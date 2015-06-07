@@ -1,5 +1,6 @@
 package comjason_lewisg.httpsgithub.boozic;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
@@ -10,7 +11,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -22,6 +24,7 @@ public class MainActivity extends ActionBarActivity {
     int PROFILE = R.drawable.download_20141015_232430;
 
     private Toolbar toolbar;                        // Declaring the Toolbar Object
+    ImageButton FAB;
 
     RecyclerView mRecyclerView;                     // Declaring RecyclerView
     RecyclerView.Adapter mAdapter;                  // Declaring Adapter For Recycler View
@@ -37,6 +40,18 @@ public class MainActivity extends ActionBarActivity {
 
             toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
             setSupportActionBar(toolbar);                   // Setting toolbar as the ActionBar with setSupportActionBar() call
+
+        FAB = (ImageButton) findViewById(R.id.imageButton);
+        FAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //Toast.makeText(MainActivity.this,"You have pressed the FAB",Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(MainActivity.this,CameraActivity.class);
+                startActivity(i);
+
+            }
+        });
 
             mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
             mRecyclerView.setHasFixedSize(true);

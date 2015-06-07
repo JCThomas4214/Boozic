@@ -16,6 +16,37 @@
             layout="@layout/tool_bar">
         </include>
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:id="@+id/frameLayout">
+
+            <ImageButton
+                android:layout_margin="15dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/ic_action_camera"
+                android:background="@drawable/circle"
+                android:id="@+id/imageButton"
+                android:layout_gravity="right|bottom" />
+
+            <TextView
+                android:id="@+id/TextAct1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:text="@string/first_active"
+                android:textSize="25dp" />
+
+
+        </FrameLayout>
+
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
