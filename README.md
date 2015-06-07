@@ -1,8 +1,5 @@
-# Boozic
-Android Application Dev
-
 <html><body>
-<h1>EEL4720 Semester Project</h1>
+<h1>CEN4914 Design Project</h1>
 <h2>Introduction</h2>
 <p>
 This is the repo for an Android Development project for the University of Florida CE Senior Design class.
