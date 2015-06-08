@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/heart"
+            android:checked="false"
+            android:icon="@drawable/ic_action_heart"
+            android:title="@string/action_heart" />
+
+        <item
+            android:id="@+id/edit"
+            android:checked="false"
+            android:icon="@drawable/ic_action_edit"
+            android:title="@string/action_theme" />
+
+        <item
+            android:id="@+id/cash"
+            android:checked="false"
+            android:icon="@drawable/ic_action_cash"
+            android:title="@string/action_cash" />
+
+        <item
+            android:id="@+id/settings"
+            android:checked="false"
+            android:icon="@drawable/ic_action_settings"
+            android:title="@string/action_settings" />
+
+
+        <item
+            android:id="@+id/about"
+            android:checked="false"
+            android:icon="@drawable/ic_action_about"
+            android:title="@string/action_bio" />
+
+    </group>
+</menu>
