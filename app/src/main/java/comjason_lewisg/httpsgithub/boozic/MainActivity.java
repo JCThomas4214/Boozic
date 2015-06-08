@@ -26,7 +26,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    //create an empty Toolbar object
+    //create a
     private Toolbar toolbar;
 
     @Override
@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -69,11 +68,13 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
 
-            Toast.makeText(MainActivity.this, "You have pressed refresh", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "You have pressed refresh", Toast.LENGTH_SHORT).show();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+
     }
+
     ////////////////
 }

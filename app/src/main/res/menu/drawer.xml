@@ -4,6 +4,12 @@
     <group android:checkableBehavior="single">
 
         <item
+            android:id="@+id/lists"
+            android:checked="false"
+            android:icon="@drawable/ic_action_lists"
+            android:title="@string/action_lists" />
+
+        <item
             android:id="@+id/heart"
             android:checked="false"
             android:icon="@drawable/ic_action_heart"

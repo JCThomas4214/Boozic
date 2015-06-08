@@ -3,26 +3,12 @@ package comjason_lewisg.httpsgithub.boozic;
 /**
  * Created by Jason on 6/8/2015.
  */
-import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
-import android.view.Menu;
+
 import android.view.MenuItem;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 import android.widget.Toast;
 
@@ -64,6 +50,9 @@ public class NavigationDrawer {
                     */
 
                     // For rest of the options we just show a toast on click
+                    case R.id.lists:
+                        Toast.makeText(m.getApplicationContext(),"Top Tenmj Selected",Toast.LENGTH_SHORT).show();
+                        return true;
                     case R.id.heart:
                         Toast.makeText(m.getApplicationContext(),"Favorites Selected",Toast.LENGTH_SHORT).show();
                         return true;

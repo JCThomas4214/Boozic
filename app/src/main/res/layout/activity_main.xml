@@ -12,29 +12,43 @@
         android:layout_width="match_parent"
         android:orientation="vertical"
         >
+
         <include
             android:id="@+id/toolbar"
             layout="@layout/tool_bar"
             />
+
+
+
         <FrameLayout
             android:id="@+id/frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/TopTScroll" >
+
+                <ExpandableListView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/TopTELV">
+
+
+                </ExpandableListView>
+
+            </ScrollView>
+
             <ImageButton
                 android:layout_margin="15dp"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:src="@drawable/ic_action_camera"
+                android:src="@drawable/ic_action_search"
                 android:background="@drawable/circle"
                 android:id="@+id/imageButton"
-                android:layout_gravity="right|bottom" />
+                android:layout_gravity="right|bottom"/>
 
-            <ExpandableListView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/expandableListView"
-                android:layout_gravity="left|top" />
         </FrameLayout>
 
     </LinearLayout>
