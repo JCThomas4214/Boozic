@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    //create an empty Toolbar object
     private Toolbar toolbar;
 
     @Override
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Creates a FAB for the bottom right corner of the main screen
         FloatActionButton FButton = new FloatActionButton();
         FButton.connectButton(this);
 
@@ -40,11 +42,15 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //Creates a Navigation Drawer
+        //When you swipe from the left
         NavigationDrawer Nav = new NavigationDrawer();
         Nav.connectDrawer(this,toolbar);
 
     }
 
+
+    //Data Handlers//
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -69,4 +75,5 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    ////////////////
 }
