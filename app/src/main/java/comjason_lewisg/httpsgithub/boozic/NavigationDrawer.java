@@ -12,7 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
-public class NavigationDrawer {
+public class NavigationDrawer extends MainActivity {
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
 
@@ -51,7 +51,7 @@ public class NavigationDrawer {
 
                     // For rest of the options we just show a toast on click
                     case R.id.lists:
-                        Toast.makeText(m.getApplicationContext(),"Top Tenmj Selected",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(m.getApplicationContext(),"Top Tens Selected",Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.heart:
                         Toast.makeText(m.getApplicationContext(),"Favorites Selected",Toast.LENGTH_SHORT).show();
