@@ -8,7 +8,7 @@ This is the repo for an Android Development project for the University of Florid
 <h2>Team members</h2>
 <ul style="list-style-type:square">
 	<li>Jason Lewis (<a href="https://github.com/Jason-LewisG">Jason-LewisG</a>)</li>
-	<li>Timmy Chandy (<a href="https://github.com/chandyt">necrostar</a>)</li>
+	<li>Timmy Chandy (<a href="https://github.com/chandyt">chandyt</a>)</li>
 </ul>
 <h2>Languages</h2>
 <p>XML, and JAVA</p>
