@@ -15,7 +15,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     //create a Toolbar object
-    protected Toolbar toolbar;
+    private Toolbar toolbar;
 
     private MenuItem item;
     private ImageView refresh;

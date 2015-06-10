@@ -4,6 +4,8 @@ package comjason_lewisg.httpsgithub.boozic;
  * Created by Jason on 6/8/2015.
  */
 
+import android.content.Intent;
+import android.util.Log;
 import android.view.MenuItem;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -15,11 +17,16 @@ import android.widget.Toast;
 public class NavigationDrawer extends MainActivity {
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
+    private int previousItemGroupId;
 
     protected void onCreate(){}
     public void connectDrawer(final MainActivity m, final Toolbar t) {
         //Initializing NavigationView
         navigationView = (NavigationView) m.findViewById(R.id.navigation_view);
+
+        //set the default checked item
+        //In this case the first page opened, TOP TENS
+        navigationView.getMenu().getItem(0).setChecked(true);
 
         //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -30,8 +37,8 @@ public class NavigationDrawer extends MainActivity {
 
 
                 //Checking if the item is in checked state or not, if not make it in checked state
-                //if(menuItem.isChecked()) menuItem.setChecked(false);
-                //else menuItem.setChecked(true);
+                if(!menuItem.isChecked()) menuItem.setChecked(true);
+                else menuItem.setChecked(false);
 
                 //Closing drawer on item click
                 drawerLayout.closeDrawers();
@@ -64,9 +71,14 @@ public class NavigationDrawer extends MainActivity {
                         return true;
                     case R.id.settings:
                         Toast.makeText(m.getApplicationContext(),"Settings Selected",Toast.LENGTH_SHORT).show();
+                        Intent i = new Intent(m, SettingsActivity.class);
+                        m.startActivity(i);
                         return true;
                     case R.id.about:
                         Toast.makeText(m.getApplicationContext(),"About Us Selected",Toast.LENGTH_SHORT).show();
+                        return true;
+                    case R.id.feedback:
+                        Toast.makeText(m.getApplicationContext(),"Help and Feedback Selected",Toast.LENGTH_SHORT).show();
                         return true;
                     default:
                         Toast.makeText(m.getApplicationContext(),"Somethings Wrong",Toast.LENGTH_SHORT).show();
