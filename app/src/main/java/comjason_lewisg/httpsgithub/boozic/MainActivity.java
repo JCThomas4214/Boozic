@@ -1,6 +1,12 @@
 package comjason_lewisg.httpsgithub.boozic;
 
+
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.app.AppCompatActivity;
@@ -8,8 +14,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -39,7 +48,33 @@ public class MainActivity extends AppCompatActivity {
         //When you swipe from the left
         NavigationDrawer Nav = new NavigationDrawer();
         Nav.connectDrawer(this,toolbar);
+
     }
+
+    public void OpenFeedbackDialog() {
+
+        MaterialDialog dialog = new MaterialDialog.Builder(this)
+                .title("Send us feedback")
+                .customView(R.layout.feedback_dialog, false)
+                .positiveText("SEND")
+                .negativeText("CANCEL")
+                .positiveColorRes(R.color.ColorPrimary)
+                .negativeColorRes(R.color.ColorPrimary)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog item) {
+                        EditText input = (EditText) item.findViewById(R.id.feedback_dialog);
+                        Log.w("myApp", "The output when positive is "+input.getText());
+                    }
+                })
+                .build();
+
+        EditText input = (EditText) dialog.findViewById(R.id.feedback_dialog);
+        input.setHint("What can we improve upon?");
+
+        dialog.show();
+    }
+
 
     //Data Handlers//
     @Override

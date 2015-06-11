@@ -19,7 +19,8 @@
         </activity>
         <activity
             android:name=".CameraActivity"
-            android:label="@string/title_activity_camera" >
+            android:label="@string/title_activity_camera"
+            android:theme="@style/camera_theme">
         </activity>
         <activity
             android:name=".SettingsActivity"

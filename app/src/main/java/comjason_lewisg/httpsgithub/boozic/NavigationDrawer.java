@@ -4,7 +4,10 @@ package comjason_lewisg.httpsgithub.boozic;
  * Created by Jason on 6/8/2015.
  */
 
+import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.support.design.widget.NavigationView;
@@ -12,14 +15,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-public class NavigationDrawer extends MainActivity {
+public class NavigationDrawer extends AppCompatActivity{
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
-    private int previousItemGroupId;
 
-    protected void onCreate(){}
+    protected void onCreate(){
+    }
     public void connectDrawer(final MainActivity m, final Toolbar t) {
         //Initializing NavigationView
         navigationView = (NavigationView) m.findViewById(R.id.navigation_view);
@@ -79,6 +83,7 @@ public class NavigationDrawer extends MainActivity {
                         return true;
                     case R.id.feedback:
                         Toast.makeText(m.getApplicationContext(),"Help and Feedback Selected",Toast.LENGTH_SHORT).show();
+                        m.OpenFeedbackDialog();
                         return true;
                     default:
                         Toast.makeText(m.getApplicationContext(),"Somethings Wrong",Toast.LENGTH_SHORT).show();
