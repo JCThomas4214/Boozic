@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import comjason_lewisg.httpsgithub.boozic.AboutUsActivity;
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
 import comjason_lewisg.httpsgithub.boozic.SettingsActivity;
@@ -125,7 +126,8 @@ public class NavigationDrawerHandler extends MainActivity {
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(m.getApplicationContext(),"About Us Selected",Toast.LENGTH_SHORT).show();
+                                Intent i = new Intent(m, AboutUsActivity.class);
+                                m.startActivity(i);
                             }
                         }, 275);
 
