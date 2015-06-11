@@ -22,8 +22,10 @@
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp"
             android:maxLength="250"
-            android:inputType="textCapSentences|textMultiLine"
+            android:colorAccent="@color/ColorPrimary"
             android:background="@null"
+            android:textCursorDrawable="@drawable/custom_cursor"
+            android:inputType="textCapSentences|textMultiLine"
             android:gravity="center_vertical">
 
             <requestFocus />

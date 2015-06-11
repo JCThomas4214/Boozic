@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageView refresh;
     private Animation rotation;
 
+    protected DialogHandler DHandle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +51,10 @@ public class MainActivity extends AppCompatActivity {
         NavigationDrawer Nav = new NavigationDrawer();
         Nav.connectDrawer(this,toolbar);
 
+        DHandle = new DialogHandler();
     }
 
+    /*
     public void OpenFeedbackDialog() {
 
         MaterialDialog dialog = new MaterialDialog.Builder(this)
@@ -74,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
         dialog.show();
     }
-
+*/
 
     //Data Handlers//
     @Override

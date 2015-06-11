@@ -18,7 +18,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-public class NavigationDrawer extends AppCompatActivity{
+public class NavigationDrawer extends MainActivity{
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
 
@@ -83,7 +83,7 @@ public class NavigationDrawer extends AppCompatActivity{
                         return true;
                     case R.id.feedback:
                         Toast.makeText(m.getApplicationContext(),"Help and Feedback Selected",Toast.LENGTH_SHORT).show();
-                        m.OpenFeedbackDialog();
+                        m.DHandle.OpenFeedbackDialog(m);
                         return true;
                     default:
                         Toast.makeText(m.getApplicationContext(),"Somethings Wrong",Toast.LENGTH_SHORT).show();
