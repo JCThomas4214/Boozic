@@ -1,12 +1,13 @@
-package comjason_lewisg.httpsgithub.boozic;
+package Handlers;
 
 /**
- * Created by Jason on 6/8/2015.
+ * Created by Jason on 6/11/2015.
  */
 
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -18,11 +19,18 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-public class NavigationDrawer extends MainActivity{
+import comjason_lewisg.httpsgithub.boozic.MainActivity;
+import comjason_lewisg.httpsgithub.boozic.R;
+import comjason_lewisg.httpsgithub.boozic.SettingsActivity;
+
+public class NavigationDrawerHandler extends MainActivity {
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
 
+
+
     protected void onCreate(){
+
     }
     public void connectDrawer(final MainActivity m, final Toolbar t) {
         //Initializing NavigationView
@@ -39,7 +47,7 @@ public class NavigationDrawer extends MainActivity{
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
 
-
+                Handler handler = new Handler();
                 //Checking if the item is in checked state or not, if not make it in checked state
                 if(!menuItem.isChecked()) menuItem.setChecked(true);
                 else menuItem.setChecked(false);
@@ -62,31 +70,85 @@ public class NavigationDrawer extends MainActivity{
 
                     // For rest of the options we just show a toast on click
                     case R.id.lists:
-                        Toast.makeText(m.getApplicationContext(),"Top Tens Selected",Toast.LENGTH_SHORT).show();
+
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(m.getApplicationContext(),"Top Tens Selected",Toast.LENGTH_SHORT).show();
+                            }
+                        }, 275);
+
                         return true;
                     case R.id.heart:
-                        Toast.makeText(m.getApplicationContext(),"Favorites Selected",Toast.LENGTH_SHORT).show();
+
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(m.getApplicationContext(),"Favorites Selected",Toast.LENGTH_SHORT).show();
+                            }
+                        }, 275);
+
                         return true;
                     case R.id.edit:
-                        Toast.makeText(m.getApplicationContext(),"Theme Selected",Toast.LENGTH_SHORT).show();
+
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(m.getApplicationContext(),"Theme Selected",Toast.LENGTH_SHORT).show();
+                            }
+                        }, 275);
+
                         return true;
                     case R.id.cash:
-                        Toast.makeText(m.getApplicationContext(),"Spending Selected",Toast.LENGTH_SHORT).show();
+
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(m.getApplicationContext(),"Spending Selected",Toast.LENGTH_SHORT).show();
+                            }
+                        }, 275);
+
                         return true;
                     case R.id.settings:
-                        Toast.makeText(m.getApplicationContext(),"Settings Selected",Toast.LENGTH_SHORT).show();
-                        Intent i = new Intent(m, SettingsActivity.class);
-                        m.startActivity(i);
+
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent i = new Intent(m, SettingsActivity.class);
+                                m.startActivity(i);
+                            }
+                        }, 275);
+
                         return true;
                     case R.id.about:
-                        Toast.makeText(m.getApplicationContext(),"About Us Selected",Toast.LENGTH_SHORT).show();
+
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(m.getApplicationContext(),"About Us Selected",Toast.LENGTH_SHORT).show();
+                            }
+                        }, 275);
+
                         return true;
                     case R.id.feedback:
-                        Toast.makeText(m.getApplicationContext(),"Help and Feedback Selected",Toast.LENGTH_SHORT).show();
-                        m.DHandle.OpenFeedbackDialog(m);
+
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                m.DHandle.OpenFeedbackDialog(m);
+                            }
+                        }, 275);
+
                         return true;
                     default:
-                        Toast.makeText(m.getApplicationContext(),"Somethings Wrong",Toast.LENGTH_SHORT).show();
+
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(m.getApplicationContext(),"Somethings Wrong",Toast.LENGTH_SHORT).show();
+                            }
+                        }, 275);
+
                         return true;
 
                 }

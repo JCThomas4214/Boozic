@@ -44,7 +44,7 @@
                 android:layout_margin="15dp"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:src="@drawable/ic_action_search"
+                android:src="@drawable/ic_action_scan"
                 android:background="@drawable/circle"
                 android:id="@+id/imageButton"
                 android:layout_gravity="right|bottom"/>

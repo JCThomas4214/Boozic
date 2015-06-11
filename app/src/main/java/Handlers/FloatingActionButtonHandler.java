@@ -1,13 +1,17 @@
-package comjason_lewisg.httpsgithub.boozic;
+package Handlers;
 
 /**
- * Created by Jason on 6/7/2015.
+ * Created by Jason on 6/11/2015.
  */
 import android.content.Intent;
 import android.view.View;
 import android.widget.ImageButton;
 
-public class FloatActionButton {
+import comjason_lewisg.httpsgithub.boozic.CameraActivity;
+import comjason_lewisg.httpsgithub.boozic.MainActivity;
+import comjason_lewisg.httpsgithub.boozic.R;
+
+public class FloatingActionButtonHandler {
 
     ImageButton FAB;
 

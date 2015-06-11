@@ -23,6 +23,7 @@
             android:layout_marginRight="24dp"
             android:maxLength="250"
             android:colorAccent="@color/ColorPrimary"
+            android:textColorHint="@color/ColorHint"
             android:background="@null"
             android:textCursorDrawable="@drawable/custom_cursor"
             android:inputType="textCapSentences|textMultiLine"
