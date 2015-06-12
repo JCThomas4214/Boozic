@@ -7,6 +7,10 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        <meta-data
+            android:name="android.app.default_searchable"
+            android:value=".MainActivity" />
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -35,7 +39,11 @@
         <activity
             android:name=".LegalActivity"
             android:label="@string/title_activity_legal"
-            android:theme="@style/normal_theme">
+            android:theme="@style/normal_theme" >
+        </activity>
+        <activity
+            android:name=".SearchActivity"
+            android:label="@string/title_activity_search" >
         </activity>
     </application>
 

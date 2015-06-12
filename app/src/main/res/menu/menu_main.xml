@@ -15,9 +15,9 @@
 
     <item
         android:orderInCategory="100"
-        android:title="Refresh"
-        app:showAsAction="ifRoom"
+        android:title="Search"
         android:id="@+id/action_search"
-        android:icon="@drawable/ic_action_search">
+        android:icon="@drawable/ic_action_search"
+        app:showAsAction="always">
     </item>
 </menu>

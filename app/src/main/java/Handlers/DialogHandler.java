@@ -1,18 +1,12 @@
 package Handlers;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.support.v7.app.AppCompatActivity;
+
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-
-import java.lang.reflect.Field;
 
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
