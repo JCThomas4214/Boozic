@@ -52,8 +52,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        search = (SearchBox) findViewById(R.id.searchbox);
-        search.enableVoiceRecognition(this);
 
         //Creates a FAB for the bottom right corner of the main screen
         FloatingActionButtonHandler FButton = new FloatingActionButtonHandler();
@@ -64,13 +62,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                openSearch();
-                return true;
-            }
-        });
+        search = (SearchBox) findViewById(R.id.searchbox);
+        search.enableVoiceRecognition(this);
 
         //Creates a Navigation Drawer
         //When you swipe from the left
@@ -89,16 +82,6 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_main, menu);
 
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-
-        /*////////////////////////
-        SearchManager searchManager = (SearchManager) MainActivity.this.getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        //searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
-        ////////////////////////*/
-
         item = menu.findItem(R.id.action_refresh);
 
         item.setActionView(R.layout.nav_refresh);
@@ -112,22 +95,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /*
-        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                // Do something when collapsed
-                Toast.makeText(getApplicationContext(), "Collapse", Toast.LENGTH_SHORT).show();
-                return true;  // Return true to collapse action view
-            }
-
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                // Do something when expanded
-                Toast.makeText(getApplicationContext(), "Expand", Toast.LENGTH_SHORT).show();
-                return true;  // Return true to expand action view
-            }
-        });*/
         return true;
     }
 
@@ -142,6 +109,10 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_refresh) {
             refresh.startAnimation(rotation);
             Toast.makeText(this, "You have pressed refresh", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        if (id == R.id.action_search) {
+            openSearch();
             return true;
         }
 
@@ -218,6 +189,6 @@ public class MainActivity extends AppCompatActivity {
 
     protected void closeSearch() {
         search.hideCircularly(this);
-        if(search.getSearchText().isEmpty())toolbar.setTitle("");
+        if(search.getSearchText().isEmpty())toolbar.setTitle(R.string.app_name);
     }
 }

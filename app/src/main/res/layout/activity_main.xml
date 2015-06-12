@@ -7,48 +7,16 @@
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:orientation="vertical"
         >
 
-        <include
-            android:id="@+id/toolbar"
-            layout="@layout/tool_bar"
-            />
-
-        <com.quinny898.library.persistentsearch.SearchBox
-            android:layout_width="wrap_content"
-            android:id="@+id/searchbox"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_marginTop="-6dp"
-            android:layout_marginLeft="-6dp"
-            android:layout_marginRight="-6dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true" />
-
-
         <FrameLayout
             android:id="@+id/frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <ScrollView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/TopTScroll" >
-
-                <ExpandableListView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/TopTELV">
-
-
-                </ExpandableListView>
-
-            </ScrollView>
 
             <ImageButton
                 android:layout_margin="15dp"
@@ -59,9 +27,26 @@
                 android:id="@+id/imageButton"
                 android:layout_gravity="right|bottom"/>
 
+            <include
+                android:id="@+id/toolbar"
+                layout="@layout/tool_bar"
+                />
+
+            <com.quinny898.library.persistentsearch.SearchBox
+                android:layout_width="wrap_content"
+                android:id="@+id/searchbox"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="-6dp"
+                android:layout_marginLeft="-6dp"
+                android:layout_marginRight="-6dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true" />
+
         </FrameLayout>
 
-    </LinearLayout>
+
+    </RelativeLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
