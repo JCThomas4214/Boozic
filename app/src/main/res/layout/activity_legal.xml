@@ -1,0 +1,30 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="comjason_lewisg.httpsgithub.boozic.LegalActivity">
+
+    <include
+        android:id="@+id/legal_toolbar"
+        layout="@layout/tool_bar"
+        />
+
+
+
+    <FrameLayout
+        android:id="@+id/frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/TopTScroll" >
+
+
+        </ScrollView>
+
+
+    </FrameLayout>
+
+
+</RelativeLayout>

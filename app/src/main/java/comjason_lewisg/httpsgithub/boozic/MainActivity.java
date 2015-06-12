@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.action_search) {
-            refresh.startAnimation(rotation);
             Toast.makeText(this, "You have pressed search", Toast.LENGTH_SHORT).show();
             return true;
         }
