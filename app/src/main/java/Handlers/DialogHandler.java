@@ -1,9 +1,18 @@
 package Handlers;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+
+import java.lang.reflect.Field;
 
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
@@ -17,32 +26,34 @@ public class DialogHandler {
 
     }
 
-    public void OpenFeedbackDialog(MainActivity m) {
-
+    public void OpenFeedbackDialog(final MainActivity m) {
 
         //Create the MaterialDialog object to start initiallizing attributes
         MaterialDialog dialog = new MaterialDialog.Builder(m)
                 .title("Send us feedback")
-                .customView(R.layout.feedback_dialog, false)
-                .positiveText("SEND")
-                .negativeText("CANCEL")
-                .positiveColorRes(R.color.ColorPrimary)
-                .negativeColorRes(R.color.ColorPrimary)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    //onPositive is the callback for when SEND is selected
-                    @Override
-                    public void onPositive(MaterialDialog item) {
-                        //grabs the EditText XML and places in input
-                        EditText input = (EditText) item.findViewById(R.id.feedback_dialog);
-                        Log.w("myApp", "The output when positive is " + input.getText());
+                .inputMaxLength(400, R.color.ColorPrimaryDark)
+                .input("What can we improve upon?", "", new MaterialDialog.InputCallback() {
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        if (input.length() == 0) {
+                            Log.w("myApp", "There is no String");
+                            OpenFeedbackDialog(m);
+                        }
                     }
                 })
+                .positiveText("SEND")
+                .negativeText("CANCEL")
+                .widgetColorRes(R.color.ColorPrimary)
+                .positiveColorRes(R.color.ColorPrimary)
+                .negativeColorRes(R.color.ColorPrimary)
                 .build();
 
-        //Again storing XML into input to set the Hint field for the input
-        //before the Material Dialog object is shown
-        EditText input = (EditText) dialog.findViewById(R.id.feedback_dialog);
-        input.setHint("What can we improve upon?");
+        EditText input = (EditText) dialog.getInputEditText();
+        input.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES|InputType.TYPE_CLASS_TEXT);
+        input.setSingleLine(false);
+        input.setVerticalScrollBarEnabled(true);
+        input.setBackground(null);
+        input.setLines(7);
+        input.setGravity(Gravity.TOP);
 
         dialog.show();
     }

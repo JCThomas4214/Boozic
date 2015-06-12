@@ -142,6 +142,16 @@ public class NavigationDrawerHandler extends MainActivity {
                         }, 275);
 
                         return true;
+                    case R.id.legal:
+
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(m.getApplicationContext(),"Selected Legal",Toast.LENGTH_SHORT).show();
+                            }
+                        }, 275);
+
+                        return true;
                     default:
 
                         handler.postDelayed(new Runnable() {

@@ -84,6 +84,11 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "You have pressed refresh", Toast.LENGTH_SHORT).show();
             return true;
         }
+        if (id == R.id.action_search) {
+            refresh.startAnimation(rotation);
+            Toast.makeText(this, "You have pressed search", Toast.LENGTH_SHORT).show();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
 

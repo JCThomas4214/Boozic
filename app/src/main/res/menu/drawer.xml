@@ -50,5 +50,11 @@
             android:checkable="false"
             android:title="@string/action_feedback" />
 
+        <item
+            android:id="@+id/legal"
+            android:checkable="false"
+            android:title="@string/action_legal" />
+
+
     </group>
 </menu>
