@@ -1,9 +1,5 @@
 package Handlers;
 
-/**
- * Created by Jason on 6/11/2015.
- */
-
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;

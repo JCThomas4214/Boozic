@@ -17,9 +17,6 @@ import java.lang.reflect.Field;
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
 
-/**
- * Created by jlew on 6/11/15.
- */
 public class DialogHandler {
 
     public void onCreate() {
@@ -47,7 +44,7 @@ public class DialogHandler {
                 .negativeColorRes(R.color.ColorPrimary)
                 .build();
 
-        EditText input = (EditText) dialog.getInputEditText();
+        EditText input = dialog.getInputEditText();
         input.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES|InputType.TYPE_CLASS_TEXT);
         input.setSingleLine(false);
         input.setVerticalScrollBarEnabled(true);
