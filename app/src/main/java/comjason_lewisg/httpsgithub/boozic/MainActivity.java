@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.speech.RecognizerIntent;
@@ -37,7 +38,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     //create a Toolbar object
-    private Toolbar toolbar;
+    public Toolbar toolbar;
 
     private MenuItem item;
     private ImageView refresh;
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     public DialogHandler DHandle;
 
-    private SearchBox search;
+    public SearchBox search;
 
 
     @Override
@@ -61,9 +62,8 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         search = (SearchBox) findViewById(R.id.searchbox);
-        search.enableVoiceRecognition(this);
+        //search.enableVoiceRecognition(this);
 
         //Creates a Navigation Drawer
         //When you swipe from the left
@@ -123,11 +123,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void openSearch() {
         toolbar.setTitle("");
-        search.revealFromMenuItem(R.id.action_search, this);
+        //Turn buttons off
+        findViewById(R.id.action_search).setEnabled(false);
+        findViewById(R.id.action_refresh).setEnabled(false);
+
+        search.revealFromMenuItem(R.id.action_refresh, this);
         for (int x = 0; x < 10; x++) {
             SearchResult option = new SearchResult("Result "
                     + Integer.toString(x), getResources().getDrawable(
-                    R.drawable.ic_action_history));
+                    R.drawable.ic_action_history, null));
             search.addSearchable(option);
         }
         search.setMenuListener(new MenuListener() {
@@ -189,6 +193,10 @@ public class MainActivity extends AppCompatActivity {
 
     protected void closeSearch() {
         search.hideCircularly(this);
+        //Turn buttons back on
+        findViewById(R.id.action_search).setEnabled(true);
+        findViewById(R.id.action_refresh).setEnabled(true);
+
         if(search.getSearchText().isEmpty())toolbar.setTitle(R.string.app_name);
     }
 }

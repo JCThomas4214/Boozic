@@ -1,15 +1,9 @@
 package comjason_lewisg.httpsgithub.boozic;
 
 import android.app.Activity;
-import android.app.ListActivity;
-import android.app.SearchManager;
 import android.content.Intent;
 import android.speech.RecognizerIntent;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -37,7 +31,7 @@ public class SearchActivity extends Activity {
             SearchResult option = new SearchResult("Result " + Integer.toString(x), getResources().getDrawable(R.drawable.ic_action_history, null));
             search.addSearchable(option);
         }
-        search.setLogoText("My App");
+        search.setLogoText("Search Boozic");
         search.setMenuListener(new MenuListener(){
 
             @Override
