@@ -25,12 +25,14 @@ public class SearchActivity extends Activity {
 
         search = (SearchBox) findViewById(R.id.searchbox);
 
-        search.enableVoiceRecognition(this);
+        //search.enableVoiceRecognition(this);
 
+        /*
         for(int x = 0; x < 10; x++){
             SearchResult option = new SearchResult("Result " + Integer.toString(x), getResources().getDrawable(R.drawable.ic_action_history, null));
             search.addSearchable(option);
-        }
+        }*/
+
         search.setLogoText("Search Boozic");
         search.setMenuListener(new MenuListener(){
 

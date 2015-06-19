@@ -1,12 +1,13 @@
 package comjason_lewisg.httpsgithub.boozic;
 
 
+//import android.animation.Animator;
 import android.app.Activity;
-import android.app.SearchManager;
-import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Point;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.SearchView;
+import android.util.TypedValue;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,21 +18,25 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.speech.RecognizerIntent;
 import android.content.Intent;
+import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.quinny898.library.persistentsearch.SearchBox;
 
 import Handlers.DialogHandler;
 import Handlers.FloatingActionButtonHandler;
 import Handlers.NavigationDrawerHandler;
+import io.codetail.animation.ReverseInterpolator;
+import io.codetail.animation.SupportAnimator;
+import io.codetail.animation.ViewAnimationUtils;
+//import Handlers.SearchBox;
 
-import com.quinny898.library.persistentsearch.SearchBox;
 import com.quinny898.library.persistentsearch.SearchBox.MenuListener;
 import com.quinny898.library.persistentsearch.SearchBox.SearchListener;
 import com.quinny898.library.persistentsearch.SearchResult;
-
 import java.util.ArrayList;
 
 
@@ -43,9 +48,9 @@ public class MainActivity extends AppCompatActivity {
     private MenuItem item;
     private ImageView refresh;
     private Animation rotation;
+    private ArrayList<String> searchSuggest;
 
     public DialogHandler DHandle;
-
     public SearchBox search;
 
 
@@ -71,7 +76,20 @@ public class MainActivity extends AppCompatActivity {
         Nav.connectDrawer(this,toolbar);
 
         DHandle = new DialogHandler();
+        //search.revealFrom();
 
+        searchSuggest = new ArrayList<>();
+        searchSuggest.add("Wine");
+        searchSuggest.add("Vodka");
+        searchSuggest.add("Beer");
+        searchSuggest.add("Whiskey");
+        searchSuggest.add("Scotch");
+        searchSuggest.add("Hennessy");
+        searchSuggest.add("Tequila");
+        searchSuggest.add("Rum");
+        searchSuggest.add("Brandy");
+        searchSuggest.add("Gin");
+        searchSuggest.add("Sake");
     }
 
 
@@ -112,6 +130,8 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.action_search) {
+
+
             openSearch();
             return true;
         }
@@ -122,18 +142,23 @@ public class MainActivity extends AppCompatActivity {
     ////////////////
 
     public void openSearch() {
-        toolbar.setTitle("");
+        toolbar.setTitle("Boozic");
+
+
         //Turn buttons off
         findViewById(R.id.action_search).setEnabled(false);
         findViewById(R.id.action_refresh).setEnabled(false);
 
-        search.revealFromMenuItem(R.id.action_refresh, this);
-        for (int x = 0; x < 10; x++) {
-            SearchResult option = new SearchResult("Result "
-                    + Integer.toString(x), getResources().getDrawable(
+        revealFromMenuItem(R.id.action_search, this);
+
+
+        for (int x = 0; x < searchSuggest.size(); x++) {
+            SearchResult option = new SearchResult(searchSuggest.get(x).toString(), getResources().getDrawable(
                     R.drawable.ic_action_history, null));
             search.addSearchable(option);
         }
+
+        search.setLogoText("Search Boozic");
         search.setMenuListener(new MenuListener() {
 
             @Override
@@ -191,12 +216,114 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+
+
     protected void closeSearch() {
-        search.hideCircularly(this);
+        hideCircularly(this);
         //Turn buttons back on
         findViewById(R.id.action_search).setEnabled(true);
         findViewById(R.id.action_refresh).setEnabled(true);
 
         if(search.getSearchText().isEmpty())toolbar.setTitle(R.string.app_name);
+    }
+
+    public void revealFromMenuItem(int id, Activity activity) {
+        findViewById(R.id.searchbox).setVisibility(View.VISIBLE);
+        View menuButton = activity.findViewById(id);
+        if (menuButton != null) {
+            FrameLayout layout = (FrameLayout) activity.getWindow().getDecorView()
+                    .findViewById(android.R.id.content);
+            if (layout.findViewWithTag("searchBox") == null) {
+                int[] location = new int[2];
+                menuButton.getLocationInWindow(location);
+                revealFrom(activity, search);
+            }
+        }
+    }
+
+    private void revealFrom(Activity a, SearchBox s) {
+        FrameLayout layout = (FrameLayout) a.getWindow().getDecorView()
+                .findViewById(android.R.id.content);
+        RelativeLayout root = (RelativeLayout) s.findViewById(R.id.search_root);
+        Resources r = getResources();
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96,
+                r.getDisplayMetrics());
+        int cx = findViewById(R.id.toolbar).getWidth() / 2 + 320;
+        int cy = findViewById(R.id.toolbar).getHeight() / 2 + 20;
+
+        int finalRadius = (int) Math.max(layout.getWidth(), px);
+
+        SupportAnimator animator = ViewAnimationUtils.createCircularReveal(
+                root, cx, cy, 0, finalRadius);
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator.setDuration(500);
+        animator.addListener(new SupportAnimator.AnimatorListener(){
+
+            @Override
+            public void onAnimationCancel() {
+
+            }
+
+            @Override
+            public void onAnimationEnd() {
+                search.toggleSearch();
+            }
+
+            @Override
+            public void onAnimationRepeat() {
+
+            }
+
+            @Override
+            public void onAnimationStart() {
+
+            }
+
+        });
+        animator.start();
+    }
+
+    public void hideCircularly(Activity activity){
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        final FrameLayout layout = (FrameLayout) activity.getWindow().getDecorView()
+                .findViewById(android.R.id.content);
+        RelativeLayout root = (RelativeLayout) findViewById(R.id.search_root);
+        display.getSize(size);
+        Resources r = getResources();
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96,
+                r.getDisplayMetrics());
+        int cx = findViewById(R.id.toolbar).getWidth() / 2 + 320;
+        int cy = findViewById(R.id.toolbar).getHeight() / 2 + 20;
+        int finalRadius = (int) Math.max(layout.getWidth()*1.5, px);
+
+        SupportAnimator animator = ViewAnimationUtils.createCircularReveal(
+                root, cx, cy, 0, finalRadius);
+        animator.setInterpolator(new ReverseInterpolator());
+        animator.setDuration(500);
+        animator.start();
+        animator.addListener(new SupportAnimator.AnimatorListener(){
+
+            @Override
+            public void onAnimationStart() {
+
+            }
+
+            @Override
+            public void onAnimationEnd() {
+                findViewById(R.id.searchbox).setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationCancel() {
+
+            }
+
+            @Override
+            public void onAnimationRepeat() {
+
+            }
+
+        });
     }
 }
