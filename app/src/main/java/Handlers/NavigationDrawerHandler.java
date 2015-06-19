@@ -17,8 +17,9 @@ import comjason_lewisg.httpsgithub.boozic.R;
 import comjason_lewisg.httpsgithub.boozic.SettingsActivity;
 
 public class NavigationDrawerHandler extends MainActivity {
-    private NavigationView navigationView;
-    private DrawerLayout drawerLayout;
+    public NavigationView navigationView;
+    public DrawerLayout drawerLayout;
+    public ActionBarDrawerToggle actionBarDrawerToggle;
 
     protected void onCreate(){
 
@@ -160,7 +161,7 @@ public class NavigationDrawerHandler extends MainActivity {
 
         // Initializing Drawer Layout and ActionBarToggle
         drawerLayout = (DrawerLayout) m.findViewById(R.id.drawer);
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(m,drawerLayout,t,R.string.openDrawer, R.string.closeDrawer){
+        actionBarDrawerToggle = new ActionBarDrawerToggle(m,drawerLayout,t,R.string.openDrawer, R.string.closeDrawer){
 
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -171,7 +172,6 @@ public class NavigationDrawerHandler extends MainActivity {
             @Override
             public void onDrawerOpened(View drawerView) {
                 // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
-
                 super.onDrawerOpened(drawerView);
             }
         };

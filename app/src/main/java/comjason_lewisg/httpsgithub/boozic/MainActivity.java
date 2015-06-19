@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.DrawerLayout;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.Menu;
@@ -12,6 +14,8 @@ import android.view.MenuItem;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
@@ -43,10 +47,13 @@ public class MainActivity extends AppCompatActivity {
     private MenuItem item;
     private ImageView refresh;
     private Animation rotation;
+    public NavigationDrawerHandler Nav;
     public Toolbar toolbar;
     public DialogHandler DHandle;
     public SearchBox search;
     public ArrayList<SearchResult> searchSuggest;
+    public FrameLayout layout_MainMenu;
+    public AlphaAnimation animFrame;
 
 
     @Override
@@ -67,12 +74,15 @@ public class MainActivity extends AppCompatActivity {
 
         //Creates a Navigation Drawer
         //When you swipe from the left
-        NavigationDrawerHandler Nav = new NavigationDrawerHandler();
+        Nav = new NavigationDrawerHandler();
         Nav.connectDrawer(this,toolbar);
 
         DHandle = new DialogHandler();
 
-        searchSuggest = new ArrayList<SearchResult>();
+        layout_MainMenu = (FrameLayout) findViewById( R.id.frame2);
+        layout_MainMenu.getForeground().setAlpha(0);
+
+        searchSuggest = new ArrayList<>();
 
         searchSuggest.add(new SearchResult("Wine", getResources().getDrawable(
                 R.drawable.ic_action_history, null)));
@@ -151,6 +161,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.action_search).setEnabled(false);
         findViewById(R.id.action_refresh).setEnabled(false);
 
+        toolbar.setEnabled(false);
+
         revealFromMenuItem(R.id.action_search, this);
 
         search.setLogoText("");
@@ -197,7 +209,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
-
+        layout_MainMenu.getForeground().setAlpha(180);
+        Nav.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        Nav.actionBarDrawerToggle.setDrawerIndicatorEnabled(false);
     }
 
     @Override
@@ -211,10 +225,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void closeSearch() {
+
+
         hideCircularly(this);
+
+        layout_MainMenu.getForeground().setAlpha(0);
+        Nav.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
         //Turn buttons back on
         findViewById(R.id.action_search).setEnabled(true);
         findViewById(R.id.action_refresh).setEnabled(true);
+        Nav.actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
 
         if(search.getSearchText().isEmpty())toolbar.setTitle(R.string.app_name);
     }

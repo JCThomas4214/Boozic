@@ -13,10 +13,18 @@
         android:orientation="vertical"
         >
 
+
+
         <FrameLayout
             android:id="@+id/frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/frame2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:foreground="@drawable/window_dim">
 
             <ImageButton
                 android:layout_margin="15dp"
@@ -31,6 +39,7 @@
                 android:id="@+id/toolbar"
                 layout="@layout/tool_bar"
                 />
+            </FrameLayout>
 
             <com.quinny898.library.persistentsearch.SearchBox
                 android:layout_width="wrap_content"
@@ -40,7 +49,6 @@
                 android:layout_marginTop="-4dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true" />
-
         </FrameLayout>
 
 
