@@ -1,7 +1,5 @@
 package comjason_lewisg.httpsgithub.boozic;
 
-
-//import android.animation.Animator;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Point;
@@ -33,7 +31,6 @@ import Handlers.NavigationDrawerHandler;
 import io.codetail.animation.ReverseInterpolator;
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
-//import Handlers.SearchBox;
 
 import com.quinny898.library.persistentsearch.SearchBox.MenuListener;
 import com.quinny898.library.persistentsearch.SearchBox.SearchListener;

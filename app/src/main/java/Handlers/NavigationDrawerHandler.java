@@ -20,8 +20,6 @@ public class NavigationDrawerHandler extends MainActivity {
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
 
-
-
     protected void onCreate(){
 
     }
