@@ -16,7 +16,7 @@ public class FloatingActionButtonHandler {
     ImageButton FAB;
 
     protected void onCreate() {}
-    public void connectButton (final MainActivity m) {
+    /*public void connectButton (final MainActivity m) {
         this.FAB = (ImageButton) m.findViewById(R.id.imageButton);
         this.FAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -28,5 +28,5 @@ public class FloatingActionButtonHandler {
 
             }
         });
-    }
+    }*/
 }

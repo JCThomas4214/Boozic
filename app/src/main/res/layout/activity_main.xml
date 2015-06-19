@@ -26,14 +26,14 @@
                 android:layout_height="match_parent"
                 android:foreground="@drawable/window_dim">
 
-            <ImageButton
+            <!--<ImageButton
                 android:layout_margin="15dp"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:src="@drawable/ic_action_scan"
                 android:background="@drawable/circle"
                 android:id="@+id/imageButton"
-                android:layout_gravity="right|bottom"/>
+                android:layout_gravity="right|bottom"/>-->
 
             <include
                 android:id="@+id/toolbar"
@@ -47,6 +47,8 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:layout_marginTop="-4dp"
+                android:layout_marginLeft="-6dp"
+                android:layout_marginRight="-6dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true" />
         </FrameLayout>
