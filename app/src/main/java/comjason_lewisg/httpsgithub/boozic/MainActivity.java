@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -42,16 +43,13 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    //create a Toolbar object
-    public Toolbar toolbar;
-
     private MenuItem item;
     private ImageView refresh;
     private Animation rotation;
-    private ArrayList<String> searchSuggest;
-
+    public Toolbar toolbar;
     public DialogHandler DHandle;
     public SearchBox search;
+    public ArrayList<SearchResult> searchSuggest;
 
 
     @Override
@@ -76,20 +74,32 @@ public class MainActivity extends AppCompatActivity {
         Nav.connectDrawer(this,toolbar);
 
         DHandle = new DialogHandler();
-        //search.revealFrom();
 
-        searchSuggest = new ArrayList<>();
-        searchSuggest.add("Wine");
-        searchSuggest.add("Vodka");
-        searchSuggest.add("Beer");
-        searchSuggest.add("Whiskey");
-        searchSuggest.add("Scotch");
-        searchSuggest.add("Hennessy");
-        searchSuggest.add("Tequila");
-        searchSuggest.add("Rum");
-        searchSuggest.add("Brandy");
-        searchSuggest.add("Gin");
-        searchSuggest.add("Sake");
+        searchSuggest = new ArrayList<SearchResult>();
+
+        searchSuggest.add(new SearchResult("Wine", getResources().getDrawable(
+                R.drawable.ic_action_history, null)));
+        searchSuggest.add(new SearchResult("Vodka", getResources().getDrawable(
+                R.drawable.ic_action_history, null)));
+        searchSuggest.add(new SearchResult("Beer", getResources().getDrawable(
+                R.drawable.ic_action_history, null)));
+        searchSuggest.add(new SearchResult("Whiskey", getResources().getDrawable(
+                R.drawable.ic_action_history, null)));
+        searchSuggest.add(new SearchResult("Scotch", getResources().getDrawable(
+                R.drawable.ic_action_history, null)));
+        searchSuggest.add(new SearchResult("Hennessy", getResources().getDrawable(
+                R.drawable.ic_action_history, null)));
+        searchSuggest.add(new SearchResult("Tequila", getResources().getDrawable(
+                R.drawable.ic_action_history, null)));
+        searchSuggest.add(new SearchResult("Rum", getResources().getDrawable(
+                R.drawable.ic_action_history, null)));
+        searchSuggest.add(new SearchResult("Brandy", getResources().getDrawable(
+                R.drawable.ic_action_history, null)));
+        searchSuggest.add(new SearchResult("Gin", getResources().getDrawable(
+                R.drawable.ic_action_history, null)));
+        searchSuggest.add(new SearchResult("Sake", getResources().getDrawable(
+                R.drawable.ic_action_history, null)));
+        search.setSearchables(searchSuggest);
     }
 
 
@@ -130,8 +140,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.action_search) {
-
-
             openSearch();
             return true;
         }
@@ -142,23 +150,15 @@ public class MainActivity extends AppCompatActivity {
     ////////////////
 
     public void openSearch() {
-        toolbar.setTitle("Boozic");
-
-
         //Turn buttons off
         findViewById(R.id.action_search).setEnabled(false);
         findViewById(R.id.action_refresh).setEnabled(false);
 
         revealFromMenuItem(R.id.action_search, this);
 
-
-        for (int x = 0; x < searchSuggest.size(); x++) {
-            SearchResult option = new SearchResult(searchSuggest.get(x).toString(), getResources().getDrawable(
-                    R.drawable.ic_action_history, null));
-            search.addSearchable(option);
-        }
-
-        search.setLogoText("Search Boozic");
+        search.setLogoText("");
+        EditText text = (EditText) search.findViewById(R.id.search);
+        text.setHint("Search Boozic");
         search.setMenuListener(new MenuListener() {
 
             @Override
@@ -191,10 +191,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSearch(String searchTerm) {
-                Toast.makeText(MainActivity.this, searchTerm + " Searched",
-                        Toast.LENGTH_LONG).show();
-                toolbar.setTitle(searchTerm);
-
+                    toolbar.setTitle(searchTerm);
             }
 
             @Override
@@ -215,8 +212,6 @@ public class MainActivity extends AppCompatActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
-
 
     protected void closeSearch() {
         hideCircularly(this);
@@ -257,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
                 root, cx, cy, 0, finalRadius);
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
         animator.setDuration(500);
-        animator.addListener(new SupportAnimator.AnimatorListener(){
+        animator.addListener(new SupportAnimator.AnimatorListener() {
 
             @Override
             public void onAnimationCancel() {
