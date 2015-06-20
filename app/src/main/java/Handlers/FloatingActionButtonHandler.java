@@ -74,7 +74,7 @@ public class FloatingActionButtonHandler {
             @Override
             public void onAnimationStart(Animator animation) {
                 menu.getMenuIconView().setImageResource(menu.isOpened()
-                        ? R.drawable.ic_camera : R.drawable.ic_plus);
+                        ? R.drawable.camera : R.drawable.chevron_up);
             }
         });
 

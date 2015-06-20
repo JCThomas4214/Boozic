@@ -8,25 +8,25 @@
         <item
             android:id="@+id/lists"
             android:checked="false"
-            android:icon="@drawable/ic_action_lists"
+            android:icon="@drawable/view_list"
             android:title="@string/action_lists" />
 
         <item
             android:id="@+id/heart"
             android:checked="false"
-            android:icon="@drawable/ic_action_heart"
+            android:icon="@drawable/heart"
             android:title="@string/action_heart" />
 
         <item
             android:id="@+id/cash"
             android:checked="false"
-            android:icon="@drawable/ic_action_cash"
+            android:icon="@drawable/cash_usd"
             android:title="@string/action_cash" />
 
         <item
             android:id="@+id/edit"
             android:checked="false"
-            android:icon="@drawable/ic_action_edit"
+            android:icon="@drawable/palette"
             android:title="@string/action_theme" />
     </group>
 

@@ -7,10 +7,10 @@
         android:id="@+id/refreshButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingRight="10dp"
-        android:paddingLeft="10dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
         android:background="@android:color/transparent"
         android:clickable="true"
-        android:src="@drawable/ic_action_refresh" />
+        android:src="@drawable/refresh" />
 
 </RelativeLayout>
