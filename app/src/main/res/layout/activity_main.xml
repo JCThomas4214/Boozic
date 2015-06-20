@@ -26,19 +26,72 @@
                 android:layout_height="match_parent"
                 android:foreground="@drawable/window_dim">
 
-            <!--<ImageButton
-                android:layout_margin="15dp"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:src="@drawable/ic_action_scan"
-                android:background="@drawable/circle"
-                android:id="@+id/imageButton"
-                android:layout_gravity="right|bottom"/>-->
+                <com.github.clans.fab.FloatingActionMenu
+                    android:id="@+id/fabmenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    app:menu_icon="@drawable/ic_plus"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="bottom|right"
+                    app:menu_animationDelayPerItem="45"
+                    app:menu_labels_ellipsize="end"
+                    app:menu_labels_singleLine="true"
+                    app:menu_colorNormal="@color/ColorPrimary"
+                    app:menu_colorPressed="@color/ColorPrimaryDark">
 
-            <include
-                android:id="@+id/toolbar"
-                layout="@layout/tool_bar"
-                />
+                    <com.github.clans.fab.FloatingActionButton
+                        android:id="@+id/fav1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_star"
+                        app:fab_label="Favorite 1"
+                        app:fab_size="mini"
+                        app:fab_colorNormal="@color/ColorAccent"
+                        app:fab_colorPressed="@color/ColorAccentDark" />
+
+                    <com.github.clans.fab.FloatingActionButton
+                        android:id="@+id/fav2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_star"
+                        app:fab_label="Favorite 2"
+                        app:fab_size="mini"
+                        app:fab_colorNormal="@color/ColorAccent"
+                        app:fab_colorPressed="@color/ColorAccentDark"/>
+
+                    <com.github.clans.fab.FloatingActionButton
+                        android:id="@+id/fav3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_star"
+                        app:fab_label="Favorite 3"
+                        app:fab_size="mini"
+                        app:fab_colorNormal="@color/ColorAccent"
+                        app:fab_colorPressed="@color/ColorAccentDark"/>
+
+                </com.github.clans.fab.FloatingActionMenu>
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/fabtop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|right"
+                    app:fab_showShadow="true"
+                    app:fab_shadowColor="#06000000"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:src="@drawable/ic_camera"
+                    app:fab_colorNormal="@color/ColorPrimary"
+                    app:fab_colorPressed="@color/ColorPrimaryDark"/>
+
+                <include
+                    android:id="@+id/toolbar"
+                    layout="@layout/tool_bar"
+                    />
+
             </FrameLayout>
 
             <com.quinny898.library.persistentsearch.SearchBox

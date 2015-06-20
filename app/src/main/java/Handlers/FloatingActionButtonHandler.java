@@ -1,8 +1,5 @@
 package Handlers;
 
-/**
- * Created by Jason on 6/11/2015.
- */
 import android.content.Intent;
 import android.view.View;
 import android.widget.ImageButton;
