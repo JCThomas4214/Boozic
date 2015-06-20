@@ -18,13 +18,14 @@ import comjason_lewisg.httpsgithub.boozic.R;
 
 public class FloatingActionButtonHandler {
 
-    public FloatingActionMenu menu;
-    public FloatingActionButton menuButton;
+    private MainActivity m;
+    private FloatingActionMenu menu;
+    private FloatingActionButton menuButton;
     public FloatingActionButton fav1;
     public FloatingActionButton fav2;
     public FloatingActionButton fav3;
 
-    private MainActivity m;
+
 
     protected void onCreate() {
 

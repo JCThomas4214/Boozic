@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (id == android.R.id.home) {
-            finish();
+            searchBarHandler.closeSearch();
             return true;
         }
 

@@ -14,6 +14,8 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.quinny898.library.persistentsearch.SearchBox;
 
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
@@ -30,6 +32,9 @@ public class SearchBarHandler {
     public void setActivity(MainActivity main) {m = main;}
 
     public void openSearch() {
+        FloatingActionMenu menu = (FloatingActionMenu) m.findViewById(R.id.fabmenu);
+        menu.hideMenuButton(true);
+
         SearchBox search = (SearchBox) m.findViewById(R.id.searchbox);
         //Turn buttons off
         m.findViewById(R.id.action_search).setEnabled(false);
@@ -96,7 +101,17 @@ public class SearchBarHandler {
         }, 400);
     }
 
-    protected void closeSearch() {
+    public void closeSearch() {
+        final FloatingActionMenu menu = (FloatingActionMenu) m.findViewById(R.id.fabmenu);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                menu.showMenuButton(true);
+            }
+        }, 550);
+
+
         SearchBox search = (SearchBox) m.findViewById(R.id.searchbox);
 
         hideCircularly(m);
@@ -108,7 +123,6 @@ public class SearchBarHandler {
         //Turn buttons back on
         m.findViewById(R.id.action_search).setEnabled(true);
         m.findViewById(R.id.action_refresh).setEnabled(true);
-
         m.Nav.actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
 
         if(search.getSearchText().isEmpty())m.toolbar.setTitle(R.string.app_name);
