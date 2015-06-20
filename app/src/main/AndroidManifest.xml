@@ -24,26 +24,31 @@
         <activity
             android:name=".CameraActivity"
             android:label="@string/title_activity_camera"
-            android:theme="@style/camera_theme" >
+            android:theme="@style/camera_theme"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:theme="@style/normal_theme" >
+            android:theme="@style/normal_theme"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".AboutUsActivity"
             android:label="@string/title_activity_about_us"
-            android:theme="@style/normal_theme" >
+            android:theme="@style/normal_theme"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".LegalActivity"
             android:label="@string/title_activity_legal"
-            android:theme="@style/normal_theme" >
+            android:theme="@style/normal_theme"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".SearchActivity"
-            android:label="@string/title_activity_search" >
+            android:label="@string/title_activity_search"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

@@ -98,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
             refresh.startAnimation(rotation);
-            Toast.makeText(this, "You have pressed refresh", Toast.LENGTH_SHORT).show();
             return true;
         }
         if (id == R.id.action_search) {

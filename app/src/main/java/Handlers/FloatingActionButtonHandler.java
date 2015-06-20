@@ -88,6 +88,7 @@ public class FloatingActionButtonHandler {
     private View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            Handler handler = new Handler();
             switch (v.getId()) {
                 case R.id.fav1:
                     menu.close(true);
@@ -99,8 +100,14 @@ public class FloatingActionButtonHandler {
                     menu.close(true);
                     break;
                 case R.id.fabtop:
-                    Intent i = new Intent(m, CameraActivity.class);
-                    m.startActivity(i);
+                    menu.close(true);
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent i = new Intent(m, CameraActivity.class);
+                            m.startActivity(i);
+                        }
+                    }, 275);
                     break;
             }
         }

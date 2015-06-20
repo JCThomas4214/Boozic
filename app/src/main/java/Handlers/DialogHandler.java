@@ -43,7 +43,7 @@ public class DialogHandler {
         input.setSingleLine(false);
         input.setVerticalScrollBarEnabled(true);
         input.setBackground(null);
-        input.setLines(7);
+        input.setLines(5);
         input.setGravity(Gravity.TOP);
 
         dialog.show();

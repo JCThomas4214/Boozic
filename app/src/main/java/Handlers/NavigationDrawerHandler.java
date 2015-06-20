@@ -10,6 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionMenu;
+
 import comjason_lewisg.httpsgithub.boozic.AboutUsActivity;
 import comjason_lewisg.httpsgithub.boozic.LegalActivity;
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
@@ -162,7 +164,7 @@ public class NavigationDrawerHandler extends MainActivity {
         // Initializing Drawer Layout and ActionBarToggle
         drawerLayout = (DrawerLayout) m.findViewById(R.id.drawer);
         actionBarDrawerToggle = new ActionBarDrawerToggle(m,drawerLayout,t,R.string.openDrawer, R.string.closeDrawer){
-
+            final FloatingActionMenu menu = (FloatingActionMenu) m.findViewById(R.id.fabmenu);
             @Override
             public void onDrawerClosed(View drawerView) {
                 // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
@@ -173,6 +175,7 @@ public class NavigationDrawerHandler extends MainActivity {
             public void onDrawerOpened(View drawerView) {
                 // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
                 super.onDrawerOpened(drawerView);
+                menu.close(true);
             }
         };
 
