@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ImageView refresh;
     private Animation rotation;
-    public NavigationDrawerHandler Nav;
+
     public Toolbar toolbar;
     public DialogHandler DHandle;
     public SearchBarHandler searchBarHandler;
@@ -43,22 +43,19 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Creates a Navigation Drawer
-        //When you swipe from the left
-        Nav = new NavigationDrawerHandler();
-        Nav.connectDrawer(this,toolbar);
-
+        //Create a Dialog Handler for Feedback
         DHandle = new DialogHandler();
 
+        //Connect and set alpha for the layout beneath seach xml
+        //used to contrast when search bar is expanded
         FrameLayout layout_MainMenu = (FrameLayout) findViewById( R.id.frame2);
         layout_MainMenu.getForeground().setAlpha(0);
 
-        SearchBox search = (SearchBox) findViewById(R.id.searchbox);
+        //connect to search bar and create new search handler
         searchBarHandler = new SearchBarHandler();
-        searchBarHandler.setActivity(this);
+        searchBarHandler.setActivity(this, toolbar);
         //search.enableVoiceRecognition(this);
-        SearchSuggestHandler searchSuggestHandler = new SearchSuggestHandler();
-        search.setSearchables(searchSuggestHandler.setSuggest(this));
+
 
         FloatingActionButtonHandler FAB = new FloatingActionButtonHandler();
         FAB.setActivity(this);

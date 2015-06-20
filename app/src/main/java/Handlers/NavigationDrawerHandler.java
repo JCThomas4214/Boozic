@@ -18,15 +18,20 @@ import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
 import comjason_lewisg.httpsgithub.boozic.SettingsActivity;
 
-public class NavigationDrawerHandler extends MainActivity {
+public class NavigationDrawerHandler {
     public NavigationView navigationView;
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
+    public String title;
+    public int titleIndex;
 
     protected void onCreate(){
-
     }
     public void connectDrawer(final MainActivity m, final Toolbar t) {
+        //set initial title to Boozic
+        title = (String) t.getTitle();
+        titleIndex = 0;
+
         //Initializing NavigationView
         navigationView = (NavigationView) m.findViewById(R.id.navigation_view);
 
@@ -43,6 +48,7 @@ public class NavigationDrawerHandler extends MainActivity {
 
                 Handler handler = new Handler();
                 //Checking if the item is in checked state or not, if not make it in checked state
+                navigationView.getMenu().getItem(titleIndex).setCheckable(true);
                 if(!menuItem.isChecked()) menuItem.setChecked(true);
                 else menuItem.setChecked(false);
 
@@ -64,7 +70,9 @@ public class NavigationDrawerHandler extends MainActivity {
 
                     // For rest of the options we just show a toast on click
                     case R.id.lists:
-
+                        m.toolbar.setTitle("Boozic");
+                        title = (String) m.toolbar.getTitle();
+                        titleIndex = 0;
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -74,7 +82,9 @@ public class NavigationDrawerHandler extends MainActivity {
 
                         return true;
                     case R.id.heart:
-
+                        m.toolbar.setTitle("Favorites");
+                        title = (String) m.toolbar.getTitle();
+                        titleIndex = 1;
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -83,22 +93,26 @@ public class NavigationDrawerHandler extends MainActivity {
                         }, 275);
 
                         return true;
-                    case R.id.edit:
-
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(m.getApplicationContext(),"Theme Selected",Toast.LENGTH_SHORT).show();
-                            }
-                        }, 275);
-
-                        return true;
                     case R.id.cash:
-
+                        m.toolbar.setTitle("Spending");
+                        title = (String) m.toolbar.getTitle();
+                        titleIndex = 2;
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 Toast.makeText(m.getApplicationContext(),"Spending Selected",Toast.LENGTH_SHORT).show();
+                            }
+                        }, 275);
+
+                        return true;
+                    case R.id.edit:
+                        m.toolbar.setTitle("Themes");
+                        title = (String) m.toolbar.getTitle();
+                        titleIndex = 3;
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(m.getApplicationContext(),"Theme Selected",Toast.LENGTH_SHORT).show();
                             }
                         }, 275);
 

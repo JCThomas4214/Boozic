@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Point;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
@@ -26,20 +27,36 @@ import io.codetail.animation.ViewAnimationUtils;
 public class SearchBarHandler {
 
     private MainActivity m;
+    public NavigationDrawerHandler Nav;
 
-    public void onCreate() {}
-    public void setActivity(MainActivity main) {m = main;}
+    public void onCreate() {
+
+    }
+    public void setActivity(MainActivity main, Toolbar t) {
+        m = main;
+        //Creates a Navigation Drawer
+        //When you swipe from the left
+        Nav = new NavigationDrawerHandler();
+        Nav.connectDrawer(m,t);
+
+        SearchBox search = (SearchBox) m.findViewById(R.id.searchbox);
+        SearchSuggestHandler searchSuggestHandler = new SearchSuggestHandler();
+        search.setSearchables(searchSuggestHandler.setSuggest(m));
+    }
 
     public void openSearch() {
+
+        //Hide the FAB button with animation
         FloatingActionMenu menu = (FloatingActionMenu) m.findViewById(R.id.fabmenu);
         menu.hideMenuButton(true);
 
+        //define Searchbox constant
         SearchBox search = (SearchBox) m.findViewById(R.id.searchbox);
         //Turn buttons off
         m.findViewById(R.id.action_search).setEnabled(false);
         m.findViewById(R.id.action_refresh).setEnabled(false);
 
-        m.toolbar.setEnabled(false);
+        //m.toolbar.setClickable(false);
 
         revealFromMenuItem(R.id.action_search, m, search);
 
@@ -78,6 +95,7 @@ public class SearchBarHandler {
 
             @Override
             public void onSearch(String searchTerm) {
+                Nav.navigationView.getMenu().getItem(Nav.titleIndex).setCheckable(false);
                 m.toolbar.setTitle(searchTerm);
             }
 
@@ -90,12 +108,13 @@ public class SearchBarHandler {
         FrameLayout layout_MainMenu = (FrameLayout) m.findViewById(R.id.frame2);
         layout_MainMenu.getForeground().setAlpha(180);
 
-        m.Nav.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        //Lock and hide Navagation drawer and Nav drawer icon
+        Nav.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                m.Nav.actionBarDrawerToggle.setDrawerIndicatorEnabled(false);
+                Nav.actionBarDrawerToggle.setDrawerIndicatorEnabled(false);
             }
         }, 400);
     }
@@ -117,14 +136,15 @@ public class SearchBarHandler {
 
         FrameLayout layout_MainMenu = (FrameLayout) m.findViewById(R.id.frame2);
         layout_MainMenu.getForeground().setAlpha(0);
-        m.Nav.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        Nav.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
         //Turn buttons back on
         m.findViewById(R.id.action_search).setEnabled(true);
         m.findViewById(R.id.action_refresh).setEnabled(true);
-        m.Nav.actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
+        Nav.actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
 
-        if(search.getSearchText().isEmpty())m.toolbar.setTitle(R.string.app_name);
+        //if no characters inputted or erased, keep the current title
+        if(search.getSearchText().isEmpty())m.toolbar.setTitle(Nav.title);
     }
 
     public void revealFromMenuItem(int id, Activity activity, SearchBox s) {
