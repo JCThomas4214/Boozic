@@ -33,9 +33,9 @@ public class DialogHandler {
                 })
                 .positiveText("SEND")
                 .negativeText("CANCEL")
-                .widgetColorRes(R.color.ColorPrimary)
-                .positiveColorRes(R.color.ColorPrimary)
-                .negativeColorRes(R.color.ColorPrimary)
+                .widgetColorRes(R.color.ColorAccent)
+                .positiveColorRes(R.color.ColorAccent)
+                .negativeColorRes(R.color.ColorAccent)
                 .build();
 
         EditText input = dialog.getInputEditText();

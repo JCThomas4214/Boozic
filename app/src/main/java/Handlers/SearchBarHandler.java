@@ -14,7 +14,6 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.quinny898.library.persistentsearch.SearchBox;
 
@@ -109,7 +108,7 @@ public class SearchBarHandler {
             public void run() {
                 menu.showMenuButton(true);
             }
-        }, 550);
+        }, 600);
 
 
         SearchBox search = (SearchBox) m.findViewById(R.id.searchbox);
