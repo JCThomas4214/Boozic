@@ -67,8 +67,8 @@ public class FloatingActionButtonHandler {
         scaleOutX.setDuration(50);
         scaleOutY.setDuration(50);
 
-        scaleInX.setDuration(150);
-        scaleInY.setDuration(150);
+        scaleInX.setDuration(100);
+        scaleInY.setDuration(100);
 
         scaleInX.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -101,6 +101,7 @@ public class FloatingActionButtonHandler {
                     break;
                 case R.id.fabtop:
                     menu.close(true);
+                    menuButton.setVisibility(View.GONE);
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -124,8 +125,15 @@ public class FloatingActionButtonHandler {
                         menuButton.setVisibility(View.VISIBLE);
                     }
                 }, 225);
-            } else
+            } else {
                 menuButton.setVisibility(View.GONE);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        menuButton.setVisibility(View.GONE);
+                    }
+                }, 200);
+            }
         }
     };
 }
