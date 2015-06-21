@@ -129,7 +129,6 @@ public class SearchBarHandler {
             }
         }, 600);
 
-
         SearchBox search = (SearchBox) m.findViewById(R.id.searchbox);
 
         hideCircularly(m);
@@ -143,8 +142,12 @@ public class SearchBarHandler {
         m.findViewById(R.id.action_refresh).setEnabled(true);
         Nav.actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
 
-        //if no characters inputted or erased, keep the current title
-        if(search.getSearchText().isEmpty())m.toolbar.setTitle(Nav.title);
+        //if no characters inputted or erased
+        if(search.getSearchText().isEmpty()) {
+            //set Toolbar title to previously selected content and set true for Nav drawer congruency
+            Nav.navigationView.getMenu().getItem(Nav.titleIndex).setCheckable(true);
+            m.toolbar.setTitle(Nav.title);
+        }
     }
 
     public void revealFromMenuItem(int id, Activity activity, SearchBox s) {
