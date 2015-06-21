@@ -171,7 +171,7 @@ public class SearchBarHandler {
         Resources r = m.getResources();
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96,
                 r.getDisplayMetrics());
-        int cx = m.findViewById(R.id.toolbar).getWidth() / 2 + 335;
+        int cx = m.findViewById(R.id.toolbar).getWidth() - (m.findViewById(R.id.action_refresh).getWidth() + (m.findViewById(R.id.action_search).getWidth() / 2)) + 20;
         int cy = m.findViewById(R.id.toolbar).getHeight() / 2 + 20;
 
         int finalRadius = (int) Math.max(layout.getWidth(), px);
@@ -216,7 +216,7 @@ public class SearchBarHandler {
         Resources r = m.getResources();
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96,
                 r.getDisplayMetrics());
-        int cx = m.findViewById(R.id.toolbar).getWidth() / 2 + 335;
+        int cx = m.findViewById(R.id.toolbar).getWidth() - (m.findViewById(R.id.action_refresh).getWidth() + (m.findViewById(R.id.action_search).getWidth() / 2)) + 20;
         int cy = m.findViewById(R.id.toolbar).getHeight() / 2 + 20;
         int finalRadius = (int) Math.max(layout.getWidth()*1.5, px);
 
