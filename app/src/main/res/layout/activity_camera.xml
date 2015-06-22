@@ -14,54 +14,93 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/scanner_layout_sub"/>
+            android:id="@+id/scanner_layout_sub">
 
-        <LinearLayout
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="left|bottom"></TableLayout>
+        </FrameLayout>
+
+        <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|left"
-            android:paddingBottom="45dp"
-            android:paddingLeft="35dp">
+            android:paddingBottom="17dp"
+            android:paddingLeft="35dp"
+            android:id="@+id/table1">
+            <TableRow>
+                <ImageView
+                    android:id="@+id/soundButton"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:clickable="true"
+                    android:src="@drawable/bell_off" />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Sound"
+                    android:textColor="#fff"
+                    android:paddingTop="8dp"
+                    android:id="@+id/sound_label" />
+            </TableRow>
+        </TableLayout>
 
-            <ImageView
-                android:id="@+id/soundButton"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:clickable="true"
-                android:src="@drawable/bell_off" />
-
-        </LinearLayout>
-
-        <LinearLayout
+        <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
-            android:paddingBottom="45dp">
+            android:paddingBottom="17dp"
+            android:id="@+id/table2">
+            <TableRow>
+                <ImageView
+                    android:id="@+id/flashlightButton"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:clickable="true"
+                    android:src="@drawable/flashlight_off" />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Flash"
+                    android:textColor="#fff"
+                    android:paddingTop="8dp"
+                    android:id="@+id/flash_label" />
+            </TableRow>
+        </TableLayout>
 
-            <ImageView
-                android:id="@+id/flashlightButton"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:clickable="true"
-                android:src="@drawable/flashlight_off" />
-
-        </LinearLayout>
-
-        <LinearLayout
+        <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
-            android:paddingBottom="45dp"
+            android:paddingBottom="17dp"
             android:paddingRight="35dp">
+            <TableRow>
+                <ImageView
+                    android:id="@+id/autofocusButton"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:clickable="true"
+                    android:src="@drawable/eye_off" />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Focus"
+                    android:textColor="#fff"
+                    android:paddingTop="8dp"
+                    android:id="@+id/autofocus_label" />
+            </TableRow>
 
-            <ImageView
-                android:id="@+id/autofocusButton"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:clickable="true"
-                android:src="@drawable/eye_off" />
-
-        </LinearLayout>
+        </TableLayout>
 
 
     </FrameLayout>
