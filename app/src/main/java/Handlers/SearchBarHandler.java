@@ -13,7 +13,6 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionMenu;
 import com.quinny898.library.persistentsearch.SearchBox;
@@ -44,35 +43,28 @@ public class SearchBarHandler {
         search.setSearchables(searchSuggestHandler.setSuggest(m));
     }
 
-    public void openSearch() {
+    public void openSearch(Toolbar t) {
 
         //Hide the FAB button with animation
         FloatingActionMenu menu = (FloatingActionMenu) m.findViewById(R.id.fabmenu);
         menu.hideMenuButton(true);
 
-        //define Searchbox constant
-        SearchBox search = (SearchBox) m.findViewById(R.id.searchbox);
+        //connect Searchbox to search variable
+        final SearchBox search = (SearchBox) m.findViewById(R.id.searchbox);
         //Turn buttons off
         m.findViewById(R.id.action_search).setEnabled(false);
         m.findViewById(R.id.action_refresh).setEnabled(false);
 
-        //m.toolbar.setClickable(false);
-
         revealFromMenuItem(R.id.action_search, m, search);
 
-        search.setLogoText("");
+        //logo is the initial String that's shown during reveal animation
+        //set search bar logo to current toolbar title
+        search.setLogoText((String)t.getTitle());
+
+        //connect to searchbar edittext xml to change hint
         EditText text = (EditText) search.findViewById(R.id.search);
         text.setHint("Search Boozic");
-        search.setMenuListener(new SearchBox.MenuListener() {
 
-            @Override
-            public void onMenuClick() {
-                // Hamburger has been clicked
-                Toast.makeText(m, "Menu click",
-                        Toast.LENGTH_LONG).show();
-            }
-
-        });
         search.setSearchListener(new SearchBox.SearchListener() {
 
             @Override
@@ -95,6 +87,7 @@ public class SearchBarHandler {
 
             @Override
             public void onSearch(String searchTerm) {
+                search.setLogoText(searchTerm);
                 Nav.navigationView.getMenu().getItem(Nav.titleIndex).setCheckable(false);
                 m.toolbar.setTitle(searchTerm);
             }
@@ -105,12 +98,12 @@ public class SearchBarHandler {
             }
 
         });
-        FrameLayout layout_MainMenu = (FrameLayout) m.findViewById(R.id.frame2);
-        layout_MainMenu.getForeground().setAlpha(180);
-
         //Lock and hide Navagation drawer and Nav drawer icon
         Nav.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         Handler handler = new Handler();
+
+        //set a delay to remove navigation drawer burger icon
+        //this makes the icon unclickable and the user doesn't see it happen
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -122,6 +115,8 @@ public class SearchBarHandler {
     public void closeSearch() {
         final FloatingActionMenu menu = (FloatingActionMenu) m.findViewById(R.id.fabmenu);
         Handler handler = new Handler();
+        //set a delay for FAB button reveal so users can see it
+        //will reveal below keyboard if not
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -129,18 +124,16 @@ public class SearchBarHandler {
             }
         }, 600);
 
+        //connect search bar to search variable
         SearchBox search = (SearchBox) m.findViewById(R.id.searchbox);
 
         hideCircularly(m);
 
-        FrameLayout layout_MainMenu = (FrameLayout) m.findViewById(R.id.frame2);
-        layout_MainMenu.getForeground().setAlpha(0);
-        Nav.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-
-        //Turn buttons back on
+        //Turn buttons back on and unlock Nav drawer
         m.findViewById(R.id.action_search).setEnabled(true);
         m.findViewById(R.id.action_refresh).setEnabled(true);
         Nav.actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
+        Nav.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
         //if no characters inputted or erased
         if(search.getSearchText().isEmpty()) {
@@ -159,6 +152,7 @@ public class SearchBarHandler {
             if (layout.findViewWithTag("searchBox") == null) {
                 int[] location = new int[2];
                 menuButton.getLocationInWindow(location);
+                //animation function
                 revealFrom(activity, s);
             }
         }
@@ -179,7 +173,7 @@ public class SearchBarHandler {
         SupportAnimator animator = ViewAnimationUtils.createCircularReveal(
                 root, cx, cy, 0, finalRadius);
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
-        animator.setDuration(500);
+        animator.setDuration(450);
         animator.addListener(new SupportAnimator.AnimatorListener() {
 
             @Override
@@ -206,7 +200,7 @@ public class SearchBarHandler {
         animator.start();
     }
 
-    public void hideCircularly(Activity activity){
+    private void hideCircularly(Activity activity){
         Display display = activity.getWindowManager().getDefaultDisplay();
         Point size = new Point();
         final FrameLayout layout = (FrameLayout) activity.getWindow().getDecorView()

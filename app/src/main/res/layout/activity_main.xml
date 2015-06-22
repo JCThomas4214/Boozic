@@ -23,8 +23,7 @@
             <FrameLayout
                 android:id="@+id/frame2"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:foreground="@drawable/window_dim">
+                android:layout_height="match_parent">
 
                 <com.github.clans.fab.FloatingActionMenu
                     android:id="@+id/fabmenu"

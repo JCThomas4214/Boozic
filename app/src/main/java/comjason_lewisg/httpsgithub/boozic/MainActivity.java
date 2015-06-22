@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //Creates a FAB for the bottom right corner of the main screen
-        //FloatingActionButtonHandler FButton = new FloatingActionButtonHandler();
-        //FButton.connectButton(this);
+        FloatingActionButtonHandler FAB = new FloatingActionButtonHandler();
+        FAB.setActivity(this);
 
         // Initializing Toolbar and setting it as the actionbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -46,19 +46,10 @@ public class MainActivity extends AppCompatActivity {
         //Create a Dialog Handler for Feedback
         DHandle = new DialogHandler();
 
-        //Connect and set alpha for the layout beneath seach xml
-        //used to contrast when search bar is expanded
-        FrameLayout layout_MainMenu = (FrameLayout) findViewById( R.id.frame2);
-        layout_MainMenu.getForeground().setAlpha(0);
-
         //connect to search bar and create new search handler
         searchBarHandler = new SearchBarHandler();
         searchBarHandler.setActivity(this, toolbar);
         //search.enableVoiceRecognition(this);
-
-
-        FloatingActionButtonHandler FAB = new FloatingActionButtonHandler();
-        FAB.setActivity(this);
     }
 
 
@@ -98,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.action_search) {
-            searchBarHandler.openSearch();
+            searchBarHandler.openSearch(toolbar);
             return true;
         }
         if (id == android.R.id.home) {

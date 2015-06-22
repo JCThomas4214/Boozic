@@ -105,12 +105,10 @@ public class FloatingActionButtonHandler {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            //Intent i = new Intent(m, CameraActivity.class);
-                            //m.startActivity(i);
-                            IntentIntegrator integrator = new IntentIntegrator(m);
-                            integrator.initiateScan();
+                            Intent i = new Intent(m, CameraActivity.class);
+                            m.startActivity(i);
                         }
-                    }, 275);
+                    }, 325);
                     break;
             }
         }
