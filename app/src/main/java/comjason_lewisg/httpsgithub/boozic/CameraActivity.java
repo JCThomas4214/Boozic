@@ -1,9 +1,11 @@
 package comjason_lewisg.httpsgithub.boozic;
-
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -11,77 +13,136 @@ import android.widget.ImageView;
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 
-public class CameraActivity extends AppCompatActivity implements ZBarScannerView.ResultHandler {
+public class CameraActivity extends Activity implements ZBarScannerView.ResultHandler {
     private ZBarScannerView mScannerView;
-    private boolean mFlash;
-    private boolean mAutoFocus;
-    private static final String FLASH_STATE = "FLASH_STATE";
-    private static final String AUTO_FOCUS_STATE = "AUTO_FOCUS_STATE";
+    private int mFlash;
+    private int mAutoFocus;
+    private int mSound;
+    static final int FLASH_STATE = 0;
+    static final int AUTO_FOCUS_STATE = 1;
+    static final int SOUND_STATE = 1;
+
+    private SharedPreferences mPrefs;
+    private ImageView flash;
+    private ImageView autofocus;
+    private ImageView sound;
 
     @Override
-    protected void onCreate(Bundle state) {
-        super.onCreate(state);
+    protected void onCreate(Bundle savedInstanceState) {
+        Log.v("STATE", savedInstanceState == null ? "NULL" : "not NULL");
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
-        //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-        if(state != null) {
-            mFlash = state.getBoolean(FLASH_STATE, false);
-            mAutoFocus = state.getBoolean(AUTO_FOCUS_STATE, true);
-        } else {
-            mFlash = false;
-            mAutoFocus = true;
-        }
-        mScannerView = new ZBarScannerView(this);    // Programmatically initialize the scanner view
+        // Programmatically initialize the scanner view
+        mScannerView = new ZBarScannerView(this);
 
-        FrameLayout linearLayout = new FrameLayout(this);
-        linearLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,FrameLayout.LayoutParams.MATCH_PARENT));
-        final ImageView flash = new ImageView(this);
-        flash.setImageResource(R.drawable.flashlight_off);
-        flash.setLayoutParams(new FrameLayout.LayoutParams(175,175, Gravity.CENTER_HORIZONTAL|Gravity.BOTTOM));
-        flash.setY(-200);
+        //add the scannerview to the layout
+        FrameLayout frameLayout = (FrameLayout) findViewById(R.id.scanner_layout_sub);
+        frameLayout.addView(mScannerView);
 
-        linearLayout.addView(mScannerView);
-        linearLayout.addView(flash);
-        setContentView(linearLayout);
+        //Set listener for all buttons
+        flash = (ImageView) findViewById(R.id.flashlightButton);
+        flash.setOnClickListener(clickListener);
 
-        flash.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mFlash) {
-                    flash.setImageResource(R.drawable.flashlight_off);
-                    mFlash = !mFlash;
-                }else {
-                    flash.setImageResource(R.drawable.flashlight);
-                    mFlash = !mFlash;
-                }
-                mScannerView.setFlash(mFlash);
-            }
-        });
+        autofocus = (ImageView) findViewById(R.id.autofocusButton);
+        autofocus.setOnClickListener(clickListener);
 
+        sound = (ImageView) findViewById(R.id.soundButton);
+        sound.setOnClickListener(clickListener);
     }
+
+    private View.OnClickListener clickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.flashlightButton:
+                    if (mFlash == 1) {
+                        flash.setImageResource(R.drawable.flashlight_off);
+                        mFlash = 0;
+                    }else {
+                        flash.setImageResource(R.drawable.flashlight);
+                        mFlash = 1;
+                    }
+                    mScannerView.setFlash(mFlash == 1);
+                    break;
+                case R.id.soundButton:
+                    if (mSound == 1) {
+                        sound.setImageResource(R.drawable.bell_off);
+                        mSound = 0;
+                    }else {
+                        sound.setImageResource(R.drawable.bell);
+                        mSound = 1;
+                    }
+                    break;
+                case R.id.autofocusButton:
+                    if (mAutoFocus == 1) {
+                        autofocus.setImageResource(R.drawable.eye_off);
+                        mAutoFocus = 0;
+                    }else {
+                        autofocus.setImageResource(R.drawable.eye);
+                        mAutoFocus = 1;
+                    }
+                    mScannerView.setAutoFocus(mAutoFocus == 1);
+                    break;
+            }
+        }
+    };
 
     @Override
     public void onResume() {
         super.onResume();
+        //pull the shared preference
+        mPrefs = getSharedPreferences("FLASH_STATE", MODE_PRIVATE);
+        //when resume, pull saves states for each button
+        mFlash = mPrefs.getInt("FLASH_STATE", FLASH_STATE);
+        mAutoFocus = mPrefs.getInt("AUTO_FOCUS_STATE", AUTO_FOCUS_STATE);
+        mSound = mPrefs.getInt("SOUND_STATE", SOUND_STATE);
+        //depending on the state, change the icon that's seen by user
+        if (mFlash == 1) {flash.setImageResource(R.drawable.flashlight);}
+        if (mAutoFocus == 1) {autofocus.setImageResource(R.drawable.eye);}
+        if (mSound == 1) {sound.setImageResource(R.drawable.bell);}
+
+        //set the camera actions according to the states
         mScannerView.setResultHandler(this); // Register ourselves as a handler for scan results.
         mScannerView.startCamera();          // Start camera on resume
-        mScannerView.setFlash(mFlash);
-        mScannerView.setAutoFocus(mAutoFocus);
+        mScannerView.setFlash(mFlash == 1);
+        mScannerView.setAutoFocus(mAutoFocus == 1);
     }
-
-
 
     @Override
     public void onPause() {
         super.onPause();
+        //connect universal sharedpreference edit to ed
+        SharedPreferences.Editor ed = mPrefs.edit();
+        //store all button states into universal sharedpreference
+        ed.putInt("FLASH_STATE", mFlash);
+        ed.putInt("AUTO_FOCUS_STATE", mAutoFocus);
+        ed.putInt("SOUND_STATE", mSound);
+        //apply changes
+        ed.apply();
+
         mScannerView.stopCamera();           // Stop camera on pause
     }
 
     @Override
     public void handleResult(Result rawResult) {
+        //if sound is enabled
+        if (mSound == 1) {
+            try {
+                //play raw mp3
+                Uri notification = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.secret);
+                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                r.play();
+            } catch (Exception e) {
+                Log.v("ERROR", "sound disabled or malfunctioned");
+            }
+        }
         // Do something with the result here
         Log.v("TAG", rawResult.getContents()); // Prints scan results
         Log.v("TAG", rawResult.getBarcodeFormat().getName()); // Prints the scan format (qrcode, pdf417 etc.)
-        onBackPressed();
+
+        //finish activity to be destroyed
+        finish();
     }
+
 }
