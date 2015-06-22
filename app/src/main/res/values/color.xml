@@ -2,8 +2,10 @@
 <resources>
     <color name="ColorPrimary">#673AB7</color>
     <color name="ColorPrimaryDark">#512DA8</color>
-    <color name="ColorAccent">#F06292</color>
-    <color name="ColorAccentDark">#EC407A</color>
+    <color name="ColorAccent">#F48FB1</color>
+    <color name="ColorAccentDark">#F06292</color>
+
+    <color name="ScannerButtonPrimary">@color/ColorAccent</color>
 
     <color name="ColorHint">#24000000</color>
 </resources>
