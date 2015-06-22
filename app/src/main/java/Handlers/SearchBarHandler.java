@@ -140,6 +140,7 @@ public class SearchBarHandler {
             //set Toolbar title to previously selected content and set true for Nav drawer congruency
             Nav.navigationView.getMenu().getItem(Nav.titleIndex).setCheckable(true);
             m.toolbar.setTitle(Nav.title);
+            search.setLogoText(Nav.title);
         }
     }
 
