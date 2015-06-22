@@ -3,6 +3,10 @@ package comjason_lewisg.httpsgithub.boozic;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
@@ -28,7 +32,31 @@ public class CameraActivity extends AppCompatActivity implements ZBarScannerView
             mAutoFocus = true;
         }
         mScannerView = new ZBarScannerView(this);    // Programmatically initialize the scanner view
-        setContentView(mScannerView);                // Set the scanner view as the content view
+
+        FrameLayout linearLayout = new FrameLayout(this);
+        linearLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,FrameLayout.LayoutParams.MATCH_PARENT));
+        final ImageView flash = new ImageView(this);
+        flash.setImageResource(R.drawable.flashlight_off);
+        flash.setLayoutParams(new FrameLayout.LayoutParams(175,175, Gravity.CENTER_HORIZONTAL|Gravity.BOTTOM));
+        flash.setY(-200);
+
+        linearLayout.addView(mScannerView);
+        linearLayout.addView(flash);
+        setContentView(linearLayout);
+
+        flash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mFlash) {
+                    flash.setImageResource(R.drawable.flashlight_off);
+                    mFlash = !mFlash;
+                }else {
+                    flash.setImageResource(R.drawable.flashlight);
+                    mFlash = !mFlash;
+                }
+                mScannerView.setFlash(mFlash);
+            }
+        });
 
     }
 

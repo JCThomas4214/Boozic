@@ -108,7 +108,7 @@ public class FloatingActionButtonHandler {
                             Intent i = new Intent(m, CameraActivity.class);
                             m.startActivity(i);
                         }
-                    }, 325);
+                    }, 300);
                     break;
             }
         }
