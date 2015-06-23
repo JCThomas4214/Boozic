@@ -15,11 +15,11 @@ import android.widget.Toast;
 
 import com.quinny898.library.persistentsearch.SearchBox;
 
-import Handlers.DialogHandler;
-import Handlers.FloatingActionButtonHandler;
-import Handlers.NavigationDrawerHandler;
-import Handlers.SearchBarHandler;
-import Handlers.SearchSuggestHandler;
+import comjason_lewisg.httpsgithub.boozic.Handlers.DialogHandler;
+import comjason_lewisg.httpsgithub.boozic.Handlers.FloatingActionButtonHandler;
+import comjason_lewisg.httpsgithub.boozic.Handlers.NavigationDrawerHandler;
+import comjason_lewisg.httpsgithub.boozic.Handlers.SearchBarHandler;
+import comjason_lewisg.httpsgithub.boozic.Handlers.SearchSuggestHandler;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package Handlers;
+package comjason_lewisg.httpsgithub.boozic.Handlers;
 
 import android.app.Activity;
 import android.content.res.Resources;

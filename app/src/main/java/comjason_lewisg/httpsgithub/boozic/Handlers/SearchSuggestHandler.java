@@ -1,4 +1,4 @@
-package Handlers;
+package comjason_lewisg.httpsgithub.boozic.Handlers;
 
 import com.quinny898.library.persistentsearch.SearchResult;
 

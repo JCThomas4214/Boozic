@@ -1,4 +1,4 @@
-package Handlers;
+package comjason_lewisg.httpsgithub.boozic.Handlers;
 
 import android.content.Intent;
 import android.os.Handler;
@@ -12,7 +12,10 @@ import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionMenu;
 
-import comjason_lewisg.httpsgithub.boozic.AboutUsActivity;
+import comjason_lewisg.httpsgithub.boozic.Fragments.FavoritesFragment;
+import comjason_lewisg.httpsgithub.boozic.Fragments.SpendingFragment;
+import comjason_lewisg.httpsgithub.boozic.Fragments.ThemeFragment;
+import comjason_lewisg.httpsgithub.boozic.Fragments.TopTensFragment;
 import comjason_lewisg.httpsgithub.boozic.LegalActivity;
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
@@ -25,12 +28,28 @@ public class NavigationDrawerHandler {
     public String title;
     public int titleIndex;
 
+    public TopTensFragment topTensFragment;
+    public FavoritesFragment favoritesFragment;
+    public SpendingFragment spendingFragment;
+    public ThemeFragment themeFragment;
+    public android.support.v4.app.FragmentTransaction fragmentTransaction;
+
     protected void onCreate(){
+
     }
     public void connectDrawer(final MainActivity m, final Toolbar t) {
         //set initial title to Boozic
         title = (String) t.getTitle();
         titleIndex = 0;
+
+        topTensFragment = new TopTensFragment();
+        favoritesFragment = new FavoritesFragment();
+        spendingFragment = new SpendingFragment();
+        themeFragment = new ThemeFragment();
+
+        fragmentTransaction = m.getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.frame2,topTensFragment);
+        fragmentTransaction.commit();
 
         //Initializing NavigationView
         navigationView = (NavigationView) m.findViewById(R.id.navigation_view);
@@ -55,66 +74,50 @@ public class NavigationDrawerHandler {
                 //Closing drawer on item click
                 drawerLayout.closeDrawers();
 
+
+                //fragmentTransaction = m.getSupportFragmentManager().beginTransaction();
+
                 //Check to see which item was being clicked and perform appropriate action
                 switch (menuItem.getItemId()){
-                    /*
-                    //Replacing the main content with ContentFragment Which is our Inbox View;
-                    case R.id.inbox:
-                        Toast.makeText(getApplicationContext(),"Inbox Selected",Toast.LENGTH_SHORT).show();
-                        ContentFragment fragment = new ContentFragment();
-                        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.frame,fragment);
-                        fragmentTransaction.commit();
-                        return true;
-                    */
-
                     // For rest of the options we just show a toast on click
                     case R.id.lists:
                         m.toolbar.setTitle("Boozic");
                         title = (String) m.toolbar.getTitle();
                         titleIndex = 0;
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(m.getApplicationContext(),"Top Tens Selected",Toast.LENGTH_SHORT).show();
-                            }
-                        }, 275);
+
+                        fragmentTransaction = m.getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.frame2,topTensFragment);
+                        fragmentTransaction.commit();
 
                         return true;
                     case R.id.heart:
                         m.toolbar.setTitle("Favorites");
                         title = (String) m.toolbar.getTitle();
                         titleIndex = 1;
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(m.getApplicationContext(),"Favorites Selected",Toast.LENGTH_SHORT).show();
-                            }
-                        }, 275);
+
+                        fragmentTransaction = m.getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.frame2,favoritesFragment);
+                        fragmentTransaction.commit();
 
                         return true;
                     case R.id.cash:
                         m.toolbar.setTitle("Spending");
                         title = (String) m.toolbar.getTitle();
                         titleIndex = 2;
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(m.getApplicationContext(),"Spending Selected",Toast.LENGTH_SHORT).show();
-                            }
-                        }, 275);
+
+                        fragmentTransaction = m.getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.frame2,spendingFragment);
+                        fragmentTransaction.commit();
 
                         return true;
                     case R.id.edit:
                         m.toolbar.setTitle("Themes");
                         title = (String) m.toolbar.getTitle();
                         titleIndex = 3;
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(m.getApplicationContext(),"Theme Selected",Toast.LENGTH_SHORT).show();
-                            }
-                        }, 275);
+
+                        fragmentTransaction = m.getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.frame2,themeFragment);
+                        fragmentTransaction.commit();
 
                         return true;
                     case R.id.settings:
@@ -129,14 +132,6 @@ public class NavigationDrawerHandler {
 
                         return true;
                     case R.id.about:
-
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Intent i = new Intent(m, AboutUsActivity.class);
-                                m.startActivity(i);
-                            }
-                        }, 275);
 
                         return true;
                     case R.id.feedback:
