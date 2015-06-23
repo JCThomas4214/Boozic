@@ -1,5 +1,6 @@
 package comjason_lewisg.httpsgithub.boozic;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -140,7 +141,11 @@ public class CameraActivity extends Activity implements ZBarScannerView.ResultHa
         // Do something with the result here
         Log.v("TAG", rawResult.getContents()); // Prints scan results
         Log.v("TAG", rawResult.getBarcodeFormat().getName()); // Prints the scan format (qrcode, pdf417 etc.)
+        //send string as integer
 
+        Intent intent = this.getIntent();
+        intent.putExtra("RESULT", rawResult.getContents());
+        this.setResult(RESULT_OK, intent);
         //finish activity to be destroyed
         finish();
     }

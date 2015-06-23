@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.view.View;
@@ -16,7 +17,7 @@ import comjason_lewisg.httpsgithub.boozic.CameraActivity;
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
 
-public class FloatingActionButtonHandler {
+public class FloatingActionButtonHandler extends Activity {
 
     private MainActivity m;
     private FloatingActionMenu menu;
@@ -25,7 +26,7 @@ public class FloatingActionButtonHandler {
     public FloatingActionButton fav2;
     public FloatingActionButton fav3;
 
-
+    static final int SCANNER_CODE_REQUEST = 0;
 
     protected void onCreate() {
 
@@ -106,7 +107,8 @@ public class FloatingActionButtonHandler {
                         @Override
                         public void run() {
                             Intent i = new Intent(m, CameraActivity.class);
-                            m.startActivity(i);
+                            //m.startActivity(i);
+                            m.startActivityForResult(i, SCANNER_CODE_REQUEST);
                         }
                     }, 300);
                     break;
@@ -136,4 +138,6 @@ public class FloatingActionButtonHandler {
             }
         }
     };
+
+
 }

@@ -48,7 +48,7 @@ public class NavigationDrawerHandler {
         themeFragment = new ThemeFragment();
 
         fragmentTransaction = m.getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.frame2,topTensFragment);
+        fragmentTransaction.replace(R.id.frame3,topTensFragment);
         fragmentTransaction.commit();
 
         //Initializing NavigationView
@@ -85,9 +85,14 @@ public class NavigationDrawerHandler {
                         title = (String) m.toolbar.getTitle();
                         titleIndex = 0;
 
-                        fragmentTransaction = m.getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.frame2,topTensFragment);
-                        fragmentTransaction.commit();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                fragmentTransaction = m.getSupportFragmentManager().beginTransaction();
+                                fragmentTransaction.replace(R.id.frame3,topTensFragment);
+                                fragmentTransaction.commit();
+                            }
+                        }, 275);
 
                         return true;
                     case R.id.heart:
@@ -95,9 +100,14 @@ public class NavigationDrawerHandler {
                         title = (String) m.toolbar.getTitle();
                         titleIndex = 1;
 
-                        fragmentTransaction = m.getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.frame2,favoritesFragment);
-                        fragmentTransaction.commit();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                fragmentTransaction = m.getSupportFragmentManager().beginTransaction();
+                                fragmentTransaction.replace(R.id.frame3,favoritesFragment);
+                                fragmentTransaction.commit();
+                            }
+                        }, 275);
 
                         return true;
                     case R.id.cash:
@@ -105,9 +115,14 @@ public class NavigationDrawerHandler {
                         title = (String) m.toolbar.getTitle();
                         titleIndex = 2;
 
-                        fragmentTransaction = m.getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.frame2,spendingFragment);
-                        fragmentTransaction.commit();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                fragmentTransaction = m.getSupportFragmentManager().beginTransaction();
+                                fragmentTransaction.replace(R.id.frame3,spendingFragment);
+                                fragmentTransaction.commit();
+                            }
+                        }, 275);
 
                         return true;
                     case R.id.edit:
@@ -115,9 +130,14 @@ public class NavigationDrawerHandler {
                         title = (String) m.toolbar.getTitle();
                         titleIndex = 3;
 
-                        fragmentTransaction = m.getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.frame2,themeFragment);
-                        fragmentTransaction.commit();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                fragmentTransaction = m.getSupportFragmentManager().beginTransaction();
+                                fragmentTransaction.replace(R.id.frame3,themeFragment);
+                                fragmentTransaction.commit();
+                            }
+                        }, 275);
 
                         return true;
                     case R.id.settings:
