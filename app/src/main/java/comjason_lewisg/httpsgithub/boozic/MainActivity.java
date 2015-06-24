@@ -173,11 +173,13 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         colorAccent_id = mPrefs.getInt("COLOR_ACCENT_STATE", COLOR_ACCENT_STATE);
         Log.v("STATE", "in resume, color id = " + colorPrimary_id);
 
+        //store the previous state colors into their variables
         primaryColor = mPrefs.getInt("PRIMARY_STATE", PRIMARY_STATE);
         primaryColorDark = mPrefs.getInt("PRIMARY_DARK_STATE", PRIMARY_DARK_STATE);
         accentColor = mPrefs.getInt("ACCENT_STATE", ACCENT_STATE);
         accentColorDark = mPrefs.getInt("ACCENT_DARK_STATE", ACCENT_DARK_STATE);
 
+        //change the FAB icons depending on state color
         findViewById(R.id.toolbar).setBackgroundColor(primaryColor);
         FAB.menu.setMenuButtonColorNormal(primaryColor);
         FAB.menu.setMenuButtonColorPressed(primaryColorDark);
@@ -189,6 +191,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         FAB.fav2.setColorPressed(accentColorDark);
         FAB.fav3.setColorNormal(accentColor);
         FAB.fav3.setColorPressed(accentColorDark);
+
+        System.gc();
     }
 
     @Override
@@ -196,8 +200,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         super.onPause();
         //connect universal sharedpreference edit to ed
         SharedPreferences.Editor ed = mPrefs.edit();
-        //store all button states into universal sharedpreference
-        Log.v("STATE", "in pause, color id = " + colorPrimary_id);
+        //store all color states into universal sharedpreference
         ed.putInt("COLOR_STATE", colorPrimary_id);
         ed.putInt("COLOR_ACCENT_STATE", colorAccent_id);
 
@@ -209,6 +212,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         ed.apply();
     }
 
+    //Override ThemeHandler.OnDataPass interface functions
     @Override
     public void PassColorPrimaryId(int primary_id) {
         colorPrimary_id = primary_id;

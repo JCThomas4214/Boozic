@@ -54,19 +54,19 @@ public class DialogHandler {
         String str = "";
       switch (colorAccent_id) {
           case 1:
-              str = "ColorAccent";
+              str = "ColorAccentDark";
               break;
           case 2:
-              str = "ColorAccent2";
+              str = "ColorAccentDark2";
               break;
           case 3:
-              str = "ColorAccent3";
+              str = "ColorAccentDark3";
               break;
           case 4:
-              str = "ColorAccent4";
+              str = "ColorAccentDark4";
               break;
           case 5:
-              str = "ColorAccent5";
+              str = "ColorAccentDark5";
               break;
       }
         return str;
