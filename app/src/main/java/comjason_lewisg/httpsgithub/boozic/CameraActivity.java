@@ -25,7 +25,7 @@ public class CameraActivity extends Activity implements ZBarScannerView.ResultHa
     static final int FLASH_STATE = 0;
     static final int AUTO_FOCUS_STATE = 1;
     static final int SOUND_STATE = 1;
-    static final int COLOR_ACCENT_STATE = 0;
+    static final int ACCENT_STATE = 0;
 
     private SharedPreferences mPrefs;
     private ImageView flash;
@@ -110,7 +110,8 @@ public class CameraActivity extends Activity implements ZBarScannerView.ResultHa
         mAutoFocus = mPrefs.getInt("AUTO_FOCUS_STATE", AUTO_FOCUS_STATE);
         mSound = mPrefs.getInt("SOUND_STATE", SOUND_STATE);
         mPrefs = getSharedPreferences("COLOR_STATE", MODE_MULTI_PROCESS);
-        colorAccent = mPrefs.getInt("COLOR_ACCENT_STATE", COLOR_ACCENT_STATE);
+        colorAccent = mPrefs.getInt("ACCENT_STATE", ACCENT_STATE);
+        Log.v("COLOR", "colorAccent = "+colorAccent);
 
         setStyleCameraButtons(colorAccent);
 
@@ -173,78 +174,18 @@ public class CameraActivity extends Activity implements ZBarScannerView.ResultHa
     }
 
     public void setStyleCameraButtons (int colorAccent) {
-        switch (colorAccent) {
-            case 1:
                 flashLight_off = getResources().getDrawable(R.drawable.flashlight_off, null);
-                flashLight_off.setColorFilter(getResources().getColor(R.color.ColorAccent), PorterDuff.Mode.MULTIPLY);
+                flashLight_off.setColorFilter(colorAccent, PorterDuff.Mode.MULTIPLY);
                 flashLight = getResources().getDrawable(R.drawable.flashlight, null);
-                flashLight.setColorFilter(getResources().getColor(R.color.ColorAccent), PorterDuff.Mode.MULTIPLY);
+                flashLight.setColorFilter(colorAccent, PorterDuff.Mode.MULTIPLY);
                 eye_off = getResources().getDrawable(R.drawable.eye_off, null);
-                eye_off.setColorFilter(getResources().getColor(R.color.ColorAccent), PorterDuff.Mode.MULTIPLY);
+                eye_off.setColorFilter(colorAccent, PorterDuff.Mode.MULTIPLY);
                 eye = getResources().getDrawable(R.drawable.eye, null);
-                eye.setColorFilter(getResources().getColor(R.color.ColorAccent), PorterDuff.Mode.MULTIPLY);
+                eye.setColorFilter(colorAccent, PorterDuff.Mode.MULTIPLY);
                 bell_off = getResources().getDrawable(R.drawable.bell_off, null);
-                bell_off.setColorFilter(getResources().getColor(R.color.ColorAccent), PorterDuff.Mode.MULTIPLY);
+                bell_off.setColorFilter(colorAccent, PorterDuff.Mode.MULTIPLY);
                 bell = getResources().getDrawable(R.drawable.bell, null);
-                bell.setColorFilter(getResources().getColor(R.color.ColorAccent), PorterDuff.Mode.MULTIPLY);
-                break;
-            case 2:
-                flashLight_off = getResources().getDrawable(R.drawable.flashlight_off, null);
-                flashLight_off.setColorFilter(getResources().getColor(R.color.ColorAccent2), PorterDuff.Mode.MULTIPLY);
-                flashLight = getResources().getDrawable(R.drawable.flashlight, null);
-                flashLight.setColorFilter(getResources().getColor(R.color.ColorAccent2), PorterDuff.Mode.MULTIPLY);
-                eye_off = getResources().getDrawable(R.drawable.eye_off, null);
-                eye_off.setColorFilter(getResources().getColor(R.color.ColorAccent2), PorterDuff.Mode.MULTIPLY);
-                eye = getResources().getDrawable(R.drawable.eye, null);
-                eye.setColorFilter(getResources().getColor(R.color.ColorAccent2), PorterDuff.Mode.MULTIPLY);
-                bell_off = getResources().getDrawable(R.drawable.bell_off, null);
-                bell_off.setColorFilter(getResources().getColor(R.color.ColorAccent2), PorterDuff.Mode.MULTIPLY);
-                bell = getResources().getDrawable(R.drawable.bell, null);
-                bell.setColorFilter(getResources().getColor(R.color.ColorAccent2), PorterDuff.Mode.MULTIPLY);
-                break;
-            case 3:
-                flashLight_off = getResources().getDrawable(R.drawable.flashlight_off, null);
-                flashLight_off.setColorFilter(getResources().getColor(R.color.ColorAccent3), PorterDuff.Mode.MULTIPLY);
-                flashLight = getResources().getDrawable(R.drawable.flashlight, null);
-                flashLight.setColorFilter(getResources().getColor(R.color.ColorAccent3), PorterDuff.Mode.MULTIPLY);
-                eye_off = getResources().getDrawable(R.drawable.eye_off, null);
-                eye_off.setColorFilter(getResources().getColor(R.color.ColorAccent3), PorterDuff.Mode.MULTIPLY);
-                eye = getResources().getDrawable(R.drawable.eye, null);
-                eye.setColorFilter(getResources().getColor(R.color.ColorAccent3), PorterDuff.Mode.MULTIPLY);
-                bell_off = getResources().getDrawable(R.drawable.bell_off, null);
-                bell_off.setColorFilter(getResources().getColor(R.color.ColorAccent3), PorterDuff.Mode.MULTIPLY);
-                bell = getResources().getDrawable(R.drawable.bell, null);
-                bell.setColorFilter(getResources().getColor(R.color.ColorAccent3), PorterDuff.Mode.MULTIPLY);
-                break;
-            case 4:
-                flashLight_off = getResources().getDrawable(R.drawable.flashlight_off, null);
-                flashLight_off.setColorFilter(getResources().getColor(R.color.ColorAccent4), PorterDuff.Mode.MULTIPLY);
-                flashLight = getResources().getDrawable(R.drawable.flashlight, null);
-                flashLight.setColorFilter(getResources().getColor(R.color.ColorAccent4), PorterDuff.Mode.MULTIPLY);
-                eye_off = getResources().getDrawable(R.drawable.eye_off, null);
-                eye_off.setColorFilter(getResources().getColor(R.color.ColorAccent4), PorterDuff.Mode.MULTIPLY);
-                eye = getResources().getDrawable(R.drawable.eye, null);
-                eye.setColorFilter(getResources().getColor(R.color.ColorAccent4), PorterDuff.Mode.MULTIPLY);
-                bell_off = getResources().getDrawable(R.drawable.bell_off, null);
-                bell_off.setColorFilter(getResources().getColor(R.color.ColorAccent4), PorterDuff.Mode.MULTIPLY);
-                bell = getResources().getDrawable(R.drawable.bell, null);
-                bell.setColorFilter(getResources().getColor(R.color.ColorAccent4), PorterDuff.Mode.MULTIPLY);
-                break;
-            case 5:
-                flashLight_off = getResources().getDrawable(R.drawable.flashlight_off, null);
-                flashLight_off.setColorFilter(getResources().getColor(R.color.ColorAccent5), PorterDuff.Mode.MULTIPLY);
-                flashLight = getResources().getDrawable(R.drawable.flashlight, null);
-                flashLight.setColorFilter(getResources().getColor(R.color.ColorAccent5), PorterDuff.Mode.MULTIPLY);
-                eye_off = getResources().getDrawable(R.drawable.eye_off, null);
-                eye_off.setColorFilter(getResources().getColor(R.color.ColorAccent5), PorterDuff.Mode.MULTIPLY);
-                eye = getResources().getDrawable(R.drawable.eye, null);
-                eye.setColorFilter(getResources().getColor(R.color.ColorAccent5), PorterDuff.Mode.MULTIPLY);
-                bell_off = getResources().getDrawable(R.drawable.bell_off, null);
-                bell_off.setColorFilter(getResources().getColor(R.color.ColorAccent5), PorterDuff.Mode.MULTIPLY);
-                bell = getResources().getDrawable(R.drawable.bell, null);
-                bell.setColorFilter(getResources().getColor(R.color.ColorAccent5), PorterDuff.Mode.MULTIPLY);
-                break;
-        }
+                bell.setColorFilter(colorAccent, PorterDuff.Mode.MULTIPLY);
     }
 
 }

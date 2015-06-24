@@ -1,95 +1,72 @@
 package comjason_lewisg.httpsgithub.boozic.Handlers;
 
+import android.app.Activity;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.ImageView;
+
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
 
-public class ThemeHandler {
+public class ThemeHandler extends MainActivity{
+
+    public int primaryColor;
+    public int primaryColorDark;
+    public int accentColor;
+    public int accentColorDark;
 
     public void onCreate(){
     }
-    public void setStyle(int colorPrimary, int colorAccent, MainActivity m) {
+    public void setStylePrimary(int colorPrimary, Activity a) {
         switch (colorPrimary) {
             case 1:
-                m.findViewById(R.id.toolbar).setBackgroundColor(m.getResources().getColor(R.color.ColorPrimary));
-                m.FAB.menu.setMenuButtonColorNormal(m.getResources().getColor(R.color.ColorPrimary));
-                m.FAB.menu.setMenuButtonColorPressed(m.getResources().getColor(R.color.ColorPrimaryDark));
-                m.FAB.menuButton.setColorNormal(m.getResources().getColor(R.color.ColorPrimary));
-                setStyleAccent(colorAccent, m);
+                primaryColor = a.getResources().getColor(R.color.ColorPrimary);
+                primaryColorDark = a.getResources().getColor(R.color.ColorPrimaryDark);
+                Log.v("COLOR", "primaryColor = "+primaryColor+ " primaryColorDark = "+primaryColorDark);
                 break;
             case 2:
-                m.findViewById(R.id.toolbar).setBackgroundColor(m.getResources().getColor(R.color.ColorPrimary2));
-                m.FAB.menu.setMenuButtonColorNormal(m.getResources().getColor(R.color.ColorPrimary2));
-                m.FAB.menu.setMenuButtonColorPressed(m.getResources().getColor(R.color.ColorPrimaryDark2));
-                m.FAB.menuButton.setColorNormal(m.getResources().getColor(R.color.ColorPrimary2));
-                setStyleAccent(colorAccent, m);
+                primaryColor = a.getResources().getColor(R.color.ColorPrimary2);
+                primaryColorDark = a.getResources().getColor(R.color.ColorPrimaryDark2);
                 break;
             case 3:
-                m.findViewById(R.id.toolbar).setBackgroundColor(m.getResources().getColor(R.color.ColorPrimary3));
-                m.FAB.menu.setMenuButtonColorNormal(m.getResources().getColor(R.color.ColorPrimary3));
-                m.FAB.menu.setMenuButtonColorPressed(m.getResources().getColor(R.color.ColorPrimaryDark3));
-                m.FAB.menuButton.setColorNormal(m.getResources().getColor(R.color.ColorPrimary3));
-                setStyleAccent(colorAccent, m);
+                primaryColor = a.getResources().getColor(R.color.ColorPrimary3);
+                primaryColorDark = a.getResources().getColor(R.color.ColorPrimaryDark3);
                 break;
             case 4:
-                m.findViewById(R.id.toolbar).setBackgroundColor(m.getResources().getColor(R.color.ColorPrimary4));
-                m.FAB.menu.setMenuButtonColorNormal(m.getResources().getColor(R.color.ColorPrimary4));
-                m.FAB.menu.setMenuButtonColorPressed(m.getResources().getColor(R.color.ColorPrimaryDark4));
-                m.FAB.menuButton.setColorNormal(m.getResources().getColor(R.color.ColorPrimary4));
-                setStyleAccent(colorAccent, m);
+                primaryColor = a.getResources().getColor(R.color.ColorPrimary4);
+                primaryColorDark = a.getResources().getColor(R.color.ColorPrimaryDark4);
                 break;
             case 5:
-                m.findViewById(R.id.toolbar).setBackgroundColor(m.getResources().getColor(R.color.ColorPrimary5));
-                m.FAB.menu.setMenuButtonColorNormal(m.getResources().getColor(R.color.ColorPrimary5));
-                m.FAB.menu.setMenuButtonColorPressed(m.getResources().getColor(R.color.ColorPrimaryDark5));
-                m.FAB.menuButton.setColorNormal(m.getResources().getColor(R.color.ColorPrimary5));
-                setStyleAccent(colorAccent, m);
+                primaryColor = a.getResources().getColor(R.color.ColorPrimary5);
+                primaryColorDark = a.getResources().getColor(R.color.ColorPrimaryDark5);
                 break;
         }
     }
 
-    private void setStyleAccent(int colorAccent, MainActivity m) {
+    public void setStyleAccent(int colorAccent, Activity a) {
         switch (colorAccent) {
             case 1:
-                m.FAB.fav1.setColorNormal(m.getResources().getColor(R.color.ColorAccent));
-                m.FAB.fav1.setColorPressed(m.getResources().getColor(R.color.ColorAccentDark));
-                m.FAB.fav2.setColorNormal(m.getResources().getColor(R.color.ColorAccent));
-                m.FAB.fav2.setColorPressed(m.getResources().getColor(R.color.ColorAccentDark));
-                m.FAB.fav3.setColorNormal(m.getResources().getColor(R.color.ColorAccent));
-                m.FAB.fav3.setColorPressed(m.getResources().getColor(R.color.ColorAccentDark));
-
-                /**/
+                accentColor = a.getResources().getColor(R.color.ColorAccent);
+                accentColorDark = a.getResources().getColor(R.color.ColorAccentDark);
                 break;
             case 2:
-                m.FAB.fav1.setColorNormal(m.getResources().getColor(R.color.ColorAccent2));
-                m.FAB.fav1.setColorPressed(m.getResources().getColor(R.color.ColorAccentDark2));
-                m.FAB.fav2.setColorNormal(m.getResources().getColor(R.color.ColorAccent2));
-                m.FAB.fav2.setColorPressed(m.getResources().getColor(R.color.ColorAccentDark2));
-                m.FAB.fav3.setColorNormal(m.getResources().getColor(R.color.ColorAccent2));
-                m.FAB.fav3.setColorPressed(m.getResources().getColor(R.color.ColorAccentDark2));
+                accentColor = a.getResources().getColor(R.color.ColorAccent2);
+                accentColorDark = a.getResources().getColor(R.color.ColorAccentDark2);
                 break;
             case 3:
-                m.FAB.fav1.setColorNormal(m.getResources().getColor(R.color.ColorAccent3));
-                m.FAB.fav1.setColorPressed(m.getResources().getColor(R.color.ColorAccentDark3));
-                m.FAB.fav2.setColorNormal(m.getResources().getColor(R.color.ColorAccent3));
-                m.FAB.fav2.setColorPressed(m.getResources().getColor(R.color.ColorAccentDark3));
-                m.FAB.fav3.setColorNormal(m.getResources().getColor(R.color.ColorAccent3));
-                m.FAB.fav3.setColorPressed(m.getResources().getColor(R.color.ColorAccentDark3));
+                accentColor = a.getResources().getColor(R.color.ColorAccent3);
+                accentColorDark = a.getResources().getColor(R.color.ColorAccentDark3);
                 break;
             case 4:
-                m.FAB.fav1.setColorNormal(m.getResources().getColor(R.color.ColorAccent4));
-                m.FAB.fav1.setColorPressed(m.getResources().getColor(R.color.ColorAccentDark4));
-                m.FAB.fav2.setColorNormal(m.getResources().getColor(R.color.ColorAccent4));
-                m.FAB.fav2.setColorPressed(m.getResources().getColor(R.color.ColorAccentDark4));
-                m.FAB.fav3.setColorNormal(m.getResources().getColor(R.color.ColorAccent4));
-                m.FAB.fav3.setColorPressed(m.getResources().getColor(R.color.ColorAccentDark4));
+                accentColor = a.getResources().getColor(R.color.ColorAccent4);
+                accentColorDark = a.getResources().getColor(R.color.ColorAccentDark4);
                 break;
             case 5:
-                m.FAB.fav1.setColorNormal(m.getResources().getColor(R.color.ColorAccent5));
-                m.FAB.fav1.setColorPressed(m.getResources().getColor(R.color.ColorAccentDark5));
-                m.FAB.fav2.setColorNormal(m.getResources().getColor(R.color.ColorAccent5));
-                m.FAB.fav2.setColorPressed(m.getResources().getColor(R.color.ColorAccentDark5));
-                m.FAB.fav3.setColorNormal(m.getResources().getColor(R.color.ColorAccent5));
-                m.FAB.fav3.setColorPressed(m.getResources().getColor(R.color.ColorAccentDark5));
+                accentColor = a.getResources().getColor(R.color.ColorAccent5);
+                accentColorDark = a.getResources().getColor(R.color.ColorAccentDark5);
                 break;
         }
     }

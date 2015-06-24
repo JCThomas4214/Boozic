@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import comjason_lewisg.httpsgithub.boozic.Handlers.ThemeHandler;
 import comjason_lewisg.httpsgithub.boozic.R;
 
 public class ThemeFragment extends Fragment {
@@ -23,8 +24,12 @@ public class ThemeFragment extends Fragment {
     private ImageView lastSelectedColorAccent;
     private View rootView;
 
+    private int colorPrimaryId;
+    private int colorAccentId;
     private int colorPrimary;
     private int colorAccent;
+
+    private ThemeHandler themeHandler;
 
     OnDataPass dataPasser;
 
@@ -32,8 +37,12 @@ public class ThemeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        themeHandler = new ThemeHandler();
+
         colorPrimary = askColorPrimary();
         colorAccent = askColorAccent();
+        colorPrimaryId = colorPrimary;
+        colorAccentId = colorAccent;
         Log.v("STATE", "primary = "+colorPrimary+" accent = "+colorAccent);
 
         rootView = inflater.inflate(R.layout.fragment_theme,container,false);
@@ -42,6 +51,11 @@ public class ThemeFragment extends Fragment {
         lastSelectedPrimaryColor.setVisibility(View.VISIBLE);
         lastSelectedColorAccent = (ImageView)rootView.findViewById(R.id.Color_accent_1_ring);
         lastSelectedColorAccent.setVisibility(View.VISIBLE);
+
+        //Drawable setButton = getResources().getDrawable(R.drawable.custon_button, null);
+        //setButton.setColorFilter(getResources().getColor(R.color.ColorAccent2), PorterDuff.Mode.MULTIPLY);
+        //Button tmp = (Button) rootView.findViewById(R.id.color_select_button);
+        //tmp.setBackground(setButton);
 
         setButtonPrimary(colorPrimary);
         setButtonAccent(colorAccent);
@@ -125,33 +139,36 @@ public class ThemeFragment extends Fragment {
                     lastSelectedPrimaryColor.setVisibility(View.GONE);
                     lastSelectedPrimaryColor = (ImageView) rootView.findViewById(R.id.Primary_color_1_ring);
                     lastSelectedPrimaryColor.setVisibility(View.VISIBLE);
-                    passPrimary(1);
-                    colorPrimary = 1;
+
+                    colorPrimaryId = 1;
                     break;
                 case R.id.Primary_color_2:
                     lastSelectedPrimaryColor.setVisibility(View.GONE);
                     lastSelectedPrimaryColor = (ImageView)rootView.findViewById(R.id.Primary_color_2_ring);
                     lastSelectedPrimaryColor.setVisibility(View.VISIBLE);
-                    passPrimary(2);
-                    colorPrimary = 1;
+
+                    colorPrimaryId = 2;
                     break;
                 case R.id.Primary_color_3:
                     lastSelectedPrimaryColor.setVisibility(View.GONE);
                     lastSelectedPrimaryColor = (ImageView)rootView.findViewById(R.id.Primary_color_3_ring);
                     lastSelectedPrimaryColor.setVisibility(View.VISIBLE);
-                    passPrimary(3);
+
+                    colorPrimaryId = 3;
                     break;
                 case R.id.Primary_color_4:
                     lastSelectedPrimaryColor.setVisibility(View.GONE);
                     lastSelectedPrimaryColor = (ImageView)rootView.findViewById(R.id.Primary_color_4_ring);
                     lastSelectedPrimaryColor.setVisibility(View.VISIBLE);
-                    passPrimary(4);
+
+                    colorPrimaryId = 4;
                     break;
                 case R.id.Primary_color_5:
                     lastSelectedPrimaryColor.setVisibility(View.GONE);
                     lastSelectedPrimaryColor = (ImageView)rootView.findViewById(R.id.Primary_color_5_ring);
                     lastSelectedPrimaryColor.setVisibility(View.VISIBLE);
-                    passPrimary(5);
+
+                    colorPrimaryId = 5;
                     break;
             }
         }
@@ -165,31 +182,36 @@ public class ThemeFragment extends Fragment {
                     lastSelectedColorAccent.setVisibility(View.GONE);
                     lastSelectedColorAccent = (ImageView)rootView.findViewById(R.id.Color_accent_1_ring);
                     lastSelectedColorAccent.setVisibility(View.VISIBLE);
-                    passAccent(1);
+
+                    colorAccentId = 1;
                     break;
                 case R.id.Color_accent_2:
                     lastSelectedColorAccent.setVisibility(View.GONE);
                     lastSelectedColorAccent = (ImageView)rootView.findViewById(R.id.Color_accent_2_ring);
                     lastSelectedColorAccent.setVisibility(View.VISIBLE);
-                    passAccent(2);
+
+                    colorAccentId = 2;
                     break;
                 case R.id.Color_accent_3:
                     lastSelectedColorAccent.setVisibility(View.GONE);
                     lastSelectedColorAccent = (ImageView)rootView.findViewById(R.id.Color_accent_3_ring);
                     lastSelectedColorAccent.setVisibility(View.VISIBLE);
-                    passAccent(3);
+
+                    colorAccentId = 3;
                     break;
                 case R.id.Color_accent_4:
                     lastSelectedColorAccent.setVisibility(View.GONE);
                     lastSelectedColorAccent = (ImageView)rootView.findViewById(R.id.Color_accent_4_ring);
                     lastSelectedColorAccent.setVisibility(View.VISIBLE);
-                    passAccent(4);
+
+                    colorAccentId = 4;
                     break;
                 case R.id.Color_accent_5:
                     lastSelectedColorAccent.setVisibility(View.GONE);
                     lastSelectedColorAccent = (ImageView)rootView.findViewById(R.id.Color_accent_5_ring);
                     lastSelectedColorAccent.setVisibility(View.VISIBLE);
-                    passAccent(5);
+
+                    colorAccentId = 5;
                     break;
             }
         }
@@ -200,6 +222,18 @@ public class ThemeFragment extends Fragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.color_select_button:
+
+                    if (colorPrimaryId != colorPrimary) {
+                        passPrimaryId(colorPrimaryId);
+                        themeHandler.setStylePrimary(colorPrimaryId, getActivity());
+                        passPrimary(themeHandler.primaryColor, themeHandler.primaryColorDark);
+                    }
+                    if (colorAccentId != colorAccent) {
+                        passAccentId(colorAccentId);
+                        themeHandler.setStyleAccent(colorAccentId, getActivity());
+                        passAccent(themeHandler.accentColor, themeHandler.accentColorDark);
+                    }
+
                     applyTheme();
                     break;
             }
@@ -267,19 +301,29 @@ public class ThemeFragment extends Fragment {
     }
 
     public interface OnDataPass {
-        void PassColorPrimary(int colorPrimary);
-        void PassColorAccent(int colorAccent);
+        void PassColorPrimaryId(int colorPrimary_id);
+        void PassColorPrimary(int colorPrimary, int colorPrimaryDark);
+        void PassColorAccentId(int colorAccent_id);
+        void PassColorAccent(int colorAccent, int colorAccentDark);
         void ApplyTheme();
         int AskForColorPrimary();
         int AskForColorAccent();
     }
 
-    public void passPrimary(int colorPrimary) {
-        dataPasser.PassColorPrimary(colorPrimary);
+    public void passPrimaryId(int colorPrimary_id) {
+        dataPasser.PassColorPrimaryId(colorPrimary_id);
     }
 
-    public void passAccent(int colorAccent) {
-        dataPasser.PassColorAccent(colorAccent);
+    public void passAccentId(int colorAccent_id) {
+        dataPasser.PassColorAccentId(colorAccent_id);
+    }
+
+    public void passPrimary(int colorPrimary, int colorAccent) {
+        dataPasser.PassColorPrimary(colorPrimary, colorAccent);
+    }
+
+    public void passAccent(int colorAccent, int colorAccentDark) {
+        dataPasser.PassColorAccent(colorAccent, colorAccentDark);
     }
 
     public void applyTheme () {

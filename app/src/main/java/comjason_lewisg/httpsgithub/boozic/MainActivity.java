@@ -31,8 +31,17 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
     static final int COLOR_STATE = 0;
     static final int COLOR_ACCENT_STATE = 0;
+    static final int PRIMARY_STATE = 0;
+    static final int PRIMARY_DARK_STATE = 0;
+    static final int ACCENT_STATE = 0;
+    static final int ACCENT_DARK_STATE = 0;
+
     private int colorPrimary_id;
     private int colorAccent_id;
+    private int primaryColor;
+    private int primaryColorDark;
+    private int accentColor;
+    private int accentColorDark;
 
     private SharedPreferences mPrefs;
 
@@ -160,7 +169,23 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         colorPrimary_id = mPrefs.getInt("COLOR_STATE", COLOR_STATE);
         colorAccent_id = mPrefs.getInt("COLOR_ACCENT_STATE", COLOR_ACCENT_STATE);
         Log.v("STATE", "in resume, color id = " + colorPrimary_id);
-        themeHandler.setStyle(colorPrimary_id, colorAccent_id, this);
+
+        primaryColor = mPrefs.getInt("PRIMARY_STATE", PRIMARY_STATE);
+        primaryColorDark = mPrefs.getInt("PRIMARY_DARK_STATE", PRIMARY_DARK_STATE);
+        accentColor = mPrefs.getInt("ACCENT_STATE", ACCENT_STATE);
+        accentColorDark = mPrefs.getInt("ACCENT_DARK_STATE", ACCENT_DARK_STATE);
+
+        findViewById(R.id.toolbar).setBackgroundColor(primaryColor);
+        FAB.menu.setMenuButtonColorNormal(primaryColor);
+        FAB.menu.setMenuButtonColorPressed(primaryColorDark);
+        FAB.menuButton.setColorNormal(primaryColor);
+
+        FAB.fav1.setColorNormal(accentColor);
+        FAB.fav1.setColorPressed(accentColorDark);
+        FAB.fav2.setColorNormal(accentColor);
+        FAB.fav2.setColorPressed(accentColorDark);
+        FAB.fav3.setColorNormal(accentColor);
+        FAB.fav3.setColorPressed(accentColorDark);
     }
 
     @Override
@@ -172,18 +197,35 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         Log.v("STATE", "in pause, color id = " + colorPrimary_id);
         ed.putInt("COLOR_STATE", colorPrimary_id);
         ed.putInt("COLOR_ACCENT_STATE", colorAccent_id);
+
+        ed.putInt("PRIMARY_STATE", primaryColor);
+        ed.putInt("PRIMARY_DARK_STATE", primaryColorDark);
+        ed.putInt("ACCENT_STATE", accentColor);
+        ed.putInt("ACCENT_DARK_STATE", accentColorDark);
         //apply changes
         ed.apply();
     }
 
     @Override
-    public void PassColorPrimary(int colorPrimary) {
-        colorPrimary_id = colorPrimary;
+    public void PassColorPrimaryId(int primary_id) {
+        colorPrimary_id = primary_id;
     }
 
     @Override
-    public void PassColorAccent(int colorAccent) {
-        colorAccent_id = colorAccent;
+    public void PassColorAccentId(int accent_id) {
+        colorAccent_id = accent_id;
+    }
+
+    @Override
+    public void PassColorPrimary(int colorPrimary, int colorPrimaryDark) {
+        primaryColor = colorPrimary;
+        primaryColorDark = colorPrimaryDark;
+    }
+
+    @Override
+    public void PassColorAccent(int colorAccent, int colorAccentDark) {
+        accentColor = colorAccent;
+        accentColorDark = colorAccentDark;
     }
 
     @Override
