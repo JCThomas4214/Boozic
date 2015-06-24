@@ -20,8 +20,8 @@ import comjason_lewisg.httpsgithub.boozic.R;
 public class FloatingActionButtonHandler extends Activity {
 
     private MainActivity m;
-    private FloatingActionMenu menu;
-    private FloatingActionButton menuButton;
+    public FloatingActionMenu menu;
+    public FloatingActionButton menuButton;
     public FloatingActionButton fav1;
     public FloatingActionButton fav2;
     public FloatingActionButton fav3;
@@ -106,8 +106,8 @@ public class FloatingActionButtonHandler extends Activity {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            //this is where the Scanner starts
                             Intent i = new Intent(m, CameraActivity.class);
-                            //m.startActivity(i);
                             m.startActivityForResult(i, SCANNER_CODE_REQUEST);
                         }
                     }, 300);

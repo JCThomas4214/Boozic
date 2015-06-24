@@ -16,10 +16,6 @@
             android:layout_height="match_parent"
             android:id="@+id/scanner_layout_sub">
 
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="left|bottom"></TableLayout>
         </FrameLayout>
 
         <TableLayout
@@ -34,8 +30,7 @@
                     android:id="@+id/soundButton"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
-                    android:clickable="true"
-                    android:src="@drawable/bell_off" />
+                    android:clickable="true" />
             </TableRow>
             <TableRow>
                 <TextView
@@ -60,8 +55,7 @@
                     android:id="@+id/flashlightButton"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
-                    android:clickable="true"
-                    android:src="@drawable/flashlight_off" />
+                    android:clickable="true"/>
             </TableRow>
             <TableRow>
                 <TextView
@@ -86,8 +80,7 @@
                     android:id="@+id/autofocusButton"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
-                    android:clickable="true"
-                    android:src="@drawable/eye_off" />
+                    android:clickable="true"/>
             </TableRow>
             <TableRow>
                 <TextView

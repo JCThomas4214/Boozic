@@ -8,7 +8,7 @@ import android.support.v7.widget.Toolbar;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
+    public Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +22,7 @@ public class SettingsActivity extends AppCompatActivity {
         //Call these to set up the back arrow on toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-;
+
 
     }
 

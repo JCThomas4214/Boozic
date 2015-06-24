@@ -5,6 +5,26 @@
     <color name="ColorAccent">#F48FB1</color>
     <color name="ColorAccentDark">#F06292</color>
 
+    <color name="ColorPrimary2">#3F51B5</color>
+    <color name="ColorPrimaryDark2">#303F9F</color>
+    <color name="ColorAccent2">#C5E1A5</color>
+    <color name="ColorAccentDark2">#AED581</color>
+
+    <color name="ColorPrimary3">#000000</color>
+    <color name="ColorPrimaryDark3">#000000</color>
+    <color name="ColorAccent3">#FFF59D</color>
+    <color name="ColorAccentDark3">#FFF176</color>
+
+    <color name="ColorPrimary4">#FFC107</color>
+    <color name="ColorPrimaryDark4">#FFA000</color>
+    <color name="ColorAccent4">#B0BEC5</color>
+    <color name="ColorAccentDark4">#90A4AE</color>
+
+    <color name="ColorPrimary5">#F44336</color>
+    <color name="ColorPrimaryDark5">#D32F2F</color>
+    <color name="ColorAccent5">#CE93D8</color>
+    <color name="ColorAccentDark5">#BA68C8</color>
+
     <color name="ScannerButtonPrimary">@color/ColorAccent</color>
 
     <color name="ColorHint">#24000000</color>
