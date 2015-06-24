@@ -234,8 +234,28 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     }
 
     @Override
-    public int AskForColorPrimary () { return colorPrimary_id; }
+    public int AskForColorPrimaryId () { return colorPrimary_id; }
 
     @Override
-    public int AskForColorAccent () { return colorAccent_id; }
+    public int AskForColorAccentId () { return colorAccent_id; }
+
+    @Override
+    public int AskForColorPrimary () {
+        return primaryColor;
+    }
+
+    @Override
+    public int AskForColorPrimaryDark () {
+        return primaryColorDark;
+    }
+
+    @Override
+    public int AskForColorAccent () {
+        return accentColor;
+    }
+
+    @Override
+    public int AskForColorAccentDark () {
+        return accentColorDark;
+    }
 }

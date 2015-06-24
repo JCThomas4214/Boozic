@@ -12,8 +12,8 @@
 
     <color name="ColorPrimary3">#000000</color>
     <color name="ColorPrimaryDark3">#000000</color>
-    <color name="ColorAccent3">#FFF59D</color>
-    <color name="ColorAccentDark3">#FFF176</color>
+    <color name="ColorAccent3">#FFF176</color>
+    <color name="ColorAccentDark3">#FFEE58</color>
 
     <color name="ColorPrimary4">#FFC107</color>
     <color name="ColorPrimaryDark4">#FFA000</color>

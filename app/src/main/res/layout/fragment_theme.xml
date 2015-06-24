@@ -16,12 +16,16 @@
                 android:layout_margin="10dp"
                 android:paddingRight="20dp"
                 android:text="Primary Color"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
             <TextView
                 android:layout_margin="10dp"
                 android:paddingLeft="20dp"
                 android:text="Color Accent"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </TableRow>
 
         <TableRow
@@ -31,7 +35,9 @@
             android:padding="10dp">
             <RelativeLayout
                 android:gravity="center"
-                android:paddingRight="20dp">
+                android:paddingRight="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
                 <ImageView
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
@@ -46,7 +52,9 @@
 
             <RelativeLayout
                 android:gravity="center"
-                android:paddingLeft="20dp">
+                android:paddingLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
                 <ImageView
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
@@ -67,7 +75,9 @@
             android:padding="10dp">
             <RelativeLayout
                 android:gravity="center"
-                android:paddingRight="20dp">
+                android:paddingRight="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
                 <ImageView
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
@@ -82,7 +92,9 @@
 
             <RelativeLayout
                 android:gravity="center"
-                android:paddingLeft="20dp">
+                android:paddingLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
                 <ImageView
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
@@ -103,7 +115,9 @@
             android:padding="10dp">
             <RelativeLayout
                 android:gravity="center"
-                android:paddingRight="20dp">
+                android:paddingRight="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
                 <ImageView
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
@@ -118,7 +132,9 @@
 
             <RelativeLayout
                 android:gravity="center"
-                android:paddingLeft="20dp">
+                android:paddingLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
                 <ImageView
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
@@ -139,7 +155,9 @@
             android:padding="10dp">
             <RelativeLayout
                 android:gravity="center"
-                android:paddingRight="20dp">
+                android:paddingRight="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
                 <ImageView
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
@@ -154,7 +172,9 @@
 
             <RelativeLayout
                 android:gravity="center"
-                android:paddingLeft="20dp">
+                android:paddingLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
                 <ImageView
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
@@ -175,7 +195,8 @@
             android:padding="10dp">
             <RelativeLayout
                 android:gravity="center"
-                android:paddingRight="20dp">
+                android:paddingRight="20dp"
+                android:layout_width="wrap_content">
                 <ImageView
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
@@ -207,15 +228,25 @@
         <TableRow
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:gravity="center"
+            android:gravity="left"
             android:padding="10dp">
-            <Button
-                android:background="@color/ColorPrimary"
-                android:clickable="true"
-                android:id="@+id/color_select_button"
-                android:text="SET"
-                android:textColor="#fff"/>
-        </TableRow>
 
+        </TableRow>
     </TableLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom|left"
+        android:elevation="20dp">
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:background="@color/ColorPrimary"
+            android:clickable="true"
+            android:id="@+id/color_select_button"
+            android:text="SET"
+            android:textColor="#fff"
+            android:layout_margin="20dp"
+            android:layout_height="wrap_content"
+            android:layout_width="85dp" />
+    </RelativeLayout>
 </RelativeLayout>

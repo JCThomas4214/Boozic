@@ -29,6 +29,11 @@ public class ThemeFragment extends Fragment {
     private int colorPrimary;
     private int colorAccent;
 
+    private int primaryColor;
+    private int primaryColorDark;
+    private int accentColor;
+    private int accentColorDark;
+
     private ThemeHandler themeHandler;
 
     OnDataPass dataPasser;
@@ -39,28 +44,36 @@ public class ThemeFragment extends Fragment {
 
         themeHandler = new ThemeHandler();
 
-        colorPrimary = askColorPrimary();
-        colorAccent = askColorAccent();
+        colorPrimary = askColorPrimaryId();
+        colorAccent = askColorAccentId();
         colorPrimaryId = colorPrimary;
         colorAccentId = colorAccent;
-        Log.v("STATE", "primary = "+colorPrimary+" accent = "+colorAccent);
+
+        primaryColor = askColorPrimary();
+        primaryColorDark = askColorPrimaryDark();
+        accentColor = askColorAccent();
+        accentColorDark = askColorAccentDark();
 
         rootView = inflater.inflate(R.layout.fragment_theme,container,false);
 
+        viewSet(rootView);
+
+        return rootView;
+    }
+
+    private void viewSet(View rootView) {
         lastSelectedPrimaryColor = (ImageView)rootView.findViewById(R.id.Primary_color_1_ring);
         lastSelectedPrimaryColor.setVisibility(View.VISIBLE);
         lastSelectedColorAccent = (ImageView)rootView.findViewById(R.id.Color_accent_1_ring);
         lastSelectedColorAccent.setVisibility(View.VISIBLE);
 
-        //Drawable setButton = getResources().getDrawable(R.drawable.custon_button, null);
-        //setButton.setColorFilter(getResources().getColor(R.color.ColorAccent2), PorterDuff.Mode.MULTIPLY);
-        //Button tmp = (Button) rootView.findViewById(R.id.color_select_button);
-        //tmp.setBackground(setButton);
+        Drawable setButton = getResources().getDrawable(R.drawable.custon_button, null);
+        setButton.setColorFilter(accentColor, PorterDuff.Mode.MULTIPLY);
+        Button tmp = (Button) rootView.findViewById(R.id.color_select_button);
+        tmp.setBackground(setButton);
 
         setButtonPrimary(colorPrimary);
         setButtonAccent(colorAccent);
-
-        Button button = (Button)rootView.findViewById(R.id.color_select_button);
 
         ImageView primColor1 = (ImageView)rootView.findViewById(R.id.Primary_color_1);
         ImageView primColor2 = (ImageView)rootView.findViewById(R.id.Primary_color_2);
@@ -68,24 +81,26 @@ public class ThemeFragment extends Fragment {
         ImageView primColor4 = (ImageView)rootView.findViewById(R.id.Primary_color_4);
         ImageView primColor5 = (ImageView)rootView.findViewById(R.id.Primary_color_5);
 
+
+
         Drawable drawable = getResources().getDrawable(R.drawable.color_selector_circle, null);
-        drawable.setColorFilter(Color.parseColor("#673AB7"), PorterDuff.Mode.MULTIPLY);
+        drawable.setColorFilter(getResources().getColor(R.color.ColorPrimary), PorterDuff.Mode.MULTIPLY);
         primColor1.setBackground(drawable);
 
         drawable = getResources().getDrawable(R.drawable.color_selector_circle, null);
-        drawable.setColorFilter(Color.parseColor("#3F51B5"), PorterDuff.Mode.MULTIPLY);
+        drawable.setColorFilter(getResources().getColor(R.color.ColorPrimary2), PorterDuff.Mode.MULTIPLY);
         primColor2.setBackground(drawable);
 
         drawable = getResources().getDrawable(R.drawable.color_selector_circle, null);
-        drawable.setColorFilter(Color.parseColor("#000000"), PorterDuff.Mode.MULTIPLY);
+        drawable.setColorFilter(getResources().getColor(R.color.ColorPrimary3), PorterDuff.Mode.MULTIPLY);
         primColor3.setBackground(drawable);
 
         drawable = getResources().getDrawable(R.drawable.color_selector_circle, null);
-        drawable.setColorFilter(Color.parseColor("#FFC107"), PorterDuff.Mode.MULTIPLY);
+        drawable.setColorFilter(getResources().getColor(R.color.ColorPrimary4), PorterDuff.Mode.MULTIPLY);
         primColor4.setBackground(drawable);
 
         drawable = getResources().getDrawable(R.drawable.color_selector_circle, null);
-        drawable.setColorFilter(Color.parseColor("#F44336"), PorterDuff.Mode.MULTIPLY);
+        drawable.setColorFilter(getResources().getColor(R.color.ColorPrimary5), PorterDuff.Mode.MULTIPLY);
         primColor5.setBackground(drawable);
 
         ImageView colorAccent1 = (ImageView)rootView.findViewById(R.id.Color_accent_1);
@@ -95,23 +110,23 @@ public class ThemeFragment extends Fragment {
         ImageView colorAccent5 = (ImageView)rootView.findViewById(R.id.Color_accent_5);
 
         drawable = getResources().getDrawable(R.drawable.color_selector_circle, null);
-        drawable.setColorFilter(Color.parseColor("#F48FB1"), PorterDuff.Mode.MULTIPLY);
+        drawable.setColorFilter(getResources().getColor(R.color.ColorAccent), PorterDuff.Mode.MULTIPLY);
         colorAccent1.setBackground(drawable);
 
         drawable = getResources().getDrawable(R.drawable.color_selector_circle, null);
-        drawable.setColorFilter(Color.parseColor("#C5E1A5"), PorterDuff.Mode.MULTIPLY);
+        drawable.setColorFilter(getResources().getColor(R.color.ColorAccent2), PorterDuff.Mode.MULTIPLY);
         colorAccent2.setBackground(drawable);
 
         drawable = getResources().getDrawable(R.drawable.color_selector_circle, null);
-        drawable.setColorFilter(Color.parseColor("#FFF59D"), PorterDuff.Mode.MULTIPLY);
+        drawable.setColorFilter(getResources().getColor(R.color.ColorAccent3), PorterDuff.Mode.MULTIPLY);
         colorAccent3.setBackground(drawable);
 
         drawable = getResources().getDrawable(R.drawable.color_selector_circle, null);
-        drawable.setColorFilter(Color.parseColor("#B0BEC5"), PorterDuff.Mode.MULTIPLY);
+        drawable.setColorFilter(getResources().getColor(R.color.ColorAccent4), PorterDuff.Mode.MULTIPLY);
         colorAccent4.setBackground(drawable);
 
         drawable = getResources().getDrawable(R.drawable.color_selector_circle, null);
-        drawable.setColorFilter(Color.parseColor("#CE93D8"), PorterDuff.Mode.MULTIPLY);
+        drawable.setColorFilter(getResources().getColor(R.color.ColorAccent5), PorterDuff.Mode.MULTIPLY);
         colorAccent5.setBackground(drawable);
 
         primColor1.setOnClickListener(primaryColorOnClickListener);
@@ -126,9 +141,8 @@ public class ThemeFragment extends Fragment {
         colorAccent4.setOnClickListener(colorAccentOnClickListener);
         colorAccent5.setOnClickListener(colorAccentOnClickListener);
 
-        button.setOnClickListener(selectButtonListener);
+        tmp.setOnClickListener(selectButtonListener);
 
-        return rootView;
     }
 
     public View.OnClickListener primaryColorOnClickListener = new View.OnClickListener() {
@@ -306,8 +320,13 @@ public class ThemeFragment extends Fragment {
         void PassColorAccentId(int colorAccent_id);
         void PassColorAccent(int colorAccent, int colorAccentDark);
         void ApplyTheme();
+        int AskForColorPrimaryId();
+        int AskForColorAccentId();
         int AskForColorPrimary();
+        int AskForColorPrimaryDark();
         int AskForColorAccent();
+        int AskForColorAccentDark();
+
     }
 
     public void passPrimaryId(int colorPrimary_id) {
@@ -330,9 +349,17 @@ public class ThemeFragment extends Fragment {
         dataPasser.ApplyTheme();
     }
 
+    public int askColorPrimaryId() { return dataPasser.AskForColorPrimaryId(); }
+
+    public int askColorAccentId() { return dataPasser.AskForColorAccentId(); }
+
     public int askColorPrimary() { return dataPasser.AskForColorPrimary(); }
 
+    public int askColorPrimaryDark() { return dataPasser.AskForColorPrimaryDark(); }
+
     public int askColorAccent() { return dataPasser.AskForColorAccent(); }
+
+    public int askColorAccentDark() { return dataPasser.AskForColorAccentDark(); }
 
     @Override
     public void onAttach(Activity a) {

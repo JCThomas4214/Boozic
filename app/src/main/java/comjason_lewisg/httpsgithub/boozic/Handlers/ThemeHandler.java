@@ -6,7 +6,7 @@ import android.util.Log;
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
 
-public class ThemeHandler extends MainActivity{
+public class ThemeHandler {
 
     public int primaryColor;
     public int primaryColorDark;
