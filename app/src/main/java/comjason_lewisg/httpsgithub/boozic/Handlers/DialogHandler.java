@@ -1,6 +1,7 @@
 package comjason_lewisg.httpsgithub.boozic.Handlers;
 
 
+import android.graphics.Color;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
@@ -17,7 +18,7 @@ public class DialogHandler {
 
     }
 
-    public void OpenFeedbackDialog(final MainActivity m) {
+    public void OpenFeedbackDialog(final MainActivity m, final int colorAccent_id) {
 
         //Create the MaterialDialog object to start initiallizing attributes
         MaterialDialog dialog = new MaterialDialog.Builder(m)
@@ -27,15 +28,15 @@ public class DialogHandler {
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         if (input.length() == 0) {
                             Log.w("myApp", "There is no String");
-                            OpenFeedbackDialog(m);
+                            OpenFeedbackDialog(m, colorAccent_id);
                         }
                     }
                 })
                 .positiveText("SEND")
                 .negativeText("CANCEL")
-                .widgetColorRes(R.color.ColorAccent)
-                .positiveColorRes(R.color.ColorAccent)
-                .negativeColorRes(R.color.ColorAccent)
+                .widgetColorRes(m.getResources().getIdentifier("comjason_lewisg.httpsgithub.boozic:color/" + searchForRes(colorAccent_id), null, null))
+                .positiveColorRes(m.getResources().getIdentifier("comjason_lewisg.httpsgithub.boozic:color/" + searchForRes(colorAccent_id), null, null))
+                .negativeColorRes(m.getResources().getIdentifier("comjason_lewisg.httpsgithub.boozic:color/"+searchForRes(colorAccent_id), null, null))
                 .build();
 
         EditText input = dialog.getInputEditText();
@@ -47,5 +48,27 @@ public class DialogHandler {
         input.setGravity(Gravity.TOP);
 
         dialog.show();
+    }
+
+    private String searchForRes(int colorAccent_id) {
+        String str = "";
+      switch (colorAccent_id) {
+          case 1:
+              str = "ColorAccent";
+              break;
+          case 2:
+              str = "ColorAccent2";
+              break;
+          case 3:
+              str = "ColorAccent3";
+              break;
+          case 4:
+              str = "ColorAccent4";
+              break;
+          case 5:
+              str = "ColorAccent5";
+              break;
+      }
+        return str;
     }
 }

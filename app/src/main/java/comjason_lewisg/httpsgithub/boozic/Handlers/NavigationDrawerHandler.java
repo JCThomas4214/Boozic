@@ -159,7 +159,7 @@ public class NavigationDrawerHandler {
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                m.DHandle.OpenFeedbackDialog(m);
+                                m.DHandle.OpenFeedbackDialog(m, m.getColorAccentId());
                             }
                         }, 275);
 

@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
     private int colorPrimary_id;
     private int colorAccent_id;
+
     private int primaryColor;
     private int primaryColorDark;
     private int accentColor;
@@ -71,8 +72,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
         setContentView(R.layout.activity_main);
 
-
-
         //Creates a FAB for the bottom right corner of the main screen
         FAB = new FloatingActionButtonHandler();
         FAB.setActivity(this);
@@ -100,6 +99,10 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public void themeChange() {
         finish();
         startActivity(getIntent());
+    }
+
+    public int getColorAccentId() {
+        return colorAccent_id;
     }
 
     //Data Handlers//
