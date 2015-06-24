@@ -192,6 +192,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         FAB.fav3.setColorNormal(accentColor);
         FAB.fav3.setColorPressed(accentColorDark);
 
+
+
         System.gc();
     }
 

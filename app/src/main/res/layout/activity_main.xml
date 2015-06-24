@@ -89,7 +89,7 @@
                     android:layout_marginBottom="10dp"
                     android:src="@drawable/camera"
                     app:fab_colorNormal="@color/ColorPrimary"
-                    app:fab_colorPressed="@color/ColorPrimaryDark"/>
+                    app:fab_colorPressed="@color/ColorPrimaryDark" />
 
                 <include
                     android:id="@+id/toolbar"

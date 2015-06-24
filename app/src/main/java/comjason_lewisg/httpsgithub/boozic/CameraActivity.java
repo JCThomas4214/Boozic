@@ -104,14 +104,16 @@ public class CameraActivity extends Activity implements ZBarScannerView.ResultHa
     public void onResume() {
         super.onResume();
         //pull the shared preference
-        mPrefs = getSharedPreferences("FLASH_STATE", MODE_PRIVATE);
+        mPrefs = getSharedPreferences("COLOR_STATE", MODE_MULTI_PROCESS);
         //when resume, pull saves states for each button
         mFlash = mPrefs.getInt("FLASH_STATE", FLASH_STATE);
         mAutoFocus = mPrefs.getInt("AUTO_FOCUS_STATE", AUTO_FOCUS_STATE);
         mSound = mPrefs.getInt("SOUND_STATE", SOUND_STATE);
-        mPrefs = getSharedPreferences("COLOR_STATE", MODE_MULTI_PROCESS);
+        Log.v("STATE", "flash = "+mFlash+" autofocus = "+mAutoFocus+" sound = "+mSound);
+
+        //mPrefs = getSharedPreferences("COLOR_STATE", MODE_MULTI_PROCESS);
         colorAccent = mPrefs.getInt("ACCENT_STATE", ACCENT_STATE);
-        Log.v("COLOR", "colorAccent = "+colorAccent);
+        Log.v("STATE", "colorA = "+colorAccent);
 
         setStyleCameraButtons(colorAccent);
 
@@ -128,6 +130,10 @@ public class CameraActivity extends Activity implements ZBarScannerView.ResultHa
         mScannerView.startCamera();          // Start camera on resume
         mScannerView.setFlash(mFlash == 1);
         mScannerView.setAutoFocus(mAutoFocus == 1);
+
+
+
+
     }
 
     @Override
