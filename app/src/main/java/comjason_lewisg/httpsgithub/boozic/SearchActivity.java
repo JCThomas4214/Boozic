@@ -10,7 +10,6 @@ import android.widget.Toast;
 import com.quinny898.library.persistentsearch.SearchBox;
 import com.quinny898.library.persistentsearch.SearchBox.MenuListener;
 import com.quinny898.library.persistentsearch.SearchBox.SearchListener;
-import com.quinny898.library.persistentsearch.SearchResult;
 
 import java.util.ArrayList;
 
