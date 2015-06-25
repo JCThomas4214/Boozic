@@ -2,6 +2,7 @@ package comjason_lewisg.httpsgithub.boozic;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -10,6 +11,13 @@ import android.view.MenuItem;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 
 import comjason_lewisg.httpsgithub.boozic.Fragments.ThemeFragment;
 import comjason_lewisg.httpsgithub.boozic.Handlers.DialogHandler;
@@ -18,7 +26,7 @@ import comjason_lewisg.httpsgithub.boozic.Handlers.RefreshHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.SearchBarHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ThemeHandler;
 
-public class MainActivity extends AppCompatActivity implements ThemeFragment.OnDataPass {
+public class MainActivity extends AppCompatActivity implements ThemeFragment.OnDataPass, GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
 
     public Toolbar toolbar;
     public DialogHandler DHandle;
@@ -29,8 +37,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
     static final int SCANNER_CODE_REQUEST = 0;
 
-    static final int COLOR_STATE = 0;
-    static final int COLOR_ACCENT_STATE = 0;
+    static final int COLOR_STATE = 1;
+    static final int COLOR_ACCENT_STATE = 1;
     static final int PRIMARY_STATE = 0;
     static final int PRIMARY_DARK_STATE = 0;
     static final int ACCENT_STATE = 0;
@@ -44,7 +52,11 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     private int accentColor;
     private int accentColorDark;
 
+    private Location mLastLocation;
+    private GoogleApiClient mGoogleApiClient;
     private SharedPreferences mPrefs;
+
+    private Toast mToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
                 break;
         }
 
+        buildGoogleApiClient();
+
         setContentView(R.layout.activity_main);
 
         //Creates a FAB for the bottom right corner of the main screen
@@ -94,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         Log.v("STATE", "onCreate color id = " + colorPrimary_id);
         themeHandler = new ThemeHandler();
 
+        mToast = Toast.makeText(this, "", Toast.LENGTH_LONG);
     }
 
     public void themeChange() {
@@ -123,6 +138,70 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         return true;
     }
 
+    ////////LOCATION SERVICES////////////
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    /**
+     * Method to display the location on UI
+     * */
+    private void displayLocation() {
+        mLastLocation = LocationServices.FusedLocationApi
+                .getLastLocation(mGoogleApiClient);
+
+        if (mLastLocation != null) {
+            mToast.setText("Latitude " + mLastLocation.getLatitude() + " , " +"Longitude " + mLastLocation.getLongitude());
+            mToast.show();
+        } else {
+            mToast.setText("Couldn't get the location. Make sure location is enabled on the device");
+            mToast.show();
+        }
+    }
+
+    /**
+     * Method to verify google play services on the device
+     * */
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil
+                .isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+            } else {
+                Toast.makeText(getApplicationContext(),
+                        "This device is not supported.", Toast.LENGTH_LONG)
+                        .show();
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+    }
+
+    @Override
+    public void onConnectionSuspended(int cause) {
+        // The connection has been interrupted.
+        // Disable any UI components that depend on Google APIs
+        // until onConnected() is called.
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        // This callback is important for handling errors that
+        // may occur while attempting to connect with Google.
+        //
+        // More about this in the 'Handle Connection Failures' section.
+    }
+    ////////////////////////////////////////////
+
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -132,6 +211,12 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
+            if (!mGoogleApiClient.isConnected()) {
+                mGoogleApiClient.connect();
+                mToast.setText("connected");
+                mToast.show();
+            }
+            displayLocation();
             refreshHandler.startAnim();
             return true;
         }
@@ -145,7 +230,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         }
 
         return super.onOptionsItemSelected(item);
-
     }
     ////////////////
     //Recieves the result from Camera Activity
@@ -157,9 +241,20 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
                 // A contact was picked.  Here we will just display it
                 // to the user.
                 Log.v("RESULT", data.getExtras().getString("RESULT"));
+                mToast.setText(data.getExtras().getString("RESULT"));
+                mToast.show();
                 //TODO PING LOCATION HERE
                 //TODO SEND TO BACKEND HERE
             }
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
         }
     }
 
@@ -192,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         FAB.fav3.setColorNormal(accentColor);
         FAB.fav3.setColorPressed(accentColorDark);
 
-
+        checkPlayServices();
 
         System.gc();
     }
@@ -212,6 +307,14 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         ed.putInt("ACCENT_DARK_STATE", accentColorDark);
         //apply changes
         ed.apply();
+    }
+
+
+
+    @Override
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
     }
 
     //Override ThemeHandler.OnDataPass interface functions

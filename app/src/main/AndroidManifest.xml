@@ -3,6 +3,7 @@
     package="comjason_lewisg.httpsgithub.boozic" >
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:allowBackup="true"
