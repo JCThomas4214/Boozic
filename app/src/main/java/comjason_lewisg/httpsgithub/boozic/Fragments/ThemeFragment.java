@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -33,6 +34,9 @@ public class ThemeFragment extends Fragment {
     private int primaryColorDark;
     private int accentColor;
     private int accentColorDark;
+
+    private ScaleAnimation scaleUp;
+    private ScaleAnimation scaleDown;
 
     private ThemeHandler themeHandler;
 
@@ -143,6 +147,18 @@ public class ThemeFragment extends Fragment {
 
         tmp.setOnClickListener(selectButtonListener);
 
+        scaleUp =
+                new ScaleAnimation(0.0f, 1f, 0.0f, 1f,
+                        ScaleAnimation.RELATIVE_TO_SELF, 0.5f,
+                        ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
+        scaleUp.setDuration(200);
+
+        scaleDown =
+                new ScaleAnimation(1.0f, 0.0f, 1f, 0.0f,
+                        ScaleAnimation.RELATIVE_TO_SELF, 0.5f,
+                        ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
+        scaleDown.setDuration(200);
+
     }
 
     public View.OnClickListener primaryColorOnClickListener = new View.OnClickListener() {
@@ -151,35 +167,45 @@ public class ThemeFragment extends Fragment {
             switch (v.getId()) {
                 case R.id.Primary_color_1:
                     lastSelectedPrimaryColor.setVisibility(View.GONE);
+                    lastSelectedPrimaryColor.startAnimation(scaleDown);
                     lastSelectedPrimaryColor = (ImageView) rootView.findViewById(R.id.Primary_color_1_ring);
+                    lastSelectedPrimaryColor.startAnimation(scaleUp);
                     lastSelectedPrimaryColor.setVisibility(View.VISIBLE);
 
                     colorPrimaryId = 1;
                     break;
                 case R.id.Primary_color_2:
                     lastSelectedPrimaryColor.setVisibility(View.GONE);
+                    lastSelectedPrimaryColor.startAnimation(scaleDown);
                     lastSelectedPrimaryColor = (ImageView)rootView.findViewById(R.id.Primary_color_2_ring);
+                    lastSelectedPrimaryColor.startAnimation(scaleUp);
                     lastSelectedPrimaryColor.setVisibility(View.VISIBLE);
 
                     colorPrimaryId = 2;
                     break;
                 case R.id.Primary_color_3:
                     lastSelectedPrimaryColor.setVisibility(View.GONE);
+                    lastSelectedPrimaryColor.startAnimation(scaleDown);
                     lastSelectedPrimaryColor = (ImageView)rootView.findViewById(R.id.Primary_color_3_ring);
+                    lastSelectedPrimaryColor.startAnimation(scaleUp);
                     lastSelectedPrimaryColor.setVisibility(View.VISIBLE);
 
                     colorPrimaryId = 3;
                     break;
                 case R.id.Primary_color_4:
                     lastSelectedPrimaryColor.setVisibility(View.GONE);
+                    lastSelectedPrimaryColor.startAnimation(scaleDown);
                     lastSelectedPrimaryColor = (ImageView)rootView.findViewById(R.id.Primary_color_4_ring);
+                    lastSelectedPrimaryColor.startAnimation(scaleUp);
                     lastSelectedPrimaryColor.setVisibility(View.VISIBLE);
 
                     colorPrimaryId = 4;
                     break;
                 case R.id.Primary_color_5:
                     lastSelectedPrimaryColor.setVisibility(View.GONE);
+                    lastSelectedPrimaryColor.startAnimation(scaleDown);
                     lastSelectedPrimaryColor = (ImageView)rootView.findViewById(R.id.Primary_color_5_ring);
+                    lastSelectedPrimaryColor.startAnimation(scaleUp);
                     lastSelectedPrimaryColor.setVisibility(View.VISIBLE);
 
                     colorPrimaryId = 5;
@@ -191,38 +217,49 @@ public class ThemeFragment extends Fragment {
     public View.OnClickListener colorAccentOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
             switch (v.getId()) {
                 case R.id.Color_accent_1:
                     lastSelectedColorAccent.setVisibility(View.GONE);
+                    lastSelectedColorAccent.startAnimation(scaleDown);
                     lastSelectedColorAccent = (ImageView)rootView.findViewById(R.id.Color_accent_1_ring);
+                    lastSelectedColorAccent.startAnimation(scaleUp);
                     lastSelectedColorAccent.setVisibility(View.VISIBLE);
 
                     colorAccentId = 1;
                     break;
                 case R.id.Color_accent_2:
                     lastSelectedColorAccent.setVisibility(View.GONE);
+                    lastSelectedColorAccent.startAnimation(scaleDown);
                     lastSelectedColorAccent = (ImageView)rootView.findViewById(R.id.Color_accent_2_ring);
+                    lastSelectedColorAccent.startAnimation(scaleUp);
                     lastSelectedColorAccent.setVisibility(View.VISIBLE);
 
                     colorAccentId = 2;
                     break;
                 case R.id.Color_accent_3:
                     lastSelectedColorAccent.setVisibility(View.GONE);
+                    lastSelectedColorAccent.startAnimation(scaleDown);
                     lastSelectedColorAccent = (ImageView)rootView.findViewById(R.id.Color_accent_3_ring);
+                    lastSelectedColorAccent.startAnimation(scaleUp);
                     lastSelectedColorAccent.setVisibility(View.VISIBLE);
 
                     colorAccentId = 3;
                     break;
                 case R.id.Color_accent_4:
                     lastSelectedColorAccent.setVisibility(View.GONE);
+                    lastSelectedColorAccent.startAnimation(scaleDown);
                     lastSelectedColorAccent = (ImageView)rootView.findViewById(R.id.Color_accent_4_ring);
+                    lastSelectedColorAccent.startAnimation(scaleUp);
                     lastSelectedColorAccent.setVisibility(View.VISIBLE);
 
                     colorAccentId = 4;
                     break;
                 case R.id.Color_accent_5:
                     lastSelectedColorAccent.setVisibility(View.GONE);
+                    lastSelectedColorAccent.startAnimation(scaleDown);
                     lastSelectedColorAccent = (ImageView)rootView.findViewById(R.id.Color_accent_5_ring);
+                    lastSelectedColorAccent.startAnimation(scaleUp);
                     lastSelectedColorAccent.setVisibility(View.VISIBLE);
 
                     colorAccentId = 5;
