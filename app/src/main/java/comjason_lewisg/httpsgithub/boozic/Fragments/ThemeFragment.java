@@ -284,19 +284,19 @@ public class ThemeFragment extends Fragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.color_select_button:
-
-                    if (colorPrimaryId != colorPrimary) {
-                        passPrimaryId(colorPrimaryId);
-                        themeHandler.setStylePrimary(colorPrimaryId, getActivity());
-                        passPrimary(themeHandler.primaryColor, themeHandler.primaryColorDark);
+                    if ((colorAccentId != colorAccent) || (colorPrimaryId != colorPrimary)) {
+                        if (colorPrimaryId != colorPrimary) {
+                            passPrimaryId(colorPrimaryId);
+                            themeHandler.setStylePrimary(colorPrimaryId, getActivity());
+                            passPrimary(themeHandler.primaryColor, themeHandler.primaryColorDark);
+                        }
+                        if (colorAccentId != colorAccent) {
+                            passAccentId(colorAccentId);
+                            themeHandler.setStyleAccent(colorAccentId, getActivity());
+                            passAccent(themeHandler.accentColor, themeHandler.accentColorDark);
+                        }
+                        applyTheme();
                     }
-                    if (colorAccentId != colorAccent) {
-                        passAccentId(colorAccentId);
-                        themeHandler.setStyleAccent(colorAccentId, getActivity());
-                        passAccent(themeHandler.accentColor, themeHandler.accentColorDark);
-                    }
-
-                    applyTheme();
                     break;
             }
         }
