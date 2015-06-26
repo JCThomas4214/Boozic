@@ -57,7 +57,7 @@ public class LegalActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == android.R.id.home) {
             //return to main activity
-            onBackPressed();
+            finish();
             return true;
         }
 

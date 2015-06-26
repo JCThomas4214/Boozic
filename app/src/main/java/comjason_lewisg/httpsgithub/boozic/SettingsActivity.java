@@ -63,7 +63,7 @@ public class SettingsActivity extends AppCompatActivity {
         //If the back button is clicked
         if (id == android.R.id.home) {
             //return to main activity
-            onBackPressed();
+            finish();
             return true;
         }
 

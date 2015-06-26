@@ -2,6 +2,7 @@ package comjason_lewisg.httpsgithub.boozic.Handlers;
 
 import android.content.Intent;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.view.MenuItem;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -33,6 +34,7 @@ public class NavigationDrawerHandler {
     public SpendingFragment spendingFragment;
     public ThemeFragment themeFragment;
     public android.support.v4.app.FragmentTransaction fragmentTransaction;
+    public Fragment fragment;
 
     protected void onCreate(){
 

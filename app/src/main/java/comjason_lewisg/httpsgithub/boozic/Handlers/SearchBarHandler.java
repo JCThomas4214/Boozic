@@ -16,6 +16,13 @@ import android.widget.RelativeLayout;
 
 import com.github.clans.fab.FloatingActionMenu;
 import com.quinny898.library.persistentsearch.SearchBox;
+import com.quinny898.library.persistentsearch.SearchResult;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
@@ -27,9 +34,9 @@ public class SearchBarHandler {
 
     private MainActivity m;
     public NavigationDrawerHandler Nav;
+    public SearchSuggestHandler searchSuggestHandler;
 
     public void onCreate() {
-
     }
     public void setActivity(MainActivity main, Toolbar t) {
         m = main;
@@ -39,8 +46,9 @@ public class SearchBarHandler {
         Nav.connectDrawer(m,t);
 
         SearchBox search = (SearchBox) m.findViewById(R.id.searchbox);
-        SearchSuggestHandler searchSuggestHandler = new SearchSuggestHandler();
-        search.setSearchables(searchSuggestHandler.setSuggest(m));
+        search.setY(m.findViewById(R.id.searchbox).getHeight() / 2);
+        searchSuggestHandler = new SearchSuggestHandler();
+        searchSuggestHandler.initList();
     }
 
     public void openSearch(Toolbar t) {
@@ -90,6 +98,10 @@ public class SearchBarHandler {
                 search.setLogoText(searchTerm);
                 Nav.navigationView.getMenu().getItem(Nav.titleIndex).setCheckable(false);
                 m.toolbar.setTitle(searchTerm);
+
+                //SearchSuggestHandler handles suggest dropdown
+                //Only allow 4 previous searches to be shown
+                search.setSearchables(searchSuggestHandler.addSuggest(searchTerm, m));
             }
 
             @Override
