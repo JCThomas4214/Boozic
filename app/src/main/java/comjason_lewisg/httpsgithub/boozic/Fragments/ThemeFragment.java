@@ -8,10 +8,16 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.annotation.Nullable;
+import android.transition.Fade;
+import android.transition.Slide;
+import android.transition.Transition;
+import android.transition.TransitionManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -59,7 +65,6 @@ public class ThemeFragment extends Fragment {
         accentColorDark = askColorAccentDark();
 
         rootView = inflater.inflate(R.layout.fragment_theme,container,false);
-
         viewSet(rootView);
 
         return rootView;
@@ -84,7 +89,6 @@ public class ThemeFragment extends Fragment {
         ImageView primColor3 = (ImageView)rootView.findViewById(R.id.Primary_color_3);
         ImageView primColor4 = (ImageView)rootView.findViewById(R.id.Primary_color_4);
         ImageView primColor5 = (ImageView)rootView.findViewById(R.id.Primary_color_5);
-
 
 
         Drawable drawable = getResources().getDrawable(R.drawable.color_selector_circle, null);
@@ -413,5 +417,10 @@ public class ThemeFragment extends Fragment {
     public void onAttach(Activity a) {
         super.onAttach(a);
         dataPasser = (OnDataPass) a;
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
     }
 }

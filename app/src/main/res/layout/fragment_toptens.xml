@@ -11,7 +11,7 @@
         android:textColor="#fff"
         android:background="@color/ColorPrimary"
         android:textSize="28sp"
-        android:id="@+id/test1"
+        android:id="@+id/toptensView"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

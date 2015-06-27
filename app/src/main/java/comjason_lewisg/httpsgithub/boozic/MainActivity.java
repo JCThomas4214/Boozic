@@ -4,7 +4,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -112,6 +116,14 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         themeHandler = new ThemeHandler();
 
         mToast = Toast.makeText(this, "", Toast.LENGTH_LONG);
+    }
+
+    public void startFragment(android.support.v4.app.FragmentTransaction fragmentTransaction, Fragment fragment) {
+        fragment.setEnterTransition(new Fade().setStartDelay(350));
+        fragment.setExitTransition(new Slide(Gravity.BOTTOM));
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.frame3,fragment);
+        fragmentTransaction.commit();
     }
 
     public void themeChange() {
@@ -298,8 +310,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         FAB.fav3.setColorPressed(accentColorDark);
 
         checkPlayServices();
-
-        System.gc();
     }
 
     @Override
