@@ -1,5 +1,6 @@
 package comjason_lewisg.httpsgithub.boozic;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
@@ -25,6 +26,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import comjason_lewisg.httpsgithub.boozic.Fragments.ThemeFragment;
+import comjason_lewisg.httpsgithub.boozic.Fragments.TopTensFragment;
 import comjason_lewisg.httpsgithub.boozic.Handlers.DialogHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.FloatingActionButtonHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.RefreshHandler;
@@ -61,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private SharedPreferences mPrefs;
+
+    private boolean backstack;
 
     private Toast mToast;
 
@@ -118,7 +122,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         mToast = Toast.makeText(this, "", Toast.LENGTH_LONG);
     }
 
-    public void startFragment(android.support.v4.app.FragmentTransaction fragmentTransaction, Fragment fragment) {
+    public void startFragment(android.support.v4.app.FragmentTransaction fragmentTransaction, Fragment fragment, boolean backstack) {
+        this.backstack = backstack;
         fragment.setEnterTransition(new Fade().setStartDelay(350));
         fragment.setExitTransition(new Slide(Gravity.BOTTOM));
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -329,12 +334,21 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         ed.apply();
     }
 
-
-
     @Override
     protected void onStop() {
         mGoogleApiClient.disconnect();
         super.onStop();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (backstack) {
+            MenuItem toptens = searchBarHandler.Nav.navigationView.getMenu().getItem(0);
+            searchBarHandler.Nav.NavListener.onNavigationItemSelected(toptens);
+            this.backstack = false;
+        } else {
+            super.onBackPressed();
+        }
     }
 
     //Override ThemeHandler.OnDataPass interface functions
