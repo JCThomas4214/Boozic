@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import java.util.Random;
+
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 
@@ -157,7 +159,11 @@ public class CameraActivity extends Activity implements ZBarScannerView.ResultHa
         if (mSound == 1) {
             try {
                 //play raw mp3
-                Uri notification = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.secret);
+                Random random = new Random();
+                int rand = random.nextInt((2) + 1);
+                Log.v("BURP", ""+rand);
+                Uri notification = Uri.parse("android.resource://" + getPackageName() + "/" +
+                        getResources().getIdentifier("comjason_lewisg.httpsgithub.boozic:raw/clink" + rand, null, null));
                 Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
                 r.play();
             } catch (Exception e) {

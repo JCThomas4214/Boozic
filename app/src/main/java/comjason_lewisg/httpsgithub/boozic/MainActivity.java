@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import comjason_lewisg.httpsgithub.boozic.Fragments.ThemeFragment;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
     private Location mLastLocation;
     private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
     private SharedPreferences mPrefs;
 
     private Toast mToast;
@@ -83,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         }
 
         buildGoogleApiClient();
+        createLocationRequest();
 
         setContentView(R.layout.activity_main);
 
@@ -145,6 +148,13 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+    }
+
+    protected void createLocationRequest() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
     /**

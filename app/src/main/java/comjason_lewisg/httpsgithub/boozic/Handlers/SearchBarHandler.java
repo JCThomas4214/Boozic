@@ -99,9 +99,10 @@ public class SearchBarHandler {
                 Nav.navigationView.getMenu().getItem(Nav.titleIndex).setCheckable(false);
                 m.toolbar.setTitle(searchTerm);
 
+
                 //SearchSuggestHandler handles suggest dropdown
                 //Only allow 4 previous searches to be shown
-                search.setSearchables(searchSuggestHandler.addSuggest(searchTerm, m));
+                //search.setSearchables(searchSuggestHandler.addSuggest(searchTerm, m));
             }
 
             @Override
