@@ -344,7 +344,9 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public void onBackPressed() {
         if (backstack) {
             MenuItem toptens = searchBarHandler.Nav.navigationView.getMenu().getItem(0);
+            searchBarHandler.Nav.delay = 0;
             searchBarHandler.Nav.NavListener.onNavigationItemSelected(toptens);
+            searchBarHandler.Nav.delay = 255;
             this.backstack = false;
         } else {
             super.onBackPressed();
