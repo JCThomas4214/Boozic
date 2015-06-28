@@ -35,6 +35,7 @@ public class SearchBarHandler {
     private MainActivity m;
     public NavigationDrawerHandler Nav;
     public SearchSuggestHandler searchSuggestHandler;
+    public SearchBox search;
 
     public void onCreate() {
     }
@@ -58,7 +59,7 @@ public class SearchBarHandler {
         menu.hideMenuButton(true);
 
         //connect Searchbox to search variable
-        final SearchBox search = (SearchBox) m.findViewById(R.id.searchbox);
+        search = (SearchBox) m.findViewById(R.id.searchbox);
         //Turn buttons off
         m.findViewById(R.id.action_search).setEnabled(false);
         m.findViewById(R.id.action_refresh).setEnabled(false);
@@ -73,44 +74,7 @@ public class SearchBarHandler {
         EditText text = (EditText) search.findViewById(R.id.search);
         text.setHint("Search Boozic");
 
-        search.setSearchListener(new SearchBox.SearchListener() {
-
-            @Override
-            public void onSearchOpened() {
-                // Use this to tint the screen
-
-            }
-
-            @Override
-            public void onSearchClosed() {
-                // Use this to un-tint the screen
-                closeSearch();
-            }
-
-            @Override
-            public void onSearchTermChanged() {
-                // React to the search term changing
-                // Called after it has updated results
-            }
-
-            @Override
-            public void onSearch(String searchTerm) {
-                search.setLogoText(searchTerm);
-                Nav.navigationView.getMenu().getItem(Nav.titleIndex).setCheckable(false);
-                m.toolbar.setTitle(searchTerm);
-
-
-                //SearchSuggestHandler handles suggest dropdown
-                //Only allow 4 previous searches to be shown
-                //search.setSearchables(searchSuggestHandler.addSuggest(searchTerm, m));
-            }
-
-            @Override
-            public void onSearchCleared() {
-
-            }
-
-        });
+        search.setSearchListener(searchListener);
         //Lock and hide Navagation drawer and Nav drawer icon
         Nav.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         Handler handler = new Handler();
@@ -124,6 +88,46 @@ public class SearchBarHandler {
             }
         }, 400);
     }
+
+    public SearchBox.SearchListener searchListener = new SearchBox.SearchListener() {
+
+        @Override
+        public void onSearchOpened() {
+            // Use this to tint the screen
+            m.backstackSearch = true;
+        }
+
+        @Override
+        public void onSearchClosed() {
+            // Use this to un-tint the screen
+            m.backstackSearch = false;
+            closeSearch();
+        }
+
+        @Override
+        public void onSearchTermChanged() {
+            // React to the search term changing
+            // Called after it has updated results
+        }
+
+        @Override
+        public void onSearch(String searchTerm) {
+            search.setLogoText(searchTerm);
+            Nav.navigationView.getMenu().getItem(Nav.titleIndex).setCheckable(false);
+            m.toolbar.setTitle(searchTerm);
+
+
+            //SearchSuggestHandler handles suggest dropdown
+            //Only allow 4 previous searches to be shown
+            //search.setSearchables(searchSuggestHandler.addSuggest(searchTerm, m));
+        }
+
+        @Override
+        public void onSearchCleared() {
+
+        }
+
+    };
 
     public void closeSearch() {
         final FloatingActionMenu menu = (FloatingActionMenu) m.findViewById(R.id.fabmenu);

@@ -3,6 +3,7 @@ package comjason_lewisg.httpsgithub.boozic.Fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.transition.Fade;
 import android.transition.Slide;
 import android.view.Gravity;
@@ -24,5 +25,8 @@ public class TopTensFragment extends Fragment{
     @Override
     public void onStart(){
         super.onStart();
+        FragmentManager manager = getActivity().getSupportFragmentManager();
+        manager.popBackStack();
     }
+
 }

@@ -1,6 +1,7 @@
 package comjason_lewisg.httpsgithub.boozic;
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,10 +48,10 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
     static final int COLOR_STATE = 1;
     static final int COLOR_ACCENT_STATE = 1;
-    static final int PRIMARY_STATE = 0;
-    static final int PRIMARY_DARK_STATE = 0;
-    static final int ACCENT_STATE = 0;
-    static final int ACCENT_DARK_STATE = 0;
+    static final int PRIMARY_STATE = -15374912;
+    static final int PRIMARY_DARK_STATE = -15906911;
+    static final int ACCENT_STATE = -26624;
+    static final int ACCENT_DARK_STATE = -291840;
 
     private int colorPrimary_id;
     private int colorAccent_id;
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     private SharedPreferences mPrefs;
 
     private boolean backstack;
+    public boolean backstackSearch;
 
     private Toast mToast;
 
@@ -251,10 +254,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
             searchBarHandler.openSearch(toolbar);
             return true;
         }
-        if (id == android.R.id.home) {
-            searchBarHandler.closeSearch();
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -293,7 +292,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         //when resume, pull saves states for each button
         colorPrimary_id = mPrefs.getInt("COLOR_STATE", COLOR_STATE);
         colorAccent_id = mPrefs.getInt("COLOR_ACCENT_STATE", COLOR_ACCENT_STATE);
-        Log.v("STATE", "in resume, color id = " + colorPrimary_id);
 
         //store the previous state colors into their variables
         primaryColor = mPrefs.getInt("PRIMARY_STATE", PRIMARY_STATE);
@@ -326,6 +324,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         ed.putInt("COLOR_STATE", colorPrimary_id);
         ed.putInt("COLOR_ACCENT_STATE", colorAccent_id);
 
+        Log.v("COLOR", "primaryColor = "+primaryColor+" primaryDark = "+primaryColorDark);
+        Log.v("COLOR", "accentColor = "+accentColor + " accentColorDark = "+ accentColorDark);
         ed.putInt("PRIMARY_STATE", primaryColor);
         ed.putInt("PRIMARY_DARK_STATE", primaryColorDark);
         ed.putInt("ACCENT_STATE", accentColor);
@@ -342,7 +342,9 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
     @Override
     public void onBackPressed() {
-        if (backstack) {
+        if (backstackSearch) {
+            searchBarHandler.search.toggleSearch();
+        } else if (backstack) {
             MenuItem toptens = searchBarHandler.Nav.navigationView.getMenu().getItem(0);
             searchBarHandler.Nav.delay = 0;
             searchBarHandler.Nav.NavListener.onNavigationItemSelected(toptens);

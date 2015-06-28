@@ -31,6 +31,7 @@ public class NavigationDrawerHandler {
     public ActionBarDrawerToggle actionBarDrawerToggle;
     public String title;
     public int titleIndex;
+    public int delay;
 
     public TopTensFragment topTensFragment;
     public FavoritesFragment favoritesFragment;
@@ -38,6 +39,7 @@ public class NavigationDrawerHandler {
     public ThemeFragment themeFragment;
     public android.support.v4.app.FragmentTransaction fragmentTransaction;
 
+    private MainActivity m;
 
     protected void onCreate(){
 
@@ -46,6 +48,8 @@ public class NavigationDrawerHandler {
         //set initial title to Boozic
         title = (String) t.getTitle();
         titleIndex = 0;
+        delay = 255;
+        this.m = m;
 
         topTensFragment = new TopTensFragment();
 
@@ -55,7 +59,7 @@ public class NavigationDrawerHandler {
 
         themeFragment = new ThemeFragment();
 
-        m.startFragment(fragmentTransaction, topTensFragment);
+        m.startFragment(fragmentTransaction, topTensFragment, false);
 
         //Initializing NavigationView
         navigationView = (NavigationView) m.findViewById(R.id.navigation_view);
@@ -65,119 +69,7 @@ public class NavigationDrawerHandler {
         navigationView.getMenu().getItem(0).setChecked(true);
 
         //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-
-            // This method will trigger on item Click of navigation menu
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-
-                Handler handler = new Handler();
-                //Checking if the item is in checked state or not, if not make it in checked state
-                navigationView.getMenu().getItem(titleIndex).setCheckable(true);
-                if(!menuItem.isChecked()) menuItem.setChecked(true);
-                else menuItem.setChecked(false);
-
-                //Closing drawer on item click
-                drawerLayout.closeDrawers();
-
-                //Check to see which item was being clicked and perform appropriate action
-                switch (menuItem.getItemId()){
-                    // For rest of the options we just show a toast on click
-                    case R.id.lists:
-                        m.toolbar.setTitle("Boozic");
-                        title = (String) m.toolbar.getTitle();
-                        titleIndex = 0;
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                m.startFragment(fragmentTransaction, topTensFragment);
-                            }
-                        }, 275);
-                        return true;
-                    case R.id.heart:
-                        m.toolbar.setTitle("Favorites");
-                        title = (String) m.toolbar.getTitle();
-                        titleIndex = 1;
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                m.startFragment(fragmentTransaction, favoritesFragment);
-                            }
-                        }, 275);
-                        return true;
-                    case R.id.cash:
-                        m.toolbar.setTitle("Spending");
-                        title = (String) m.toolbar.getTitle();
-                        titleIndex = 2;
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                m.startFragment(fragmentTransaction, spendingFragment);
-                            }
-                        }, 275);
-                        return true;
-                    case R.id.edit:
-                        m.toolbar.setTitle("Themes");
-                        title = (String) m.toolbar.getTitle();
-                        titleIndex = 3;
-
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                m.startFragment(fragmentTransaction, themeFragment);
-                            }
-                        }, 275);
-
-                        return true;
-                    case R.id.settings:
-
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Intent i = new Intent(m, SettingsActivity.class);
-                                m.startActivity(i);
-                            }
-                        }, 275);
-
-                        return true;
-                    case R.id.about:
-
-                        return true;
-                    case R.id.feedback:
-
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                m.DHandle.OpenFeedbackDialog(m, m.getColorAccentId());
-                            }
-                        }, 275);
-
-                        return true;
-                    case R.id.legal:
-
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Intent i = new Intent(m, LegalActivity.class);
-                                m.startActivity(i);
-                            }
-                        }, 275);
-
-                        return true;
-                    default:
-
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(m.getApplicationContext(),"Somethings Wrong",Toast.LENGTH_SHORT).show();
-                            }
-                        }, 275);
-
-                        return true;
-
-                }
-            }
-        });
+        navigationView.setNavigationItemSelectedListener(NavListener);
 
         // Initializing Drawer Layout and ActionBarToggle
         drawerLayout = (DrawerLayout) m.findViewById(R.id.drawer);
@@ -203,4 +95,118 @@ public class NavigationDrawerHandler {
         //calling sync state is necessay or else your hamburger icon wont show up
         actionBarDrawerToggle.syncState();
     }
+
+    public NavigationView.OnNavigationItemSelectedListener NavListener = new NavigationView.OnNavigationItemSelectedListener() {
+
+        // This method will trigger on item Click of navigation menu
+        @Override
+        public boolean onNavigationItemSelected(MenuItem menuItem) {
+
+            Handler handler = new Handler();
+            //Checking if the item is in checked state or not, if not make it in checked state
+            navigationView.getMenu().getItem(titleIndex).setCheckable(true);
+            if(!menuItem.isChecked()) menuItem.setChecked(true);
+            else menuItem.setChecked(false);
+
+            //Closing drawer on item click
+            drawerLayout.closeDrawers();
+
+            //Check to see which item was being clicked and perform appropriate action
+            switch (menuItem.getItemId()){
+                // For rest of the options we just show a toast on click
+                case R.id.lists:
+                    m.toolbar.setTitle("Boozic");
+                    title = (String) m.toolbar.getTitle();
+                    titleIndex = 0;
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            m.startFragment(fragmentTransaction, topTensFragment, false);
+                        }
+                    }, delay);
+                    return true;
+                case R.id.heart:
+                    m.toolbar.setTitle("Favorites");
+                    title = (String) m.toolbar.getTitle();
+                    titleIndex = 1;
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            m.startFragment(fragmentTransaction, favoritesFragment, true);
+                        }
+                    }, delay);
+                    return true;
+                case R.id.cash:
+                    m.toolbar.setTitle("Spending");
+                    title = (String) m.toolbar.getTitle();
+                    titleIndex = 2;
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            m.startFragment(fragmentTransaction, spendingFragment, true);
+                        }
+                    }, delay);
+                    return true;
+                case R.id.edit:
+                    m.toolbar.setTitle("Themes");
+                    title = (String) m.toolbar.getTitle();
+                    titleIndex = 3;
+
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            m.startFragment(fragmentTransaction, themeFragment, true);
+                        }
+                    }, delay);
+
+                    return true;
+                case R.id.settings:
+
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent i = new Intent(m, SettingsActivity.class);
+                            m.startActivity(i);
+                        }
+                    }, delay);
+
+                    return true;
+                case R.id.about:
+
+                    return true;
+                case R.id.feedback:
+
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            m.DHandle.OpenFeedbackDialog(m, m.getColorAccentId());
+                        }
+                    }, delay);
+
+                    return true;
+                case R.id.legal:
+
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent i = new Intent(m, LegalActivity.class);
+                            m.startActivity(i);
+                        }
+                    }, delay);
+
+                    return true;
+                default:
+
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(m.getApplicationContext(),"Somethings Wrong",Toast.LENGTH_SHORT).show();
+                        }
+                    }, delay);
+
+                    return true;
+
+            }
+        }
+    };
 }
