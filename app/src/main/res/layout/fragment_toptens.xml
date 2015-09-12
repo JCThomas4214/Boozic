@@ -19,5 +19,6 @@
         android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="55dp"/>
+        android:layout_marginTop="55dp"
+        android:paddingTop="10dp"/>
 </RelativeLayout>

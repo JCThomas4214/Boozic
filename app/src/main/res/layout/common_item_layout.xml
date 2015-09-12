@@ -4,16 +4,47 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="8dp"
-    android:layout_marginTop="55dp"
-    android:layout_centerVertical="true"
-    android:gravity="center">
+    android:layout_margin="15dp"
+    android:layout_centerVertical="true">
 
     <!-- This is where we'll populate the item -->
-    <TextView
+    <TableLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/txt_label_item"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
+        android:layout_height="wrap_content">
+        <TableRow>
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/profile_image"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/download_20141015_232430"
+                app:border_color="#FF000000"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
+
+            <TableLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="20dp"
+                    android:id="@+id/txt_label_item"
+                    android:textColor="#000"
+                    android:textSize="20sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="20dp"
+                    android:id="@+id/txt_desc_item"
+                    android:textAppearance="?android:attr/textAppearanceSmall"/>
+            </TableLayout>
+
+        </TableRow>
+    </TableLayout>
+
+
+
 
 </LinearLayout>

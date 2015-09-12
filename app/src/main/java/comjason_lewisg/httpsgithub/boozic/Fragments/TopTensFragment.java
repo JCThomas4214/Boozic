@@ -29,10 +29,11 @@ public class TopTensFragment extends Fragment{
 
     private List<TopTensModel> DataSet = new ArrayList<TopTensModel>() {
         {
-            add(new TopTensModel("This"));
-            add(new TopTensModel("is"));
-            add(new TopTensModel("a"));
-            add(new TopTensModel("test"));
+            add(new TopTensModel("Price", "Cheapest near you"));
+            add(new TopTensModel("Price/Alcohol Content", "Highest alcohol content for price"));
+            add(new TopTensModel("Price/Favorites", "Cheapest favorited"));
+            add(new TopTensModel("Most Popular", "Most searched alcohol"));
+            add(new TopTensModel("Most Favorited", "Most favorited near you"));
         }
     };
 

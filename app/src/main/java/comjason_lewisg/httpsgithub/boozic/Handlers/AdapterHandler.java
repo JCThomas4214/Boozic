@@ -21,11 +21,13 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
     // you provide access to all the views for a data item in a view holder
     public static class ListItemViewHolder extends RecyclerView.ViewHolder {
         TextView label;
+        TextView description;
 
         // each data item is just a string in this case
         public ListItemViewHolder(View itemView) {
             super(itemView);
             label = (TextView) itemView.findViewById(R.id.txt_label_item);
+            description = (TextView) itemView.findViewById(R.id.txt_desc_item);
         }
     }
 
@@ -55,7 +57,7 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         // - replace the contents of the view with that element
         TopTensModel model = items.get(position);
         viewHolder.label.setText(model.label);
-
+        viewHolder.description.setText(model.description);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
