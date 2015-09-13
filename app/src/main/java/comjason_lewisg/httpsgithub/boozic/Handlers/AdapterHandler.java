@@ -5,9 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.NumberFormat;
 import java.util.List;
 
 import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
@@ -21,13 +23,19 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
     // you provide access to all the views for a data item in a view holder
     public static class ListItemViewHolder extends RecyclerView.ViewHolder {
         TextView label;
-        TextView description;
+        TextView storeName;
+        TextView price;
+        TextView volume;
+        ImageView picture;
 
         // each data item is just a string in this case
         public ListItemViewHolder(View itemView) {
             super(itemView);
             label = (TextView) itemView.findViewById(R.id.txt_label_item);
-            description = (TextView) itemView.findViewById(R.id.txt_desc_item);
+            storeName = (TextView) itemView.findViewById(R.id.txt_desc_item);
+            price = (TextView) itemView.findViewById(R.id.price_item);
+            picture = (ImageView) itemView.findViewById(R.id.type_image);
+            volume = (TextView) itemView.findViewById(R.id.volume_item);
         }
     }
 
@@ -57,7 +65,20 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         // - replace the contents of the view with that element
         TopTensModel model = items.get(position);
         viewHolder.label.setText(model.label);
-        viewHolder.description.setText(model.description);
+        viewHolder.storeName.setText(model.storeName);
+        viewHolder.price.setText(NumberFormat.getCurrencyInstance().format(model.price));
+        viewHolder.volume.setText(model.volume);
+        switch (model.typePic) {
+            case 1:
+                viewHolder.picture.setBackgroundResource(R.mipmap.beer);
+                break;
+            case 2:
+                viewHolder.picture.setBackgroundResource(R.mipmap.wine);
+                break;
+            case 3:
+                viewHolder.picture.setBackgroundResource(R.mipmap.liquor);
+                break;
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,11 +30,11 @@ public class TopTensFragment extends Fragment{
 
     private List<TopTensModel> DataSet = new ArrayList<TopTensModel>() {
         {
-            add(new TopTensModel("Price", "Cheapest near you"));
-            add(new TopTensModel("Price/Alcohol Content", "Highest alcohol content for price"));
-            add(new TopTensModel("Price/Favorites", "Cheapest favorited"));
-            add(new TopTensModel("Most Popular", "Most searched alcohol"));
-            add(new TopTensModel("Most Favorited", "Most favorited near you"));
+            add(new TopTensModel(3, "Sky Vodka", "ABC liquor", "1.75L", 1.3, BigDecimal.valueOf(18.73), true));
+            add(new TopTensModel(1, "Miller Light", "Publix liquor", "6*355ml", 1.8, BigDecimal.valueOf(7.23), true));
+            add(new TopTensModel(1, "Bud Light", "Publix liquor", "6*355ml", 1.8, BigDecimal.valueOf(8.02), true));
+            add(new TopTensModel(2, "Moscato", "ABC liquor", "750ml", 1.3, BigDecimal.valueOf(11.46), true));
+            add(new TopTensModel(3, "Fireball Whiskey", "ADC Liquor", "750ml", 1.3, BigDecimal.valueOf(12.95), true));
         }
     };
 
