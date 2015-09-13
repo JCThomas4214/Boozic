@@ -3,22 +3,18 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--<TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TOP TENS"
-        android:padding="8dp"
-        android:textColor="#fff"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:background="@color/ColorPrimary"
-        android:textSize="28sp"
-        android:id="@+id/toptensView"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />-->
+        android:elevation="4dp">
+
+    </LinearLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/topTen_rv"
         android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="55dp"
-        android:paddingTop="10dp"/>
+        android:layout_marginTop="100dp"
+        android:paddingTop="0dp"/>
 </RelativeLayout>

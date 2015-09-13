@@ -125,6 +125,10 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         mToast = Toast.makeText(this, "", Toast.LENGTH_LONG);
     }
 
+    public void changeToolBarElev(float n){
+        toolbar.setElevation(n);
+    }
+
     public void startFragment(android.support.v4.app.FragmentTransaction fragmentTransaction, Fragment fragment, boolean backstack) {
         this.backstack = backstack;
         fragment.setEnterTransition(new Fade().setStartDelay(350));

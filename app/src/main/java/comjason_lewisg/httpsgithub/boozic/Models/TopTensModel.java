@@ -15,6 +15,8 @@ public class TopTensModel {
     public boolean favorite;
     public String volume;
     public double rating;
+    public int alcoholId;
+    public long barcode;
     int id = ++nextId;
 
     public TopTensModel(int type, String title, String store, String vol, double dist, BigDecimal value, boolean fave) {
