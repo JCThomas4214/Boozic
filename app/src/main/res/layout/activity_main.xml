@@ -30,7 +30,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
 
-                <com.github.clans.fab.FloatingActionMenu
+                <!--<com.github.clans.fab.FloatingActionMenu
                     android:id="@+id/fabmenu"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -76,7 +76,7 @@
                         app:fab_colorNormal="@color/ColorAccent"
                         app:fab_colorPressed="@color/ColorAccentDark"/>
 
-                </com.github.clans.fab.FloatingActionMenu>
+                </com.github.clans.fab.FloatingActionMenu>-->
 
                 <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/fabtop"
@@ -84,10 +84,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|right"
                     app:fab_showShadow="true"
-                    app:fab_shadowColor="#06000000"
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
                     android:src="@drawable/camera"
+                    app:fab_showAnimation="@anim/fab_scale_up"
+                    app:fab_hideAnimation="@anim/fab_scale_down"
                     app:fab_colorNormal="@color/ColorPrimary"
                     app:fab_colorPressed="@color/ColorPrimaryDark" />
 

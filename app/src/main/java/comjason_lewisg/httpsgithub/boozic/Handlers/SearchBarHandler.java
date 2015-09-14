@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.quinny898.library.persistentsearch.SearchBox;
 import com.quinny898.library.persistentsearch.SearchResult;
@@ -55,8 +56,8 @@ public class SearchBarHandler {
     public void openSearch(Toolbar t) {
 
         //Hide the FAB button with animation
-        FloatingActionMenu menu = (FloatingActionMenu) m.findViewById(R.id.fabmenu);
-        menu.hideMenuButton(true);
+        FloatingActionButton menu = (FloatingActionButton) m.findViewById(R.id.fabtop);
+        menu.hide(true);
 
         //connect Searchbox to search variable
         search = (SearchBox) m.findViewById(R.id.searchbox);
@@ -130,14 +131,14 @@ public class SearchBarHandler {
     };
 
     public void closeSearch() {
-        final FloatingActionMenu menu = (FloatingActionMenu) m.findViewById(R.id.fabmenu);
+        final FloatingActionButton menu = (FloatingActionButton) m.findViewById(R.id.fabtop);
         Handler handler = new Handler();
         //set a delay for FAB button reveal so users can see it
         //will reveal below keyboard if not
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                menu.showMenuButton(true);
+                menu.show(true);
             }
         }, 600);
 

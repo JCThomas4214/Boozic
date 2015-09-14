@@ -74,7 +74,6 @@ public class NavigationDrawerHandler {
         // Initializing Drawer Layout and ActionBarToggle
         drawerLayout = (DrawerLayout) m.findViewById(R.id.drawer);
         actionBarDrawerToggle = new ActionBarDrawerToggle(m,drawerLayout,t,R.string.openDrawer, R.string.closeDrawer){
-            final FloatingActionMenu menu = (FloatingActionMenu) m.findViewById(R.id.fabmenu);
             @Override
             public void onDrawerClosed(View drawerView) {
                 // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
@@ -85,7 +84,6 @@ public class NavigationDrawerHandler {
             public void onDrawerOpened(View drawerView) {
                 // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
                 super.onDrawerOpened(drawerView);
-                menu.close(true);
             }
         };
 

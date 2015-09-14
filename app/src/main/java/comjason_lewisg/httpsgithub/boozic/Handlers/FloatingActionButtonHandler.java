@@ -20,11 +20,11 @@ import comjason_lewisg.httpsgithub.boozic.R;
 public class FloatingActionButtonHandler extends Activity {
 
     private MainActivity m;
-    public FloatingActionMenu menu;
+    //public FloatingActionMenu menu;
     public FloatingActionButton menuButton;
-    public FloatingActionButton fav1;
+    /*public FloatingActionButton fav1;
     public FloatingActionButton fav2;
-    public FloatingActionButton fav3;
+    public FloatingActionButton fav3;*/
 
     static final int SCANNER_CODE_REQUEST = 0;
 
@@ -35,26 +35,26 @@ public class FloatingActionButtonHandler extends Activity {
     public void setActivity(MainActivity main) {
         m = main;
 
-        createCustomAnimation();
+        //createCustomAnimation();
 
-        menu = (FloatingActionMenu) m.findViewById(R.id.fabmenu);
+        //menu = (FloatingActionMenu) m.findViewById(R.id.fabmenu);
         menuButton = (FloatingActionButton) m.findViewById(R.id.fabtop);
-        fav1 = (FloatingActionButton) m.findViewById(R.id.fav1);
+        /*fav1 = (FloatingActionButton) m.findViewById(R.id.fav1);
         fav2 = (FloatingActionButton) m.findViewById(R.id.fav2);
         fav3 = (FloatingActionButton) m.findViewById(R.id.fav3);
 
         fav1.setOnClickListener(clickListener);
         fav2.setOnClickListener(clickListener);
-        fav3.setOnClickListener(clickListener);
-        menu.setOnMenuToggleListener(menuClickListener);
+        fav3.setOnClickListener(clickListener);*/
+        //menu.setOnMenuToggleListener(menuClickListener);
 
         menuButton.setOnClickListener(clickListener);
-        menuButton.setVisibility(View.GONE);
+        //menuButton.setVisibility(View.GONE);
 
-        menu.setClosedOnTouchOutside(true);
+        //menu.setClosedOnTouchOutside(true);
     }
 
-    private void createCustomAnimation() {
+   /* private void createCustomAnimation() {
         final FloatingActionMenu menu = (FloatingActionMenu) m.findViewById(R.id.fabmenu);
 
         AnimatorSet set = new AnimatorSet();
@@ -84,14 +84,13 @@ public class FloatingActionButtonHandler extends Activity {
         set.setInterpolator(new OvershootInterpolator(2));
 
         menu.setIconToggleAnimatorSet(set);
-    }
+    }*/
 
     private View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Handler handler = new Handler();
             switch (v.getId()) {
-                case R.id.fav1:
+               /* case R.id.fav1:
                     menu.close(true);
                     break;
                 case R.id.fav2:
@@ -99,24 +98,16 @@ public class FloatingActionButtonHandler extends Activity {
                     break;
                 case R.id.fav3:
                     menu.close(true);
-                    break;
+                    break;*/
                 case R.id.fabtop:
-                    menu.close(true);
-                    menuButton.setVisibility(View.GONE);
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            //this is where the Scanner starts
-                            Intent i = new Intent(m, CameraActivity.class);
-                            m.startActivityForResult(i, SCANNER_CODE_REQUEST);
-                        }
-                    }, 300);
+                    Intent i = new Intent(m, CameraActivity.class);
+                    m.startActivityForResult(i, SCANNER_CODE_REQUEST);
                     break;
             }
         }
     };
 
-    private FloatingActionMenu.OnMenuToggleListener menuClickListener = new FloatingActionMenu.OnMenuToggleListener() {
+    /*private FloatingActionMenu.OnMenuToggleListener menuClickListener = new FloatingActionMenu.OnMenuToggleListener() {
         @Override
         public void onMenuToggle(boolean opened) {
             Handler handler = new Handler();
@@ -137,7 +128,7 @@ public class FloatingActionButtonHandler extends Activity {
                 }, 200);
             }
         }
-    };
+    };*/
 
 
 }

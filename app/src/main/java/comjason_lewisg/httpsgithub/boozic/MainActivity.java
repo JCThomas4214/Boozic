@@ -35,7 +35,7 @@ import comjason_lewisg.httpsgithub.boozic.Handlers.RefreshHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.SearchBarHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ThemeHandler;
 
-public class MainActivity extends AppCompatActivity implements ThemeFragment.OnDataPass, GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends AppCompatActivity implements ThemeFragment.OnDataPass, TopTensFragment.OnColorPass, GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
 
     public Toolbar toolbar;
     public DialogHandler DHandle;
@@ -114,13 +114,13 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         //Create a new RefreshHandler for refresh button
         refreshHandler = new RefreshHandler();
 
+        Log.v("STATE", "onCreate color id = " + colorPrimary_id);
+        themeHandler = new ThemeHandler();
+
         //connect to search bar and create new search handler
         searchBarHandler = new SearchBarHandler();
         searchBarHandler.setActivity(this, toolbar);
         //search.enableVoiceRecognition(this);
-
-        Log.v("STATE", "onCreate color id = " + colorPrimary_id);
-        themeHandler = new ThemeHandler();
 
         mToast = Toast.makeText(this, "", Toast.LENGTH_LONG);
     }
@@ -146,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public int getColorAccentId() {
         return colorAccent_id;
     }
+    public int getColorPrimary() { return primaryColor; }
 
     //Data Handlers//
     @Override
@@ -305,16 +306,17 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
         //change the FAB icons depending on state color
         findViewById(R.id.toolbar).setBackgroundColor(primaryColor);
-        FAB.menu.setMenuButtonColorNormal(primaryColor);
-        FAB.menu.setMenuButtonColorPressed(primaryColorDark);
+        /*FAB.menu.setMenuButtonColorNormal(primaryColor);
+        FAB.menu.setMenuButtonColorPressed(primaryColorDark);*/
         FAB.menuButton.setColorNormal(primaryColor);
+        FAB.menuButton.setColorPressed(primaryColorDark);
 
-        FAB.fav1.setColorNormal(accentColor);
+        /*FAB.fav1.setColorNormal(accentColor);
         FAB.fav1.setColorPressed(accentColorDark);
         FAB.fav2.setColorNormal(accentColor);
         FAB.fav2.setColorPressed(accentColorDark);
         FAB.fav3.setColorNormal(accentColor);
-        FAB.fav3.setColorPressed(accentColorDark);
+        FAB.fav3.setColorPressed(accentColorDark);*/
 
         checkPlayServices();
     }

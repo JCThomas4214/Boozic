@@ -1,5 +1,6 @@
 package comjason_lewisg.httpsgithub.boozic.Fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,10 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -28,6 +33,8 @@ public class TopTensFragment extends Fragment{
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+
+    OnColorPass dataPasser;
 
     private List<TopTensModel> DataSet = new ArrayList<TopTensModel>() {
         {
@@ -50,6 +57,7 @@ public class TopTensFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+
         rootView =  inflater.inflate(R.layout.fragment_toptens,container,false);
         viewSet(rootView);
 
@@ -66,6 +74,40 @@ public class TopTensFragment extends Fragment{
         mAdapter = new AdapterHandler(DataSet);
         mRecyclerView.setAdapter(mAdapter);
 
+        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener(){
+            @Override
+            public void onScrolled(RecyclerView mRecyclerView, int dx, int dy){
+                super.onScrolled(mRecyclerView, dx, dy);
+                if(Math.abs(dy) > 20) {
+                    if ( dy > 0)
+                        ((MainActivity)getActivity()).FAB.menuButton.hide(true);
+                    else
+                        ((MainActivity)getActivity()).FAB.menuButton.show(true);
+                }
+            }
+        });
+    }
+
+    public interface OnColorPass {
+        int AskForColorPrimary();
+        int AskForColorPrimaryDark();
+        int AskForColorAccent();
+        int AskForColorAccentDark();
+
+    }
+
+    public int askColorPrimary() { return dataPasser.AskForColorPrimary(); }
+
+    public int askColorPrimaryDark() { return dataPasser.AskForColorPrimaryDark(); }
+
+    public int askColorAccent() { return dataPasser.AskForColorAccent(); }
+
+    public int askColorAccentDark() { return dataPasser.AskForColorAccentDark(); }
+
+    @Override
+    public void onAttach(Activity a) {
+        super.onAttach(a);
+        dataPasser = (OnColorPass) a;
     }
 
     @Override
@@ -73,6 +115,10 @@ public class TopTensFragment extends Fragment{
         super.onStart();
         FragmentManager manager = getActivity().getSupportFragmentManager();
         manager.popBackStack();
+
+
+
+
     }
 
     @Override
@@ -85,6 +131,74 @@ public class TopTensFragment extends Fragment{
     public void onResume(){
         super.onResume();
         ((MainActivity)getActivity()).changeToolBarElev(0);
+
+        int colorPrimary = askColorPrimary();
+        int colorPrimaryDark = askColorPrimaryDark();
+        int colorAccent = askColorAccent();
+        int colorAccentDark = askColorAccentDark();
+
+        LinearLayout view = (LinearLayout)getActivity().findViewById(R.id.filterback);
+        view.setBackgroundColor(colorPrimary);
+        FloatingActionMenu fab;
+        fab = (FloatingActionMenu)getActivity().findViewById(R.id.fabtype);
+        fab.setMenuButtonColorNormal(colorPrimary);
+        fab.setMenuButtonColorPressed(colorPrimaryDark);
+
+        fab = (FloatingActionMenu)getActivity().findViewById(R.id.fabdist);
+        fab.setMenuButtonColorNormal(colorPrimary);
+        fab.setMenuButtonColorPressed(colorPrimaryDark);
+
+        fab = (FloatingActionMenu)getActivity().findViewById(R.id.fabprice);
+        fab.setMenuButtonColorNormal(colorPrimary);
+        fab.setMenuButtonColorPressed(colorPrimaryDark);
+
+        fab = (FloatingActionMenu)getActivity().findViewById(R.id.fabcontent);
+        fab.setMenuButtonColorNormal(colorPrimary);
+        fab.setMenuButtonColorPressed(colorPrimaryDark);
+
+        FloatingActionButton fabb;
+        fabb = (FloatingActionButton)getActivity().findViewById(R.id.wines);
+        fabb.setColorNormal(colorAccent);
+        fabb.setColorPressed(colorAccentDark);
+        fabb = (FloatingActionButton)getActivity().findViewById(R.id.beers);
+        fabb.setColorNormal(colorAccent);
+        fabb.setColorPressed(colorAccentDark);
+        fabb = (FloatingActionButton)getActivity().findViewById(R.id.liquors);
+        fabb.setColorNormal(colorAccent);
+        fabb.setColorPressed(colorAccentDark);
+
+        fabb = (FloatingActionButton)getActivity().findViewById(R.id.twomi);
+        fabb.setColorNormal(colorAccent);
+        fabb.setColorPressed(colorAccentDark);
+        fabb = (FloatingActionButton)getActivity().findViewById(R.id.fivemi);
+        fabb.setColorNormal(colorAccent);
+        fabb.setColorPressed(colorAccentDark);
+        fabb = (FloatingActionButton)getActivity().findViewById(R.id.tenmi);
+        fabb.setColorNormal(colorAccent);
+        fabb.setColorPressed(colorAccentDark);
+        fabb = (FloatingActionButton)getActivity().findViewById(R.id.custommi);
+        fabb.setColorNormal(colorAccent);
+        fabb.setColorPressed(colorAccentDark);
+
+        fabb = (FloatingActionButton)getActivity().findViewById(R.id.hilow);
+        fabb.setColorNormal(colorAccent);
+        fabb.setColorPressed(colorAccentDark);
+        fabb = (FloatingActionButton)getActivity().findViewById(R.id.lowhi);
+        fabb.setColorNormal(colorAccent);
+        fabb.setColorPressed(colorAccentDark);
+        fabb = (FloatingActionButton)getActivity().findViewById(R.id.range);
+        fabb.setColorNormal(colorAccent);
+        fabb.setColorPressed(colorAccentDark);
+
+        fabb = (FloatingActionButton)getActivity().findViewById(R.id.hilowcontent);
+        fabb.setColorNormal(colorAccent);
+        fabb.setColorPressed(colorAccentDark);
+        fabb = (FloatingActionButton)getActivity().findViewById(R.id.lowhicontent);
+        fabb.setColorNormal(colorAccent);
+        fabb.setColorPressed(colorAccentDark);
+        fabb = (FloatingActionButton)getActivity().findViewById(R.id.rangecontent);
+        fabb.setColorNormal(colorAccent);
+        fabb.setColorPressed(colorAccentDark);
     }
 
 
