@@ -23,16 +23,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import comjason_lewisg.httpsgithub.boozic.Handlers.AdapterHandler;
+import comjason_lewisg.httpsgithub.boozic.Handlers.FilterActionButtonHandler;
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
 import comjason_lewisg.httpsgithub.boozic.R;
 
-public class TopTensFragment extends Fragment{
+public class TopTensFragment extends Fragment {
     private View rootView;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+
+    private FilterActionButtonHandler FBhandle;
+
+    int colorPrimary;
+    int colorPrimaryDark;
+    int colorAccent;
+    int colorAccentDark;
 
     OnColorPass dataPasser;
 
@@ -74,18 +82,21 @@ public class TopTensFragment extends Fragment{
         mAdapter = new AdapterHandler(DataSet);
         mRecyclerView.setAdapter(mAdapter);
 
-        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener(){
+        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(RecyclerView mRecyclerView, int dx, int dy){
+            public void onScrolled(RecyclerView mRecyclerView, int dx, int dy) {
                 super.onScrolled(mRecyclerView, dx, dy);
-                if(Math.abs(dy) > 20) {
-                    if ( dy > 0)
-                        ((MainActivity)getActivity()).FAB.menuButton.hide(true);
+                if (Math.abs(dy) > 20) {
+                    if (dy > 0)
+                        ((MainActivity) getActivity()).FAB.menuButton.hide(true);
                     else
-                        ((MainActivity)getActivity()).FAB.menuButton.show(true);
+                        ((MainActivity) getActivity()).FAB.menuButton.show(true);
                 }
             }
         });
+
+        FBhandle = new FilterActionButtonHandler();
+        FBhandle.setActivity(rootView);
     }
 
     public interface OnColorPass {
@@ -115,10 +126,6 @@ public class TopTensFragment extends Fragment{
         super.onStart();
         FragmentManager manager = getActivity().getSupportFragmentManager();
         manager.popBackStack();
-
-
-
-
     }
 
     @Override
@@ -132,10 +139,12 @@ public class TopTensFragment extends Fragment{
         super.onResume();
         ((MainActivity)getActivity()).changeToolBarElev(0);
 
-        int colorPrimary = askColorPrimary();
-        int colorPrimaryDark = askColorPrimaryDark();
-        int colorAccent = askColorAccent();
-        int colorAccentDark = askColorAccentDark();
+        colorPrimary = askColorPrimary();
+        colorPrimaryDark = askColorPrimaryDark();
+        colorAccent = askColorAccent();
+        colorAccentDark = askColorAccentDark();
+
+        FBhandle.setColor(colorAccent, colorPrimaryDark);
 
         LinearLayout view = (LinearLayout)getActivity().findViewById(R.id.filterback);
         view.setBackgroundColor(colorPrimary);

@@ -20,38 +20,19 @@ import comjason_lewisg.httpsgithub.boozic.R;
 public class FloatingActionButtonHandler extends Activity {
 
     private MainActivity m;
-    //public FloatingActionMenu menu;
+
     public FloatingActionButton menuButton;
-    /*public FloatingActionButton fav1;
-    public FloatingActionButton fav2;
-    public FloatingActionButton fav3;*/
 
     static final int SCANNER_CODE_REQUEST = 0;
 
-    protected void onCreate() {
-
-    }
+    protected void onCreate() {}
 
     public void setActivity(MainActivity main) {
         m = main;
 
         //createCustomAnimation();
-
-        //menu = (FloatingActionMenu) m.findViewById(R.id.fabmenu);
         menuButton = (FloatingActionButton) m.findViewById(R.id.fabtop);
-        /*fav1 = (FloatingActionButton) m.findViewById(R.id.fav1);
-        fav2 = (FloatingActionButton) m.findViewById(R.id.fav2);
-        fav3 = (FloatingActionButton) m.findViewById(R.id.fav3);
-
-        fav1.setOnClickListener(clickListener);
-        fav2.setOnClickListener(clickListener);
-        fav3.setOnClickListener(clickListener);*/
-        //menu.setOnMenuToggleListener(menuClickListener);
-
         menuButton.setOnClickListener(clickListener);
-        //menuButton.setVisibility(View.GONE);
-
-        //menu.setClosedOnTouchOutside(true);
     }
 
    /* private void createCustomAnimation() {
@@ -90,15 +71,6 @@ public class FloatingActionButtonHandler extends Activity {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-               /* case R.id.fav1:
-                    menu.close(true);
-                    break;
-                case R.id.fav2:
-                    menu.close(true);
-                    break;
-                case R.id.fav3:
-                    menu.close(true);
-                    break;*/
                 case R.id.fabtop:
                     Intent i = new Intent(m, CameraActivity.class);
                     m.startActivityForResult(i, SCANNER_CODE_REQUEST);
@@ -106,29 +78,6 @@ public class FloatingActionButtonHandler extends Activity {
             }
         }
     };
-
-    /*private FloatingActionMenu.OnMenuToggleListener menuClickListener = new FloatingActionMenu.OnMenuToggleListener() {
-        @Override
-        public void onMenuToggle(boolean opened) {
-            Handler handler = new Handler();
-            if (opened) {
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        menuButton.setVisibility(View.VISIBLE);
-                    }
-                }, 225);
-            } else {
-                menuButton.setVisibility(View.GONE);
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        menuButton.setVisibility(View.GONE);
-                    }
-                }, 200);
-            }
-        }
-    };*/
 
 
 }

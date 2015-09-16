@@ -30,12 +30,14 @@ import com.google.android.gms.location.LocationServices;
 import comjason_lewisg.httpsgithub.boozic.Fragments.ThemeFragment;
 import comjason_lewisg.httpsgithub.boozic.Fragments.TopTensFragment;
 import comjason_lewisg.httpsgithub.boozic.Handlers.DialogHandler;
+import comjason_lewisg.httpsgithub.boozic.Handlers.FilterActionButtonHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.FloatingActionButtonHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.RefreshHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.SearchBarHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ThemeHandler;
 
-public class MainActivity extends AppCompatActivity implements ThemeFragment.OnDataPass, TopTensFragment.OnColorPass, GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends AppCompatActivity implements ThemeFragment.OnDataPass, TopTensFragment.OnColorPass,
+        GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
 
     public Toolbar toolbar;
     public DialogHandler DHandle;

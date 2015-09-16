@@ -27,5 +27,6 @@
     <color name="ColorAccentDark5">#BA68C8</color>
 
     <color name="ColorHint">#24000000</color>
-    
+
+    <color name="ColorCheck">#bfbfbf</color>
 </resources>

@@ -30,54 +30,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
 
-                <!--<com.github.clans.fab.FloatingActionMenu
-                    android:id="@+id/fabmenu"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    app:menu_icon="@drawable/chevron_up"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_gravity="bottom|right"
-                    app:menu_animationDelayPerItem="45"
-                    app:menu_labels_ellipsize="end"
-                    app:menu_labels_singleLine="true"
-                    app:menu_colorNormal="@color/ColorPrimary"
-                    app:menu_colorPressed="@color/ColorPrimaryDark">
-
-                    <com.github.clans.fab.FloatingActionButton
-                        android:id="@+id/fav1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/star"
-                        app:fab_label="Favorite 1"
-                        app:fab_size="mini"
-                        app:fab_colorNormal="@color/ColorAccent"
-                        app:fab_colorPressed="@color/ColorAccentDark" />
-
-                    <com.github.clans.fab.FloatingActionButton
-                        android:id="@+id/fav2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/star"
-                        app:fab_label="Favorite 2"
-                        app:fab_size="mini"
-                        app:fab_colorNormal="@color/ColorAccent"
-                        app:fab_colorPressed="@color/ColorAccentDark"/>
-
-                    <com.github.clans.fab.FloatingActionButton
-                        android:id="@+id/fav3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/star"
-                        app:fab_label="Favorite 3"
-                        app:fab_size="mini"
-                        app:fab_colorNormal="@color/ColorAccent"
-                        app:fab_colorPressed="@color/ColorAccentDark"/>
-
-                </com.github.clans.fab.FloatingActionMenu>-->
-
                 <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/fabtop"
                     android:layout_width="wrap_content"
