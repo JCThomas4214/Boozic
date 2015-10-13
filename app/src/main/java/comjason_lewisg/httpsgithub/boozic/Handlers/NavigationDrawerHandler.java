@@ -2,10 +2,6 @@ package comjason_lewisg.httpsgithub.boozic.Handlers;
 
 import android.content.Intent;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
-import android.transition.Fade;
-import android.transition.Slide;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -14,14 +10,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionMenu;
-
 import comjason_lewisg.httpsgithub.boozic.Fragments.FavoritesFragment;
 import comjason_lewisg.httpsgithub.boozic.Fragments.SpendingFragment;
 import comjason_lewisg.httpsgithub.boozic.Fragments.ThemeFragment;
 import comjason_lewisg.httpsgithub.boozic.Fragments.TopTensFragment;
-import comjason_lewisg.httpsgithub.boozic.LegalActivity;
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
+import comjason_lewisg.httpsgithub.boozic.ProductActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
 import comjason_lewisg.httpsgithub.boozic.SettingsActivity;
 
@@ -55,7 +49,7 @@ public class NavigationDrawerHandler {
 
         favoritesFragment = new FavoritesFragment();
 
-        spendingFragment = new SpendingFragment();
+        /*spendingFragment = new SpendingFragment();*/
 
         themeFragment = new ThemeFragment();
 
@@ -134,7 +128,7 @@ public class NavigationDrawerHandler {
                         }
                     }, delay);
                     return true;
-                case R.id.cash:
+                /*case R.id.cash:
                     m.toolbar.setTitle("Spending");
                     title = (String) m.toolbar.getTitle();
                     titleIndex = 2;
@@ -144,7 +138,7 @@ public class NavigationDrawerHandler {
                             m.startFragment(fragmentTransaction, spendingFragment, true);
                         }
                     }, delay);
-                    return true;
+                    return true;*/
                 case R.id.edit:
                     m.toolbar.setTitle("Themes");
                     title = (String) m.toolbar.getTitle();
@@ -171,6 +165,15 @@ public class NavigationDrawerHandler {
                     return true;
                 case R.id.about:
 
+                    //link to facebook page
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent i = new Intent(m, ProductActivity.class);
+                            m.startActivity(i);
+                        }
+                    }, delay);
+
                     return true;
                 case R.id.feedback:
 
@@ -187,8 +190,7 @@ public class NavigationDrawerHandler {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            Intent i = new Intent(m, LegalActivity.class);
-                            m.startActivity(i);
+                            m.DHandle.OpenLegalDialog(m, m.getColorAccentId());
                         }
                     }, delay);
 

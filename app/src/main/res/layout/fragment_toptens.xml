@@ -14,9 +14,115 @@
     </LinearLayout>
 
     <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/fabcontent"
+        app:menu_icon="@drawable/water"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="false"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="180dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:elevation="6dp"
+        app:menu_buttonSpacing="7dp"
+        app:menu_labels_ellipsize="end"
+        app:menu_labels_singleLine="true"
+        app:menu_fab_size="mini"
+        app:menu_openDirection="down"
+        app:menu_colorNormal="@color/ColorPrimary3"
+        app:menu_colorPressed="@color/ColorPrimary3"
+        app:menu_showShadow="false">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/hilowcontent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/chevron_right"
+            app:fab_label="High/Low"
+            app:fab_size="mini"
+            app:fab_colorNormal="@color/ColorAccent"
+            app:fab_colorPressed="@color/ColorAccentDark" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/lowhicontent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/chevron_left"
+            app:fab_label="Low/High"
+            app:fab_size="mini"
+            app:fab_colorNormal="@color/ColorAccent"
+            app:fab_colorPressed="@color/ColorAccentDark"/>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/rangecontent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/code_tags"
+            app:fab_label="Range"
+            app:fab_size="mini"
+            app:fab_colorNormal="@color/ColorAccent"
+            app:fab_colorPressed="@color/ColorAccentDark"/>
+
+    </com.github.clans.fab.FloatingActionMenu>
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/fabprice"
+        app:menu_icon="@drawable/currency_usd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="false"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="100dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:elevation="6dp"
+        app:menu_buttonSpacing="7dp"
+        app:menu_labels_ellipsize="end"
+        app:menu_labels_singleLine="true"
+        app:menu_fab_size="mini"
+        app:menu_openDirection="down"
+        app:menu_colorNormal="@color/ColorPrimary3"
+        app:menu_colorPressed="@color/ColorPrimary3"
+        app:menu_showShadow="false">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/hilow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/chevron_right"
+            app:fab_label="High/Low"
+            app:fab_size="mini"
+            app:fab_colorNormal="@color/ColorAccent"
+            app:fab_colorPressed="@color/ColorAccentDark" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/lowhi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/chevron_left"
+            app:fab_label="Low/High"
+            app:fab_size="mini"
+            app:fab_colorNormal="@color/ColorAccent"
+            app:fab_colorPressed="@color/ColorAccentDark"/>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/range"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/code_tags"
+            app:fab_label="Range"
+            app:fab_size="mini"
+            app:fab_colorNormal="@color/ColorAccent"
+            app:fab_colorPressed="@color/ColorAccentDark"/>
+
+    </com.github.clans.fab.FloatingActionMenu>
+    <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/fabtype"
         app:menu_icon="@drawable/beer"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="false"
         android:layout_marginTop="50dp"
@@ -26,6 +132,7 @@
         android:paddingBottom="10dp"
         android:paddingLeft="10dp"
         android:elevation="6dp"
+        app:menu_buttonSpacing="7dp"
         app:menu_labels_ellipsize="end"
         app:menu_labels_singleLine="true"
         app:menu_fab_size="mini"
@@ -70,7 +177,7 @@
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/fabdist"
         app:menu_icon="@drawable/car"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="false"
         android:layout_marginTop="50dp"
@@ -80,6 +187,7 @@
         android:paddingBottom="10dp"
         android:paddingLeft="10dp"
         android:elevation="6dp"
+        app:menu_buttonSpacing="7dp"
         app:menu_labels_ellipsize="end"
         app:menu_labels_singleLine="true"
         app:menu_fab_size="mini"
@@ -131,111 +239,9 @@
 
     </com.github.clans.fab.FloatingActionMenu>
 
-    <com.github.clans.fab.FloatingActionMenu
-        android:id="@+id/fabprice"
-        app:menu_icon="@drawable/currency_usd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="false"
-        android:layout_marginTop="50dp"
-        android:layout_marginRight="100dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:elevation="6dp"
-        app:menu_labels_ellipsize="end"
-        app:menu_labels_singleLine="true"
-        app:menu_fab_size="mini"
-        app:menu_openDirection="down"
-        app:menu_colorNormal="@color/ColorPrimary3"
-        app:menu_colorPressed="@color/ColorPrimary3"
-        app:menu_showShadow="false">
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/hilow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/chevron_right"
-            app:fab_label="High/Low"
-            app:fab_size="mini"
-            app:fab_colorNormal="@color/ColorAccent"
-            app:fab_colorPressed="@color/ColorAccentDark" />
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/lowhi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/chevron_left"
-            app:fab_label="Low/High"
-            app:fab_size="mini"
-            app:fab_colorNormal="@color/ColorAccent"
-            app:fab_colorPressed="@color/ColorAccentDark"/>
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/range"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/code_tags"
-            app:fab_label="Range"
-            app:fab_size="mini"
-            app:fab_colorNormal="@color/ColorAccent"
-            app:fab_colorPressed="@color/ColorAccentDark"/>
-
-    </com.github.clans.fab.FloatingActionMenu>
-
-    <com.github.clans.fab.FloatingActionMenu
-        android:id="@+id/fabcontent"
-        app:menu_icon="@drawable/water"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="false"
-        android:layout_marginTop="50dp"
-        android:layout_marginRight="20dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:elevation="6dp"
-        app:menu_labels_ellipsize="end"
-        app:menu_labels_singleLine="true"
-        app:menu_fab_size="mini"
-        app:menu_openDirection="down"
-        app:menu_colorNormal="@color/ColorPrimary3"
-        app:menu_colorPressed="@color/ColorPrimary3"
-        app:menu_showShadow="false">
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/hilowcontent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/chevron_right"
-            app:fab_label="High/Low"
-            app:fab_size="mini"
-            app:fab_colorNormal="@color/ColorAccent"
-            app:fab_colorPressed="@color/ColorAccentDark" />
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/lowhicontent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/chevron_left"
-            app:fab_label="Low/High"
-            app:fab_size="mini"
-            app:fab_colorNormal="@color/ColorAccent"
-            app:fab_colorPressed="@color/ColorAccentDark"/>
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/rangecontent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/code_tags"
-            app:fab_label="Range"
-            app:fab_size="mini"
-            app:fab_colorNormal="@color/ColorAccent"
-            app:fab_colorPressed="@color/ColorAccentDark"/>
-
-    </com.github.clans.fab.FloatingActionMenu>
 
 
 

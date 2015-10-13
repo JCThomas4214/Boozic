@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class LegalActivity extends AppCompatActivity {
+public class ProductActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
 
@@ -29,22 +29,15 @@ public class LegalActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_legal);
+        setContentView(R.layout.activity_product);
 
         //Instantiate the toobar object
-        toolbar = (Toolbar) findViewById(R.id.legal_toolbar); // Attaching the layout to the toolbar object
+        toolbar = (Toolbar) findViewById(R.id.product_toolbar); // Attaching the layout to the toolbar object
         setSupportActionBar(toolbar);
 
         //Call these to set up the back arrow on toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_legal, menu);
-        return true;
     }
 
     @Override
@@ -79,6 +72,6 @@ public class LegalActivity extends AppCompatActivity {
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(primaryColorDark);
-        findViewById(R.id.legal_toolbar).setBackgroundColor(primaryColor);
+        findViewById(R.id.product_toolbar).setBackgroundColor(primaryColor);
     }
 }
