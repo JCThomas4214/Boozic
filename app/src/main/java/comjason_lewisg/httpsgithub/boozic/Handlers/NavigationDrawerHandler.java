@@ -29,7 +29,6 @@ public class NavigationDrawerHandler {
 
     public TopTensFragment topTensFragment;
     public FavoritesFragment favoritesFragment;
-    public SpendingFragment spendingFragment;
     public ThemeFragment themeFragment;
     public android.support.v4.app.FragmentTransaction fragmentTransaction;
 
@@ -40,7 +39,7 @@ public class NavigationDrawerHandler {
     }
     public void connectDrawer(final MainActivity m, final Toolbar t) {
         //set initial title to Boozic
-        title = (String) t.getTitle();
+        title = m.getString(R.string.app_name);
         titleIndex = 0;
         delay = 255;
         this.m = m;
@@ -84,7 +83,7 @@ public class NavigationDrawerHandler {
         //Setting the actionbarToggle to drawer layout
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
 
-        //calling sync state is necessay or else your hamburger icon wont show up
+        //calling sync state is necessary or else your hamburger icon wont show up
         actionBarDrawerToggle.syncState();
     }
 
@@ -107,8 +106,8 @@ public class NavigationDrawerHandler {
             switch (menuItem.getItemId()){
                 // For rest of the options we just show a toast on click
                 case R.id.lists:
-                    m.toolbar.setTitle("Boozic");
-                    title = (String) m.toolbar.getTitle();
+                    m.title.setText("Boozic");
+                    title = (String) m.title.getText();
                     titleIndex = 0;
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -118,8 +117,8 @@ public class NavigationDrawerHandler {
                     }, delay);
                     return true;
                 case R.id.heart:
-                    m.toolbar.setTitle("Favorites");
-                    title = (String) m.toolbar.getTitle();
+                    m.title.setText("Favorites");
+                    title = (String) m.title.getText();
                     titleIndex = 1;
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -128,20 +127,9 @@ public class NavigationDrawerHandler {
                         }
                     }, delay);
                     return true;
-                /*case R.id.cash:
-                    m.toolbar.setTitle("Spending");
-                    title = (String) m.toolbar.getTitle();
-                    titleIndex = 2;
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            m.startFragment(fragmentTransaction, spendingFragment, true);
-                        }
-                    }, delay);
-                    return true;*/
                 case R.id.edit:
-                    m.toolbar.setTitle("Themes");
-                    title = (String) m.toolbar.getTitle();
+                    m.title.setText("Themes");
+                    title = (String) m.title.getText();
                     titleIndex = 3;
 
                     handler.postDelayed(new Runnable() {

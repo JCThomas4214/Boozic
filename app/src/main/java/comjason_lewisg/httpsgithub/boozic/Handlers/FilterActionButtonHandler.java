@@ -1,25 +1,15 @@
 package comjason_lewisg.httpsgithub.boozic.Handlers;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.app.Activity;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Handler;
 import android.view.View;
-import android.view.animation.OvershootInterpolator;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
-import comjason_lewisg.httpsgithub.boozic.CameraActivity;
-import comjason_lewisg.httpsgithub.boozic.Fragments.TopTensFragment;
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
 
-public class FilterActionButtonHandler{
+public class FilterActionButtonHandler extends Activity{
 
     int colorAccent;
     int colorAccentDark;
@@ -64,7 +54,7 @@ public class FilterActionButtonHandler{
         colorAccentDark = ad;
     }
 
-    public void setActivity(View m) {
+    public void setActivity(MainActivity m) {
 
 
         types = (FloatingActionMenu) m.findViewById(R.id.fabtype);
@@ -108,7 +98,7 @@ public class FilterActionButtonHandler{
         prices.setClosedOnTouchOutside(true);
         contents.setClosedOnTouchOutside(true);
 
-        distances.setIconAnimated(false);;
+        distances.setIconAnimated(false);
         prices.setIconAnimated(false);
         contents.setIconAnimated(false);
     }
@@ -207,6 +197,7 @@ public class FilterActionButtonHandler{
             contents.close(true);
 
     }
+
 
     private boolean checkclick(FloatingActionButton button, boolean check) {
         if (check) {

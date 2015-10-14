@@ -115,8 +115,9 @@ public class SearchBarHandler {
         public void onSearch(String searchTerm) {
             search.setLogoText(searchTerm);
             Nav.navigationView.getMenu().getItem(Nav.titleIndex).setCheckable(false);
-            m.toolbar.setTitle(searchTerm);
+            //m.title.setText(searchTerm);
 
+            //TODO: we need to connect to the backend here and query for product search to populate product activity
 
             //SearchSuggestHandler handles suggest dropdown
             //Only allow 4 previous searches to be shown
@@ -157,7 +158,7 @@ public class SearchBarHandler {
         if(search.getSearchText().isEmpty()) {
             //set Toolbar title to previously selected content and set true for Nav drawer congruency
             Nav.navigationView.getMenu().getItem(Nav.titleIndex).setCheckable(true);
-            m.toolbar.setTitle(Nav.title);
+            m.title.setText(Nav.title);
             search.setLogoText(Nav.title);
         }
     }

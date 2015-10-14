@@ -3,8 +3,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/abc_action_bar_default_height_material"
+    android:layout_height="56dp"
     android:elevation="8dp"
+    android:animateLayoutChanges="true"
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    android:background="@color/ColorPrimary"
-    />
+    android:background="@color/ColorPrimary">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Boozic"
+        android:layout_gravity="top"
+        android:textSize="21dp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:id="@+id/toolbar_title"/>
+
+    </android.support.v7.widget.Toolbar>
