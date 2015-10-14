@@ -550,5 +550,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public void AskToHideFilterButtons () { hideFilterButtons(); }
 
     @Override
-    public void AskToShowFilterButtons () { showFilterButtons(); }
+    public void AskToShowFilterButtons () {
+        if (toolbar.getLayoutParams().height <= 300)
+            showFilterButtons();
+    }
 }

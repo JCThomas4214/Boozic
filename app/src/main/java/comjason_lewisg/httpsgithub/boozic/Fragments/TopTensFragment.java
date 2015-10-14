@@ -111,30 +111,32 @@ public class TopTensFragment extends Fragment {
     public void onAttach(Activity a) {
         super.onAttach(a);
         dataPasser = (OnPass) a;
-    }
-
-    @Override
-    public void onStart(){
-        super.onStart();
-        FragmentManager manager = getActivity().getSupportFragmentManager();
-        manager.popBackStack();
 
         askShowFilterButtons();
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+        askHideFilterButtons();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        FragmentManager manager = getActivity().getSupportFragmentManager();
+        manager.popBackStack();
+
+
+    }
+
+    @Override
     public void onStop(){
         super.onStop();
-        askHideFilterButtons();
     }
 
     @Override
     public void onResume(){
         super.onResume();
-
-        colorPrimary = askColorPrimary();
-        colorPrimaryDark = askColorPrimaryDark();
-        colorAccent = askColorAccent();
-        colorAccentDark = askColorAccentDark();
     }
 }

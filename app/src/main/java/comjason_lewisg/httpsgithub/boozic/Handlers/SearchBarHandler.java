@@ -37,6 +37,7 @@ public class SearchBarHandler {
     public NavigationDrawerHandler Nav;
     public SearchSuggestHandler searchSuggestHandler;
     public SearchBox search;
+    private int dist;
 
     public void onCreate() {
     }
@@ -65,6 +66,15 @@ public class SearchBarHandler {
         m.findViewById(R.id.action_search).setEnabled(false);
         m.findViewById(R.id.action_refresh).setEnabled(false);
 
+        //circular reveal and hide are determined by the length and width of the toolbar layout
+        //if the filter options are present then the toolbar will be longer than typical
+        //this adjusts for the difference
+        if (m.toolbar.getLayoutParams().height > 300) {
+            dist = 20 - (m.toolbar.getLayoutParams().height / 4);
+        }
+        else {
+            dist = 20;
+        }
         revealFromMenuItem(R.id.action_search, m, search);
 
         //logo is the initial String that's shown during reveal animation
@@ -186,7 +196,7 @@ public class SearchBarHandler {
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96,
                 r.getDisplayMetrics());
         int cx = m.findViewById(R.id.toolbar).getWidth() - (m.findViewById(R.id.action_refresh).getWidth() + (m.findViewById(R.id.action_search).getWidth() / 2)) + 20;
-        int cy = m.findViewById(R.id.toolbar).getHeight() / 2 + 20;
+        int cy = m.findViewById(R.id.toolbar).getHeight() / 2 + dist;
 
         int finalRadius = (int) Math.max(layout.getWidth(), px);
 
@@ -231,7 +241,7 @@ public class SearchBarHandler {
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96,
                 r.getDisplayMetrics());
         int cx = m.findViewById(R.id.toolbar).getWidth() - (m.findViewById(R.id.action_refresh).getWidth() + (m.findViewById(R.id.action_search).getWidth() / 2)) + 20;
-        int cy = m.findViewById(R.id.toolbar).getHeight() / 2 + 20;
+        int cy = m.findViewById(R.id.toolbar).getHeight() / 2 + dist;
         int finalRadius = (int) Math.max(layout.getWidth()*1.5, px);
 
         SupportAnimator animator = ViewAnimationUtils.createCircularReveal(

@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -35,8 +36,12 @@ public class SettingsActivity extends AppCompatActivity {
         //when resume, pull saves states for each button
         setContentView(R.layout.activity_settings);
 
-        //Instantiate the toobar object
+        //Instantiate the toolbar object
         toolbar = (Toolbar) findViewById(R.id.settings_toolbar); // Attaching the layout to the toolbar object
+        toolbar.setTitle("");
+        toolbar.getLayoutParams().height = 170;
+        TextView title = (TextView) findViewById(R.id.toolbar_title);
+        title.setText("Settings");
         setSupportActionBar(toolbar);
 
         //Call these to set up the back arrow on toolbar

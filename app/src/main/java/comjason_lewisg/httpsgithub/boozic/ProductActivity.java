@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 public class ProductActivity extends AppCompatActivity {
 
@@ -31,8 +32,12 @@ public class ProductActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
 
-        //Instantiate the toobar object
+        //Instantiate the toolbar object
         toolbar = (Toolbar) findViewById(R.id.product_toolbar); // Attaching the layout to the toolbar object
+        toolbar.setTitle("");
+        toolbar.getLayoutParams().height = 170;
+        TextView title = (TextView) findViewById(R.id.toolbar_title);
+        title.setText("Product");
         setSupportActionBar(toolbar);
 
         //Call these to set up the back arrow on toolbar
