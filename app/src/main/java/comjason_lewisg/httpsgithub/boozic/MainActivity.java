@@ -1,12 +1,10 @@
 package comjason_lewisg.httpsgithub.boozic;
 
-import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.transition.Fade;
 import android.transition.Slide;
@@ -18,21 +16,20 @@ import android.view.MenuItem;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-
-import java.io.IOException;
 
 import comjason_lewisg.httpsgithub.boozic.Fragments.ThemeFragment;
 import comjason_lewisg.httpsgithub.boozic.Fragments.TopTensFragment;
+import comjason_lewisg.httpsgithub.boozic.Handlers.AnimateToolbarHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.DialogHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.FilterActionButtonHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.FloatingActionButtonHandler;
@@ -40,15 +37,17 @@ import comjason_lewisg.httpsgithub.boozic.Handlers.RefreshHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.SearchBarHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ThemeHandler;
 
-public class MainActivity extends AppCompatActivity implements ThemeFragment.OnDataPass, TopTensFragment.OnColorPass,
+public class MainActivity extends AppCompatActivity implements ThemeFragment.OnDataPass, TopTensFragment.OnPass,
         GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
 
     public Toolbar toolbar;
+    public TextView title;
     public DialogHandler DHandle;
     public SearchBarHandler searchBarHandler;
     public RefreshHandler refreshHandler;
     public ThemeHandler themeHandler;
     public FloatingActionButtonHandler FAB;
+    public FilterActionButtonHandler FBhandle;
 
     static final int SCANNER_CODE_REQUEST = 0;
 
@@ -77,12 +76,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
     private Toast mToast;
 
-    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    GoogleCloudMessaging gcmObj;
-    String PROJECT_NUMBER = "845607826709";
-    Context applicationContext;
-    String regId="";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,9 +100,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
                 break;
         }
 
-        applicationContext = getApplicationContext();
-        getRegId();
-
         buildGoogleApiClient();
         createLocationRequest();
 
@@ -119,8 +109,19 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         FAB = new FloatingActionButtonHandler();
         FAB.setActivity(this);
 
+        FBhandle = new FilterActionButtonHandler();
+        FBhandle.setActivity(this);
+
         // Initializing Toolbar and setting it as the actionbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("");
+
+        /*RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) toolbar.getLayoutParams();
+        layoutParams.height = 106;
+        toolbar.setLayoutParams(layoutParams);
+        toolbar.requestLayout();*/
+
+        title = (TextView) findViewById(R.id.toolbar_title);
         setSupportActionBar(toolbar);
 
         //Create a Dialog Handler for Feedback
@@ -140,22 +141,83 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         mToast = Toast.makeText(this, "", Toast.LENGTH_LONG);
     }
 
-    public void changeToolBarElev(float n){
-        toolbar.setElevation(n);
-    }
-
     public void startFragment(android.support.v4.app.FragmentTransaction fragmentTransaction, Fragment fragment, boolean backstack) {
         this.backstack = backstack;
         fragment.setEnterTransition(new Fade().setStartDelay(350));
         fragment.setExitTransition(new Slide(Gravity.BOTTOM));
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.frame3, fragment);
+        fragmentTransaction.replace(R.id.frame3,fragment);
         fragmentTransaction.commit();
     }
 
     public void themeChange() {
         finish();
         startActivity(getIntent());
+    }
+
+    public void hideFilterButtons() {
+        FloatingActionMenu fab;
+
+        fab = (FloatingActionMenu) findViewById(R.id.fabtype);
+        fab.hideMenuButton(true);
+
+        fab = (FloatingActionMenu) findViewById(R.id.fabdist);
+        fab.hideMenuButton(true);
+
+        fab = (FloatingActionMenu) findViewById(R.id.fabprice);
+        fab.hideMenuButton(true);
+
+        fab = (FloatingActionMenu) findViewById(R.id.fabcontent);
+        fab.hideMenuButton(true);
+
+        //toolbar.getLayoutParams().height = 170;
+        AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, 170);
+        anim.setDuration(500);
+        toolbar.startAnimation(anim);
+    }
+
+    public void showFilterButtons() {
+        final FloatingActionMenu fab0;
+        final FloatingActionMenu fab1;
+        final FloatingActionMenu fab2;
+        final FloatingActionMenu fab3;
+        Handler handler = new Handler();
+
+        fab0 = (FloatingActionMenu) findViewById(R.id.fabtype);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                fab0.showMenuButton(true);
+            }
+        }, 250);
+
+        fab1 = (FloatingActionMenu) findViewById(R.id.fabdist);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                fab1.showMenuButton(true);
+            }
+        }, 350);
+
+        fab2 = (FloatingActionMenu) findViewById(R.id.fabprice);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                fab2.showMenuButton(true);
+            }
+        }, 450);
+
+        fab3 = (FloatingActionMenu) findViewById(R.id.fabcontent);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                fab3.showMenuButton(true);
+            }
+        }, 550);
+
+        AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, 315);
+        anim.setDuration(350);
+        toolbar.startAnimation(anim);
     }
 
     public int getColorAccentId() {
@@ -221,8 +283,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
                 .isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
-                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
             } else {
                 Toast.makeText(getApplicationContext(),
                         "This device is not supported.", Toast.LENGTH_LONG)
@@ -323,17 +383,71 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
         //change the FAB icons depending on state color
         findViewById(R.id.toolbar).setBackgroundColor(primaryColor);
-        /*FAB.menu.setMenuButtonColorNormal(primaryColor);
-        FAB.menu.setMenuButtonColorPressed(primaryColorDark);*/
         FAB.menuButton.setColorNormal(primaryColor);
         FAB.menuButton.setColorPressed(primaryColorDark);
 
-        /*FAB.fav1.setColorNormal(accentColor);
-        FAB.fav1.setColorPressed(accentColorDark);
-        FAB.fav2.setColorNormal(accentColor);
-        FAB.fav2.setColorPressed(accentColorDark);
-        FAB.fav3.setColorNormal(accentColor);
-        FAB.fav3.setColorPressed(accentColorDark);*/
+        FBhandle.setColor(accentColor, primaryColorDark);
+        FloatingActionMenu fab;
+
+        fab = (FloatingActionMenu) findViewById(R.id.fabtype);
+        fab.setMenuButtonColorNormal(primaryColor);
+        fab.setMenuButtonColorPressed(primaryColorDark);
+
+        fab = (FloatingActionMenu) findViewById(R.id.fabdist);
+        fab.setMenuButtonColorNormal(primaryColor);
+        fab.setMenuButtonColorPressed(primaryColorDark);
+
+        fab = (FloatingActionMenu) findViewById(R.id.fabprice);
+        fab.setMenuButtonColorNormal(primaryColor);
+        fab.setMenuButtonColorPressed(primaryColorDark);
+
+        fab = (FloatingActionMenu) findViewById(R.id.fabcontent);
+        fab.setMenuButtonColorNormal(primaryColor);
+        fab.setMenuButtonColorPressed(primaryColorDark);
+
+        FloatingActionButton fabb;
+        fabb = (FloatingActionButton) findViewById(R.id.wines);
+        fabb.setColorNormal(accentColor);
+        fabb.setColorPressed(accentColorDark);
+        fabb = (FloatingActionButton) findViewById(R.id.beers);
+        fabb.setColorNormal(accentColor);
+        fabb.setColorPressed(accentColorDark);
+        fabb = (FloatingActionButton) findViewById(R.id.liquors);
+        fabb.setColorNormal(accentColor);
+        fabb.setColorPressed(accentColorDark);
+
+        fabb = (FloatingActionButton) findViewById(R.id.twomi);
+        fabb.setColorNormal(accentColor);
+        fabb.setColorPressed(accentColorDark);
+        fabb = (FloatingActionButton) findViewById(R.id.fivemi);
+        fabb.setColorNormal(accentColor);
+        fabb.setColorPressed(accentColorDark);
+        fabb = (FloatingActionButton) findViewById(R.id.tenmi);
+        fabb.setColorNormal(accentColor);
+        fabb.setColorPressed(accentColorDark);
+        fabb = (FloatingActionButton) findViewById(R.id.custommi);
+        fabb.setColorNormal(accentColor);
+        fabb.setColorPressed(accentColorDark);
+
+        fabb = (FloatingActionButton) findViewById(R.id.hilow);
+        fabb.setColorNormal(accentColor);
+        fabb.setColorPressed(accentColorDark);
+        fabb = (FloatingActionButton) findViewById(R.id.lowhi);
+        fabb.setColorNormal(accentColor);
+        fabb.setColorPressed(accentColorDark);
+        fabb = (FloatingActionButton) findViewById(R.id.range);
+        fabb.setColorNormal(accentColor);
+        fabb.setColorPressed(accentColorDark);
+
+        fabb = (FloatingActionButton) findViewById(R.id.hilowcontent);
+        fabb.setColorNormal(accentColor);
+        fabb.setColorPressed(accentColorDark);
+        fabb = (FloatingActionButton) findViewById(R.id.lowhicontent);
+        fabb.setColorNormal(accentColor);
+        fabb.setColorPressed(accentColorDark);
+        fabb = (FloatingActionButton) findViewById(R.id.rangecontent);
+        fabb.setColorNormal(accentColor);
+        fabb.setColorPressed(accentColorDark);
 
         checkPlayServices();
     }
@@ -347,7 +461,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         ed.putInt("COLOR_STATE", colorPrimary_id);
         ed.putInt("COLOR_ACCENT_STATE", colorAccent_id);
 
-        Log.v("COLOR", "primaryColor = "+primaryColor+" primaryDark = "+primaryColorDark);
+        Log.v("COLOR", "primaryColor = " + primaryColor + " primaryDark = " + primaryColorDark);
         Log.v("COLOR", "accentColor = "+accentColor + " accentColorDark = "+ accentColorDark);
         ed.putInt("PRIMARY_STATE", primaryColor);
         ed.putInt("PRIMARY_DARK_STATE", primaryColorDark);
@@ -432,76 +546,12 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         return accentColorDark;
     }
 
-  /*  public void getRegId(){
-        new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
-                String msg = "";
-                try {
-                    if (gcm == null) {
-                        gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
-                    }
-                    regid = gcm.register(PROJECT_NUMBER);
-                    msg = "Device registered, registration ID=" + regid;
-                    Log.i("GCM",  msg);
+    @Override
+    public void AskToHideFilterButtons () { hideFilterButtons(); }
 
-                } catch (IOException ex) {
-                    msg = "Error :" + ex.getMessage();
-
-                }
-                return msg;
-            }
-
-            @Override
-            protected void onPostExecute(String msg) {
-               // etRegId.setText(msg + "\n");
-                Log.v("RESULT", msg);
-            }
-        }.execute(null, null, null);
-    } */
-
-    public void getRegId() {
-        GoogleCloudMessaging gcmObj;
-
-
-        // Check if Google Play Service is installed in Device
-        // Play services is needed to handle GCM stuffs
-        if (checkPlayServices()) {
-
-            // Register Device in GCM Server
-            registerInBackground();
-        }
-
-
+    @Override
+    public void AskToShowFilterButtons () {
+        if (toolbar.getLayoutParams().height <= 300)
+            showFilterButtons();
     }
-
-    private void registerInBackground() {
-        new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
-                String msg = "";
-                try {
-                    if (gcmObj == null) {
-                        gcmObj = GoogleCloudMessaging
-                                .getInstance(applicationContext);
-                    }
-                    regId = gcmObj.register(PROJECT_NUMBER);
-                    //TODO: send this regID to database using controller
-                    msg = "Registration ID :" + regId;
-
-                } catch (IOException ex) {
-                    msg = "Error :" + ex.getMessage();
-                }
-                return msg;
-            }
-
-            @Override
-            protected void onPostExecute(String msg) {
-                //TODO: Remove this
-                //Toast.makeText(applicationContext,"Registered with GCM Server successfully.nn"+ msg, Toast.LENGTH_SHORT).show();
-
-            }
-        }.execute(null, null, null);
-    }
-
 }

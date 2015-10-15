@@ -3,13 +3,7 @@
     package="comjason_lewisg.httpsgithub.boozic" >
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <permission android:name="comjason_lewisg.httpsgithub.boozic.permission.C2D_MESSAGE" android:protectionLevel="signature"/>
-    <uses-permission android:name="comjason_lewisg.httpsgithub.boozic.permission.C2D_MESSAGE" />
-
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -24,50 +18,35 @@
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustPan" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".ProductActivity"
+            android:label="@string/title_activity_product"
+            android:screenOrientation="portrait"
+            android:theme="@style/normal_theme">
         </activity>
         <activity
             android:name=".CameraActivity"
             android:label="@string/title_activity_camera"
-            android:theme="@style/camera_theme"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/camera_theme" >
         </activity>
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:theme="@style/normal_theme"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name=".AboutUsActivity"
-            android:label="@string/title_activity_about_us"
-            android:theme="@style/normal_theme"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name=".LegalActivity"
-            android:label="@string/title_activity_legal"
-            android:theme="@style/normal_theme"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/normal_theme" >
         </activity>
         <activity
             android:name=".SearchActivity"
             android:label="@string/title_activity_search"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
-        <receiver
-            android:name=".GcmBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="com.hmkcode.android.gcm" />
-            </intent-filter>
-        </receiver>
-
     </application>
 
 </manifest>

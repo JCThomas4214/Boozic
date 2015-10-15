@@ -50,6 +50,20 @@ public class DialogHandler {
         dialog.show();
     }
 
+    public void OpenLegalDialog(final MainActivity m, final int colorAccent_id) {
+
+        //Create the MaterialDialog object to start initiallizing attributes
+        MaterialDialog dialog = new MaterialDialog.Builder(m)
+                .title("Legal and Liability")
+                .content("This is where the legal documentation will go.")
+                .positiveText("OK")
+                .widgetColorRes(m.getResources().getIdentifier("comjason_lewisg.httpsgithub.boozic:color/" + searchForRes(colorAccent_id), null, null))
+                .positiveColorRes(m.getResources().getIdentifier("comjason_lewisg.httpsgithub.boozic:color/" + searchForRes(colorAccent_id), null, null))
+                .build();
+
+        dialog.show();
+    }
+
     private String searchForRes(int colorAccent_id) {
         String str = "";
       switch (colorAccent_id) {

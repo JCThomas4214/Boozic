@@ -2,10 +2,6 @@ package comjason_lewisg.httpsgithub.boozic.Handlers;
 
 import android.content.Intent;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
-import android.transition.Fade;
-import android.transition.Slide;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -14,14 +10,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionMenu;
-
 import comjason_lewisg.httpsgithub.boozic.Fragments.FavoritesFragment;
 import comjason_lewisg.httpsgithub.boozic.Fragments.SpendingFragment;
 import comjason_lewisg.httpsgithub.boozic.Fragments.ThemeFragment;
 import comjason_lewisg.httpsgithub.boozic.Fragments.TopTensFragment;
-import comjason_lewisg.httpsgithub.boozic.LegalActivity;
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
+import comjason_lewisg.httpsgithub.boozic.ProductActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
 import comjason_lewisg.httpsgithub.boozic.SettingsActivity;
 
@@ -35,7 +29,6 @@ public class NavigationDrawerHandler {
 
     public TopTensFragment topTensFragment;
     public FavoritesFragment favoritesFragment;
-    public SpendingFragment spendingFragment;
     public ThemeFragment themeFragment;
     public android.support.v4.app.FragmentTransaction fragmentTransaction;
 
@@ -46,7 +39,7 @@ public class NavigationDrawerHandler {
     }
     public void connectDrawer(final MainActivity m, final Toolbar t) {
         //set initial title to Boozic
-        title = (String) t.getTitle();
+        title = m.getString(R.string.app_name);
         titleIndex = 0;
         delay = 255;
         this.m = m;
@@ -55,7 +48,7 @@ public class NavigationDrawerHandler {
 
         favoritesFragment = new FavoritesFragment();
 
-        spendingFragment = new SpendingFragment();
+        /*spendingFragment = new SpendingFragment();*/
 
         themeFragment = new ThemeFragment();
 
@@ -90,7 +83,7 @@ public class NavigationDrawerHandler {
         //Setting the actionbarToggle to drawer layout
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
 
-        //calling sync state is necessay or else your hamburger icon wont show up
+        //calling sync state is necessary or else your hamburger icon wont show up
         actionBarDrawerToggle.syncState();
     }
 
@@ -113,8 +106,8 @@ public class NavigationDrawerHandler {
             switch (menuItem.getItemId()){
                 // For rest of the options we just show a toast on click
                 case R.id.lists:
-                    m.toolbar.setTitle("Boozic");
-                    title = (String) m.toolbar.getTitle();
+                    m.title.setText("Boozic");
+                    title = (String) m.title.getText();
                     titleIndex = 0;
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -124,8 +117,8 @@ public class NavigationDrawerHandler {
                     }, delay);
                     return true;
                 case R.id.heart:
-                    m.toolbar.setTitle("Favorites");
-                    title = (String) m.toolbar.getTitle();
+                    m.title.setText("Favorites");
+                    title = (String) m.title.getText();
                     titleIndex = 1;
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -134,20 +127,9 @@ public class NavigationDrawerHandler {
                         }
                     }, delay);
                     return true;
-                case R.id.cash:
-                    m.toolbar.setTitle("Spending");
-                    title = (String) m.toolbar.getTitle();
-                    titleIndex = 2;
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            m.startFragment(fragmentTransaction, spendingFragment, true);
-                        }
-                    }, delay);
-                    return true;
                 case R.id.edit:
-                    m.toolbar.setTitle("Themes");
-                    title = (String) m.toolbar.getTitle();
+                    m.title.setText("Themes");
+                    title = (String) m.title.getText();
                     titleIndex = 3;
 
                     handler.postDelayed(new Runnable() {
@@ -171,6 +153,15 @@ public class NavigationDrawerHandler {
                     return true;
                 case R.id.about:
 
+                    //link to facebook page
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent i = new Intent(m, ProductActivity.class);
+                            m.startActivity(i);
+                        }
+                    }, delay);
+
                     return true;
                 case R.id.feedback:
 
@@ -187,8 +178,7 @@ public class NavigationDrawerHandler {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            Intent i = new Intent(m, LegalActivity.class);
-                            m.startActivity(i);
+                            m.DHandle.OpenLegalDialog(m, m.getColorAccentId());
                         }
                     }, delay);
 

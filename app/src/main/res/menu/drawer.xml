@@ -18,11 +18,11 @@
             android:icon="@drawable/heart"
             android:title="@string/action_heart" />
 
-        <item
+        <!--<item
             android:id="@+id/cash"
             android:checked="false"
             android:icon="@drawable/cash_usd"
-            android:title="@string/action_cash" />
+            android:title="@string/action_cash" />-->
 
         <item
             android:id="@+id/edit"
