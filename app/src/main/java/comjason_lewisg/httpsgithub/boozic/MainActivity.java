@@ -1,8 +1,10 @@
 package comjason_lewisg.httpsgithub.boozic;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -24,8 +26,11 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+
+import java.io.IOException;
 
 import comjason_lewisg.httpsgithub.boozic.Fragments.ThemeFragment;
 import comjason_lewisg.httpsgithub.boozic.Fragments.TopTensFragment;
@@ -76,6 +81,12 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
     private Toast mToast;
 
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    GoogleCloudMessaging gcmObj;
+    String PROJECT_NUMBER = "845607826709";
+    Context applicationContext;
+    String regId="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +110,9 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
                 setTheme(R.style.AppTheme5);
                 break;
         }
+
+        applicationContext = getApplicationContext();
+        getRegId();
 
         buildGoogleApiClient();
         createLocationRequest();
@@ -283,6 +297,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
                 .isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
             } else {
                 Toast.makeText(getApplicationContext(),
                         "This device is not supported.", Toast.LENGTH_LONG)
@@ -553,5 +569,49 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public void AskToShowFilterButtons () {
         if (toolbar.getLayoutParams().height <= 300)
             showFilterButtons();
+    }
+
+    public void getRegId() {
+        GoogleCloudMessaging gcmObj;
+
+
+        // Check if Google Play Service is installed in Device
+        // Play services is needed to handle GCM stuffs
+        if (checkPlayServices()) {
+
+            // Register Device in GCM Server
+            registerInBackground();
+        }
+
+
+    }
+
+    private void registerInBackground() {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String msg = "";
+                try {
+                    if (gcmObj == null) {
+                        gcmObj = GoogleCloudMessaging
+                                .getInstance(applicationContext);
+                    }
+                    regId = gcmObj.register(PROJECT_NUMBER);
+                    //TODO: send this regID to database using controller
+                    msg = "Registration ID :" + regId;
+
+                } catch (IOException ex) {
+                    msg = "Error :" + ex.getMessage();
+                }
+                return msg;
+            }
+
+            @Override
+            protected void onPostExecute(String msg) {
+                //TODO: Remove this
+               // Toast.makeText(applicationContext,"Registered with GCM Server successfully.nn"+ msg, Toast.LENGTH_SHORT).show();
+
+            }
+        }.execute(null, null, null);
     }
 }
