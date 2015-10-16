@@ -32,6 +32,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.iid.InstanceID;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
@@ -46,6 +47,10 @@ import comjason_lewisg.httpsgithub.boozic.Handlers.FloatingActionButtonHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.RefreshHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.SearchBarHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ThemeHandler;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+
 
 public class MainActivity extends AppCompatActivity implements ThemeFragment.OnDataPass, TopTensFragment.OnPass,
         GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
@@ -121,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         applicationContext = getApplicationContext();
         getRegId();
 
+
         buildGoogleApiClient();
         createLocationRequest();
 
@@ -160,6 +166,9 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         searchBarHandler.setActivity(this, toolbar);
         //search.enableVoiceRecognition(this);
 
+        String str = getIntent().getStringExtra("msg");
+        mToast = Toast.makeText(this, str, Toast.LENGTH_LONG);
+
         mToast = Toast.makeText(this, "", Toast.LENGTH_LONG);
     }
 
@@ -168,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         fragment.setEnterTransition(new Fade().setStartDelay(350));
         fragment.setExitTransition(new Slide(Gravity.BOTTOM));
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.frame3,fragment);
+        fragmentTransaction.replace(R.id.frame3, fragment);
         fragmentTransaction.commit();
     }
 
@@ -614,38 +623,39 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         if (checkPlayServices()) {
 
             // Register Device in GCM Server
-            registerInBackground();
+            getTokenInBackground();
         }
 
 
     }
 
-    private void registerInBackground() {
+    /**
+     * Get a Instance ID authorization Token
+     */
+    public void getTokenInBackground() {
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
-                String msg = "";
+                String token = "";
                 try {
-                    if (gcmObj == null) {
-                        gcmObj = GoogleCloudMessaging
-                                .getInstance(applicationContext);
-                    }
-                    regId = gcmObj.register(PROJECT_NUMBER);
-                    //TODO: send this regID to database using controller
-                    msg = "Registration ID :" + regId;
+                    //TODO: change token
+                    InstanceID instanceID = InstanceID.getInstance(getApplicationContext());
+                     token = instanceID.getToken("845607826709",
+                            GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
 
-                } catch (IOException ex) {
-                    msg = "Error :" + ex.getMessage();
+                } catch (final IOException e) {
+                    token = "Error :" + e.getMessage();
+
                 }
-                return msg;
+                return token;
             }
 
             @Override
             protected void onPostExecute(String msg) {
-                //TODO: Remove this
-               // Toast.makeText(applicationContext,"Registered with GCM Server successfully.nn"+ msg, Toast.LENGTH_SHORT).show();
+                //TODO: Remove this and store this to database
+                Toast.makeText(applicationContext,"Registered with GCM Server successfully.nn"+ msg, Toast.LENGTH_SHORT).show();
 
             }
-        }.execute(null, null, null);
+        }.execute();
     }
 }
