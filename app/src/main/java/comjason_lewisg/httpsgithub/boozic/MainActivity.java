@@ -653,7 +653,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
             @Override
             protected void onPostExecute(String msg) {
                 //TODO: Remove this and store this to database
-                Toast.makeText(applicationContext,"Registered with GCM Server successfully.nn"+ msg, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(applicationContext,"Registered with GCM Server successfully.nn"+ msg, Toast.LENGTH_SHORT).show();
 
             }
         }.execute();
