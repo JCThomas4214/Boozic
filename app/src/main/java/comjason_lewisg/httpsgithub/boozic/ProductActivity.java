@@ -10,6 +10,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
+
 public class ProductActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
@@ -25,6 +27,18 @@ public class ProductActivity extends AppCompatActivity {
     private int accentColor;
     private int accentColorDark;
 
+    public String label;
+    public String pathToImage;
+    public String storeName;
+    public BigDecimal price;
+    public int typePic;
+    public double distance;
+    public boolean favorite;
+    public String volume;
+    public double rating;
+    public int alcoholId;
+    public long barcode;
+
     private SharedPreferences mPrefs;
 
     @Override
@@ -32,12 +46,17 @@ public class ProductActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
 
+        //fetch extra items
+        label = (String) getIntent().getSerializableExtra("Label");
+
         //Instantiate the toolbar object
         toolbar = (Toolbar) findViewById(R.id.product_toolbar); // Attaching the layout to the toolbar object
         toolbar.setTitle("");
         toolbar.getLayoutParams().height = 170;
         TextView title = (TextView) findViewById(R.id.toolbar_title);
-        title.setText("Product");
+
+        //inject extra item in product layout
+        title.setText(label);
         setSupportActionBar(toolbar);
 
         //Call these to set up the back arrow on toolbar
@@ -78,5 +97,6 @@ public class ProductActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(primaryColorDark);
         findViewById(R.id.product_toolbar).setBackgroundColor(primaryColor);
+
     }
 }

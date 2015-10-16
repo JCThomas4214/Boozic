@@ -77,6 +77,7 @@ public class NavigationDrawerHandler {
             public void onDrawerOpened(View drawerView) {
                 // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
                 super.onDrawerOpened(drawerView);
+                m.FBhandle.closeAll();
             }
         };
 
@@ -157,8 +158,7 @@ public class NavigationDrawerHandler {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            Intent i = new Intent(m, ProductActivity.class);
-                            m.startActivity(i);
+                            //put about
                         }
                     }, delay);
 

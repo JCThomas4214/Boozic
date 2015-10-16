@@ -2,6 +2,8 @@ package comjason_lewisg.httpsgithub.boozic;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.transition.Fade;
 import android.transition.Slide;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,6 +19,8 @@ import android.view.MenuItem;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     static final int PRIMARY_DARK_STATE = -15906911;
     static final int ACCENT_STATE = -26624;
     static final int ACCENT_DARK_STATE = -291840;
+
+    public int TBwidth;
 
     private int colorPrimary_id;
     private int colorAccent_id;
@@ -105,24 +112,25 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
         setContentView(R.layout.activity_main);
 
+        // Initializing Toolbar and setting it as the actionbar
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("");
+
+        title = (TextView) findViewById(R.id.toolbar_title);
+        setSupportActionBar(toolbar);
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        TBwidth = size.x;
+        Log.v("data", "toolbar width = " + TBwidth);
+
         //Creates a FAB for the bottom right corner of the main screen
         FAB = new FloatingActionButtonHandler();
         FAB.setActivity(this);
 
         FBhandle = new FilterActionButtonHandler();
         FBhandle.setActivity(this);
-
-        // Initializing Toolbar and setting it as the actionbar
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("");
-
-        /*RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) toolbar.getLayoutParams();
-        layoutParams.height = 106;
-        toolbar.setLayoutParams(layoutParams);
-        toolbar.requestLayout();*/
-
-        title = (TextView) findViewById(R.id.toolbar_title);
-        setSupportActionBar(toolbar);
 
         //Create a Dialog Handler for Feedback
         DHandle = new DialogHandler();
@@ -170,6 +178,9 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         fab = (FloatingActionMenu) findViewById(R.id.fabcontent);
         fab.hideMenuButton(true);
 
+        fab = (FloatingActionMenu) findViewById(R.id.fabrating);
+        fab.hideMenuButton(true);
+
         //toolbar.getLayoutParams().height = 170;
         AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, 170);
         anim.setDuration(500);
@@ -181,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         final FloatingActionMenu fab1;
         final FloatingActionMenu fab2;
         final FloatingActionMenu fab3;
+        final FloatingActionMenu fab4;
         Handler handler = new Handler();
 
         fab0 = (FloatingActionMenu) findViewById(R.id.fabtype);
@@ -214,6 +226,14 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
                 fab3.showMenuButton(true);
             }
         }, 550);
+
+        fab4 = (FloatingActionMenu) findViewById(R.id.fabrating);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                fab4.showMenuButton(true);
+            }
+        }, 650);
 
         AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, 315);
         anim.setDuration(350);
@@ -405,6 +425,10 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         fab.setMenuButtonColorNormal(primaryColor);
         fab.setMenuButtonColorPressed(primaryColorDark);
 
+        fab = (FloatingActionMenu) findViewById(R.id.fabrating);
+        fab.setMenuButtonColorNormal(primaryColor);
+        fab.setMenuButtonColorPressed(primaryColorDark);
+
         FloatingActionButton fabb;
         fabb = (FloatingActionButton) findViewById(R.id.wines);
         fabb.setColorNormal(accentColor);
@@ -435,7 +459,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         fabb = (FloatingActionButton) findViewById(R.id.lowhi);
         fabb.setColorNormal(accentColor);
         fabb.setColorPressed(accentColorDark);
-        fabb = (FloatingActionButton) findViewById(R.id.range);
+        fabb = (FloatingActionButton) findViewById(R.id.pricerange);
         fabb.setColorNormal(accentColor);
         fabb.setColorPressed(accentColorDark);
 
@@ -446,6 +470,16 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         fabb.setColorNormal(accentColor);
         fabb.setColorPressed(accentColorDark);
         fabb = (FloatingActionButton) findViewById(R.id.rangecontent);
+        fabb.setColorNormal(accentColor);
+        fabb.setColorPressed(accentColorDark);
+
+        fabb = (FloatingActionButton) findViewById(R.id.hilowrating);
+        fabb.setColorNormal(accentColor);
+        fabb.setColorPressed(accentColorDark);
+        fabb = (FloatingActionButton) findViewById(R.id.lowhirating);
+        fabb.setColorNormal(accentColor);
+        fabb.setColorPressed(accentColorDark);
+        fabb = (FloatingActionButton) findViewById(R.id.rangerating);
         fabb.setColorNormal(accentColor);
         fabb.setColorPressed(accentColorDark);
 

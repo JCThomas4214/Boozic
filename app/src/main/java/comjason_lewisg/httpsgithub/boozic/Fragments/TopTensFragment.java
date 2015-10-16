@@ -22,6 +22,7 @@ import comjason_lewisg.httpsgithub.boozic.R;
 
 public class TopTensFragment extends Fragment {
     private View rootView;
+    private FragmentManager manager;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -69,7 +70,7 @@ public class TopTensFragment extends Fragment {
 
         mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new AdapterHandler(DataSet);
+        mAdapter = new AdapterHandler(DataSet, (MainActivity) getActivity());
         mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -124,10 +125,8 @@ public class TopTensFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        FragmentManager manager = getActivity().getSupportFragmentManager();
+        manager = getActivity().getSupportFragmentManager();
         manager.popBackStack();
-
-
     }
 
     @Override
