@@ -5,6 +5,8 @@
         <!-- Customize your theme here. -->
         <item name="android:colorPrimary">@color/ColorPrimary</item>
         <item name="android:colorPrimaryDark">@color/ColorPrimaryDark</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 
     <style name="camera_theme" parent="Theme.AppCompat.Light.NoActionBar">

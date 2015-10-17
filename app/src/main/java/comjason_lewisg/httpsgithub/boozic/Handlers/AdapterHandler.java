@@ -3,6 +3,7 @@ package comjason_lewisg.httpsgithub.boozic.Handlers;
 import android.app.Fragment;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,7 +22,7 @@ import comjason_lewisg.httpsgithub.boozic.R;
 
 public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItemViewHolder> {
     private List<TopTensModel> items;
-    MainActivity m;
+    AppCompatActivity m;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -55,7 +56,7 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public AdapterHandler(List<TopTensModel> modeldata, MainActivity m) {
+    public AdapterHandler(List<TopTensModel> modeldata, AppCompatActivity m) {
         if (modeldata == null) {
             throw new IllegalArgumentException("modelData must not be null");
         }
