@@ -28,11 +28,6 @@ public class GCMService extends GcmListenerService {
         sendNotification(data.getString("gcm.notification.body"));
     }
 
-    @Override
-    public void onDeletedMessages() {
-        sendNotification("Deleted messages on server");
-    }
-
 
     // Put the message into a notification and post it.
     // This is just one simple example of what you might choose to do with
@@ -44,7 +39,7 @@ public class GCMService extends GcmListenerService {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle("Boozic App")
+                        .setContentTitle("Boozic")
                         .setContentText(msg);
         // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(this, MainActivity.class);
