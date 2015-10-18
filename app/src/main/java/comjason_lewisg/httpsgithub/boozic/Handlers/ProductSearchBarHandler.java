@@ -34,7 +34,6 @@ public class ProductSearchBarHandler {
     private AppCompatActivity m;
     public SearchSuggestHandler searchSuggestHandler;
     public SearchBox search;
-    private int dist;
 
     public void onCreate() {
     }
@@ -58,7 +57,7 @@ public class ProductSearchBarHandler {
 
         //logo is the initial String that's shown during reveal animation
         //set search bar logo to current toolbar title
-        search.setLogoText((String)t.getTitle());
+        search.setLogoText("");
 
         //connect to searchbar edittext xml to change hint
         EditText text = (EditText) search.findViewById(R.id.search);
@@ -142,7 +141,7 @@ public class ProductSearchBarHandler {
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96,
                 r.getDisplayMetrics());
         int cx = m.findViewById(R.id.product_toolbar).getWidth() - (m.findViewById(R.id.action_product_search).getWidth() / 2) + 20;
-        int cy = m.findViewById(R.id.product_toolbar).getHeight() / 2 + dist;
+        int cy = m.findViewById(R.id.product_toolbar).getHeight() / 2 + 15;
 
         int finalRadius = (int) Math.max(layout.getWidth(), px);
 
@@ -187,7 +186,7 @@ public class ProductSearchBarHandler {
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96,
                 r.getDisplayMetrics());
         int cx = m.findViewById(R.id.product_toolbar).getWidth() - (m.findViewById(R.id.action_product_search).getWidth() / 2) + 20;
-        int cy = m.findViewById(R.id.product_toolbar).getHeight() / 2 + dist;
+        int cy = m.findViewById(R.id.product_toolbar).getHeight() / 2 + 15;
         int finalRadius = (int) Math.max(layout.getWidth()*1.5, px);
 
         SupportAnimator animator = ViewAnimationUtils.createCircularReveal(

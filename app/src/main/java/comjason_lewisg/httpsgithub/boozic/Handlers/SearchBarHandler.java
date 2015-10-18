@@ -14,6 +14,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -55,7 +56,7 @@ public class SearchBarHandler {
         searchSuggestHandler.initList();
     }
 
-    public void openSearch(Toolbar t) {
+    public void openSearch(Toolbar t, TextView title) {
 
         //Hide the FAB button with animation
         FloatingActionButton menu = (FloatingActionButton) m.findViewById(R.id.fabtop);
@@ -80,7 +81,7 @@ public class SearchBarHandler {
 
         //logo is the initial String that's shown during reveal animation
         //set search bar logo to current toolbar title
-        search.setLogoText((String)t.getTitle());
+        search.setLogoText((String)title.getText());
 
         //connect to searchbar edittext xml to change hint
         EditText text = (EditText) search.findViewById(R.id.search);

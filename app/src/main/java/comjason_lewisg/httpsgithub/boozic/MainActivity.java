@@ -383,7 +383,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
             return true;
         }
         if (id == R.id.action_search) {
-            searchBarHandler.openSearch(toolbar);
+            searchBarHandler.openSearch(toolbar, title);
             return true;
         }
 

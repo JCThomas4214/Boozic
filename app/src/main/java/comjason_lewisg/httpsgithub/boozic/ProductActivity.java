@@ -2,6 +2,8 @@ package comjason_lewisg.httpsgithub.boozic;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -15,13 +17,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.quinny898.library.persistentsearch.SearchBox;
+
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import comjason_lewisg.httpsgithub.boozic.Handlers.AdapterHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ProductSearchBarHandler;
@@ -44,9 +58,10 @@ public class ProductActivity extends AppCompatActivity {
     private int accentColorDark;
 
     public String label;
-    public String pathToImage;
-    public String storeName;
-    public BigDecimal price;
+    public String closestStoreName;
+    public String cheapestStoreName;
+    public BigDecimal closestPrice;
+    public BigDecimal cheapestPrice;
     public int typePic;
     public double distance;
     public boolean favorite;
@@ -55,45 +70,18 @@ public class ProductActivity extends AppCompatActivity {
     public int alcoholId;
     public long barcode;
 
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    public PieChart ratingChart;
+    private float[] yData = {145, 112, 98, 45, 16};
+    private String[] xData = {"5", "4", "3", "2", "1"};
 
     private SharedPreferences mPrefs;
-
-    private List<TopTensModel> DataSet = new ArrayList<TopTensModel>() {
-        {
-            //this is where we call backend connector
-            //to populate Arraylist
-            add(new TopTensModel(3, "Sky Vodka", "ABC liquor", "1.75L", 1.3, BigDecimal.valueOf(18.73), true));
-            add(new TopTensModel(1, "Miller Light", "Publix liquor", "2.13L", 1.8, BigDecimal.valueOf(7.23), true));
-            add(new TopTensModel(1, "Bud Light", "Publix liquor", "2.13L", 1.8, BigDecimal.valueOf(8.02), true));
-            add(new TopTensModel(2, "Moscato", "ABC liquor", "0.75L", 1.3, BigDecimal.valueOf(11.46), true));
-            add(new TopTensModel(3, "Fireball Whiskey", "ADC Liquor", "0.75L", 1.3, BigDecimal.valueOf(12.95), true));
-            add(new TopTensModel(3, "Wyborowa Wodka Rye Grain Polish Vodka", "ABC liquor", "1.75L", 1.3, BigDecimal.valueOf(26.99), true));
-            add(new TopTensModel(1, "Henninger", "ABC liquor", "0.47L", 1.8, BigDecimal.valueOf(1.59), true));
-            add(new TopTensModel(1, "Erie Soleil Shandy ", "ABC liquor", "0.35L", 1.8, BigDecimal.valueOf(2.29), true));
-            add(new TopTensModel(2, "Domaine Gavoty Provence Rose", "ABC liquor", "0.75L", 1.3, BigDecimal.valueOf(29.99), true));
-            add(new TopTensModel(3, "Ciroc French Pineapple Vodka", "ADC Liquor", "1.75L", 1.3, BigDecimal.valueOf(27.99), true));
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.list);
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        mRecyclerView.setHasFixedSize(true);
-
-        mAdapter = new AdapterHandler(DataSet, this);
-        mRecyclerView.setAdapter(mAdapter);
-
-        //fetch extra items
-        label = (String) getIntent().getSerializableExtra("Label");
+        fetchProductInfo();
 
         //Instantiate the toolbar object
         toolbar = (Toolbar) findViewById(R.id.product_toolbar); // Attaching the layout to the toolbar object
@@ -108,7 +96,9 @@ public class ProductActivity extends AppCompatActivity {
         searchBarHandler.setActivity(this, toolbar);
 
         ImageView img = (ImageView) findViewById(R.id.headerimg);
+        SearchBox sb = (SearchBox) findViewById(R.id.product_searchbox);
         toolbar.setY(getStatusBarHeight() + 75);
+        sb.setY(getStatusBarHeight());
         img.setY(getStatusBarHeight());
     }
 
@@ -142,6 +132,121 @@ public class ProductActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void fetchProductInfo() {
+        //fetch extra items
+        label = (String) getIntent().getSerializableExtra("Label");
+        typePic = (int) getIntent().getSerializableExtra("Type");
+        closestStoreName = (String) getIntent().getSerializableExtra("ClosestStore");
+        cheapestStoreName = (String) getIntent().getSerializableExtra("CheapestStore");
+        closestPrice = (BigDecimal) getIntent().getSerializableExtra("ClosestPrice");
+        closestPrice = (BigDecimal) getIntent().getSerializableExtra("ClosestPrice");
+
+        setProductInfo();
+    }
+
+    public void setProductInfo() {
+
+        TextView text = (TextView) findViewById(R.id.product_label);
+        text.setText(label);
+
+        selectTypePic();
+
+        text = (TextView) findViewById(R.id.product_closest_store);
+        text.setText(closestStoreName + " - " + NumberFormat.getCurrencyInstance().format(closestPrice));
+
+        text = (TextView) findViewById(R.id.product_cheapest_store);
+        text.setText(closestStoreName + " - " + NumberFormat.getCurrencyInstance().format(closestPrice));
+
+        setChart();
+    }
+
+    public void selectTypePic() {
+        ImageView img = (ImageView) findViewById(R.id.product_type);
+        switch (typePic) {
+            case 1:
+                img.setBackgroundResource(R.mipmap.beer);
+                break;
+            case 2:
+                img.setBackgroundResource(R.mipmap.wine);
+                break;
+            case 3:
+                img.setBackgroundResource(R.mipmap.liquor);
+                break;
+        }
+    }
+
+    public void setChart() {
+        ratingChart = (PieChart) findViewById(R.id.rating_chart);
+
+        // config the pie chart
+        ratingChart.setUsePercentValues(true);
+        ratingChart.setDrawSliceText(false);
+        ratingChart.setDescription("");
+
+        // enable hole and config
+        ratingChart.setDrawHoleEnabled(true);
+        ratingChart.setHoleColorTransparent(true);
+        ratingChart.setHoleRadius(60);
+        ratingChart.setTransparentCircleRadius(65);
+
+        // set rotation
+        ratingChart.setRotationEnabled(false);
+
+        // add data
+        addData();
+
+        // customize legends
+        Legend l = ratingChart.getLegend();
+        l.setPosition(Legend.LegendPosition.LEFT_OF_CHART);
+        l.setYOffset(18);
+        l.setXOffset(0);
+        l.setFormSize(15);
+        l.setXEntrySpace(2);
+        l.setYEntrySpace(8);
+    }
+
+    private void addData() {
+        ArrayList<Entry> yVals = new ArrayList<>();
+
+        for (int i = 0; i < yData.length; i++)
+            yVals.add(new Entry(yData[i], i));
+
+        ArrayList<String> xVals = new ArrayList<>();
+
+        for (int o = 0; o < xData.length; o++)
+            xVals.add(xData[o]);
+
+        // create pie data
+        PieDataSet dataSet = new PieDataSet(yVals, "");
+        dataSet.setSliceSpace(3);
+        dataSet.setSelectionShift(0);
+
+        // add colors
+        ArrayList<Integer> colors = new ArrayList<>();
+
+        colors.add(getResources().getColor(R.color.ColorAccent));
+        colors.add(getResources().getColor(R.color.ColorAccent2));
+        colors.add(getResources().getColor(R.color.ColorAccent3));
+        colors.add(getResources().getColor(R.color.ColorAccent4));
+        colors.add(getResources().getColor(R.color.ColorAccent5));
+
+        dataSet.setColors(colors);
+
+        // instantiate pie data
+        PieData data = new PieData(xVals, dataSet);
+        data.setValueFormatter(new PercentFormatter());
+        data.setValueTextSize(10f);
+        data.setValueTextColor(Color.BLACK);
+
+        ratingChart.setData(data);
+
+        //undo all highlights
+        ratingChart.highlightValues(null);
+
+        //update pie chart
+        ratingChart.invalidate();
+    }
+
     // A method to find height of the status bar
     public int getStatusBarHeight() {
         int result = 0;
@@ -164,17 +269,19 @@ public class ProductActivity extends AppCompatActivity {
         accentColor = mPrefs.getInt("ACCENT_STATE", ACCENT_STATE);
         accentColorDark = mPrefs.getInt("ACCENT_DARK_STATE", ACCENT_DARK_STATE);
 
-        CollapsingToolbarLayout tmp = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        tmp.setTitle(label);
-        tmp.setContentScrimColor(primaryColor);
-        tmp.setStatusBarScrimColor(primaryColorDark);
+        CollapsingToolbarLayout ctl = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        ctl.setTitle(label);
+        ctl.setContentScrimColor(primaryColor);
+        ctl.setStatusBarScrimColor(primaryColorDark);
 
+        /*Drawable setButton = getResources().getDrawable(R.drawable.custom_product_button, null);
+        setButton.setColorFilter(primaryColor, PorterDuff.Mode.MULTIPLY);
+        Button btn = (Button) findViewById(R.id.new_price_button);
+        btn.setBackground(setButton);*/
 
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        //getWindow().setStatusBarColor(primaryColorDark);
-        //findViewById(R.id.collapsing_toolbar).setCon(primaryColor);
 
     }
 }

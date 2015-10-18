@@ -7,9 +7,10 @@ import java.util.Date;
 public class TopTensModel {
     private static int nextId = 0;
     public String label;
-    public String pathToImage;
-    public String storeName;
-    public BigDecimal price;
+    public String closestStoreName;
+    public String cheapestStoreName;
+    public BigDecimal closestPrice;
+    public BigDecimal cheapestPrice;
     public int typePic;
     public double distance;
     public boolean favorite;
@@ -22,8 +23,8 @@ public class TopTensModel {
     public TopTensModel(int type, String title, String store, String vol, double dist, BigDecimal value, boolean fave) {
         label = title;
         typePic = type;
-        storeName = store + " (" + dist + "mi)";
-        price = value;
+        closestStoreName = store + " (" + dist + "mi)";
+        closestPrice = value;
         volume = "(" + vol + ")";
         favorite = fave;
     }

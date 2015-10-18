@@ -1,8 +1,6 @@
 package comjason_lewisg.httpsgithub.boozic.Handlers;
 
-import android.app.Fragment;
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,7 +13,6 @@ import android.widget.TextView;
 import java.text.NumberFormat;
 import java.util.List;
 
-import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
 import comjason_lewisg.httpsgithub.boozic.ProductActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
@@ -55,7 +52,7 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         }
     }
 
-    // Provide a suitable constructor (depends on the kind of dataset)
+    // Provide a suitable constructor (depends on the kind of data set)
     public AdapterHandler(List<TopTensModel> modeldata, AppCompatActivity m) {
         if (modeldata == null) {
             throw new IllegalArgumentException("modelData must not be null");
@@ -63,8 +60,6 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         items = modeldata;
         this.m = m;
     }
-
-
 
     // Create new views (invoked by the layout manager)
     @Override
@@ -76,10 +71,15 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         // set the view's size, margins, paddings and layout parameters
         AdapterHandler.ListItemViewHolder vh = new ListItemViewHolder(itemView, new AdapterHandler.ListItemViewHolder.IMyViewHolderClicks() {
             public void onPotato(View caller, int position) {
-                Log.v("DATA", "The Item Clicked is: " + items.get(position).label);
                 Intent i = new Intent(m, ProductActivity.class);
                 //inject model variables
                 i.putExtra("Label", items.get(position).label);
+                i.putExtra("Type", items.get(position).typePic);
+                i.putExtra("ClosestStore", items.get(position).closestStoreName);
+                i.putExtra("CheapestStore", items.get(position).cheapestStoreName);
+                i.putExtra("ClosestPrice", items.get(position).closestPrice);
+                i.putExtra("CheapestPrice", items.get(position).cheapestPrice);
+
                 m.startActivity(i);
             }
         });
@@ -93,8 +93,8 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         // - replace the contents of the view with that element
         TopTensModel model = items.get(position);
         viewHolder.label.setText(model.label);
-        viewHolder.storeName.setText(model.storeName);
-        viewHolder.price.setText(NumberFormat.getCurrencyInstance().format(model.price));
+        viewHolder.storeName.setText(model.closestStoreName);
+        viewHolder.price.setText(NumberFormat.getCurrencyInstance().format(model.closestPrice));
         viewHolder.volume.setText(model.volume);
         switch (model.typePic) {
             case 1:

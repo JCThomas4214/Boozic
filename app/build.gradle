@@ -30,4 +30,5 @@ dependencies {
     compile 'com.github.clans:fab:1.5.0'
     compile 'me.dm7.barcodescanner:zbar:1.7.2'
     compile 'com.google.android.gms:play-services:8.1.0'
+    compile 'com.github.PhilJay:MPAndroidChart:v2.1.5'
 }
