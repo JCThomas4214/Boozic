@@ -12,6 +12,9 @@
         android:layout_margin="15dp"
         android:gravity="center_vertical"
         android:layout_centerVertical="true">
+
+        <include layout="@layout/star_rating"/>
+
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -24,6 +27,9 @@
                 android:layout_width="190dp"
                 android:layout_height="150dp" />
         </LinearLayout>
+
+
+
     </LinearLayout>
 
 </RelativeLayout>

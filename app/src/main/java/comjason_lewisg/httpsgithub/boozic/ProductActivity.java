@@ -32,6 +32,7 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.quinny898.library.persistentsearch.SearchBox;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +73,7 @@ public class ProductActivity extends AppCompatActivity {
 
     public PieChart ratingChart;
     private float[] yData = {145, 112, 98, 45, 16};
-    private String[] xData = {"5", "4", "3", "2", "1"};
+    private String[] xData = {"", "", "", "", ""};
 
     private SharedPreferences mPrefs;
 
@@ -152,10 +153,16 @@ public class ProductActivity extends AppCompatActivity {
         selectTypePic();
 
         text = (TextView) findViewById(R.id.product_closest_store);
-        text.setText(closestStoreName + " - " + NumberFormat.getCurrencyInstance().format(closestPrice));
+        text.setText(closestStoreName);
 
         text = (TextView) findViewById(R.id.product_cheapest_store);
-        text.setText(closestStoreName + " - " + NumberFormat.getCurrencyInstance().format(closestPrice));
+        text.setText(closestStoreName);
+
+        text = (TextView) findViewById(R.id.product_closest_price);
+        text.setText(NumberFormat.getCurrencyInstance().format(closestPrice));
+
+        text = (TextView) findViewById(R.id.product_cheapest_price);
+        text.setText(NumberFormat.getCurrencyInstance().format(closestPrice));
 
         setChart();
     }
@@ -188,6 +195,8 @@ public class ProductActivity extends AppCompatActivity {
         ratingChart.setHoleColorTransparent(true);
         ratingChart.setHoleRadius(60);
         ratingChart.setTransparentCircleRadius(65);
+        ratingChart.setCenterText(findAverage());
+        ratingChart.setCenterTextSize(40f);
 
         // set rotation
         ratingChart.setRotationEnabled(false);
@@ -245,6 +254,24 @@ public class ProductActivity extends AppCompatActivity {
 
         //update pie chart
         ratingChart.invalidate();
+    }
+
+    public String findAverage() {
+        String tmp = "";
+        double wTotal = 0;
+        double total = 0;
+
+        for (int i = 0; i < yData.length; i++) {
+            wTotal += ((float) 1.0 - 0.2 * (i)) * yData[i];
+            total += yData[i];
+        }
+
+        double avg = ((wTotal / total) * 100) / 20;
+
+        DecimalFormat df = new DecimalFormat("#.#");
+
+        tmp = "" + df.format(avg);
+        return tmp;
     }
 
     // A method to find height of the status bar
