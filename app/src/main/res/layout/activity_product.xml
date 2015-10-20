@@ -57,10 +57,11 @@
 
             <include layout="@layout/product_info_0" />
             <include layout="@layout/product_info_table" />
+            <include layout="@layout/product_user_rate" />
             <include layout="@layout/product_info_1" />
             <include layout="@layout/product_info_2" />
+            <!--<include layout="@layout/product_space" />-->
 
-            <include layout="@layout/product_space" />
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

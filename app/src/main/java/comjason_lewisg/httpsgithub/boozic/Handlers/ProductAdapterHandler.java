@@ -119,9 +119,9 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<RecyclerView.Vie
         // - replace the contents of the view with that element
         TopTensModel model = item.get(position);
         label.setText(model.label);
-        closestStoreName.setText(model.closestStoreName + " - " + NumberFormat.getCurrencyInstance().format(model.closestPrice));
-        cheapestStoreName.setText(model.cheapestStoreName + " - " + NumberFormat.getCurrencyInstance().format(model.cheapestPrice));
-        volume.setText(model.volume);
+        closestStoreName.setText("(" + model.closestStoreDist + "mi) " + model.closestStoreName + " - " + NumberFormat.getCurrencyInstance().format(model.closestPrice));
+        cheapestStoreName.setText("(" + model.closestStoreDist + "mi) " + model.cheapestStoreName + " - " + NumberFormat.getCurrencyInstance().format(model.cheapestPrice));
+        volume.setText("(" + model.volume + "L)");
         switch (model.typePic) {
             case 1:
                 picture.setBackgroundResource(R.mipmap.beer);

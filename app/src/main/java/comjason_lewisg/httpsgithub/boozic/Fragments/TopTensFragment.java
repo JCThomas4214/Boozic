@@ -39,16 +39,18 @@ public class TopTensFragment extends Fragment {
         {
             //this is where we call backend connector
             //to populate Arraylist
-            add(new TopTensModel(3, "Skyy Vodka", "ABC liquor", "1.75L", 1.3, BigDecimal.valueOf(18.73), true));
-            add(new TopTensModel(1, "Miller Light", "Publix liquor", "2.13L", 1.8, BigDecimal.valueOf(7.23), true));
-            add(new TopTensModel(1, "Bud Light", "Publix liquor", "2.13L", 1.8, BigDecimal.valueOf(8.02), true));
-            add(new TopTensModel(2, "Moscato", "ABC liquor", "0.75L", 1.3, BigDecimal.valueOf(11.46), true));
-            add(new TopTensModel(3, "Fireball Whiskey", "ADC Liquor", "0.75L", 1.3, BigDecimal.valueOf(12.95), true));
-            add(new TopTensModel(3, "Wyborowa Wodka Rye Grain Polish Vodka", "ABC liquor", "1.75L", 1.3, BigDecimal.valueOf(26.99), true));
-            add(new TopTensModel(1, "Henninger", "ABC liquor", "0.47L", 1.8, BigDecimal.valueOf(1.59), true));
-            add(new TopTensModel(1, "Erie Soleil Shandy ", "ABC liquor", "0.35L", 1.8, BigDecimal.valueOf(2.29), true));
-            add(new TopTensModel(2, "Domaine Gavoty Provence Rose", "ABC liquor", "0.75L", 1.3, BigDecimal.valueOf(29.99), true));
-            add(new TopTensModel(3, "Ciroc French Pineapple Vodka", "ADC Liquor", "1.75L", 1.3, BigDecimal.valueOf(27.99), true));
+            add(new TopTensModel("Skyy Vodka", "12/02/14", 3.5, "ABC liquor","Publix liquor",  1.3, 1.80, 18.73,
+                    17.00, 3, true, "fifth",  40, 80, 251, 196, 75, 49, 21));
+            add(new TopTensModel("Miller Light", "06/11/15", 3.0, "Publix liquor", 1.8, 7.23, 1, true, "(6) bottle", 4.17, 8, 129, 62, 514, 486, 69));
+            add(new TopTensModel("Bud Light", "04/25/15", 4.0, "ABC liquor", "Walmart", 1.3, 2.34, 8.02,
+                    6.73, 1, true, "(6) bottle",  4.20, 8, 251, 496, 765, 49, 128));
+            add(new TopTensModel("Moscato", "02/09/15", 3.5,"Publix liquor", 1.8, 11.46, 2, true, "fifth", 5.5, 11, 265, 468, 96, 135, 26));
+            /*add(new TopTensModel(3, "Fireball Whiskey", "ADC Liquor", 0.75, 1.3, BigDecimal.valueOf(12.95), true));
+            add(new TopTensModel(3, "Wyborowa Wodka Rye Grain Polish Vodka", "ABC liquor", 1.75, 1.3, BigDecimal.valueOf(26.99), true));
+            add(new TopTensModel(1, "Henninger", "ABC liquor", 0.47, 1.8, BigDecimal.valueOf(1.59), true));
+            add(new TopTensModel(1, "Erie Soleil Shandy ", "ABC liquor", 0.35, 1.8, BigDecimal.valueOf(2.29), true));
+            add(new TopTensModel(2, "Domaine Gavoty Provence Rose", "ABC liquor", 0.75, 1.3, BigDecimal.valueOf(29.99), true));
+            add(new TopTensModel(3, "Ciroc French Pineapple Vodka", "ADC Liquor", 1.75, 1.3, BigDecimal.valueOf(27.99), true));*/
         }
     };
 

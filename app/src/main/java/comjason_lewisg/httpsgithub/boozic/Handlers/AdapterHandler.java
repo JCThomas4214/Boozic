@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
@@ -74,11 +76,28 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
                 Intent i = new Intent(m, ProductActivity.class);
                 //inject model variables
                 i.putExtra("Label", items.get(position).label);
-                i.putExtra("Type", items.get(position).typePic);
+                i.putExtra("LastUpdate", items.get(position).lastUpdate);
+                i.putExtra("UserRating", items.get(position).userRating);
                 i.putExtra("ClosestStore", items.get(position).closestStoreName);
                 i.putExtra("CheapestStore", items.get(position).cheapestStoreName);
+                i.putExtra("ClosestStoreDist", items.get(position).closestStoreDist);
+                i.putExtra("CheapestStoreDist", items.get(position).cheapestStoreDist);
                 i.putExtra("ClosestPrice", items.get(position).closestPrice);
                 i.putExtra("CheapestPrice", items.get(position).cheapestPrice);
+                i.putExtra("Type", items.get(position).typePic);
+                i.putExtra("Favorites", items.get(position).favorite);
+                i.putExtra("Container", items.get(position).container);
+                i.putExtra("Volume", items.get(position).volume);
+                i.putExtra("Type", items.get(position).typePic);
+                i.putExtra("ABV", items.get(position).abv);
+                i.putExtra("Proof", items.get(position).proof);
+                i.putExtra("ABP", items.get(position).abp);
+                i.putExtra("PDD", items.get(position).pdd);
+                i.putExtra("Rating5", items.get(position).rating5);
+                i.putExtra("Rating4", items.get(position).rating4);
+                i.putExtra("Rating3", items.get(position).rating3);
+                i.putExtra("Rating2", items.get(position).rating2);
+                i.putExtra("Rating1", items.get(position).rating1);
 
                 m.startActivity(i);
             }
@@ -93,9 +112,9 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         // - replace the contents of the view with that element
         TopTensModel model = items.get(position);
         viewHolder.label.setText(model.label);
-        viewHolder.storeName.setText(model.closestStoreName);
+        viewHolder.storeName.setText(model.closestStoreName + " (" + model.closestStoreDist + "mi)");
         viewHolder.price.setText(NumberFormat.getCurrencyInstance().format(model.closestPrice));
-        viewHolder.volume.setText(model.volume);
+        viewHolder.volume.setText("(" + model.volume + "L)");
         switch (model.typePic) {
             case 1:
                 viewHolder.picture.setBackgroundResource(R.mipmap.beer);

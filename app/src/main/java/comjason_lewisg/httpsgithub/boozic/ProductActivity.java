@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -32,9 +34,12 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.quinny898.library.persistentsearch.SearchBox;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -58,21 +63,9 @@ public class ProductActivity extends AppCompatActivity {
     private int accentColor;
     private int accentColorDark;
 
-    public String label;
-    public String closestStoreName;
-    public String cheapestStoreName;
-    public BigDecimal closestPrice;
-    public BigDecimal cheapestPrice;
-    public int typePic;
-    public double distance;
-    public boolean favorite;
-    public String volume;
-    public double rating;
-    public int alcoholId;
-    public long barcode;
+    public TopTensModel model;
 
     public PieChart ratingChart;
-    private float[] yData = {145, 112, 98, 45, 16};
     private String[] xData = {"", "", "", "", ""};
 
     private SharedPreferences mPrefs;
@@ -135,41 +128,90 @@ public class ProductActivity extends AppCompatActivity {
 
     public void fetchProductInfo() {
         //fetch extra items
-        label = (String) getIntent().getSerializableExtra("Label");
-        typePic = (int) getIntent().getSerializableExtra("Type");
-        closestStoreName = (String) getIntent().getSerializableExtra("ClosestStore");
-        cheapestStoreName = (String) getIntent().getSerializableExtra("CheapestStore");
-        closestPrice = (BigDecimal) getIntent().getSerializableExtra("ClosestPrice");
-        closestPrice = (BigDecimal) getIntent().getSerializableExtra("ClosestPrice");
+
+        model = new TopTensModel((String) getIntent().getSerializableExtra("Label"),
+                (String) getIntent().getSerializableExtra("LastUpdate"),
+                (double) getIntent().getSerializableExtra("UserRating"),
+                (String) getIntent().getSerializableExtra("ClosestStore"),
+                (String) getIntent().getSerializableExtra("CheapestStore"),
+                (double) getIntent().getSerializableExtra("ClosestStoreDist"),
+                (double) getIntent().getSerializableExtra("CheapestStoreDist"),
+                (double) getIntent().getSerializableExtra("ClosestPrice"),
+                (double) getIntent().getSerializableExtra("CheapestPrice"),
+                (int) getIntent().getSerializableExtra("Type"),
+                (boolean) getIntent().getSerializableExtra("Favorites"),
+                (String) getIntent().getSerializableExtra("Container"),
+                (double) getIntent().getSerializableExtra("ABV"),
+                (int) getIntent().getSerializableExtra("Proof"),
+                (int) getIntent().getSerializableExtra("Rating5"),
+                (int) getIntent().getSerializableExtra("Rating4"),
+                (int) getIntent().getSerializableExtra("Rating3"),
+                (int) getIntent().getSerializableExtra("Rating2"),
+                (int) getIntent().getSerializableExtra("Rating1"));
 
         setProductInfo();
     }
 
     public void setProductInfo() {
+        DecimalFormat df = new DecimalFormat("####0.##");
+        DecimalFormat monFormat = new DecimalFormat("####0.00");
 
         TextView text = (TextView) findViewById(R.id.product_label);
-        text.setText(label);
+        text.setText(model.label);
+
+        text = (TextView) findViewById(R.id.product_last_updated);
+        text.setText("" + model.lastUpdate);
+
+        RatingBar uRating = (RatingBar) findViewById(R.id.product_ratingBar);
+        uRating.setRating((float) model.userRating);
+
+        LinearLayout closestStoreLayout = (LinearLayout) findViewById(R.id.closest_store_layout);
+        if (model.closestStoreName.equals(model.cheapestStoreName)) {
+            closestStoreLayout.setVisibility(View.GONE);
+            text = (TextView) findViewById(R.id.product_pdd);
+            text.setText("N/A");
+        }
+        else {
+            text = (TextView) findViewById(R.id.product_closest_store);
+            text.setText("(" + model.closestStoreDist + "mi) " + model.closestStoreName);
+            text = (TextView) findViewById(R.id.product_closest_price);
+            text.setText("$"+ monFormat.format(model.closestPrice));
+            text = (TextView) findViewById(R.id.product_pdd);
+            text.setText("$" + monFormat.format(model.pdd));
+        }
+
+        text = (TextView) findViewById(R.id.product_cheapest_store);
+        text.setText("(" + model.cheapestStoreDist + "mi) " + model.cheapestStoreName);
+        text = (TextView) findViewById(R.id.product_cheapest_price);
+        text.setText("$" + monFormat.format(model.cheapestPrice));
+
+
 
         selectTypePic();
 
-        text = (TextView) findViewById(R.id.product_closest_store);
-        text.setText(closestStoreName);
+        //TODO: impliment the favorities button here
 
-        text = (TextView) findViewById(R.id.product_cheapest_store);
-        text.setText(closestStoreName);
+        text = (TextView) findViewById(R.id.product_container);
+        text.setText(model.container);
 
-        text = (TextView) findViewById(R.id.product_closest_price);
-        text.setText(NumberFormat.getCurrencyInstance().format(closestPrice));
+        text = (TextView) findViewById(R.id.product_volume);
+        text.setText(df.format(model.volume) + model.volumeMeasure);
 
-        text = (TextView) findViewById(R.id.product_cheapest_price);
-        text.setText(NumberFormat.getCurrencyInstance().format(closestPrice));
+        text = (TextView) findViewById(R.id.product_abv);
+        text.setText(df.format(model.abv) + "%");
+
+        text = (TextView) findViewById(R.id.product_proof);
+        text.setText("" + model.proof);
+
+        text = (TextView) findViewById(R.id.product_abp);
+        text.setText("$" + monFormat.format(model.abp) + "/ml");
 
         setChart();
     }
 
     public void selectTypePic() {
         ImageView img = (ImageView) findViewById(R.id.product_type);
-        switch (typePic) {
+        switch (model.typePic) {
             case 1:
                 img.setBackgroundResource(R.mipmap.beer);
                 break;
@@ -183,6 +225,8 @@ public class ProductActivity extends AppCompatActivity {
     }
 
     public void setChart() {
+        float yData[] = {model.rating5, model.rating4, model.rating3, model.rating2, model.rating1};
+
         ratingChart = (PieChart) findViewById(R.id.rating_chart);
 
         // config the pie chart
@@ -195,14 +239,14 @@ public class ProductActivity extends AppCompatActivity {
         ratingChart.setHoleColorTransparent(true);
         ratingChart.setHoleRadius(60);
         ratingChart.setTransparentCircleRadius(65);
-        ratingChart.setCenterText(findAverage());
+        ratingChart.setCenterText(findAverage(yData));
         ratingChart.setCenterTextSize(40f);
 
         // set rotation
         ratingChart.setRotationEnabled(false);
 
         // add data
-        addData();
+        addData(yData);
 
         // customize legends
         Legend l = ratingChart.getLegend();
@@ -214,7 +258,8 @@ public class ProductActivity extends AppCompatActivity {
         l.setYEntrySpace(8);
     }
 
-    private void addData() {
+    private void addData(float[] yData) {
+
         ArrayList<Entry> yVals = new ArrayList<>();
 
         for (int i = 0; i < yData.length; i++)
@@ -256,7 +301,7 @@ public class ProductActivity extends AppCompatActivity {
         ratingChart.invalidate();
     }
 
-    public String findAverage() {
+    public String findAverage(float[] yData) {
         String tmp = "";
         double wTotal = 0;
         double total = 0;
@@ -273,7 +318,6 @@ public class ProductActivity extends AppCompatActivity {
         tmp = "" + df.format(avg);
         return tmp;
     }
-
     // A method to find height of the status bar
     public int getStatusBarHeight() {
         int result = 0;
@@ -297,9 +341,13 @@ public class ProductActivity extends AppCompatActivity {
         accentColorDark = mPrefs.getInt("ACCENT_DARK_STATE", ACCENT_DARK_STATE);
 
         CollapsingToolbarLayout ctl = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        ctl.setTitle(label);
+        ctl.setTitle(model.label);
         ctl.setContentScrimColor(primaryColor);
         ctl.setStatusBarScrimColor(primaryColorDark);
+
+        RatingBar ratingBar = (RatingBar) findViewById(R.id.product_ratingBar);
+        LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
+        stars.getDrawable(2).setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP);
 
         /*Drawable setButton = getResources().getDrawable(R.drawable.custom_product_button, null);
         setButton.setColorFilter(primaryColor, PorterDuff.Mode.MULTIPLY);
