@@ -155,6 +155,7 @@ public class ProductActivity extends AppCompatActivity {
     public void setProductInfo() {
         DecimalFormat df = new DecimalFormat("####0.##");
         DecimalFormat monFormat = new DecimalFormat("####0.00");
+        DecimalFormat pbvFormat = new DecimalFormat("####0.00#");
 
         TextView text = (TextView) findViewById(R.id.product_label);
         text.setText(model.label);
@@ -170,6 +171,8 @@ public class ProductActivity extends AppCompatActivity {
             closestStoreLayout.setVisibility(View.GONE);
             text = (TextView) findViewById(R.id.product_pdd);
             text.setText("N/A");
+            text = (TextView) findViewById(R.id.product_td);
+            text.setText("N/A");
         }
         else {
             text = (TextView) findViewById(R.id.product_closest_store);
@@ -178,6 +181,8 @@ public class ProductActivity extends AppCompatActivity {
             text.setText("$"+ monFormat.format(model.closestPrice));
             text = (TextView) findViewById(R.id.product_pdd);
             text.setText("$" + monFormat.format(model.pdd));
+            text = (TextView) findViewById(R.id.product_td);
+            text.setText("$" + monFormat.format(model.td));
         }
 
         text = (TextView) findViewById(R.id.product_cheapest_store);
@@ -205,6 +210,9 @@ public class ProductActivity extends AppCompatActivity {
 
         text = (TextView) findViewById(R.id.product_abp);
         text.setText("$" + monFormat.format(model.abp) + "/ml");
+
+        text = (TextView) findViewById(R.id.product_pbv);
+        text.setText("$" + pbvFormat.format(model.pbv) + "/ml");
 
         setChart();
     }
@@ -302,7 +310,7 @@ public class ProductActivity extends AppCompatActivity {
     }
 
     public String findAverage(float[] yData) {
-        String tmp = "";
+        String tmp;
         double wTotal = 0;
         double total = 0;
 
@@ -313,7 +321,7 @@ public class ProductActivity extends AppCompatActivity {
 
         double avg = ((wTotal / total) * 100) / 20;
 
-        DecimalFormat df = new DecimalFormat("#.#");
+        DecimalFormat df = new DecimalFormat("0.0");
 
         tmp = "" + df.format(avg);
         return tmp;

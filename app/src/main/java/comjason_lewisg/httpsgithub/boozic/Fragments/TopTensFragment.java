@@ -2,9 +2,11 @@ package comjason_lewisg.httpsgithub.boozic.Fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -45,12 +47,14 @@ public class TopTensFragment extends Fragment {
             add(new TopTensModel("Bud Light", "04/25/15", 4.0, "ABC liquor", "Walmart", 1.3, 2.34, 8.02,
                     6.73, 1, true, "(6) bottle",  4.20, 8, 251, 496, 765, 49, 128));
             add(new TopTensModel("Moscato", "02/09/15", 3.5,"Publix liquor", 1.8, 11.46, 2, true, "fifth", 5.5, 11, 265, 468, 96, 135, 26));
-            /*add(new TopTensModel(3, "Fireball Whiskey", "ADC Liquor", 0.75, 1.3, BigDecimal.valueOf(12.95), true));
-            add(new TopTensModel(3, "Wyborowa Wodka Rye Grain Polish Vodka", "ABC liquor", 1.75, 1.3, BigDecimal.valueOf(26.99), true));
-            add(new TopTensModel(1, "Henninger", "ABC liquor", 0.47, 1.8, BigDecimal.valueOf(1.59), true));
-            add(new TopTensModel(1, "Erie Soleil Shandy ", "ABC liquor", 0.35, 1.8, BigDecimal.valueOf(2.29), true));
-            add(new TopTensModel(2, "Domaine Gavoty Provence Rose", "ABC liquor", 0.75, 1.3, BigDecimal.valueOf(29.99), true));
-            add(new TopTensModel(3, "Ciroc French Pineapple Vodka", "ADC Liquor", 1.75, 1.3, BigDecimal.valueOf(27.99), true));*/
+            add(new TopTensModel("Fireball Whiskey", "02/26/15", 3.5, "ABC liquor", "Publix liquor", 1.3, 1.8, 16.02,
+                    15.56, 3, true, "handle",  33, 66, 361, 496, 210, 46, 12));
+            add(new TopTensModel("Wyborowa Wodka Rye Grain Polish Vodka", "07/25/15", 4.0, "ABC liquor", "Publix liquor", 1.3, 1.8, 23.61,
+                    21.49, 3, true, "fifth",  40, 80, 465, 129, 76, 32, 15));
+            add(new TopTensModel("Henninger", "08/11/15", 3.5, "Publix liquor", 1.8, 8.26, 1, true, "(6) bottle", 4.80, 10, 162, 168, 35, 12, 1));
+            add(new TopTensModel("Domaine Gavoty Provence Rose", "02/26/15", 3.5, "ABC liquor", "Publix liquor", 1.3, 1.8, 29.99,
+                    28.36, 2, true, "fifth",  13, 26, 612, 345, 61, 124, 10));
+            add(new TopTensModel("Ciroc French Pineapple Vodka", "10/11/15", 3.5, "Publix liquor", 1.8, 22.99, 3, true, "fifth", 35, 70, 236, 61, 96, 23, 9));
         }
     };
 
@@ -87,6 +91,23 @@ public class TopTensFragment extends Fragment {
                 }
             }
         });
+
+        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setColorSchemeColors(rootView.getResources().getColor(R.color.ColorAccent),rootView.getResources().getColor(R.color.ColorAccent2),
+                rootView.getResources().getColor(R.color.ColorAccent3), rootView.getResources().getColor(R.color.ColorAccent4), rootView.getResources().getColor(R.color.ColorAccent5));
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        askShowGPS();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 1250);
+            }
+        });
     }
 
     public interface OnPass {
@@ -96,6 +117,7 @@ public class TopTensFragment extends Fragment {
         int AskForColorAccentDark();
         void AskToHideFilterButtons();
         void AskToShowFilterButtons();
+        void AskToShowGPS();
     }
 
     public int askColorPrimary() { return dataPasser.AskForColorPrimary(); }
@@ -109,6 +131,8 @@ public class TopTensFragment extends Fragment {
     public void askHideFilterButtons() { dataPasser.AskToHideFilterButtons(); }
 
     public void askShowFilterButtons() { dataPasser.AskToShowFilterButtons(); }
+
+    public void askShowGPS() { dataPasser.AskToShowGPS(); }
 
     @Override
     public void onAttach(Activity a) {

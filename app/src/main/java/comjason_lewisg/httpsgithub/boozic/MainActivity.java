@@ -3,7 +3,6 @@ package comjason_lewisg.httpsgithub.boozic;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Point;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -21,9 +20,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,7 +45,6 @@ import comjason_lewisg.httpsgithub.boozic.Handlers.AnimateToolbarHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.DialogHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.FilterActionButtonHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.FloatingActionButtonHandler;
-import comjason_lewisg.httpsgithub.boozic.Handlers.RefreshHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.SearchBarHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ThemeHandler;
 
@@ -64,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public TextView title;
     public DialogHandler DHandle;
     public SearchBarHandler searchBarHandler;
-    public RefreshHandler refreshHandler;
     public ThemeHandler themeHandler;
     public FloatingActionButtonHandler FAB;
     public FilterActionButtonHandler FBhandle;
@@ -159,9 +153,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
         //Create a Dialog Handler for Feedback
         DHandle = new DialogHandler();
-
-        //Create a new RefreshHandler for refresh button
-        refreshHandler = new RefreshHandler();
 
         Log.v("STATE", "onCreate color id = " + colorPrimary_id);
         themeHandler = new ThemeHandler();
@@ -280,14 +271,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_main, menu);
 
-        final MenuItem item = refreshHandler.setRefreshButton(this, menu);
-        refreshHandler.refresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onOptionsItemSelected(item);
-            }
-        });
-
         return true;
     }
 
@@ -371,17 +354,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_refresh) {
-            if (!mGoogleApiClient.isConnected()) {
-                mGoogleApiClient.connect();
-                mToast.setText("connected");
-                mToast.show();
-            }
-            displayLocation();
-            refreshHandler.startAnim();
-            return true;
-        }
         if (id == R.id.action_search) {
             searchBarHandler.openSearch(toolbar, title);
             return true;
@@ -614,6 +586,9 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public void AskToHideFilterButtons () { hideFilterButtons(); }
 
     @Override
+    public void AskToShowGPS () { displayLocation(); }
+
+    @Override
     public void AskToShowFilterButtons () {
         if (toolbar.getLayoutParams().height <= 300)
             showFilterButtons();
@@ -636,7 +611,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
-                String token = "";
+                String token;
                 try {
                     //TODO: get Project number from global variable
                     InstanceID instanceID = InstanceID.getInstance(getApplicationContext());

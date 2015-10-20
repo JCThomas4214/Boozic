@@ -66,7 +66,6 @@ public class SearchBarHandler {
         search = (SearchBox) m.findViewById(R.id.searchbox);
         //Turn buttons off
         m.findViewById(R.id.action_search).setEnabled(false);
-        m.findViewById(R.id.action_refresh).setEnabled(false);
 
         //circular reveal and hide are determined by the length and width of the toolbar layout
         //if the filter options are present then the toolbar will be longer than typical
@@ -162,7 +161,6 @@ public class SearchBarHandler {
 
         //Turn buttons back on and unlock Nav drawer
         m.findViewById(R.id.action_search).setEnabled(true);
-        m.findViewById(R.id.action_refresh).setEnabled(true);
         Nav.actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
         Nav.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
@@ -197,7 +195,7 @@ public class SearchBarHandler {
         Resources r = m.getResources();
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96,
                 r.getDisplayMetrics());
-        int cx = m.findViewById(R.id.toolbar).getWidth() - (m.findViewById(R.id.action_refresh).getWidth() + (m.findViewById(R.id.action_search).getWidth() / 2)) + 20;
+        int cx = m.findViewById(R.id.toolbar).getWidth() - (m.findViewById(R.id.action_search).getWidth() / 2) + 20;
         int cy = m.findViewById(R.id.toolbar).getHeight() / 2 + dist;
 
         int finalRadius = (int) Math.max(layout.getWidth(), px);
@@ -242,7 +240,7 @@ public class SearchBarHandler {
         Resources r = m.getResources();
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96,
                 r.getDisplayMetrics());
-        int cx = m.findViewById(R.id.toolbar).getWidth() - (m.findViewById(R.id.action_refresh).getWidth() + (m.findViewById(R.id.action_search).getWidth() / 2)) + 20;
+        int cx = m.findViewById(R.id.toolbar).getWidth() - (m.findViewById(R.id.action_search).getWidth() / 2) + 20;
         int cy = m.findViewById(R.id.toolbar).getHeight() / 2 + dist;
         int finalRadius = (int) Math.max(layout.getWidth()*1.5, px);
 

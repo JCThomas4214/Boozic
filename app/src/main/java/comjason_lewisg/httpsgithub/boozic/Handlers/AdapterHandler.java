@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -49,8 +50,8 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         public void onClick(View v) {
             mListener.onPotato(v, getAdapterPosition());
         }
-        public static interface IMyViewHolderClicks {
-            public void onPotato(View caller, int position);
+        public interface IMyViewHolderClicks {
+            void onPotato(View caller, int position);
         }
     }
 
@@ -111,10 +112,12 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         TopTensModel model = items.get(position);
+        DecimalFormat df = new DecimalFormat("####0.##");
+
         viewHolder.label.setText(model.label);
         viewHolder.storeName.setText(model.closestStoreName + " (" + model.closestStoreDist + "mi)");
         viewHolder.price.setText(NumberFormat.getCurrencyInstance().format(model.closestPrice));
-        viewHolder.volume.setText("(" + model.volume + "L)");
+        viewHolder.volume.setText("(" + df.format(model.volume) + model.volumeMeasure + ")");
         switch (model.typePic) {
             case 1:
                 viewHolder.picture.setBackgroundResource(R.mipmap.beer);

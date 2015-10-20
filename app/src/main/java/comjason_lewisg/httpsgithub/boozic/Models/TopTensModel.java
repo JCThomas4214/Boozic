@@ -27,10 +27,12 @@ public class TopTensModel {
     public double volume;
     public String volumeMeasure;
 
+    public double pbv;
     public double abv;
     public int proof;
     public double abp;
     public double pdd;
+    public double td;
 
     public int rating5;
     public int rating4;
@@ -64,8 +66,10 @@ public class TopTensModel {
         this.rating1 = rating1;
 
         volume = findVol();
+        pbv = findPBV();
         abp = findABP();
         pdd = findPDD();
+        td = findTD();
     }
 
     public TopTensModel(String label, String lastUpdate, double userRating, String closestStoreName, double closestStoreDist, double closestPrice, int type, boolean favorite,
@@ -131,14 +135,7 @@ public class TopTensModel {
     }
 
     public double findABP() {
-        double volumetmp = volume;
-        String volmeas = findVolMeasure();
-
-        if (volmeas == "oz")
-            volumetmp = volume * 29.5735;
-        else if (volmeas == "L")
-            volumetmp = volume * 1000;
-
+        double volumetmp = convertVol();
         float abptmp = (float)cheapestPrice / (((float)abv/100f) * (float)volumetmp);
 
         return (double)abptmp;
@@ -149,6 +146,14 @@ public class TopTensModel {
         pddtmp = pddtmp * pddtmp2;
 
         return (double)pddtmp;
+    }
+    private double findPBV() {
+        float pbvtmp = (float)cheapestPrice / (float)convertVol();
+        return (double)pbvtmp;
+    }
+    private double findTD() {
+        float tdtmp = (float)closestPrice - (float)cheapestPrice - (float)pdd;
+        return (double)tdtmp;
     }
     private String findVolMeasure() {
         String volMeasure = "";
@@ -175,5 +180,15 @@ public class TopTensModel {
         }
 
         return volMeasure;
+    }
+
+    private double convertVol() {
+        double volumetmp = volume;
+        String volmeas = findVolMeasure();
+        if (volmeas.equals("oz"))
+            volumetmp = volume * 29.5735;
+        else if (volmeas.equals("L"))
+            volumetmp = volume * 1000;
+        return volumetmp;
     }
 }
