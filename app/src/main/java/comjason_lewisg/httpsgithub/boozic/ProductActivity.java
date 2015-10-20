@@ -143,11 +143,7 @@ public class ProductActivity extends AppCompatActivity {
                 (String) getIntent().getSerializableExtra("Container"),
                 (double) getIntent().getSerializableExtra("ABV"),
                 (int) getIntent().getSerializableExtra("Proof"),
-                (int) getIntent().getSerializableExtra("Rating5"),
-                (int) getIntent().getSerializableExtra("Rating4"),
-                (int) getIntent().getSerializableExtra("Rating3"),
-                (int) getIntent().getSerializableExtra("Rating2"),
-                (int) getIntent().getSerializableExtra("Rating1"));
+                (int[]) getIntent().getSerializableExtra("Rating"));
 
         setProductInfo();
     }
@@ -233,7 +229,9 @@ public class ProductActivity extends AppCompatActivity {
     }
 
     public void setChart() {
-        float yData[] = {model.rating5, model.rating4, model.rating3, model.rating2, model.rating1};
+        DecimalFormat avgFormat = new DecimalFormat("0.0");
+        //float yData[] = {model.rating5, model.rating4, model.rating3, model.rating2, model.rating1};
+        float yData[] = {model.rating[0], model.rating[1], model.rating[2], model.rating[3], model.rating[4]};
 
         ratingChart = (PieChart) findViewById(R.id.rating_chart);
 
@@ -247,7 +245,7 @@ public class ProductActivity extends AppCompatActivity {
         ratingChart.setHoleColorTransparent(true);
         ratingChart.setHoleRadius(60);
         ratingChart.setTransparentCircleRadius(65);
-        ratingChart.setCenterText(findAverage(yData));
+        ratingChart.setCenterText(avgFormat.format(model.avgRating));
         ratingChart.setCenterTextSize(40f);
 
         // set rotation
@@ -309,23 +307,6 @@ public class ProductActivity extends AppCompatActivity {
         ratingChart.invalidate();
     }
 
-    public String findAverage(float[] yData) {
-        String tmp;
-        double wTotal = 0;
-        double total = 0;
-
-        for (int i = 0; i < yData.length; i++) {
-            wTotal += ((float) 1.0 - 0.2 * (i)) * yData[i];
-            total += yData[i];
-        }
-
-        double avg = ((wTotal / total) * 100) / 20;
-
-        DecimalFormat df = new DecimalFormat("0.0");
-
-        tmp = "" + df.format(avg);
-        return tmp;
-    }
     // A method to find height of the status bar
     public int getStatusBarHeight() {
         int result = 0;

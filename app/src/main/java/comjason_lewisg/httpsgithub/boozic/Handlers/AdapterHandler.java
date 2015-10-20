@@ -94,11 +94,11 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
                 i.putExtra("Proof", items.get(position).proof);
                 i.putExtra("ABP", items.get(position).abp);
                 i.putExtra("PDD", items.get(position).pdd);
-                i.putExtra("Rating5", items.get(position).rating5);
-                i.putExtra("Rating4", items.get(position).rating4);
-                i.putExtra("Rating3", items.get(position).rating3);
-                i.putExtra("Rating2", items.get(position).rating2);
-                i.putExtra("Rating1", items.get(position).rating1);
+                i.putExtra("Rating", items.get(position).rating);
+                /*i.putExtra("Rating4", items.get(position).rating[1]);
+                i.putExtra("Rating3", items.get(position).rating[2]);
+                i.putExtra("Rating2", items.get(position).rating[3]);
+                i.putExtra("Rating1", items.get(position).rating[4]);*/
 
                 m.startActivity(i);
             }

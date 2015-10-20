@@ -34,15 +34,12 @@ public class TopTensModel {
     public double pdd;
     public double td;
 
-    public int rating5;
-    public int rating4;
-    public int rating3;
-    public int rating2;
-    public int rating1;
+    public int[] rating = new int[5];
+    public double avgRating;
 
     public TopTensModel(String label, String lastUpdate, double userRating, String closestStoreName, String cheapestStoreName, double closestStoreDist, double cheapestStoreDist,
                         double closestPrice, double cheapestPrice, int type, boolean favorite, String container,
-                        double abv, int proof, int rating5, int rating4,int rating3, int rating2, int rating1) {
+                        double abv, int proof, int[] rating) {
 
         this.label = label;
         this.lastUpdate = lastUpdate;
@@ -59,21 +56,18 @@ public class TopTensModel {
         this.container = container;
         this.abv = abv;
         this.proof = proof;
-        this.rating5 = rating5;
-        this.rating4 = rating4;
-        this.rating3 = rating3;
-        this.rating2 = rating2;
-        this.rating1 = rating1;
+        System.arraycopy(rating,0,this.rating,0,rating.length);
 
         volume = findVol();
         pbv = findPBV();
         abp = findABP();
         pdd = findPDD();
         td = findTD();
+        avgRating = findAverage();
     }
 
     public TopTensModel(String label, String lastUpdate, double userRating, String closestStoreName, double closestStoreDist, double closestPrice, int type, boolean favorite,
-                        String container, double abv, int proof, int rating5, int rating4,int rating3, int rating2, int rating1) {
+                        String container, double abv, int proof, int[] rating) {
 
         this.label = label;
         this.lastUpdate = lastUpdate;
@@ -90,15 +84,12 @@ public class TopTensModel {
         this.container = container;
         this.abv = abv;
         this.proof = proof;
-        this.rating5 = rating5;
-        this.rating4 = rating4;
-        this.rating3 = rating3;
-        this.rating2 = rating2;
-        this.rating1 = rating1;
+        System.arraycopy(rating,0,this.rating,0,rating.length);
 
         volume = findVol();
+        pbv = findPBV();
         abp = findABP();
-        pdd = findPDD();
+        avgRating = findAverage();
     }
 
     private double findVol() {
@@ -190,5 +181,19 @@ public class TopTensModel {
         else if (volmeas.equals("L"))
             volumetmp = volume * 1000;
         return volumetmp;
+    }
+
+    private double findAverage() {
+        double wTotal = 0;
+        double total = 0;
+
+        for (int i = 0; i < rating.length; i++) {
+            wTotal += ((float) 1.0 - 0.2 * (i)) * rating[i];
+            total += rating[i];
+        }
+
+        double avg = ((wTotal / total) * 100) / 20;
+
+        return avg;
     }
 }
