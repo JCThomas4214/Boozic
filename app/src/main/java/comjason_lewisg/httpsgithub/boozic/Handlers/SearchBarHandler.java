@@ -41,8 +41,12 @@ public class SearchBarHandler {
     public SearchBox search;
     private int dist;
 
-    public void onCreate() {
+    public void onCreate() {}
+
+    public SearchBarHandler(MainActivity m, Toolbar t) {
+        setActivity(m, t);
     }
+
     public void setActivity(MainActivity main, Toolbar t) {
         m = main;
         //Creates a Navigation Drawer
@@ -56,7 +60,9 @@ public class SearchBarHandler {
         searchSuggestHandler.initList();
     }
 
-    public void openSearch(Toolbar t, TextView title) {
+    public void openSearch(TextView title) {
+        m.FBhandle.closeAll();
+        m.FBhandle.disableAll();
 
         //Hide the FAB button with animation
         FloatingActionButton menu = (FloatingActionButton) m.findViewById(R.id.fabtop);
@@ -143,6 +149,8 @@ public class SearchBarHandler {
     };
 
     public void closeSearch() {
+        m.FBhandle.enableAll();
+
         final FloatingActionButton menu = (FloatingActionButton) m.findViewById(R.id.fabtop);
         Handler handler = new Handler();
         //set a delay for FAB button reveal so users can see it

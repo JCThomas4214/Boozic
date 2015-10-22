@@ -13,14 +13,13 @@ public class ThemeHandler {
     public int accentColor;
     public int accentColorDark;
 
-    public void onCreate(){
-    }
+    public void onCreate() {}
+
     public void setStylePrimary(int colorPrimary, Activity a) {
         switch (colorPrimary) {
             case 1:
                 primaryColor = a.getResources().getColor(R.color.ColorPrimary);
                 primaryColorDark = a.getResources().getColor(R.color.ColorPrimaryDark);
-                Log.v("COLOR", "primaryColor = "+primaryColor+ " primaryColorDark = "+primaryColorDark);
                 break;
             case 2:
                 primaryColor = a.getResources().getColor(R.color.ColorPrimary2);

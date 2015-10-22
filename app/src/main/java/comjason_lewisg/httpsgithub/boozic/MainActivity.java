@@ -7,7 +7,6 @@ import android.graphics.Point;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.transition.Fade;
@@ -23,8 +22,6 @@ import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -97,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     GoogleCloudMessaging gcmObj;
     String PROJECT_NUMBER = "845607826709";
-    Context applicationContext;
+    public Context applicationContext;
     String regId="";
 
     @Override
@@ -123,10 +120,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
                 setTheme(R.style.AppTheme5);
                 break;
         }
-
         applicationContext = getApplicationContext();
-        getRegId();
-
+        DIDcon = new DeviceIdController(this);
 
         buildGoogleApiClient();
         createLocationRequest();
@@ -144,14 +139,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         Point size = new Point();
         display.getSize(size);
         TBwidth = size.x;
-        Log.v("data", "toolbar width = " + TBwidth);
-
-        //Creates a FAB for the bottom right corner of the main screen
-        FAB = new FloatingActionButtonHandler();
-        FAB.setActivity(this);
-
-        FBhandle = new FilterActionButtonHandler();
-        FBhandle.setActivity(this);
 
         //Create a Dialog Handler for Feedback
         DHandle = new DialogHandler();
@@ -160,8 +147,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         themeHandler = new ThemeHandler();
 
         //connect to search bar and create new search handler
-        searchBarHandler = new SearchBarHandler();
-        searchBarHandler.setActivity(this, toolbar);
+        searchBarHandler = new SearchBarHandler(this, toolbar);
         //search.enableVoiceRecognition(this);
 
         String str = getIntent().getStringExtra("msg");
@@ -236,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     /**
      * Method to verify google play services on the device
      * */
-    private boolean checkPlayServices() {
+    public boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil
                 .isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {
@@ -282,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         int id = item.getItemId();
 
         if (id == R.id.action_search) {
-            searchBarHandler.openSearch(toolbar, title);
+            searchBarHandler.openSearch(title);
             return true;
         }
 
@@ -297,7 +283,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
             if (resultCode == RESULT_OK) {
                 // A contact was picked.  Here we will just display it
                 // to the user.
-                Log.v("RESULT", data.getExtras().getString("RESULT"));
                 mToast.setText(data.getExtras().getString("RESULT"));
                 mToast.show();
                 //TODO PING LOCATION HERE
@@ -332,11 +317,12 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
         //change the FAB icons depending on state color
         findViewById(R.id.toolbar).setBackgroundColor(primaryColor);
-        FAB.menuButton.setColorNormal(primaryColor);
-        FAB.menuButton.setColorPressed(primaryColorDark);
 
-        FBhandle.setColor(primaryColor, primaryColorDark, accentColor);
-        FBhandle.setFilterButtons();
+        //Creates a FAB for the bottom right corner of the main screen
+        FAB = new FloatingActionButtonHandler(this, primaryColor, primaryColorDark);
+
+        //Create instance for Filter buttons
+        FBhandle = new FilterActionButtonHandler(this, primaryColor, primaryColorDark, accentColor, accentColorDark);
 
         checkPlayServices();
     }
@@ -350,8 +336,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         ed.putInt("COLOR_STATE", colorPrimary_id);
         ed.putInt("COLOR_ACCENT_STATE", colorAccent_id);
 
-        Log.v("COLOR", "primaryColor = " + primaryColor + " primaryDark = " + primaryColorDark);
-        Log.v("COLOR", "accentColor = "+accentColor + " accentColorDark = "+ accentColorDark);
+        /*Log.v("COLOR", "primaryColor = " + primaryColor + " primaryDark = " + primaryColorDark);
+        Log.v("COLOR", "accentColor = "+accentColor + " accentColorDark = "+ accentColorDark);*/
         ed.putInt("PRIMARY_STATE", primaryColor);
         ed.putInt("PRIMARY_DARK_STATE", primaryColorDark);
         ed.putInt("ACCENT_STATE", accentColor);
@@ -459,86 +445,5 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
             anim.setDuration(350);
             toolbar.startAnimation(anim);
         }
-    }
-
-    public void getRegId() {
-        GoogleCloudMessaging gcmObj;
-        // Check if Google Play Service is installed in Device
-        // Play services is needed to handle GCM stuffs
-        if (checkPlayServices()) {
-            // Register Device in GCM Server
-            getTokenInBackground();
-        }
-    }
-
-    public void getTokenInBackground() {
-        new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
-                String token;
-                try {
-                    //TODO: get Project number from global variable
-                    InstanceID instanceID = InstanceID.getInstance(getApplicationContext());
-                     token = instanceID.getToken("845607826709",GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-                } catch (final IOException e) {
-                    token = "Error :" + e.getMessage();
-                }
-                return token;
-            }
-
-            @Override
-            protected void onPostExecute(String msg) {
-                // Add token to App Server
-                addToken(msg);
-               // Toast.makeText(applicationContext,"Registered with GCM Server successfully.nn"+ msg, Toast.LENGTH_SHORT).show();
-            }
-        }.execute();
-    }
-
-    //This will add the token to App server in the background
-    public void addToken(final String token) {
-        new AsyncTask<Void, Void, String>() {
-
-        private Exception exception;
-        protected String doInBackground(Void... urls) {
-            try {
-                StringBuilder urlString = new StringBuilder();
-                String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),Settings.Secure.ANDROID_ID);
-                //TODO: Store the Server IP in global locaiton
-                urlString.append("http://54.210.175.98:9080//api/GCM/addGCMRegkey?");
-                urlString.append("RegKey=").append(token);
-                urlString.append("&DeviceId=").append( android_id );
-
-                URL url = new URL(urlString.toString());
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                try {
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                    StringBuilder stringBuilder = new StringBuilder();
-                    String line;
-                    while ((line = bufferedReader.readLine()) != null) {
-                        stringBuilder.append(line).append("\n");
-                    }
-                    bufferedReader.close();
-                    return stringBuilder.toString();
-                } finally {
-                    urlConnection.disconnect();
-                }
-            } catch (Exception e) {
-                Log.e("ERROR", e.getMessage(), e);
-                return null;
-            }
-        }
-
-        protected void onPostExecute(String response) {
-            if (response == null) {
-                response = "THERE WAS AN ERROR";
-            }
-            else
-            {
-                //Toast.makeText(applicationContext,"Regn Token Updated to database", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        }.execute();
     }
 }

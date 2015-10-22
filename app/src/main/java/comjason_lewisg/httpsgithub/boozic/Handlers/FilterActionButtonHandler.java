@@ -14,7 +14,6 @@ public class FilterActionButtonHandler extends Activity{
 
     private int colorAccent;
     private int primaryColor;
-    private int primaryColorDark;
     private MainActivity main;
 
     public FloatingActionMenu types;
@@ -58,6 +57,12 @@ public class FilterActionButtonHandler extends Activity{
     public FloatingActionButton ratingrange;
 
     public void onCreate() {}
+
+    public FilterActionButtonHandler(MainActivity m, int primaryColor, int primaryColorDark, int accentColor, int accentColorDark) {
+        setActivity(m);
+        setColor(primaryColor, primaryColorDark, accentColor, accentColorDark);
+        setFilterButtons();
+    }
 
     public void setActivity(MainActivity m) {
         main = m;
@@ -223,6 +228,22 @@ public class FilterActionButtonHandler extends Activity{
         ratings.close(true);
     }
 
+    public void disableAll() {
+        types.setEnabled(false);
+        distances.setEnabled(false);
+        prices.setEnabled(false);
+        contents.setEnabled(false);
+        ratings.setEnabled(false);
+    }
+
+    public void enableAll() {
+        types.setEnabled(true);
+        distances.setEnabled(true);
+        prices.setEnabled(true);
+        contents.setEnabled(true);
+        ratings.setEnabled(true);
+    }
+
     private void checkOpen(FloatingActionMenu menu) {
         if (types.isOpened() && (types != menu))
             types.close(true);
@@ -313,65 +334,64 @@ public class FilterActionButtonHandler extends Activity{
             return false;
         }
         else {
-            button.setColorNormal(primaryColorDark);
+            button.setColorNormal(primaryColor);
             return true;
         }
     }
 
     public void setFilterButtons() {
         if (winescheck) {
-            wines.setColorNormal(primaryColorDark);
+            wines.setColorNormal(primaryColor);
         }
         if (beerscheck) {
-            beers.setColorNormal(primaryColorDark);
+            beers.setColorNormal(primaryColor);
         }
         if (liquorscheck) {
-            liquors.setColorNormal(primaryColorDark);
+            liquors.setColorNormal(primaryColor);
         }
         if (twomicheck) {
-            twomi.setColorNormal(primaryColorDark);
+            twomi.setColorNormal(primaryColor);
         }
         if (fivemicheck) {
-            fivemi.setColorNormal(primaryColorDark);
+            fivemi.setColorNormal(primaryColor);
         }
         if (tenmicheck) {
-            tenmi.setColorNormal(primaryColorDark);
+            tenmi.setColorNormal(primaryColor);
         }
         if (custommicheck) {
-            custommi.setColorNormal(primaryColorDark);
+            custommi.setColorNormal(primaryColor);
         }
         if (hilowpricecheck) {
-            hilowprice.setColorNormal(primaryColorDark);
+            hilowprice.setColorNormal(primaryColor);
         }
         if (lowhipricecheck) {
-            lowhiprice.setColorNormal(primaryColorDark);
+            lowhiprice.setColorNormal(primaryColor);
         }
         if (pricerangecheck) {
-            pricerange.setColorNormal(primaryColorDark);
+            pricerange.setColorNormal(primaryColor);
         }
         if (hilowcontentcheck) {
-            hilowcontent.setColorNormal(primaryColorDark);
+            hilowcontent.setColorNormal(primaryColor);
         }
         if (lowhicontentcheck) {
-            lowhicontent.setColorNormal(primaryColorDark);
+            lowhicontent.setColorNormal(primaryColor);
         }
         if (contentrangecheck) {
-            contentrange.setColorNormal(primaryColorDark);
+            contentrange.setColorNormal(primaryColor);
         }
         if (hilowratingcheck) {
-            hilowrating.setColorNormal(primaryColorDark);
+            hilowrating.setColorNormal(primaryColor);
         }
         if (lowhiratingcheck) {
-            lowhirating.setColorNormal(primaryColorDark);
+            lowhirating.setColorNormal(primaryColor);
         }
         if (ratingrangecheck) {
-            ratingrange.setColorNormal(primaryColorDark);
+            ratingrange.setColorNormal(primaryColor);
         }
     }
 
-    public void setColor(int primaryColor, int primaryColorDark, int accentColor) {
+    public void setColor(int primaryColor, int primaryColorDark, int accentColor, int accentColorDark) {
         colorAccent = accentColor;
-        this.primaryColorDark = primaryColorDark;
         this.primaryColor = primaryColor;
 
         types.setMenuButtonColorNormal(primaryColor);
@@ -390,41 +410,41 @@ public class FilterActionButtonHandler extends Activity{
         ratings.setMenuButtonColorPressed(primaryColorDark);
 
         wines.setColorNormal(accentColor);
-        wines.setColorPressed(primaryColorDark);
+        wines.setColorPressed(accentColorDark);
         beers.setColorNormal(accentColor);
-        beers.setColorPressed(primaryColorDark);
+        beers.setColorPressed(accentColorDark);
         liquors.setColorNormal(accentColor);
-        liquors.setColorPressed(primaryColorDark);
+        liquors.setColorPressed(accentColorDark);
 
         twomi.setColorNormal(accentColor);
-        twomi.setColorPressed(primaryColorDark);
+        twomi.setColorPressed(accentColorDark);
         fivemi.setColorNormal(accentColor);
-        fivemi.setColorPressed(primaryColorDark);
+        fivemi.setColorPressed(accentColorDark);
         tenmi.setColorNormal(accentColor);
-        tenmi.setColorPressed(primaryColorDark);
+        tenmi.setColorPressed(accentColorDark);
         custommi.setColorNormal(accentColor);
-        custommi.setColorPressed(primaryColorDark);
+        custommi.setColorPressed(accentColorDark);
 
         hilowprice.setColorNormal(accentColor);
-        hilowprice.setColorPressed(primaryColorDark);
+        hilowprice.setColorPressed(accentColorDark);
         lowhiprice.setColorNormal(accentColor);
-        lowhiprice.setColorPressed(primaryColorDark);
+        lowhiprice.setColorPressed(accentColorDark);
         pricerange.setColorNormal(accentColor);
-        pricerange.setColorPressed(primaryColorDark);
+        pricerange.setColorPressed(accentColorDark);
 
         hilowcontent.setColorNormal(accentColor);
-        hilowcontent.setColorPressed(primaryColorDark);
+        hilowcontent.setColorPressed(accentColorDark);
         lowhicontent.setColorNormal(accentColor);
-        lowhicontent.setColorPressed(primaryColorDark);
+        lowhicontent.setColorPressed(accentColorDark);
         contentrange.setColorNormal(accentColor);
-        contentrange.setColorPressed(primaryColorDark);
+        contentrange.setColorPressed(accentColorDark);
 
         hilowrating.setColorNormal(accentColor);
-        hilowrating.setColorPressed(primaryColorDark);
+        hilowrating.setColorPressed(accentColorDark);
         lowhirating.setColorNormal(accentColor);
-        lowhirating.setColorPressed(primaryColorDark);
+        lowhirating.setColorPressed(accentColorDark);
         ratingrange.setColorNormal(accentColor);
-        ratingrange.setColorPressed(primaryColorDark);
+        ratingrange.setColorPressed(accentColorDark);
     }
 
     private void adjustFBPosition() {
@@ -449,42 +469,35 @@ public class FilterActionButtonHandler extends Activity{
 
     public void showFilterButtons() {
         Handler handler = new Handler();
-
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 types.showMenuButton(true);
             }
         }, 250);
-
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 distances.showMenuButton(true);
             }
         }, 350);
-
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 prices.showMenuButton(true);
             }
         }, 450);
-
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 contents.showMenuButton(true);
             }
         }, 550);
-
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 ratings.showMenuButton(true);
             }
         }, 650);
-
-
     }
 }

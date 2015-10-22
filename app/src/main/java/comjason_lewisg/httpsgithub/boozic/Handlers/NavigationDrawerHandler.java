@@ -42,7 +42,7 @@ public class NavigationDrawerHandler {
         //set initial title to Boozic
         title = m.getString(R.string.app_name);
         titleIndex = 0;
-        delay = 255;
+        delay = 335;
         this.m = m;
 
         topTensFragment = new TopTensFragment();

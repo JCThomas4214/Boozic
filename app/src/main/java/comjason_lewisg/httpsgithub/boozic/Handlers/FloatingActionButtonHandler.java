@@ -27,6 +27,12 @@ public class FloatingActionButtonHandler extends Activity {
 
     protected void onCreate() {}
 
+    public FloatingActionButtonHandler(MainActivity m, int primaryColor, int primaryColorDark) {
+        setActivity(m);
+        menuButton.setColorNormal(primaryColor);
+        menuButton.setColorPressed(primaryColorDark);
+    }
+
     public void setActivity(MainActivity main) {
         m = main;
 
@@ -34,38 +40,6 @@ public class FloatingActionButtonHandler extends Activity {
         menuButton = (FloatingActionButton) m.findViewById(R.id.fabtop);
         menuButton.setOnClickListener(clickListener);
     }
-
-   /* private void createCustomAnimation() {
-        final FloatingActionMenu menu = (FloatingActionMenu) m.findViewById(R.id.fabmenu);
-
-        AnimatorSet set = new AnimatorSet();
-
-        ObjectAnimator scaleOutX = ObjectAnimator.ofFloat(menu.getMenuIconView(), "scaleX", 1.0f, 0.2f);
-        ObjectAnimator scaleOutY = ObjectAnimator.ofFloat(menu.getMenuIconView(), "scaleY", 1.0f, 0.2f);
-
-        ObjectAnimator scaleInX = ObjectAnimator.ofFloat(menu.getMenuIconView(), "scaleX", 0.2f, 1.0f);
-        ObjectAnimator scaleInY = ObjectAnimator.ofFloat(menu.getMenuIconView(), "scaleY", 0.2f, 1.0f);
-
-        scaleOutX.setDuration(50);
-        scaleOutY.setDuration(50);
-
-        scaleInX.setDuration(100);
-        scaleInY.setDuration(100);
-
-        scaleInX.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                menu.getMenuIconView().setImageResource(menu.isOpened()
-                        ? R.drawable.camera : R.drawable.chevron_up);
-            }
-        });
-
-        set.play(scaleOutX).with(scaleOutY);
-        set.play(scaleInX).with(scaleInY).after(scaleOutX);
-        set.setInterpolator(new OvershootInterpolator(2));
-
-        menu.setIconToggleAnimatorSet(set);
-    }*/
 
     private View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
