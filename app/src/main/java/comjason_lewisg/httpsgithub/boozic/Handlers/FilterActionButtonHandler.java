@@ -1,6 +1,7 @@
 package comjason_lewisg.httpsgithub.boozic.Handlers;
 
 import android.app.Activity;
+import android.os.Handler;
 import android.view.View;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -12,7 +13,8 @@ import comjason_lewisg.httpsgithub.boozic.R;
 public class FilterActionButtonHandler extends Activity{
 
     private int colorAccent;
-    private int colorAccentDark;
+    private int primaryColor;
+    private int primaryColorDark;
     private MainActivity main;
 
     public FloatingActionMenu types;
@@ -56,11 +58,6 @@ public class FilterActionButtonHandler extends Activity{
     public FloatingActionButton ratingrange;
 
     public void onCreate() {}
-
-    public void setColor(int a, int ad) {
-        colorAccent = a;
-        colorAccentDark = ad;
-    }
 
     public void setActivity(MainActivity m) {
         main = m;
@@ -246,61 +243,61 @@ public class FilterActionButtonHandler extends Activity{
             case 0:
                 return checkclick(button, check);
             case 1:
-                if ((twomicheck == true) && (button != twomi)) {
+                if ((twomicheck) && (button != twomi)) {
                     twomicheck= checkclick(twomi, true);
                     return checkclick(button, false);
                 }
-                else if ((fivemicheck == true) && (button != fivemi)) {
+                else if ((fivemicheck) && (button != fivemi)) {
                     fivemicheck = checkclick(fivemi, true);
                     return checkclick(button, false);
                 }
-                else if ((tenmicheck == true) && (button != tenmi)) {
+                else if ((tenmicheck) && (button != tenmi)) {
                     tenmicheck = checkclick(tenmi, true);
                     return checkclick(button, false);
                 }
-                else if ((custommicheck == true) && (button != custommi)) {
+                else if ((custommicheck) && (button != custommi)) {
                     custommicheck = checkclick(custommi, true);
                     return checkclick(button, false);
                 }
                 break;
             case 2:
-                if ((hilowpricecheck == true) && (button != hilowprice)) {
+                if ((hilowpricecheck) && (button != hilowprice)) {
                     hilowpricecheck = checkclick(hilowprice, true);
                     return checkclick(button, false);
                 }
-                else if ((lowhipricecheck == true) && (button != lowhiprice)) {
+                else if ((lowhipricecheck) && (button != lowhiprice)) {
                     lowhipricecheck = checkclick(lowhiprice, true);
                     return checkclick(button, false);
                 }
-                else if ((pricerangecheck == true) && (button != pricerange)) {
+                else if ((pricerangecheck) && (button != pricerange)) {
                     pricerangecheck = checkclick(pricerange, true);
                     return checkclick(button, false);
                 }
             break;
             case 3:
-                if ((hilowcontentcheck == true) && (button != hilowcontent)) {
+                if ((hilowcontentcheck) && (button != hilowcontent)) {
                     hilowcontentcheck = checkclick(hilowcontent, true);
                     return checkclick(button, false);
                 }
-                else if ((lowhicontentcheck == true) && (button != lowhicontent)) {
+                else if ((lowhicontentcheck) && (button != lowhicontent)) {
                     lowhicontentcheck = checkclick(lowhicontent, true);
                     return checkclick(button, false);
                 }
-                else if ((contentrangecheck == true) && (button != contentrange)) {
+                else if ((contentrangecheck) && (button != contentrange)) {
                     contentrangecheck = checkclick(contentrange, true);
                     return checkclick(button, false);
                 }
                 break;
             case 4:
-                if ((hilowratingcheck == true) && (button != hilowrating)) {
+                if ((hilowratingcheck) && (button != hilowrating)) {
                     hilowratingcheck = checkclick(hilowrating, true);
                     return checkclick(button, false);
                 }
-                else if ((lowhiratingcheck == true) && (button != lowhirating)) {
+                else if ((lowhiratingcheck) && (button != lowhirating)) {
                     lowhiratingcheck = checkclick(lowhirating, true);
                     return checkclick(button, false);
                 }
-                else if ((ratingrangecheck == true) && (button != ratingrange)) {
+                else if ((ratingrangecheck) && (button != ratingrange)) {
                     ratingrangecheck = checkclick(ratingrange, true);
                     return checkclick(button, false);
                 }
@@ -316,9 +313,118 @@ public class FilterActionButtonHandler extends Activity{
             return false;
         }
         else {
-            button.setColorNormal(colorAccentDark);
+            button.setColorNormal(primaryColorDark);
             return true;
         }
+    }
+
+    public void setFilterButtons() {
+        if (winescheck) {
+            wines.setColorNormal(primaryColorDark);
+        }
+        if (beerscheck) {
+            beers.setColorNormal(primaryColorDark);
+        }
+        if (liquorscheck) {
+            liquors.setColorNormal(primaryColorDark);
+        }
+        if (twomicheck) {
+            twomi.setColorNormal(primaryColorDark);
+        }
+        if (fivemicheck) {
+            fivemi.setColorNormal(primaryColorDark);
+        }
+        if (tenmicheck) {
+            tenmi.setColorNormal(primaryColorDark);
+        }
+        if (custommicheck) {
+            custommi.setColorNormal(primaryColorDark);
+        }
+        if (hilowpricecheck) {
+            hilowprice.setColorNormal(primaryColorDark);
+        }
+        if (lowhipricecheck) {
+            lowhiprice.setColorNormal(primaryColorDark);
+        }
+        if (pricerangecheck) {
+            pricerange.setColorNormal(primaryColorDark);
+        }
+        if (hilowcontentcheck) {
+            hilowcontent.setColorNormal(primaryColorDark);
+        }
+        if (lowhicontentcheck) {
+            lowhicontent.setColorNormal(primaryColorDark);
+        }
+        if (contentrangecheck) {
+            contentrange.setColorNormal(primaryColorDark);
+        }
+        if (hilowratingcheck) {
+            hilowrating.setColorNormal(primaryColorDark);
+        }
+        if (lowhiratingcheck) {
+            lowhirating.setColorNormal(primaryColorDark);
+        }
+        if (ratingrangecheck) {
+            ratingrange.setColorNormal(primaryColorDark);
+        }
+    }
+
+    public void setColor(int primaryColor, int primaryColorDark, int accentColor) {
+        colorAccent = accentColor;
+        this.primaryColorDark = primaryColorDark;
+        this.primaryColor = primaryColor;
+
+        types.setMenuButtonColorNormal(primaryColor);
+        types.setMenuButtonColorPressed(primaryColorDark);
+
+        distances.setMenuButtonColorNormal(primaryColor);
+        distances.setMenuButtonColorPressed(primaryColorDark);
+
+        prices.setMenuButtonColorNormal(primaryColor);
+        prices.setMenuButtonColorPressed(primaryColorDark);
+
+        contents.setMenuButtonColorNormal(primaryColor);
+        contents.setMenuButtonColorPressed(primaryColorDark);
+
+        ratings.setMenuButtonColorNormal(primaryColor);
+        ratings.setMenuButtonColorPressed(primaryColorDark);
+
+        wines.setColorNormal(accentColor);
+        wines.setColorPressed(primaryColorDark);
+        beers.setColorNormal(accentColor);
+        beers.setColorPressed(primaryColorDark);
+        liquors.setColorNormal(accentColor);
+        liquors.setColorPressed(primaryColorDark);
+
+        twomi.setColorNormal(accentColor);
+        twomi.setColorPressed(primaryColorDark);
+        fivemi.setColorNormal(accentColor);
+        fivemi.setColorPressed(primaryColorDark);
+        tenmi.setColorNormal(accentColor);
+        tenmi.setColorPressed(primaryColorDark);
+        custommi.setColorNormal(accentColor);
+        custommi.setColorPressed(primaryColorDark);
+
+        hilowprice.setColorNormal(accentColor);
+        hilowprice.setColorPressed(primaryColorDark);
+        lowhiprice.setColorNormal(accentColor);
+        lowhiprice.setColorPressed(primaryColorDark);
+        pricerange.setColorNormal(accentColor);
+        pricerange.setColorPressed(primaryColorDark);
+
+        hilowcontent.setColorNormal(accentColor);
+        hilowcontent.setColorPressed(primaryColorDark);
+        lowhicontent.setColorNormal(accentColor);
+        lowhicontent.setColorPressed(primaryColorDark);
+        contentrange.setColorNormal(accentColor);
+        contentrange.setColorPressed(primaryColorDark);
+
+        hilowrating.setColorNormal(accentColor);
+        hilowrating.setColorPressed(primaryColorDark);
+        lowhirating.setColorNormal(accentColor);
+        lowhirating.setColorPressed(primaryColorDark);
+        ratingrange.setColorNormal(accentColor);
+        ratingrange.setColorPressed(primaryColorDark);
     }
 
     private void adjustFBPosition() {
@@ -331,5 +437,54 @@ public class FilterActionButtonHandler extends Activity{
         prices.setX(25 + 2 * segments);
         contents.setX(25 + 3 * segments);
         ratings.setX(-25);
+    }
+
+    public void hideFilterButtons() {
+        types.hideMenuButton(true);
+        distances.hideMenuButton(true);
+        prices.hideMenuButton(true);
+        contents.hideMenuButton(true);
+        ratings.hideMenuButton(true);
+    }
+
+    public void showFilterButtons() {
+        Handler handler = new Handler();
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                types.showMenuButton(true);
+            }
+        }, 250);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                distances.showMenuButton(true);
+            }
+        }, 350);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                prices.showMenuButton(true);
+            }
+        }, 450);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                contents.showMenuButton(true);
+            }
+        }, 550);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ratings.showMenuButton(true);
+            }
+        }, 650);
+
+
     }
 }

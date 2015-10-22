@@ -84,8 +84,10 @@ public class TopTensFragment extends Fragment {
             public void onScrolled(RecyclerView mRecyclerView, int dx, int dy) {
                 super.onScrolled(mRecyclerView, dx, dy);
                 if (Math.abs(dy) > 20) {
-                    if (dy > 0)
+                    if (dy > 0) {
                         ((MainActivity) getActivity()).FAB.menuButton.hide(true);
+                        closeFilterbuttons();
+                    }
                     else
                         ((MainActivity) getActivity()).FAB.menuButton.show(true);
                 }
@@ -117,6 +119,7 @@ public class TopTensFragment extends Fragment {
         int AskForColorAccentDark();
         void AskToHideFilterButtons();
         void AskToShowFilterButtons();
+        void CloseAllFilterButtons();
         void AskToShowGPS();
     }
 
@@ -127,6 +130,8 @@ public class TopTensFragment extends Fragment {
     public int askColorAccent() { return dataPasser.AskForColorAccent(); }
 
     public int askColorAccentDark() { return dataPasser.AskForColorAccentDark(); }
+
+    public void closeFilterbuttons() { dataPasser.CloseAllFilterButtons(); }
 
     public void askHideFilterButtons() { dataPasser.AskToHideFilterButtons(); }
 

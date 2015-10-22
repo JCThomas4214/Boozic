@@ -1,4 +1,4 @@
-package comjason_lewisg.httpsgithub.boozic;
+package comjason_lewisg.httpsgithub.boozic.Services;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -14,6 +14,9 @@ import com.google.android.gms.gcm.GcmListenerService;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import comjason_lewisg.httpsgithub.boozic.MainActivity;
+import comjason_lewisg.httpsgithub.boozic.R;
 
 /**
  * Created by Timmy on 10/15/2015.

@@ -39,6 +39,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import comjason_lewisg.httpsgithub.boozic.Controllers.DeviceIdController;
 import comjason_lewisg.httpsgithub.boozic.Fragments.ThemeFragment;
 import comjason_lewisg.httpsgithub.boozic.Fragments.TopTensFragment;
 import comjason_lewisg.httpsgithub.boozic.Handlers.AnimateToolbarHandler;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public Toolbar toolbar;
     public TextView title;
     public DialogHandler DHandle;
+    public DeviceIdController DIDcon;
     public SearchBarHandler searchBarHandler;
     public ThemeHandler themeHandler;
     public FloatingActionButtonHandler FAB;
@@ -182,82 +184,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         startActivity(getIntent());
     }
 
-    public void hideFilterButtons() {
-        FloatingActionMenu fab;
 
-        fab = (FloatingActionMenu) findViewById(R.id.fabtype);
-        fab.hideMenuButton(true);
-
-        fab = (FloatingActionMenu) findViewById(R.id.fabdist);
-        fab.hideMenuButton(true);
-
-        fab = (FloatingActionMenu) findViewById(R.id.fabprice);
-        fab.hideMenuButton(true);
-
-        fab = (FloatingActionMenu) findViewById(R.id.fabcontent);
-        fab.hideMenuButton(true);
-
-        fab = (FloatingActionMenu) findViewById(R.id.fabrating);
-        fab.hideMenuButton(true);
-
-        //toolbar.getLayoutParams().height = 170;
-        AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, 170);
-        anim.setDuration(500);
-        toolbar.startAnimation(anim);
-    }
-
-    public void showFilterButtons() {
-        final FloatingActionMenu fab0;
-        final FloatingActionMenu fab1;
-        final FloatingActionMenu fab2;
-        final FloatingActionMenu fab3;
-        final FloatingActionMenu fab4;
-        Handler handler = new Handler();
-
-        fab0 = (FloatingActionMenu) findViewById(R.id.fabtype);
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                fab0.showMenuButton(true);
-            }
-        }, 250);
-
-        fab1 = (FloatingActionMenu) findViewById(R.id.fabdist);
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                fab1.showMenuButton(true);
-            }
-        }, 350);
-
-        fab2 = (FloatingActionMenu) findViewById(R.id.fabprice);
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                fab2.showMenuButton(true);
-            }
-        }, 450);
-
-        fab3 = (FloatingActionMenu) findViewById(R.id.fabcontent);
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                fab3.showMenuButton(true);
-            }
-        }, 550);
-
-        fab4 = (FloatingActionMenu) findViewById(R.id.fabrating);
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                fab4.showMenuButton(true);
-            }
-        }, 650);
-
-        AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, 315);
-        anim.setDuration(350);
-        toolbar.startAnimation(anim);
-    }
 
     public int getColorAccentId() {
         return colorAccent_id;
@@ -408,82 +335,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         FAB.menuButton.setColorNormal(primaryColor);
         FAB.menuButton.setColorPressed(primaryColorDark);
 
-        FBhandle.setColor(accentColor, primaryColorDark);
-        FloatingActionMenu fab;
-
-        fab = (FloatingActionMenu) findViewById(R.id.fabtype);
-        fab.setMenuButtonColorNormal(primaryColor);
-        fab.setMenuButtonColorPressed(primaryColorDark);
-
-        fab = (FloatingActionMenu) findViewById(R.id.fabdist);
-        fab.setMenuButtonColorNormal(primaryColor);
-        fab.setMenuButtonColorPressed(primaryColorDark);
-
-        fab = (FloatingActionMenu) findViewById(R.id.fabprice);
-        fab.setMenuButtonColorNormal(primaryColor);
-        fab.setMenuButtonColorPressed(primaryColorDark);
-
-        fab = (FloatingActionMenu) findViewById(R.id.fabcontent);
-        fab.setMenuButtonColorNormal(primaryColor);
-        fab.setMenuButtonColorPressed(primaryColorDark);
-
-        fab = (FloatingActionMenu) findViewById(R.id.fabrating);
-        fab.setMenuButtonColorNormal(primaryColor);
-        fab.setMenuButtonColorPressed(primaryColorDark);
-
-        FloatingActionButton fabb;
-        fabb = (FloatingActionButton) findViewById(R.id.wines);
-        fabb.setColorNormal(accentColor);
-        fabb.setColorPressed(accentColorDark);
-        fabb = (FloatingActionButton) findViewById(R.id.beers);
-        fabb.setColorNormal(accentColor);
-        fabb.setColorPressed(accentColorDark);
-        fabb = (FloatingActionButton) findViewById(R.id.liquors);
-        fabb.setColorNormal(accentColor);
-        fabb.setColorPressed(accentColorDark);
-
-        fabb = (FloatingActionButton) findViewById(R.id.twomi);
-        fabb.setColorNormal(accentColor);
-        fabb.setColorPressed(accentColorDark);
-        fabb = (FloatingActionButton) findViewById(R.id.fivemi);
-        fabb.setColorNormal(accentColor);
-        fabb.setColorPressed(accentColorDark);
-        fabb = (FloatingActionButton) findViewById(R.id.tenmi);
-        fabb.setColorNormal(accentColor);
-        fabb.setColorPressed(accentColorDark);
-        fabb = (FloatingActionButton) findViewById(R.id.custommi);
-        fabb.setColorNormal(accentColor);
-        fabb.setColorPressed(accentColorDark);
-
-        fabb = (FloatingActionButton) findViewById(R.id.hilow);
-        fabb.setColorNormal(accentColor);
-        fabb.setColorPressed(accentColorDark);
-        fabb = (FloatingActionButton) findViewById(R.id.lowhi);
-        fabb.setColorNormal(accentColor);
-        fabb.setColorPressed(accentColorDark);
-        fabb = (FloatingActionButton) findViewById(R.id.pricerange);
-        fabb.setColorNormal(accentColor);
-        fabb.setColorPressed(accentColorDark);
-
-        fabb = (FloatingActionButton) findViewById(R.id.hilowcontent);
-        fabb.setColorNormal(accentColor);
-        fabb.setColorPressed(accentColorDark);
-        fabb = (FloatingActionButton) findViewById(R.id.lowhicontent);
-        fabb.setColorNormal(accentColor);
-        fabb.setColorPressed(accentColorDark);
-        fabb = (FloatingActionButton) findViewById(R.id.rangecontent);
-        fabb.setColorNormal(accentColor);
-        fabb.setColorPressed(accentColorDark);
-
-        fabb = (FloatingActionButton) findViewById(R.id.hilowrating);
-        fabb.setColorNormal(accentColor);
-        fabb.setColorPressed(accentColorDark);
-        fabb = (FloatingActionButton) findViewById(R.id.lowhirating);
-        fabb.setColorNormal(accentColor);
-        fabb.setColorPressed(accentColorDark);
-        fabb = (FloatingActionButton) findViewById(R.id.rangerating);
-        fabb.setColorNormal(accentColor);
-        fabb.setColorPressed(accentColorDark);
+        FBhandle.setColor(primaryColor, primaryColorDark, accentColor);
+        FBhandle.setFilterButtons();
 
         checkPlayServices();
     }
@@ -583,15 +436,29 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     }
 
     @Override
-    public void AskToHideFilterButtons () { hideFilterButtons(); }
+    public void CloseAllFilterButtons () { FBhandle.closeAll(); }
+
+    @Override
+    public void AskToHideFilterButtons () {
+        FBhandle.hideFilterButtons();
+
+        AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, 170);
+        anim.setDuration(500);
+        toolbar.startAnimation(anim);
+    }
 
     @Override
     public void AskToShowGPS () { displayLocation(); }
 
     @Override
     public void AskToShowFilterButtons () {
-        if (toolbar.getLayoutParams().height <= 300)
-            showFilterButtons();
+        if (toolbar.getLayoutParams().height <= 300) {
+            FBhandle.showFilterButtons();
+
+            AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, 315);
+            anim.setDuration(350);
+            toolbar.startAnimation(anim);
+        }
     }
 
     public void getRegId() {
@@ -604,9 +471,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         }
     }
 
-    /**
-     * Get an authorization Token for GCM
-     */
     public void getTokenInBackground() {
         new AsyncTask<Void, Void, String>() {
             @Override
