@@ -76,6 +76,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<RecyclerView.Vie
 
             label = (TextView) itemView.findViewById(R.id.product_label);
             typePic = (ImageView) itemView.findViewById(R.id.product_type);
+            boozicScore = (TextView) itemView.findViewById(R.id.product_metascore);
             lastUpdate = (TextView) itemView.findViewById(R.id.product_last_updated);
             userRating = (RatingBar) itemView.findViewById(R.id.product_ratingBar);
 
@@ -155,7 +156,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<RecyclerView.Vie
             td.setText("$" + monFormat.format(model.td));
         }
 
-        cheapestPrice.setText("(" + model.cheapestStoreDist + "mi) " + model.cheapestStoreName);
+        cheapestStore.setText("(" + model.cheapestStoreDist + "mi) " + model.cheapestStoreName);
         cheapestPrice.setText("$" + monFormat.format(model.cheapestPrice));
 
         selectTypePic(model);
