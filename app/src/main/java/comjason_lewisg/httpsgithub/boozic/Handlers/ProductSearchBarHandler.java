@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import comjason_lewisg.httpsgithub.boozic.ProductActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
 import io.codetail.animation.ReverseInterpolator;
 import io.codetail.animation.SupportAnimator;
@@ -35,8 +36,12 @@ public class ProductSearchBarHandler {
     public SearchSuggestHandler searchSuggestHandler;
     public SearchBox search;
 
-    public void onCreate() {
+    public void onCreate() {}
+
+    public ProductSearchBarHandler(ProductActivity p, Toolbar t) {
+        setActivity(p, t);
     }
+
     public void setActivity(AppCompatActivity main, Toolbar t) {
         m = main;
 
@@ -114,7 +119,7 @@ public class ProductSearchBarHandler {
 
         //if no characters inputted or erased
         if(search.getSearchText().isEmpty()) {
-
+            //dono
         }
     }
 

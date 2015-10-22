@@ -44,7 +44,9 @@ import java.util.List;
 import java.util.Map;
 
 import comjason_lewisg.httpsgithub.boozic.Handlers.AdapterHandler;
+import comjason_lewisg.httpsgithub.boozic.Handlers.ProductAdapterHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ProductSearchBarHandler;
+import comjason_lewisg.httpsgithub.boozic.Models.ProductStorageModel;
 import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
 
 public class ProductActivity extends AppCompatActivity {
@@ -58,21 +60,42 @@ public class ProductActivity extends AppCompatActivity {
     static final int ACCENT_STATE = 0;
     static final int ACCENT_DARK_STATE = 0;
 
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
     private int primaryColor;
     private int primaryColorDark;
     private int accentColor;
     private int accentColorDark;
 
-    public TopTensModel model;
-
-    public PieChart ratingChart;
-    private String[] xData = {"", "", "", "", ""};
+    public ProductStorageModel model;
 
     private SharedPreferences mPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPrefs = getSharedPreferences("COLOR_STATE", MODE_MULTI_PROCESS);
+        //when resume, pull saves states for each button
+        int colorPrimary_id = mPrefs.getInt("COLOR_STATE", COLOR_STATE);
+        switch (colorPrimary_id) {
+            case 1:
+                setTheme(R.style.AppTheme);
+                break;
+            case 2:
+                setTheme(R.style.AppTheme2);
+                break;
+            case 3:
+                setTheme(R.style.AppTheme3);
+                break;
+            case 4:
+                setTheme(R.style.AppTheme4);
+                break;
+            case 5:
+                setTheme(R.style.AppTheme5);
+                break;
+        }
         setContentView(R.layout.activity_product);
 
         fetchProductInfo();
@@ -86,14 +109,23 @@ public class ProductActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         //connect to search bar and create new search handler
-        searchBarHandler = new ProductSearchBarHandler();
-        searchBarHandler.setActivity(this, toolbar);
+        searchBarHandler = new ProductSearchBarHandler(this, toolbar);
 
         ImageView img = (ImageView) findViewById(R.id.headerimg);
         SearchBox sb = (SearchBox) findViewById(R.id.product_searchbox);
         toolbar.setY(getStatusBarHeight() + 75);
         sb.setY(getStatusBarHeight());
         img.setY(getStatusBarHeight());
+
+        //set recyclerview for product layout
+        mRecyclerView = (RecyclerView) findViewById(R.id.product_rv);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        mRecyclerView.setHasFixedSize(true);
+
+        mAdapter = new ProductAdapterHandler(model, this);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -129,7 +161,7 @@ public class ProductActivity extends AppCompatActivity {
     public void fetchProductInfo() {
         //fetch extra items
 
-        model = new TopTensModel((String) getIntent().getSerializableExtra("Label"),
+        model = new ProductStorageModel((String) getIntent().getSerializableExtra("Label"),
                 (String) getIntent().getSerializableExtra("LastUpdate"),
                 (double) getIntent().getSerializableExtra("UserRating"),
                 (String) getIntent().getSerializableExtra("ClosestStore"),
@@ -143,168 +175,14 @@ public class ProductActivity extends AppCompatActivity {
                 (String) getIntent().getSerializableExtra("Container"),
                 (double) getIntent().getSerializableExtra("ABV"),
                 (int) getIntent().getSerializableExtra("Proof"),
-                (int[]) getIntent().getSerializableExtra("Rating"));
-
-        setProductInfo();
-    }
-
-    public void setProductInfo() {
-        DecimalFormat df = new DecimalFormat("####0.##");
-        DecimalFormat monFormat = new DecimalFormat("####0.00");
-        DecimalFormat pbvFormat = new DecimalFormat("####0.00#");
-
-        TextView text = (TextView) findViewById(R.id.product_label);
-        text.setText(model.label);
-
-        text = (TextView) findViewById(R.id.product_last_updated);
-        text.setText("" + model.lastUpdate);
-
-        RatingBar uRating = (RatingBar) findViewById(R.id.product_ratingBar);
-        uRating.setRating((float) model.userRating);
-
-        LinearLayout closestStoreLayout = (LinearLayout) findViewById(R.id.closest_store_layout);
-        if (model.closestStoreName.equals(model.cheapestStoreName)) {
-            closestStoreLayout.setVisibility(View.GONE);
-            text = (TextView) findViewById(R.id.product_pdd);
-            text.setText("N/A");
-            text = (TextView) findViewById(R.id.product_td);
-            text.setText("N/A");
-        }
-        else {
-            text = (TextView) findViewById(R.id.product_closest_store);
-            text.setText("(" + model.closestStoreDist + "mi) " + model.closestStoreName);
-            text = (TextView) findViewById(R.id.product_closest_price);
-            text.setText("$"+ monFormat.format(model.closestPrice));
-            text = (TextView) findViewById(R.id.product_pdd);
-            text.setText("$" + monFormat.format(model.pdd));
-            text = (TextView) findViewById(R.id.product_td);
-            text.setText("$" + monFormat.format(model.td));
-        }
-
-        text = (TextView) findViewById(R.id.product_cheapest_store);
-        text.setText("(" + model.cheapestStoreDist + "mi) " + model.cheapestStoreName);
-        text = (TextView) findViewById(R.id.product_cheapest_price);
-        text.setText("$" + monFormat.format(model.cheapestPrice));
-
-
-
-        selectTypePic();
-
-        //TODO: impliment the favorities button here
-
-        text = (TextView) findViewById(R.id.product_container);
-        text.setText(model.container);
-
-        text = (TextView) findViewById(R.id.product_volume);
-        text.setText(df.format(model.volume) + model.volumeMeasure);
-
-        text = (TextView) findViewById(R.id.product_abv);
-        text.setText(df.format(model.abv) + "%");
-
-        text = (TextView) findViewById(R.id.product_proof);
-        text.setText("" + model.proof);
-
-        text = (TextView) findViewById(R.id.product_abp);
-        text.setText("$" + monFormat.format(model.abp) + "/ml");
-
-        text = (TextView) findViewById(R.id.product_pbv);
-        text.setText("$" + pbvFormat.format(model.pbv) + "/ml");
-
-        setChart();
-    }
-
-    public void selectTypePic() {
-        ImageView img = (ImageView) findViewById(R.id.product_type);
-        switch (model.typePic) {
-            case 1:
-                img.setBackgroundResource(R.mipmap.beer);
-                break;
-            case 2:
-                img.setBackgroundResource(R.mipmap.wine);
-                break;
-            case 3:
-                img.setBackgroundResource(R.mipmap.liquor);
-                break;
-        }
-    }
-
-    public void setChart() {
-        DecimalFormat avgFormat = new DecimalFormat("0.0");
-        //float yData[] = {model.rating5, model.rating4, model.rating3, model.rating2, model.rating1};
-        float yData[] = {model.rating[0], model.rating[1], model.rating[2], model.rating[3], model.rating[4]};
-
-        ratingChart = (PieChart) findViewById(R.id.rating_chart);
-
-        // config the pie chart
-        ratingChart.setUsePercentValues(true);
-        ratingChart.setDrawSliceText(false);
-        ratingChart.setDescription("");
-
-        // enable hole and config
-        ratingChart.setDrawHoleEnabled(true);
-        ratingChart.setHoleColorTransparent(true);
-        ratingChart.setHoleRadius(60);
-        ratingChart.setTransparentCircleRadius(65);
-        ratingChart.setCenterText(avgFormat.format(model.avgRating));
-        ratingChart.setCenterTextSize(40f);
-
-        // set rotation
-        ratingChart.setRotationEnabled(false);
-
-        // add data
-        addData(yData);
-
-        // customize legends
-        Legend l = ratingChart.getLegend();
-        l.setPosition(Legend.LegendPosition.LEFT_OF_CHART);
-        l.setYOffset(18);
-        l.setXOffset(0);
-        l.setFormSize(15);
-        l.setXEntrySpace(2);
-        l.setYEntrySpace(8);
-    }
-
-    private void addData(float[] yData) {
-
-        ArrayList<Entry> yVals = new ArrayList<>();
-
-        for (int i = 0; i < yData.length; i++)
-            yVals.add(new Entry(yData[i], i));
-
-        ArrayList<String> xVals = new ArrayList<>();
-
-        for (int o = 0; o < xData.length; o++)
-            xVals.add(xData[o]);
-
-        // create pie data
-        PieDataSet dataSet = new PieDataSet(yVals, "");
-        dataSet.setSliceSpace(3);
-        dataSet.setSelectionShift(0);
-
-        // add colors
-        ArrayList<Integer> colors = new ArrayList<>();
-
-        colors.add(getResources().getColor(R.color.ColorAccent));
-        colors.add(getResources().getColor(R.color.ColorAccent2));
-        colors.add(getResources().getColor(R.color.ColorAccent3));
-        colors.add(getResources().getColor(R.color.ColorAccent4));
-        colors.add(getResources().getColor(R.color.ColorAccent5));
-
-        dataSet.setColors(colors);
-
-        // instantiate pie data
-        PieData data = new PieData(xVals, dataSet);
-        data.setValueFormatter(new PercentFormatter());
-        data.setValueTextSize(10f);
-        data.setValueTextColor(Color.BLACK);
-
-        ratingChart.setData(data);
-
-        //undo all highlights
-        ratingChart.highlightValues(null);
-
-        //update pie chart
-        ratingChart.invalidate();
+                (int[]) getIntent().getSerializableExtra("Rating"),
+                (double) getIntent().getSerializableExtra("Volume"),
+                (String) getIntent().getSerializableExtra("VolumeMeasure"),
+                (double) getIntent().getSerializableExtra("PBV"),
+                (double) getIntent().getSerializableExtra("ABP"),
+                (double) getIntent().getSerializableExtra("PDD"),
+                (double) getIntent().getSerializableExtra("TD"),
+                (double) getIntent().getSerializableExtra("AvgRating"));
     }
 
     // A method to find height of the status bar
@@ -333,15 +211,6 @@ public class ProductActivity extends AppCompatActivity {
         ctl.setTitle(model.label);
         ctl.setContentScrimColor(primaryColor);
         ctl.setStatusBarScrimColor(primaryColorDark);
-
-        RatingBar ratingBar = (RatingBar) findViewById(R.id.product_ratingBar);
-        LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
-        stars.getDrawable(2).setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP);
-
-        /*Drawable setButton = getResources().getDrawable(R.drawable.custom_product_button, null);
-        setButton.setColorFilter(primaryColor, PorterDuff.Mode.MULTIPLY);
-        Button btn = (Button) findViewById(R.id.new_price_button);
-        btn.setBackground(setButton);*/
 
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE

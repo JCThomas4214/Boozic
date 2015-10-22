@@ -88,8 +88,10 @@ public class TopTensFragment extends Fragment {
                         ((MainActivity) getActivity()).FAB.menuButton.hide(true);
                         closeFilterbuttons();
                     }
-                    else
+                    else {
                         ((MainActivity) getActivity()).FAB.menuButton.show(true);
+                        closeFilterbuttons();
+                    }
                 }
             }
         });

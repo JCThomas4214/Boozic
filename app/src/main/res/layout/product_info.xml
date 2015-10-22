@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/product_info_0" />
+
+    <include layout="@layout/product_info_table" />
+
+    <include layout="@layout/product_user_rate" />
+
+    <include layout="@layout/product_info_1" />
+
+    <include layout="@layout/product_info_2" />
+
+</LinearLayout>

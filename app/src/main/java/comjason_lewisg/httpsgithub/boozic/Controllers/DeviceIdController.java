@@ -22,7 +22,7 @@ public class DeviceIdController {
         getRegId(m);
     }
 
-    public void getRegId(MainActivity m) {
+    private void getRegId(MainActivity m) {
         GoogleCloudMessaging gcmObj;
         // Check if Google Play Service is installed in Device
         // Play services is needed to handle GCM stuffs

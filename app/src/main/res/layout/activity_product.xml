@@ -44,27 +44,14 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/product_rv"
+        android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:scrollbars="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <include layout="@layout/product_info_0" />
-            <include layout="@layout/product_info_table" />
-            <include layout="@layout/product_user_rate" />
-            <include layout="@layout/product_info_1" />
-            <include layout="@layout/product_info_2" />
-            <!--<include layout="@layout/product_space" />-->
-
-
-        </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+        android:paddingTop="0dp"
+        android:overScrollMode="always"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <com.quinny898.library.persistentsearch.SearchBox
         android:layout_width="wrap_content"

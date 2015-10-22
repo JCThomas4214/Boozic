@@ -72,7 +72,7 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
                 .from(viewGroup.getContext())
                 .inflate(R.layout.top_ten_item, viewGroup, false);
         // set the view's size, margins, paddings and layout parameters
-        AdapterHandler.ListItemViewHolder vh = new ListItemViewHolder(itemView, new AdapterHandler.ListItemViewHolder.IMyViewHolderClicks() {
+        return new ListItemViewHolder(itemView, new AdapterHandler.ListItemViewHolder.IMyViewHolderClicks() {
             public void onPotato(View caller, int position) {
                 Intent i = new Intent(m, ProductActivity.class);
                 //inject model variables
@@ -95,15 +95,17 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
                 i.putExtra("ABP", items.get(position).abp);
                 i.putExtra("PDD", items.get(position).pdd);
                 i.putExtra("Rating", items.get(position).rating);
-                /*i.putExtra("Rating4", items.get(position).rating[1]);
-                i.putExtra("Rating3", items.get(position).rating[2]);
-                i.putExtra("Rating2", items.get(position).rating[3]);
-                i.putExtra("Rating1", items.get(position).rating[4]);*/
+                i.putExtra("Volume", items.get(position).volume);
+                i.putExtra("VolumeMeasure", items.get(position).volumeMeasure);
+                i.putExtra("PBV", items.get(position).pbv);
+                i.putExtra("ABP", items.get(position).abp);
+                i.putExtra("PDD", items.get(position).pdd);
+                i.putExtra("TD", items.get(position).td);
+                i.putExtra("AvgRating", items.get(position).avgRating);
 
                 m.startActivity(i);
             }
         });
-        return vh;
     }
 
     // Replace the contents of a view (invoked by the layout manager)
