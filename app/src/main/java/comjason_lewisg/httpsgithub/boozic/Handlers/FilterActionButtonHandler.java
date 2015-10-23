@@ -349,6 +349,22 @@ public class FilterActionButtonHandler extends Activity{
                     custommicheck = checkclick(custommi, true);
                     return checkclick(button, false);
                 }
+                else if ((button == twomi)) {
+                    twomicheck = !twomicheck;
+                    return checkclick(button, !twomicheck);
+                }
+                else if ((button == fivemi)) {
+                    fivemicheck = !fivemicheck;
+                    return checkclick(button, !fivemicheck);
+                }
+                else if ((button == tenmi)) {
+                    tenmicheck = !tenmicheck;
+                    return checkclick(button, !tenmicheck);
+                }
+                else if ((button == custommi)) {
+                    custommicheck = !custommicheck;
+                    return checkclick(button, !custommicheck);
+                }
                 break;
             case 2:
                 if ((hilowpricecheck) && (button != hilowprice)) {
@@ -362,6 +378,18 @@ public class FilterActionButtonHandler extends Activity{
                 else if ((pricerangecheck) && (button != pricerange)) {
                     pricerangecheck = checkclick(pricerange, true);
                     return checkclick(button, false);
+                }
+                else if ((button == hilowprice)) {
+                    hilowpricecheck = !hilowpricecheck;
+                    return checkclick(button, !hilowpricecheck);
+                }
+                else if ((button == lowhiprice)) {
+                    lowhipricecheck = !lowhipricecheck;
+                    return checkclick(button, !lowhipricecheck);
+                }
+                else if ((button == pricerange)) {
+                    pricerangecheck = !pricerangecheck;
+                    return checkclick(button, !pricerangecheck);
                 }
             break;
             case 3:
@@ -377,6 +405,18 @@ public class FilterActionButtonHandler extends Activity{
                     contentrangecheck = checkclick(contentrange, true);
                     return checkclick(button, false);
                 }
+                else if ((button == hilowcontent)) {
+                    hilowcontentcheck = !hilowcontentcheck;
+                    return checkclick(button, !hilowcontentcheck);
+                }
+                else if ((button == lowhicontent)) {
+                    lowhicontentcheck = !lowhicontentcheck;
+                    return checkclick(button, !lowhicontentcheck);
+                }
+                else if ((button == contentrange)) {
+                    contentrangecheck = !contentrangecheck;
+                    return checkclick(button, !contentrangecheck);
+                }
                 break;
             case 4:
                 if ((hilowratingcheck) && (button != hilowrating)) {
@@ -390,6 +430,18 @@ public class FilterActionButtonHandler extends Activity{
                 else if ((ratingrangecheck) && (button != ratingrange)) {
                     ratingrangecheck = checkclick(ratingrange, true);
                     return checkclick(button, false);
+                }
+                else if ((button == hilowrating)) {
+                    hilowratingcheck = !hilowratingcheck;
+                    return checkclick(button, !hilowratingcheck);
+                }
+                else if ((button == lowhirating)) {
+                    lowhiratingcheck = !lowhiratingcheck;
+                    return checkclick(button, !lowhiratingcheck);
+                }
+                else if ((button == ratingrange)) {
+                    ratingrangecheck = !ratingrangecheck;
+                    return checkclick(button, !ratingrangecheck);
                 }
                 break;
         }
