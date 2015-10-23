@@ -86,11 +86,13 @@ public class TopTensFragment extends Fragment {
                 if (Math.abs(dy) > 20) {
                     if (dy > 0) {
                         ((MainActivity) getActivity()).FAB.menuButton.hide(true);
-                        closeFilterbuttons();
+                        if (isMenuOpened())
+                            closeFilterbuttons();
                     }
                     else {
                         ((MainActivity) getActivity()).FAB.menuButton.show(true);
-                        closeFilterbuttons();
+                        if (isMenuOpened())
+                            closeFilterbuttons();
                     }
                 }
             }
@@ -123,6 +125,7 @@ public class TopTensFragment extends Fragment {
         void AskToShowFilterButtons();
         void CloseAllFilterButtons();
         void AskToShowGPS();
+        boolean IsMenuOpened();
     }
 
     public int askColorPrimary() { return dataPasser.AskForColorPrimary(); }
@@ -140,6 +143,8 @@ public class TopTensFragment extends Fragment {
     public void askShowFilterButtons() { dataPasser.AskToShowFilterButtons(); }
 
     public void askShowGPS() { dataPasser.AskToShowGPS(); }
+
+    public boolean isMenuOpened() { return dataPasser.IsMenuOpened(); }
 
     @Override
     public void onAttach(Activity a) {

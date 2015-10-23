@@ -16,6 +16,7 @@ public class FilterActionButtonHandler extends Activity{
     private int colorAccent;
     private int primaryColor;
     private MainActivity main;
+    public boolean menuOpened = false;
 
     static final boolean WINES = true;
     static final boolean BEERS = true;
@@ -212,7 +213,11 @@ public class FilterActionButtonHandler extends Activity{
         @Override
         public void onMenuToggle(boolean opened) {
             if (opened) {
+                menuOpened = true;
                 checkOpen(types);
+            }
+            else {
+                menuOpened = false;
             }
         }
     };
@@ -221,7 +226,11 @@ public class FilterActionButtonHandler extends Activity{
         @Override
         public void onMenuToggle(boolean opened) {
             if (opened) {
+                menuOpened = true;
                 checkOpen(distances);
+            }
+            else {
+                menuOpened = false;
             }
         }
     };
@@ -230,7 +239,11 @@ public class FilterActionButtonHandler extends Activity{
         @Override
         public void onMenuToggle(boolean opened) {
             if (opened) {
+                menuOpened = true;
                 checkOpen(prices);
+            }
+            else {
+                menuOpened = false;
             }
         }
     };
@@ -239,7 +252,11 @@ public class FilterActionButtonHandler extends Activity{
         @Override
         public void onMenuToggle(boolean opened) {
             if (opened) {
+                menuOpened = true;
                 checkOpen(contents);
+            }
+            else {
+                menuOpened = false;
             }
         }
     };
@@ -248,17 +265,36 @@ public class FilterActionButtonHandler extends Activity{
         @Override
         public void onMenuToggle(boolean opened) {
             if (opened) {
+                menuOpened = true;
                 checkOpen(ratings);
+            }
+            else {
+                menuOpened = false;
             }
         }
     };
 
     public void closeAll() {
-        types.close(true);
-        distances.close(true);
-        prices.close(true);
-        contents.close(true);
-        ratings.close(true);
+        if (types.isOpened()) {
+            menuOpened = false;
+            types.close(true);
+        }
+        else if (distances.isOpened()) {
+            menuOpened = false;
+            distances.close(true);
+        }
+        else if (prices.isOpened()) {
+            menuOpened = false;
+            prices.close(true);
+        }
+        else if (contents.isOpened()) {
+            menuOpened = false;
+            contents.close(true);
+        }
+        else if (ratings.isOpened()) {
+            menuOpened = false;
+            ratings.close(true);
+        }
     }
 
     public void disableAll() {

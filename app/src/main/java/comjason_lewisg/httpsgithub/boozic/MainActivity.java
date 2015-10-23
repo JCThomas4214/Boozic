@@ -438,4 +438,9 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
             toolbar.startAnimation(anim);
         }
     }
+
+    @Override
+    public boolean IsMenuOpened() {
+        return FBhandle.menuOpened;
+    }
 }
