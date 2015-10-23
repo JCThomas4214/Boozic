@@ -15,6 +15,8 @@ import com.google.android.gms.gcm.GcmListenerService;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Random;
+
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
 
@@ -62,10 +64,11 @@ public class GCMService extends GcmListenerService {
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
         mBuilder.setContentIntent(resultPendingIntent);
-        NotificationManager mNotificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        // mId allows you to update the notification later on.
-        mNotificationManager.notify(1, mBuilder.build());
+        NotificationManager mNotificationManager =(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        //new msgId to avaid message getting over written.
+        Random random = new Random();
+        int msgId = random.nextInt(9999 - 1000) + 1000;
+        mNotificationManager.notify(msgId, mBuilder.build());
 
     }
 
