@@ -441,6 +441,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
     @Override
     public boolean IsMenuOpened() {
-        return FBhandle.menuOpened;
+        //cheaper with homemade boolean values instead of .isOpened in FloatingActionMenu
+        return FBhandle.typeMenuOpened || FBhandle.distantsMenuOpened || FBhandle.pricesMenuOpened || FBhandle.contentsMenuOpened || FBhandle.ratingsMenuOpened;
     }
 }

@@ -3,6 +3,7 @@ package comjason_lewisg.httpsgithub.boozic.Handlers;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -16,7 +17,11 @@ public class FilterActionButtonHandler extends Activity{
     private int colorAccent;
     private int primaryColor;
     private MainActivity main;
-    public boolean menuOpened = false;
+    public boolean typeMenuOpened = false;
+    public boolean distantsMenuOpened = false;
+    public boolean contentsMenuOpened = false;
+    public boolean pricesMenuOpened = false;
+    public boolean ratingsMenuOpened = false;
 
     static final boolean WINES = true;
     static final boolean BEERS = true;
@@ -213,11 +218,11 @@ public class FilterActionButtonHandler extends Activity{
         @Override
         public void onMenuToggle(boolean opened) {
             if (opened) {
-                menuOpened = true;
+                typeMenuOpened = true;
                 checkOpen(types);
             }
             else {
-                menuOpened = false;
+                typeMenuOpened = false;
             }
         }
     };
@@ -226,11 +231,11 @@ public class FilterActionButtonHandler extends Activity{
         @Override
         public void onMenuToggle(boolean opened) {
             if (opened) {
-                menuOpened = true;
+                distantsMenuOpened = true;
                 checkOpen(distances);
             }
             else {
-                menuOpened = false;
+                distantsMenuOpened = false;
             }
         }
     };
@@ -239,11 +244,11 @@ public class FilterActionButtonHandler extends Activity{
         @Override
         public void onMenuToggle(boolean opened) {
             if (opened) {
-                menuOpened = true;
+                pricesMenuOpened = true;
                 checkOpen(prices);
             }
             else {
-                menuOpened = false;
+                pricesMenuOpened = false;
             }
         }
     };
@@ -252,11 +257,11 @@ public class FilterActionButtonHandler extends Activity{
         @Override
         public void onMenuToggle(boolean opened) {
             if (opened) {
-                menuOpened = true;
+                contentsMenuOpened = true;
                 checkOpen(contents);
             }
             else {
-                menuOpened = false;
+                contentsMenuOpened = false;
             }
         }
     };
@@ -265,34 +270,34 @@ public class FilterActionButtonHandler extends Activity{
         @Override
         public void onMenuToggle(boolean opened) {
             if (opened) {
-                menuOpened = true;
+                ratingsMenuOpened = true;
                 checkOpen(ratings);
             }
             else {
-                menuOpened = false;
+                ratingsMenuOpened = false;
             }
         }
     };
 
     public void closeAll() {
         if (types.isOpened()) {
-            menuOpened = false;
+            typeMenuOpened = false;
             types.close(true);
         }
         else if (distances.isOpened()) {
-            menuOpened = false;
+            distantsMenuOpened = false;
             distances.close(true);
         }
         else if (prices.isOpened()) {
-            menuOpened = false;
+            pricesMenuOpened = false;
             prices.close(true);
         }
         else if (contents.isOpened()) {
-            menuOpened = false;
+            contentsMenuOpened = false;
             contents.close(true);
         }
         else if (ratings.isOpened()) {
-            menuOpened = false;
+            ratingsMenuOpened = false;
             ratings.close(true);
         }
     }

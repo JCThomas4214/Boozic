@@ -237,7 +237,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<RecyclerView.Vie
 
         // create pie data
         PieDataSet dataSet = new PieDataSet(yVals, "");
-        dataSet.setSliceSpace(1);
+        dataSet.setSliceSpace(0);
         dataSet.setSelectionShift(0);
 
         // add colors
