@@ -367,6 +367,10 @@ public class FilterActionButtonHandler extends Activity{
                     return checkclick(button, !tenmicheck);
                 }
                 else if ((button == custommi)) {
+                    if (!custommicheck) {
+                        distances.close(true);
+                        //open custom mile dialog
+                    }
                     custommicheck = !custommicheck;
                     return checkclick(button, !custommicheck);
                 }
@@ -393,6 +397,10 @@ public class FilterActionButtonHandler extends Activity{
                     return checkclick(button, !lowhipricecheck);
                 }
                 else if ((button == pricerange)) {
+                    if (!pricerangecheck) {
+                        prices.close(true);
+                        //open price range dialog
+                    }
                     pricerangecheck = !pricerangecheck;
                     return checkclick(button, !pricerangecheck);
                 }
@@ -419,6 +427,10 @@ public class FilterActionButtonHandler extends Activity{
                     return checkclick(button, !lowhicontentcheck);
                 }
                 else if ((button == contentrange)) {
+                    if (!contentrangecheck) {
+                        contents.close(true);
+                        //open content range dialog
+                    }
                     contentrangecheck = !contentrangecheck;
                     return checkclick(button, !contentrangecheck);
                 }
@@ -445,6 +457,10 @@ public class FilterActionButtonHandler extends Activity{
                     return checkclick(button, !lowhiratingcheck);
                 }
                 else if ((button == ratingrange)) {
+                    if (!ratingrangecheck) {
+                        ratings.close(true);
+                        //open rating range dialog
+                    }
                     ratingrangecheck = !ratingrangecheck;
                     return checkclick(button, !ratingrangecheck);
                 }
@@ -461,6 +477,18 @@ public class FilterActionButtonHandler extends Activity{
         }
         else {
             button.setColorNormal(primaryColor);
+            if (button == custommi) {
+                distances.close(true);
+            }
+            else if (button == pricerange) {
+                prices.close(true);
+            }
+            else if (button == contentrange) {
+                contents.close(true);
+            }
+            else if (button == ratingrange) {
+                ratings.close(true);
+            }
             return true;
         }
     }
