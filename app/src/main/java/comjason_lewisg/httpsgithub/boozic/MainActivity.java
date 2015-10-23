@@ -312,6 +312,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
         //Create instance for Filter buttons
         FBhandle = new FilterActionButtonHandler(this, primaryColor, primaryColorDark, accentColor, accentColorDark);
+        FBhandle.initiateSharedPref(mPrefs);
 
         checkPlayServices();
     }
@@ -331,6 +332,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         ed.putInt("PRIMARY_DARK_STATE", primaryColorDark);
         ed.putInt("ACCENT_STATE", accentColor);
         ed.putInt("ACCENT_DARK_STATE", accentColorDark);
+
+        FBhandle.saveSharedPref(ed);
         //apply changes
         ed.apply();
     }

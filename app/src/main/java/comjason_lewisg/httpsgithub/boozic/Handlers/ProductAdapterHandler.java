@@ -34,7 +34,7 @@ import comjason_lewisg.httpsgithub.boozic.R;
 
 public class ProductAdapterHandler extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ProductStorageModel item;
-    AppCompatActivity m;
+    ProductActivity m;
 
     View main;
 
@@ -107,7 +107,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     // Provide a suitable constructor (depends on the kind of data set)
-    public ProductAdapterHandler(ProductStorageModel modeldata, AppCompatActivity m) {
+    public ProductAdapterHandler(ProductStorageModel modeldata, ProductActivity m) {
         if (modeldata == null) {
             throw new IllegalArgumentException("modelData must not be null");
         }
@@ -193,9 +193,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<RecyclerView.Vie
 
     public void setChart(ProductStorageModel model) {
         DecimalFormat avgFormat = new DecimalFormat("0.0");
-        //float yData[] = {model.rating5, model.rating4, model.rating3, model.rating2, model.rating1};
         float yData[] = {model.rating[0], model.rating[1], model.rating[2], model.rating[3], model.rating[4]};
-
 
         // config the pie chart
         ratingChart.setUsePercentValues(true);
@@ -239,7 +237,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<RecyclerView.Vie
 
         // create pie data
         PieDataSet dataSet = new PieDataSet(yVals, "");
-        dataSet.setSliceSpace(3);
+        dataSet.setSliceSpace(1);
         dataSet.setSelectionShift(0);
 
         // add colors

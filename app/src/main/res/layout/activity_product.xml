@@ -50,7 +50,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="0dp"
-        android:overScrollMode="always"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <com.quinny898.library.persistentsearch.SearchBox

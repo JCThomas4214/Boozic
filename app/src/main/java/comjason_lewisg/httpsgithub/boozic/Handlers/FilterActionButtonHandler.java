@@ -1,6 +1,7 @@
 package comjason_lewisg.httpsgithub.boozic.Handlers;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.view.View;
 
@@ -16,28 +17,61 @@ public class FilterActionButtonHandler extends Activity{
     private int primaryColor;
     private MainActivity main;
 
+    static final boolean WINES = true;
+    static final boolean BEERS = true;
+    static final boolean LIQUORS = true;
+    static final boolean TWOMI = true;
+    static final boolean FIVEMI = false;
+    static final boolean TENMI = false;
+    static final boolean CUSTOMMI = false;
+    static final int CUSTOMMI_LOW = 0;
+    static final int CUSTOMMI_HIGH = 10;
+    static final boolean HILOW_PRICE = false;
+    static final boolean LOWHI_PRICE = true;
+    static final boolean PRICE_RANGE = false;
+    static final int PRICE_RANGE_LOW = 0;
+    static final int PRICE_RANGE_HIGH = 30;
+    static final boolean HILOW_CONTENT = true;
+    static final boolean LOWHI_CONTENT = false;
+    static final boolean CONTENT_RANGE = false;
+    static final int CONTENT_RANGE_LOW = 0;
+    static final int CONTENT_RANGE_HIGH = 60;
+    static final boolean HILOW_RATING = true;
+    static final boolean LOWHI_RATING = false;
+    static final boolean RATING_RANGE = false;
+    static final int RATING_RANGE_LOW = 0;
+    static final int RATING_RANGE_HIGH = 5;
+
     public FloatingActionMenu types;
     public FloatingActionMenu distances;
     public FloatingActionMenu prices;
     public FloatingActionMenu contents;
     public FloatingActionMenu ratings;
 
-    public boolean winescheck = true;
-    public boolean beerscheck = true;
-    public boolean liquorscheck = true;
-    public boolean twomicheck = true;
-    public boolean fivemicheck = false;
-    public boolean tenmicheck = false;
-    public boolean custommicheck = false;
-    public boolean hilowpricecheck = false;
-    public boolean lowhipricecheck = true;
-    public boolean pricerangecheck = false;
-    public boolean hilowcontentcheck = true;
-    public boolean lowhicontentcheck = false;
-    public boolean contentrangecheck = false;
-    public boolean hilowratingcheck = true;
-    public boolean lowhiratingcheck = false;
-    public boolean ratingrangecheck = false;
+    public boolean winescheck;
+    public boolean beerscheck;
+    public boolean liquorscheck;
+    public boolean twomicheck;
+    public boolean fivemicheck;
+    public boolean tenmicheck;
+    public boolean custommicheck;
+    public int custommi_low;
+    public int custommi_high;
+    public boolean hilowpricecheck;
+    public boolean lowhipricecheck;
+    public boolean pricerangecheck;
+    public int pricerange_low;
+    public int pricerange_high;
+    public boolean hilowcontentcheck;
+    public boolean lowhicontentcheck;
+    public boolean contentrangecheck;
+    public int contentrange_low;
+    public int contentrange_high;
+    public boolean hilowratingcheck;
+    public boolean lowhiratingcheck;
+    public boolean ratingrangecheck;
+    public int ratingrange_low;
+    public int ratingrange_high;
 
     public FloatingActionButton wines;
     public FloatingActionButton beers;
@@ -61,7 +95,6 @@ public class FilterActionButtonHandler extends Activity{
     public FilterActionButtonHandler(MainActivity m, int primaryColor, int primaryColorDark, int accentColor, int accentColorDark) {
         setActivity(m);
         setColor(primaryColor, primaryColorDark, accentColor, accentColorDark);
-        setFilterButtons();
     }
 
     public void setActivity(MainActivity m) {
@@ -499,5 +532,66 @@ public class FilterActionButtonHandler extends Activity{
                 ratings.showMenuButton(true);
             }
         }, 650);
+    }
+
+    public void initiateSharedPref(SharedPreferences mPrefs) {
+        //when resume, pull saves states for each button
+        winescheck = mPrefs.getBoolean("WINES", WINES);
+        beerscheck = mPrefs.getBoolean("BEERS", BEERS);
+        liquorscheck = mPrefs.getBoolean("LIQUORS", LIQUORS);
+        twomicheck = mPrefs.getBoolean("TWOMI", TWOMI);
+        fivemicheck = mPrefs.getBoolean("FIVEMI", FIVEMI);
+        tenmicheck = mPrefs.getBoolean("TENMI", TENMI);
+        custommicheck = mPrefs.getBoolean("CUSTOMMI", CUSTOMMI);
+        hilowpricecheck = mPrefs.getBoolean("HILOW_PRICE", HILOW_PRICE);
+        lowhipricecheck = mPrefs.getBoolean("LOWHI_PRICE", LOWHI_PRICE);
+        pricerangecheck = mPrefs.getBoolean("PRICE_RANGE", PRICE_RANGE);
+        hilowcontentcheck = mPrefs.getBoolean("HILOW_CONTENT", HILOW_CONTENT);
+        lowhicontentcheck = mPrefs.getBoolean("LOWHI_CONTENT", LOWHI_CONTENT);
+        contentrangecheck = mPrefs.getBoolean("CONTENT_RANGE", CONTENT_RANGE);
+        hilowratingcheck = mPrefs.getBoolean("HILOW_RATING", HILOW_RATING);
+        lowhiratingcheck = mPrefs.getBoolean("LOWHI_RATING", LOWHI_RATING);
+        ratingrangecheck = mPrefs.getBoolean("RATING_RANGE", RATING_RANGE);
+
+        //store the previous state colors into their variables
+        custommi_low = mPrefs.getInt("CUSTOMMI_LOW", CUSTOMMI_LOW);
+        custommi_high = mPrefs.getInt("CUSTOMMI_HIGH", CUSTOMMI_HIGH);
+        pricerange_low = mPrefs.getInt("PRICE_RANGE_LOW", PRICE_RANGE_LOW);
+        pricerange_high = mPrefs.getInt("PRICE_RANGE_HIGH", PRICE_RANGE_HIGH);
+        contentrange_low = mPrefs.getInt("CONTENT_RANGE_LOW", CONTENT_RANGE_LOW);
+        contentrange_high = mPrefs.getInt("CONTENT_RANGE_HIGH", CONTENT_RANGE_HIGH);
+        ratingrange_low = mPrefs.getInt("RATING_RANGE_LOW", RATING_RANGE_LOW);
+        ratingrange_high = mPrefs.getInt("RATING_RANGE_HIGH", RATING_RANGE_HIGH);
+
+        setFilterButtons();
+    }
+
+    public void saveSharedPref(SharedPreferences.Editor ed) {
+        //store all color states into universal sharedpreference
+        ed.putBoolean("WINES", winescheck);
+        ed.putBoolean("BEERS", beerscheck);
+        ed.putBoolean("LIQUORS", liquorscheck);
+        ed.putBoolean("TWOMI", twomicheck);
+        ed.putBoolean("FIVEMI", fivemicheck);
+        ed.putBoolean("TENMI", tenmicheck);
+        ed.putBoolean("CUSTOMMI", custommicheck);
+        ed.putBoolean("HILOW_PRICE", hilowpricecheck);
+        ed.putBoolean("LOWHI_PRICE", lowhipricecheck);
+        ed.putBoolean("PRICE_RANGE", pricerangecheck);
+        ed.putBoolean("HILOW_CONTENT", hilowcontentcheck);
+        ed.putBoolean("LOWHI_CONTENT", lowhicontentcheck);
+        ed.putBoolean("CONTENT_RANGE", contentrangecheck);
+        ed.putBoolean("HILOW_RATING", hilowratingcheck);
+        ed.putBoolean("LOWHI_RATING", lowhiratingcheck);
+        ed.putBoolean("RATING_RANGE", ratingrangecheck);
+
+        ed.putInt("CUSTOMMI_LOW", custommi_low);
+        ed.putInt("CUSTOMMI_HIGH", custommi_high);
+        ed.putInt("PRICE_RANGE_LOW", pricerange_low);
+        ed.putInt("PRICE_RANGE_HIGH", pricerange_high);
+        ed.putInt("CONTENT_RANGE_LOW", contentrange_low);
+        ed.putInt("CONTENT_RANGE_HIGH", contentrange_high);
+        ed.putInt("RATING_RANGE_LOW", ratingrange_low);
+        ed.putInt("RATING_RANGE_HIGH", ratingrange_high);
     }
 }
