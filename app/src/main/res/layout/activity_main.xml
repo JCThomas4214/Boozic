@@ -292,7 +292,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/star"
-                        app:fab_label="10 Miles"
+                        app:fab_label="10mi"
                         app:fab_size="mini"
                         app:fab_colorNormal="@color/ColorAccent"
                         app:fab_colorPressed="@color/ColorAccentDark"/>
@@ -302,7 +302,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/star"
-                        app:fab_label="5 miles"
+                        app:fab_label="5mi"
                         app:fab_size="mini"
                         app:fab_colorNormal="@color/ColorAccent"
                         app:fab_colorPressed="@color/ColorAccentDark"/>
@@ -312,7 +312,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/star"
-                        app:fab_label="2 Miles"
+                        app:fab_label="2mi"
                         app:fab_size="mini"
                         app:fab_colorNormal="@color/ColorAccent"
                         app:fab_colorPressed="@color/ColorAccentDark"/>

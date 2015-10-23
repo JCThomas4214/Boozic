@@ -399,6 +399,7 @@ public class FilterActionButtonHandler extends Activity{
                 else if ((button == pricerange)) {
                     if (!pricerangecheck) {
                         prices.close(true);
+                        main.callRangeDialog("Choose Price Range", "$");
                         //open price range dialog
                     }
                     pricerangecheck = !pricerangecheck;
@@ -429,6 +430,7 @@ public class FilterActionButtonHandler extends Activity{
                 else if ((button == contentrange)) {
                     if (!contentrangecheck) {
                         contents.close(true);
+                        main.callRangeDialog("Choose ABV Range", "%");
                         //open content range dialog
                     }
                     contentrangecheck = !contentrangecheck;
@@ -459,6 +461,7 @@ public class FilterActionButtonHandler extends Activity{
                 else if ((button == ratingrange)) {
                     if (!ratingrangecheck) {
                         ratings.close(true);
+                        main.callRangeDialog("Choose Rating Range", "avg");
                         //open rating range dialog
                     }
                     ratingrangecheck = !ratingrangecheck;
@@ -482,12 +485,15 @@ public class FilterActionButtonHandler extends Activity{
             }
             else if (button == pricerange) {
                 prices.close(true);
+                main.callRangeDialog("Choose Price Range", "$");
             }
             else if (button == contentrange) {
                 contents.close(true);
+                main.callRangeDialog("Choose ABV Range", "%");
             }
             else if (button == ratingrange) {
                 ratings.close(true);
+                main.callRangeDialog("Choose Rating Range", "avg");
             }
             return true;
         }

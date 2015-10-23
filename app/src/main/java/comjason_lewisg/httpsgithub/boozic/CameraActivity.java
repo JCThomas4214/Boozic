@@ -106,7 +106,7 @@ public class CameraActivity extends Activity implements ZBarScannerView.ResultHa
     public void onResume() {
         super.onResume();
         //pull the shared preference
-        mPrefs = getSharedPreferences("COLOR_STATE", MODE_MULTI_PROCESS);
+        mPrefs = getSharedPreferences("COLOR_STATE", MODE_PRIVATE);
         //when resume, pull saves states for each button
         mFlash = mPrefs.getInt("FLASH_STATE", FLASH_STATE);
         mAutoFocus = mPrefs.getInt("AUTO_FOCUS_STATE", AUTO_FOCUS_STATE);

@@ -166,6 +166,10 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     }
     public int getColorPrimary() { return primaryColor; }
 
+    public void callRangeDialog(String title, String units) {
+        DHandle.OpenRangeDialog(this, getColorAccentId(), title, units);
+    }
+
     //Data Handlers//
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {

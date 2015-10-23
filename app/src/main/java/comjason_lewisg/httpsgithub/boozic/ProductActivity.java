@@ -76,7 +76,7 @@ public class ProductActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPrefs = getSharedPreferences("COLOR_STATE", MODE_MULTI_PROCESS);
+        mPrefs = getSharedPreferences("COLOR_STATE", MODE_PRIVATE);
         //when resume, pull saves states for each button
         int colorPrimary_id = mPrefs.getInt("COLOR_STATE", COLOR_STATE);
         switch (colorPrimary_id) {
@@ -110,12 +110,8 @@ public class ProductActivity extends AppCompatActivity {
 
         //connect to search bar and create new search handler
         searchBarHandler = new ProductSearchBarHandler(this, toolbar);
-
-        ImageView img = (ImageView) findViewById(R.id.headerimg);
         SearchBox sb = (SearchBox) findViewById(R.id.product_searchbox);
-        toolbar.setY(getStatusBarHeight() + 75);
         sb.setY(getStatusBarHeight());
-        img.setY(getStatusBarHeight());
 
         //set recyclerview for product layout
         mRecyclerView = (RecyclerView) findViewById(R.id.product_rv);
@@ -213,8 +209,7 @@ public class ProductActivity extends AppCompatActivity {
         ctl.setStatusBarScrimColor(primaryColorDark);
 
         getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
     }
 }
