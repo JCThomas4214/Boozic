@@ -27,9 +27,9 @@ import java.util.Queue;
 
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
-import io.codetail.animation.ReverseInterpolator;
-import io.codetail.animation.SupportAnimator;
-import io.codetail.animation.ViewAnimationUtils;
+import io.codetailps.animation.ReverseInterpolator;
+import io.codetailps.animation.SupportAnimator;
+import io.codetailps.animation.ViewAnimationUtils;
 
 public class SearchBarHandler {
 
@@ -121,7 +121,7 @@ public class SearchBarHandler {
         }
 
         @Override
-        public void onSearchTermChanged() {
+        public void onSearchTermChanged(String term) {
             // React to the search term changing
             // Called after it has updated results
         }
@@ -137,6 +137,11 @@ public class SearchBarHandler {
             //SearchSuggestHandler handles suggest dropdown
             //Only allow 4 previous searches to be shown
             //search.setSearchables(searchSuggestHandler.addSuggest(searchTerm, m));
+        }
+
+        @Override
+        public void onResultClick(SearchResult result) {
+            //React to a result being clicked
         }
 
         @Override
