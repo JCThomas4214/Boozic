@@ -1,7 +1,6 @@
 package comjason_lewisg.httpsgithub.boozic.Handlers;
 
 
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.text.InputType;
 import android.util.Log;
@@ -25,7 +24,7 @@ public class DialogHandler {
         //Create the MaterialDialog object to start initiallizing attributes
         MaterialDialog dialog = new MaterialDialog.Builder(m)
                 .title("Send us feedback")
-                .inputMaxLength(400, primarycolor)
+                .inputMaxLength(250, primarycolor)
                 .input("What can we improve upon?", "", new MaterialDialog.InputCallback() {
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         if (input.length() == 0) {
@@ -100,26 +99,47 @@ public class DialogHandler {
 
         TextView low_curr = (TextView) view.findViewById(R.id.range_low_currency);
         TextView low_units = (TextView) view.findViewById(R.id.range_low_units);
+        EditText low_input = (EditText) view.findViewById(R.id.range_low_input);
 
         TextView high_curr = (TextView) view.findViewById(R.id.range_high_currency);
         TextView high_units = (TextView) view.findViewById(R.id.range_high_units);
+        EditText high_input = (EditText) view.findViewById(R.id.range_high_input);
 
-        setUnits(units, low_curr, low_units, high_curr, high_units);
+        setUnits(units, low_curr, low_units, low_input, high_curr, high_units, high_input, m);
 
         dialog.show();
     }
 
-    public void OpenCustomMileDialog(final MainActivity m, final int colorAccent_id, String units) {
+    public void OpenCustomMileDialog(final MainActivity m, final int colorAccent_id) {
         //Create the MaterialDialog object to start initiallizing attributes
         MaterialDialog dialog = new MaterialDialog.Builder(m)
-                .title("Input Custom Mile Radius")
-                .customView(R.layout.custom_range, true)
+                .title("Custom Mile Radius")
+                .customView(R.layout.custom_mi, true)
                 .positiveText("SET")
                 .negativeText("CANCEL")
                 .widgetColorRes(m.getResources().getIdentifier("comjason_lewisg.httpsgithub.boozic:color/" + searchForRes(colorAccent_id), null, null))
                 .positiveColorRes(m.getResources().getIdentifier("comjason_lewisg.httpsgithub.boozic:color/" + searchForRes(colorAccent_id), null, null))
-                .negativeColorRes(m.getResources().getIdentifier("comjason_lewisg.httpsgithub.boozic:color/"+searchForRes(colorAccent_id), null, null))
+                .negativeColorRes(m.getResources().getIdentifier("comjason_lewisg.httpsgithub.boozic:color/" + searchForRes(colorAccent_id), null, null))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        View view = dialog.getCustomView();
+
+                        EditText miles = (EditText) view.findViewById(R.id.custom_mi_input);
+                        String radius = miles.getText().toString();
+
+                        checkDialog(m, radius);
+                    }
+                })
                 .build();
+
+        View view = dialog.getCustomView();
+
+        EditText miles = (EditText) view.findViewById(R.id.custom_mi_input);
+        String radius = miles.getText().toString();
+
+        setMiles(m, miles);
 
         dialog.show();
     }
@@ -146,26 +166,59 @@ public class DialogHandler {
         return str;
     }
 
-    private void setUnits(String units, TextView low_curr, TextView low_units, TextView high_curr, TextView high_units) {
+    private void setMiles(MainActivity m, EditText miles) {
+        miles.setText(m.FBhandle.custommi_miles + "");
+    }
+
+    private void setUnits(String units, TextView low_curr, TextView low_units, EditText low_input, TextView high_curr,
+                          TextView high_units, EditText high_input, MainActivity m) {
         switch (units) {
             case "$":
                 low_curr.setVisibility(View.VISIBLE);
                 low_units.setVisibility(View.GONE);
                 high_curr.setVisibility(View.VISIBLE);
                 high_units.setVisibility(View.GONE);
+
+                low_input.setText(m.FBhandle.pricerange_low + "");
+                high_input.setText(m.FBhandle.pricerange_high + "");
+
+                break;
+            case "%":
+                low_input.setText(m.FBhandle.contentrange_low + "");
+                high_input.setText(m.FBhandle.contentrange_high + "");
                 break;
             case "avg":
                 low_units.setText("avg");
                 high_units.setText("avg");
+
+                low_input.setText(m.FBhandle.ratingrange_low + "");
+                high_input.setText(m.FBhandle.ratingrange_high + "");
                 break;
         }
+    }
+
+    private void checkDialog(MainActivity m, String radius) {
+
+        int radiuss = changeToInt(radius);
+
+        //set the filterbutton model's low/high variables
+        m.FBhandle.setCustommi(radiuss);
     }
 
     private void checkDialog(MainActivity m, String units, String low, String high) {
 
         int loww = changeToInt(low);
         int highh = changeToInt(high);
+        int tmp;
 
+        //if user fucks up the input...
+        if (highh < loww) {
+            tmp = loww;
+            loww = highh;
+            highh = tmp;
+        }
+
+        //set the filterbutton model's low/high variables
         switch (units) {
             case "$":
                 m.FBhandle.setPriceRange(loww, highh);
@@ -180,9 +233,7 @@ public class DialogHandler {
     }
 
     private int changeToInt(String str) {
-
         int tmp = Integer.parseInt(str);
-
         return tmp;
     }
 }

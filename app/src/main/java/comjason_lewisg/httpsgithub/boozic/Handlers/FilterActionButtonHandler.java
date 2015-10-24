@@ -30,8 +30,7 @@ public class FilterActionButtonHandler extends Activity{
     static final boolean FIVEMI = false;
     static final boolean TENMI = false;
     static final boolean CUSTOMMI = false;
-    static final int CUSTOMMI_LOW = 0;
-    static final int CUSTOMMI_HIGH = 10;
+    static final int CUSTOMMI_MILES = 15;
     static final boolean HILOW_PRICE = false;
     static final boolean LOWHI_PRICE = true;
     static final boolean PRICE_RANGE = false;
@@ -48,6 +47,12 @@ public class FilterActionButtonHandler extends Activity{
     static final int RATING_RANGE_LOW = 0;
     static final int RATING_RANGE_HIGH = 5;
 
+    static final boolean TYPESMENUOPENED = false;
+    static final boolean DISTANCESMENUOPENED = false;
+    static final boolean PRICESMENUOPENED = false;
+    static final boolean CONTENTSMENUOPENED = false;
+    static final boolean RATINGSMENUOPENED = false;
+
     public FloatingActionMenu types;
     public FloatingActionMenu distances;
     public FloatingActionMenu prices;
@@ -61,8 +66,7 @@ public class FilterActionButtonHandler extends Activity{
     public boolean fivemicheck;
     public boolean tenmicheck;
     public boolean custommicheck;
-    public int custommi_low;
-    public int custommi_high;
+    public int custommi_miles;
     public boolean hilowpricecheck;
     public boolean lowhipricecheck;
     public boolean pricerangecheck;
@@ -371,6 +375,7 @@ public class FilterActionButtonHandler extends Activity{
                     custommi.setLabelVisibility(View.GONE);
                     if (!custommicheck) {
                         distances.close(true);
+                        main.callCustommiDialog();
                         //open custom mile dialog
                     }
                     custommicheck = !custommicheck;
@@ -490,6 +495,7 @@ public class FilterActionButtonHandler extends Activity{
             button.setColorNormal(primaryColor);
             if (button == custommi) {
                 distances.close(true);
+                main.callCustommiDialog();
             }
             else if (button == pricerange) {
                 prices.close(true);
@@ -508,6 +514,11 @@ public class FilterActionButtonHandler extends Activity{
     }
 
     public void setFilterButtons() {
+        custommi.setLabelVisibility(View.GONE);
+        pricerange.setLabelVisibility(View.GONE);
+        contentrange.setLabelVisibility(View.GONE);
+        ratingrange.setLabelVisibility(View.GONE);
+
         if (winescheck) {
             wines.setColorNormal(primaryColor);
         }
@@ -529,7 +540,7 @@ public class FilterActionButtonHandler extends Activity{
         if (custommicheck) {
             custommi.setColorNormal(primaryColor);
             custommi.setLabelVisibility(View.VISIBLE);
-            custommi.setLabelText(custommi_low + " to " + custommi_high);
+            custommi.setLabelText(custommi_miles + "mi");
         }
         if (hilowpricecheck) {
             hilowprice.setColorNormal(primaryColor);
@@ -540,7 +551,7 @@ public class FilterActionButtonHandler extends Activity{
         if (pricerangecheck) {
             pricerange.setColorNormal(primaryColor);
             pricerange.setLabelVisibility(View.VISIBLE);
-            pricerange.setLabelText(pricerange_low + " to " + pricerange_high);
+            pricerange.setLabelText("$" + pricerange_low + " to $" + pricerange_high);
         }
         if (hilowcontentcheck) {
             hilowcontent.setColorNormal(primaryColor);
@@ -551,7 +562,7 @@ public class FilterActionButtonHandler extends Activity{
         if (contentrangecheck) {
             contentrange.setColorNormal(primaryColor);
             contentrange.setLabelVisibility(View.VISIBLE);
-            contentrange.setLabelText(contentrange_low + " to " + contentrange_high);
+            contentrange.setLabelText(contentrange_low + "% to " + contentrange_high + "%");
         }
         if (hilowratingcheck) {
             hilowrating.setColorNormal(primaryColor);
@@ -629,9 +640,9 @@ public class FilterActionButtonHandler extends Activity{
         int segments = tbwidth / 5;
 
         types.setX(25);
-        distances.setX(25 + segments);
+        distances.setX(25 + segments - 5);
         prices.setX(25 + 2 * segments);
-        contents.setX(25 + 3 * segments);
+        contents.setX(-25 - segments + 15);
         ratings.setX(-25);
     }
 
@@ -696,15 +707,19 @@ public class FilterActionButtonHandler extends Activity{
         lowhiratingcheck = mPrefs.getBoolean("LOWHI_RATING", LOWHI_RATING);
         ratingrangecheck = mPrefs.getBoolean("RATING_RANGE", RATING_RANGE);
 
-        //store the previous state colors into their variables
-        custommi_low = mPrefs.getInt("CUSTOMMI_LOW", CUSTOMMI_LOW);
-        custommi_high = mPrefs.getInt("CUSTOMMI_HIGH", CUSTOMMI_HIGH);
+        custommi_miles = mPrefs.getInt("CUSTOMMI_MILES", CUSTOMMI_MILES);
         pricerange_low = mPrefs.getInt("PRICE_RANGE_LOW", PRICE_RANGE_LOW);
         pricerange_high = mPrefs.getInt("PRICE_RANGE_HIGH", PRICE_RANGE_HIGH);
         contentrange_low = mPrefs.getInt("CONTENT_RANGE_LOW", CONTENT_RANGE_LOW);
         contentrange_high = mPrefs.getInt("CONTENT_RANGE_HIGH", CONTENT_RANGE_HIGH);
         ratingrange_low = mPrefs.getInt("RATING_RANGE_LOW", RATING_RANGE_LOW);
         ratingrange_high = mPrefs.getInt("RATING_RANGE_HIGH", RATING_RANGE_HIGH);
+
+        typeMenuOpened = mPrefs.getBoolean("TYPESMENUOPENED", TYPESMENUOPENED);
+        distantsMenuOpened = mPrefs.getBoolean("DISTANCESMENUOPENED", DISTANCESMENUOPENED);
+        pricesMenuOpened = mPrefs.getBoolean("PRICESMENUOPENED", PRICESMENUOPENED);
+        contentsMenuOpened = mPrefs.getBoolean("CONTENTSMENUOPENED", CONTENTSMENUOPENED);
+        ratingsMenuOpened = mPrefs.getBoolean("RATINGSMENUOPENED", RATINGSMENUOPENED);
 
         setFilterButtons();
     }
@@ -728,20 +743,24 @@ public class FilterActionButtonHandler extends Activity{
         ed.putBoolean("LOWHI_RATING", lowhiratingcheck);
         ed.putBoolean("RATING_RANGE", ratingrangecheck);
 
-        ed.putInt("CUSTOMMI_LOW", custommi_low);
-        ed.putInt("CUSTOMMI_HIGH", custommi_high);
+        ed.putInt("CUSTOMMI_MILES", custommi_miles);
         ed.putInt("PRICE_RANGE_LOW", pricerange_low);
         ed.putInt("PRICE_RANGE_HIGH", pricerange_high);
         ed.putInt("CONTENT_RANGE_LOW", contentrange_low);
         ed.putInt("CONTENT_RANGE_HIGH", contentrange_high);
         ed.putInt("RATING_RANGE_LOW", ratingrange_low);
         ed.putInt("RATING_RANGE_HIGH", ratingrange_high);
+
+        ed.putBoolean("TYPESMENUOPENED", typeMenuOpened);
+        ed.putBoolean("DISTANCESMENUOPENED", distantsMenuOpened);
+        ed.putBoolean("PRICESMENUOPENED", pricesMenuOpened);
+        ed.putBoolean("CONTENTSMENUOPENED", contentsMenuOpened);
+        ed.putBoolean("RATINGSMENUOPENED", ratingsMenuOpened);
     }
 
-    public void setCustommi(int low, int high) {
-        custommi_low = low;
-        custommi_high = high;
-        custommi.setLabelText(low + " to " + high);
+    public void setCustommi(int radius) {
+        custommi_miles = radius;
+        custommi.setLabelText(radius + "mi");
         custommi.setLabelVisibility(View.VISIBLE);
     }
 
@@ -751,17 +770,17 @@ public class FilterActionButtonHandler extends Activity{
 
         pricerange_low = low;
         pricerange_high = high;
-        pricerange.setLabelText(low + " to " + high);
+        pricerange.setLabelText("$" + low + " to $" + high);
         pricerange.setLabelVisibility(View.VISIBLE);
     }
 
     public void setContentRange(int low, int high) {
 
-        Log.v("DATA", "The low and high for setContentRange is " + low + " and " + high);
+        Log.v("DATA", "The low and high for setContentRange is " + low + "% and " + high);
 
         contentrange_low = low;
         contentrange_high = high;
-        contentrange.setLabelText(low + " to " + high);
+        contentrange.setLabelText(low + "% to " + high + "%");
         contentrange.setLabelVisibility(View.VISIBLE);
     }
 

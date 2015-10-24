@@ -171,6 +171,10 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         DHandle.OpenRangeDialog(this, getColorAccentId(), title, units);
     }
 
+    public void callCustommiDialog() {
+        DHandle.OpenCustomMileDialog(this, getColorAccentId());
+    }
+
     //Data Handlers//
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
