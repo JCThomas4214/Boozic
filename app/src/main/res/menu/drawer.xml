@@ -33,27 +33,30 @@
 
     <group
         android:id="@+id/group2"
-        android:checkableBehavior="single">
+        android:checkableBehavior="none">
 
         <item
             android:id="@+id/settings"
             android:checkable="false"
+            android:checked="false"
             android:title="@string/action_settings" />
-
 
         <item
             android:id="@+id/about"
             android:checkable="false"
+            android:checked="false"
             android:title="@string/action_bio" />
 
         <item
             android:id="@+id/feedback"
             android:checkable="false"
+            android:checked="false"
             android:title="@string/action_feedback" />
 
         <item
             android:id="@+id/legal"
             android:checkable="false"
+            android:checked="false"
             android:title="@string/action_legal" />
 
 

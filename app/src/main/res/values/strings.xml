@@ -7,9 +7,7 @@
     <string name="camera_active">The Camera is active</string>
     <string name="title_activity_camera">CameraActivity</string>
 
-    <string name="hello_world">Hello world!</string>
-
-    <string name="action_lists">Top Tens</string>
+    <string name="action_lists">Product Lists</string>
     <string name="action_heart">Favorites</string>
     <string name="action_theme">Theme</string>
     <string name="action_cash">Spending</string>

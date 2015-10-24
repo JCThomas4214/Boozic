@@ -351,6 +351,7 @@ public class FilterActionButtonHandler extends Activity{
                     return checkclick(button, false);
                 }
                 else if ((custommicheck) && (button != custommi)) {
+                    custommi.setLabelVisibility(View.GONE);
                     custommicheck = checkclick(custommi, true);
                     return checkclick(button, false);
                 }
@@ -367,6 +368,7 @@ public class FilterActionButtonHandler extends Activity{
                     return checkclick(button, !tenmicheck);
                 }
                 else if ((button == custommi)) {
+                    custommi.setLabelVisibility(View.GONE);
                     if (!custommicheck) {
                         distances.close(true);
                         //open custom mile dialog
@@ -385,6 +387,7 @@ public class FilterActionButtonHandler extends Activity{
                     return checkclick(button, false);
                 }
                 else if ((pricerangecheck) && (button != pricerange)) {
+                    pricerange.setLabelVisibility(View.GONE);
                     pricerangecheck = checkclick(pricerange, true);
                     return checkclick(button, false);
                 }
@@ -397,6 +400,7 @@ public class FilterActionButtonHandler extends Activity{
                     return checkclick(button, !lowhipricecheck);
                 }
                 else if ((button == pricerange)) {
+                    pricerange.setLabelVisibility(View.GONE);
                     if (!pricerangecheck) {
                         prices.close(true);
                         main.callRangeDialog("Choose Price Range", "$");
@@ -416,6 +420,7 @@ public class FilterActionButtonHandler extends Activity{
                     return checkclick(button, false);
                 }
                 else if ((contentrangecheck) && (button != contentrange)) {
+                    contentrange.setLabelVisibility(View.GONE);
                     contentrangecheck = checkclick(contentrange, true);
                     return checkclick(button, false);
                 }
@@ -428,6 +433,7 @@ public class FilterActionButtonHandler extends Activity{
                     return checkclick(button, !lowhicontentcheck);
                 }
                 else if ((button == contentrange)) {
+                    contentrange.setLabelVisibility(View.GONE);
                     if (!contentrangecheck) {
                         contents.close(true);
                         main.callRangeDialog("Choose ABV Range", "%");
@@ -447,6 +453,7 @@ public class FilterActionButtonHandler extends Activity{
                     return checkclick(button, false);
                 }
                 else if ((ratingrangecheck) && (button != ratingrange)) {
+                    ratingrange.setLabelVisibility(View.GONE);
                     ratingrangecheck = checkclick(ratingrange, true);
                     return checkclick(button, false);
                 }
@@ -459,6 +466,7 @@ public class FilterActionButtonHandler extends Activity{
                     return checkclick(button, !lowhiratingcheck);
                 }
                 else if ((button == ratingrange)) {
+                    ratingrange.setLabelVisibility(View.GONE);
                     if (!ratingrangecheck) {
                         ratings.close(true);
                         main.callRangeDialog("Choose Rating Range", "avg");
@@ -520,6 +528,8 @@ public class FilterActionButtonHandler extends Activity{
         }
         if (custommicheck) {
             custommi.setColorNormal(primaryColor);
+            custommi.setLabelVisibility(View.VISIBLE);
+            custommi.setLabelText(custommi_low + " to " + custommi_high);
         }
         if (hilowpricecheck) {
             hilowprice.setColorNormal(primaryColor);
@@ -529,6 +539,8 @@ public class FilterActionButtonHandler extends Activity{
         }
         if (pricerangecheck) {
             pricerange.setColorNormal(primaryColor);
+            pricerange.setLabelVisibility(View.VISIBLE);
+            pricerange.setLabelText(pricerange_low + " to " + pricerange_high);
         }
         if (hilowcontentcheck) {
             hilowcontent.setColorNormal(primaryColor);
@@ -538,6 +550,8 @@ public class FilterActionButtonHandler extends Activity{
         }
         if (contentrangecheck) {
             contentrange.setColorNormal(primaryColor);
+            contentrange.setLabelVisibility(View.VISIBLE);
+            contentrange.setLabelText(contentrange_low + " to " + contentrange_high);
         }
         if (hilowratingcheck) {
             hilowrating.setColorNormal(primaryColor);
@@ -547,6 +561,8 @@ public class FilterActionButtonHandler extends Activity{
         }
         if (ratingrangecheck) {
             ratingrange.setColorNormal(primaryColor);
+            ratingrange.setLabelVisibility(View.VISIBLE);
+            ratingrange.setLabelText(ratingrange_low + " to " + ratingrange_high);
         }
     }
 
@@ -720,5 +736,42 @@ public class FilterActionButtonHandler extends Activity{
         ed.putInt("CONTENT_RANGE_HIGH", contentrange_high);
         ed.putInt("RATING_RANGE_LOW", ratingrange_low);
         ed.putInt("RATING_RANGE_HIGH", ratingrange_high);
+    }
+
+    public void setCustommi(int low, int high) {
+        custommi_low = low;
+        custommi_high = high;
+        custommi.setLabelText(low + " to " + high);
+        custommi.setLabelVisibility(View.VISIBLE);
+    }
+
+    public void setPriceRange(int low, int high) {
+
+        Log.v("DATA", "The low and high for setPriceRange is " + low + " and " + high);
+
+        pricerange_low = low;
+        pricerange_high = high;
+        pricerange.setLabelText(low + " to " + high);
+        pricerange.setLabelVisibility(View.VISIBLE);
+    }
+
+    public void setContentRange(int low, int high) {
+
+        Log.v("DATA", "The low and high for setContentRange is " + low + " and " + high);
+
+        contentrange_low = low;
+        contentrange_high = high;
+        contentrange.setLabelText(low + " to " + high);
+        contentrange.setLabelVisibility(View.VISIBLE);
+    }
+
+    public void setRatingRange(int low, int high) {
+
+        Log.v("DATA", "The low and high for setRatingRange is " + low + " and " + high);
+
+        ratingrange_low = low;
+        ratingrange_high = high;
+        ratingrange.setLabelText(low + " to " + high);
+        ratingrange.setLabelVisibility(View.VISIBLE);
     }
 }

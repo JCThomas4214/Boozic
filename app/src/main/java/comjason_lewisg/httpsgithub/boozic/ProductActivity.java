@@ -18,7 +18,7 @@ import comjason_lewisg.httpsgithub.boozic.Models.ProductStorageModel;
 
 public class ProductActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
+    Toolbar toolbar;
     public ProductSearchBarHandler searchBarHandler;
 
     static final int COLOR_STATE = 0;
@@ -27,14 +27,14 @@ public class ProductActivity extends AppCompatActivity {
     static final int ACCENT_STATE = 0;
     static final int ACCENT_DARK_STATE = 0;
 
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    RecyclerView mRecyclerView;
+    RecyclerView.Adapter mAdapter;
+    RecyclerView.LayoutManager mLayoutManager;
 
-    private int primaryColor;
-    private int primaryColorDark;
-    private int accentColor;
-    private int accentColorDark;
+    int primaryColor;
+    int primaryColorDark;
+    int accentColor;
+    int accentColorDark;
 
     public ProductStorageModel model;
 
@@ -69,6 +69,7 @@ public class ProductActivity extends AppCompatActivity {
 
         //Instantiate the toolbar object
         toolbar = (Toolbar) findViewById(R.id.product_toolbar); // Attaching the layout to the toolbar object
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
         //Call these to set up the back arrow on toolbar
@@ -162,7 +163,7 @@ public class ProductActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         //pull the shared preference
-        mPrefs = getSharedPreferences("COLOR_STATE", MODE_MULTI_PROCESS);
+        mPrefs = getSharedPreferences("COLOR_STATE", MODE_PRIVATE);
         //when resume, pull saves states for each button
 
         primaryColor = mPrefs.getInt("PRIMARY_STATE", PRIMARY_STATE);
@@ -171,7 +172,7 @@ public class ProductActivity extends AppCompatActivity {
         accentColorDark = mPrefs.getInt("ACCENT_DARK_STATE", ACCENT_DARK_STATE);
 
         CollapsingToolbarLayout ctl = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        ctl.setTitle(model.label);
+        ctl.setTitle("");
         ctl.setContentScrimColor(primaryColor);
         ctl.setStatusBarScrimColor(primaryColorDark);
 

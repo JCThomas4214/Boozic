@@ -1,6 +1,11 @@
 package comjason_lewisg.httpsgithub.boozic.Handlers;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.content.res.XmlResourceParser;
+import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -35,14 +40,17 @@ public class NavigationDrawerHandler {
 
     private MainActivity m;
 
-    protected void onCreate(){
+    protected void onCreate(){}
 
+    public NavigationDrawerHandler(MainActivity m, Toolbar t) {
+        connectDrawer(m,t);
     }
+
     public void connectDrawer(final MainActivity m, final Toolbar t) {
         //set initial title to Boozic
         title = m.getString(R.string.app_name);
         titleIndex = 0;
-        delay = 335;
+        delay = 320;
         this.m = m;
 
         topTensFragment = new TopTensFragment();
@@ -57,6 +65,7 @@ public class NavigationDrawerHandler {
 
         //Initializing NavigationView
         navigationView = (NavigationView) m.findViewById(R.id.navigation_view);
+        setNavTheme();
 
         //set the default checked item
         //In this case the first page opened, TOP TENS
@@ -96,10 +105,6 @@ public class NavigationDrawerHandler {
         public boolean onNavigationItemSelected(MenuItem menuItem) {
 
             Handler handler = new Handler();
-            //Checking if the item is in checked state or not, if not make it in checked state
-            navigationView.getMenu().getItem(titleIndex).setCheckable(true);
-            if(!menuItem.isChecked()) menuItem.setChecked(true);
-            else menuItem.setChecked(false);
 
             //Closing drawer on item click
             drawerLayout.closeDrawers();
@@ -169,7 +174,7 @@ public class NavigationDrawerHandler {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            m.DHandle.OpenFeedbackDialog(m, m.getColorAccentId());
+                            m.DHandle.OpenFeedbackDialog(m, m.getColorAccentId(), m.AskForColorPrimary());
                         }
                     }, delay);
 
@@ -189,7 +194,7 @@ public class NavigationDrawerHandler {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(m.getApplicationContext(),"Somethings Wrong",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(m.getApplicationContext(), "Somethings Wrong", Toast.LENGTH_SHORT).show();
                         }
                     }, delay);
 
@@ -198,4 +203,140 @@ public class NavigationDrawerHandler {
             }
         }
     };
+
+    private void setNavTheme() {
+        ColorStateList cList;
+
+        int navUnchecked = m.getResources().getColor(R.color.NavUnchecked);
+        int navUncheckedText = m.getResources().getColor(R.color.NavUncheckedText);
+
+        int cPrimary = m.getResources().getColor(R.color.ColorPrimary);
+        int cPrimary2 = m.getResources().getColor(R.color.ColorPrimary2);
+        int cPrimary3 = m.getResources().getColor(R.color.ColorPrimary3);
+        int cPrimary4 = m.getResources().getColor(R.color.ColorPrimary4);
+        int cPrimary5 = m.getResources().getColor(R.color.ColorPrimary5);
+
+        switch (m.getColorPrimary_id()) {
+            case 1:
+                cList = new ColorStateList(
+                        new int[][]{
+                                new int[] {-android.R.attr.state_checked}, // enabled
+                                new int[] {android.R.attr.state_checked}
+                        },
+                        new int[] {
+                                navUnchecked,
+                                cPrimary
+                        }
+                );
+                navigationView.setItemIconTintList(cList);
+                cList = new ColorStateList(
+                        new int[][]{
+                                new int[] {-android.R.attr.state_checked},
+                                new int[] {android.R.attr.state_checked}
+                        },
+                        new int[] {
+                                navUncheckedText,
+                                cPrimary
+                        }
+                );
+                navigationView.setItemTextColor(cList);
+                break;
+            case 2:
+                cList = new ColorStateList(
+                        new int[][]{
+                                new int[] {-android.R.attr.state_checked}, // enabled
+                                new int[] {android.R.attr.state_checked}
+                        },
+                        new int[] {
+                                navUnchecked,
+                                cPrimary2
+                        }
+                );
+                navigationView.setItemIconTintList(cList);
+                cList = new ColorStateList(
+                        new int[][]{
+                                new int[] {-android.R.attr.state_checked}, // enabled
+                                new int[] {android.R.attr.state_checked}
+                        },
+                        new int[] {
+                                navUncheckedText,
+                                cPrimary2
+                        }
+                );
+                navigationView.setItemTextColor(cList);
+                break;
+            case 3:
+                cList = new ColorStateList(
+                        new int[][]{
+                                new int[] {-android.R.attr.state_checked}, // enabled
+                                new int[] {android.R.attr.state_checked}
+                        },
+                        new int[] {
+                                navUnchecked,
+                                cPrimary3
+                        }
+                );
+                navigationView.setItemIconTintList(cList);
+                cList = new ColorStateList(
+                        new int[][]{
+                                new int[] {-android.R.attr.state_checked}, // enabled
+                                new int[] {android.R.attr.state_checked}
+                        },
+                        new int[] {
+                                navUncheckedText,
+                                cPrimary3
+                        }
+                );
+                navigationView.setItemTextColor(cList);
+                break;
+            case 4:
+                cList = new ColorStateList(
+                        new int[][]{
+                                new int[] {-android.R.attr.state_checked}, // enabled
+                                new int[] {android.R.attr.state_checked}
+                        },
+                        new int[] {
+                                navUnchecked,
+                                cPrimary4
+                        }
+                );
+                navigationView.setItemIconTintList(cList);
+                cList = new ColorStateList(
+                        new int[][]{
+                                new int[] {-android.R.attr.state_checked}, // enabled
+                                new int[] {android.R.attr.state_checked}
+                        },
+                        new int[] {
+                                navUncheckedText,
+                                cPrimary4
+                        }
+                );
+                navigationView.setItemTextColor(cList);
+                break;
+            case 5:
+                cList = new ColorStateList(
+                        new int[][]{
+                                new int[] {-android.R.attr.state_checked}, // enabled
+                                new int[] {android.R.attr.state_checked}
+                        },
+                        new int[] {
+                                navUnchecked,
+                                cPrimary5
+                        }
+                );
+                navigationView.setItemIconTintList(cList);
+                cList = new ColorStateList(
+                        new int[][]{
+                                new int[] {-android.R.attr.state_checked}, // enabled
+                                new int[] {android.R.attr.state_checked}
+                        },
+                        new int[] {
+                                navUncheckedText,
+                                cPrimary5
+                        }
+                );
+                navigationView.setItemTextColor(cList);
+                break;
+        }
+    }
 }

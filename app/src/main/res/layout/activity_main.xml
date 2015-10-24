@@ -86,6 +86,7 @@
                         android:layout_height="wrap_content"
                         android:src="@drawable/code_tags"
                         app:fab_size="mini"
+                        app:fab_label="range"
                         app:fab_colorNormal="@color/ColorAccent"
                         app:fab_colorPressed="@color/ColorAccentDark"/>
                     <!--app:fab_label="Range"-->
@@ -140,6 +141,7 @@
                         android:layout_height="wrap_content"
                         android:src="@drawable/code_tags"
                         app:fab_size="mini"
+                        app:fab_label="range"
                         app:fab_colorNormal="@color/ColorAccent"
                         app:fab_colorPressed="@color/ColorAccentDark"/>
                     <!--app:fab_label="Range"-->
@@ -194,6 +196,7 @@
                         android:layout_height="wrap_content"
                         android:src="@drawable/code_tags"
                         app:fab_size="mini"
+                        app:fab_label="range"
                         app:fab_colorNormal="@color/ColorAccent"
                         app:fab_colorPressed="@color/ColorAccentDark"/>
                     <!--app:fab_label="Range"-->

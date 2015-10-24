@@ -41,16 +41,15 @@ public class SearchBarHandler {
 
     public void onCreate() {}
 
-    public SearchBarHandler(MainActivity m, Toolbar t) {
-        setActivity(m, t);
+    public SearchBarHandler(MainActivity m) {
+        this.m = m;
+        setActivity(m.toolbar);
     }
 
-    public void setActivity(MainActivity main, Toolbar t) {
-        m = main;
+    public void setActivity(Toolbar t) {
         //Creates a Navigation Drawer
         //When you swipe from the left
-        Nav = new NavigationDrawerHandler();
-        Nav.connectDrawer(m,t);
+        Nav = new NavigationDrawerHandler(m,t);
 
         SearchBox search = (SearchBox) m.findViewById(R.id.searchbox);
         search.setY(m.findViewById(R.id.searchbox).getHeight() / 2);

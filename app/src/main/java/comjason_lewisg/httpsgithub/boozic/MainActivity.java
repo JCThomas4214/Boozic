@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPrefs = getSharedPreferences("COLOR_STATE", MODE_MULTI_PROCESS);
+        mPrefs = getSharedPreferences("COLOR_STATE", MODE_PRIVATE);
         //when resume, pull saves states for each button
         colorPrimary_id = mPrefs.getInt("COLOR_STATE", COLOR_STATE);
         switch (colorPrimary_id) {
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         themeHandler = new ThemeHandler();
 
         //connect to search bar and create new search handler
-        searchBarHandler = new SearchBarHandler(this, toolbar);
+        searchBarHandler = new SearchBarHandler(this);
         //search.enableVoiceRecognition(this);
 
         String str = getIntent().getStringExtra("msg");
@@ -161,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         startActivity(getIntent());
     }
 
+    public int getColorPrimary_id() { return colorPrimary_id; }
     public int getColorAccentId() {
         return colorAccent_id;
     }
@@ -297,7 +298,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public void onResume() {
         super.onResume();
         //pull the shared preference
-        mPrefs = getSharedPreferences("COLOR_STATE", MODE_MULTI_PROCESS);
+        mPrefs = getSharedPreferences("COLOR_STATE", MODE_PRIVATE);
         //when resume, pull saves states for each button
         colorPrimary_id = mPrefs.getInt("COLOR_STATE", COLOR_STATE);
         colorAccent_id = mPrefs.getInt("COLOR_ACCENT_STATE", COLOR_ACCENT_STATE);
