@@ -7,6 +7,7 @@ import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.transition.Fade;
 import android.transition.Slide;
 import android.util.Log;
@@ -28,6 +29,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import comjason_lewisg.httpsgithub.boozic.Controllers.DeviceIdController;
+import comjason_lewisg.httpsgithub.boozic.Fragments.FavoritesFragment;
 import comjason_lewisg.httpsgithub.boozic.Fragments.ThemeFragment;
 import comjason_lewisg.httpsgithub.boozic.Fragments.TopTensFragment;
 import comjason_lewisg.httpsgithub.boozic.Handlers.AnimateToolbarHandler;
@@ -41,7 +43,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
 
-public class MainActivity extends AppCompatActivity implements ThemeFragment.OnDataPass, TopTensFragment.OnPass,
+public class MainActivity extends AppCompatActivity implements ThemeFragment.OnDataPass, TopTensFragment.OnPass, FavoritesFragment.OnPass,
         GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
 
     public Toolbar toolbar;
@@ -139,7 +141,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
         //connect to search bar and create new search handler
         searchBarHandler = new SearchBarHandler(this);
-        //search.enableVoiceRecognition(this);
 
         String str = getIntent().getStringExtra("msg");
         mToast = Toast.makeText(this, str, Toast.LENGTH_LONG);
@@ -161,11 +162,12 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         startActivity(getIntent());
     }
 
-    public int getColorPrimary_id() { return colorPrimary_id; }
-    public int getColorAccentId() {
-        return colorAccent_id;
-    }
+    public int getColorPrimaryId() { return colorPrimary_id; }
+    public int getColorAccentId() { return colorAccent_id; }
     public int getColorPrimary() { return primaryColor; }
+    public int getColorPrimaryDark() { return primaryColorDark; }
+    public int getColorAccent() { return accentColor; }
+    public int getColorAccentDark() { return accentColorDark; }
 
     public void callRangeDialog(String title, String units) {
         DHandle.OpenRangeDialog(this, getColorAccentId(), title, units);
@@ -301,6 +303,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     @Override
     public void onResume() {
         super.onResume();
+
         //pull the shared preference
         mPrefs = getSharedPreferences("COLOR_STATE", MODE_PRIVATE);
         //when resume, pull saves states for each button
@@ -355,13 +358,14 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
     @Override
     public void onBackPressed() {
-        if (backstackSearch) {
-            searchBarHandler.search.toggleSearch();
-        } else if (backstack) {
+        /*if (backstackSearch) {
+            searchBarHandler.closeSearch();
+        } else*/ if (backstack) {
             MenuItem toptens = searchBarHandler.Nav.navigationView.getMenu().getItem(0);
             searchBarHandler.Nav.delay = 0;
             searchBarHandler.Nav.NavListener.onNavigationItemSelected(toptens);
-            searchBarHandler.Nav.delay = 255;
+            searchBarHandler.Nav.setMenuItenChecked(0);
+            searchBarHandler.Nav.delay = 320;
             this.backstack = false;
         } else {
             super.onBackPressed();

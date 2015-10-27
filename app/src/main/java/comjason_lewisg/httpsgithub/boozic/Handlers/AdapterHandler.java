@@ -16,13 +16,14 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
 import comjason_lewisg.httpsgithub.boozic.ProductActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
 
 public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItemViewHolder> {
     private List<TopTensModel> items;
-    AppCompatActivity m;
+    MainActivity m;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -56,7 +57,7 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
     }
 
     // Provide a suitable constructor (depends on the kind of data set)
-    public AdapterHandler(List<TopTensModel> modeldata, AppCompatActivity m) {
+    public AdapterHandler(List<TopTensModel> modeldata, MainActivity m) {
         if (modeldata == null) {
             throw new IllegalArgumentException("modelData must not be null");
         }
@@ -75,6 +76,8 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         return new ListItemViewHolder(itemView, new AdapterHandler.ListItemViewHolder.IMyViewHolderClicks() {
             public void onPotato(View caller, int position) {
                 Intent i = new Intent(m, ProductActivity.class);
+                //if the product is in the list, it is not a new product
+                i.putExtra("Found", true);
                 //inject model variables
                 i.putExtra("Label", items.get(position).label);
                 i.putExtra("LastUpdate", items.get(position).lastUpdate);
@@ -102,6 +105,13 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
                 i.putExtra("PDD", items.get(position).pdd);
                 i.putExtra("TD", items.get(position).td);
                 i.putExtra("AvgRating", items.get(position).avgRating);
+
+                i.putExtra("COLOR_PRIMARY_ID", m.getColorPrimaryId());
+                i.putExtra("COLOR_ACCENT_ID", m.getColorAccentId());
+                i.putExtra("COLOR_PRIMARY", m.getColorPrimary());
+                i.putExtra("COLOR_PRIMARY_DARK", m.getColorPrimaryDark());
+                i.putExtra("COLOR_ACCENT", m.getColorAccent());
+                i.putExtra("COLOR_ACCENT_DARK", m.getColorAccentDark());
 
                 m.startActivity(i);
             }
@@ -138,5 +148,4 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
     public int getItemCount() {
         return items.size();
     }
-
 }

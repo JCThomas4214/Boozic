@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
@@ -58,9 +59,6 @@ public class SearchBarHandler {
     }
 
     public void openSearch(TextView title) {
-        m.FBhandle.closeAll();
-        m.FBhandle.disableAll();
-
         //Hide the FAB button with animation
         FloatingActionButton menu = (FloatingActionButton) m.findViewById(R.id.fabtop);
         menu.hide(true);
@@ -68,7 +66,6 @@ public class SearchBarHandler {
         //connect Searchbox to search variable
         search = (SearchBox) m.findViewById(R.id.searchbox);
         //Turn buttons off
-        m.findViewById(R.id.action_search).setEnabled(false);
 
         //circular reveal and hide are determined by the length and width of the toolbar layout
         //if the filter options are present then the toolbar will be longer than typical
@@ -90,10 +87,11 @@ public class SearchBarHandler {
         text.setHint("Search Boozic");
 
         search.setSearchListener(searchListener);
-        //Lock and hide Navagation drawer and Nav drawer icon
-        Nav.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         Handler handler = new Handler();
 
+        m.findViewById(R.id.action_search).setEnabled(false);
+        //Lock and hide Navagation drawer and Nav drawer icon
+        Nav.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         //set a delay to remove navigation drawer burger icon
         //this makes the icon unclickable and the user doesn't see it happen
         handler.postDelayed(new Runnable() {
@@ -110,12 +108,15 @@ public class SearchBarHandler {
         public void onSearchOpened() {
             // Use this to tint the screen
             m.backstackSearch = true;
+            m.FBhandle.closeAll();
+            m.FBhandle.disableAll();
         }
 
         @Override
         public void onSearchClosed() {
             // Use this to un-tint the screen
             m.backstackSearch = false;
+            m.FBhandle.enableAll();
             closeSearch();
         }
 
@@ -151,7 +152,10 @@ public class SearchBarHandler {
     };
 
     public void closeSearch() {
-        m.FBhandle.enableAll();
+        //Turn buttons back on and unlock Nav drawer
+        m.findViewById(R.id.action_search).setEnabled(true);
+        Nav.actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
+        Nav.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
         final FloatingActionButton menu = (FloatingActionButton) m.findViewById(R.id.fabtop);
         Handler handler = new Handler();
@@ -164,15 +168,7 @@ public class SearchBarHandler {
             }
         }, 600);
 
-        //connect search bar to search variable
-        SearchBox search = (SearchBox) m.findViewById(R.id.searchbox);
-
-        hideCircularly(m);
-
-        //Turn buttons back on and unlock Nav drawer
-        m.findViewById(R.id.action_search).setEnabled(true);
-        Nav.actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
-        Nav.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        hideCircularly();
 
         //if no characters inputted or erased
         if(search.getSearchText().isEmpty()) {
@@ -240,10 +236,10 @@ public class SearchBarHandler {
         animator.start();
     }
 
-    private void hideCircularly(Activity activity){
-        Display display = activity.getWindowManager().getDefaultDisplay();
+    private void hideCircularly(){
+        Display display = m.getWindowManager().getDefaultDisplay();
         Point size = new Point();
-        final FrameLayout layout = (FrameLayout) activity.getWindow().getDecorView()
+        final FrameLayout layout = (FrameLayout) m.getWindow().getDecorView()
                 .findViewById(android.R.id.content);
         RelativeLayout root = (RelativeLayout) m.findViewById(R.id.search_root);
         display.getSize(size);
@@ -259,7 +255,7 @@ public class SearchBarHandler {
         animator.setInterpolator(new ReverseInterpolator());
         animator.setDuration(500);
         animator.start();
-        animator.addListener(new SupportAnimator.AnimatorListener(){
+        animator.addListener(new SupportAnimator.AnimatorListener() {
 
             @Override
             public void onAnimationStart() {

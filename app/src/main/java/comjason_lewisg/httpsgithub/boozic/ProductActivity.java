@@ -7,11 +7,16 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+
 import com.quinny898.library.persistentsearch.SearchBox;
+
+import comjason_lewisg.httpsgithub.boozic.Handlers.DialogHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ProductAdapterHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ProductSearchBarHandler;
 import comjason_lewisg.httpsgithub.boozic.Models.ProductStorageModel;
@@ -21,16 +26,12 @@ public class ProductActivity extends AppCompatActivity {
     Toolbar toolbar;
     public ProductSearchBarHandler searchBarHandler;
 
-    static final int COLOR_STATE = 0;
-    static final int PRIMARY_STATE = 0;
-    static final int PRIMARY_DARK_STATE = 0;
-    static final int ACCENT_STATE = 0;
-    static final int ACCENT_DARK_STATE = 0;
-
     RecyclerView mRecyclerView;
     RecyclerView.Adapter mAdapter;
     RecyclerView.LayoutManager mLayoutManager;
 
+    int colorPrimary_id;
+    int colorAccent_id;
     int primaryColor;
     int primaryColorDark;
     int accentColor;
@@ -38,14 +39,12 @@ public class ProductActivity extends AppCompatActivity {
 
     public ProductStorageModel model;
 
-    private SharedPreferences mPrefs;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPrefs = getSharedPreferences("COLOR_STATE", MODE_PRIVATE);
+
+        fetchColorInfo();
         //when resume, pull saves states for each button
-        int colorPrimary_id = mPrefs.getInt("COLOR_STATE", COLOR_STATE);
         switch (colorPrimary_id) {
             case 1:
                 setTheme(R.style.AppTheme);
@@ -65,7 +64,11 @@ public class ProductActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_product);
 
-        fetchProductInfo();
+        //if not a new product inject serializable objects
+        if ((boolean) getIntent().getSerializableExtra("Found"))
+            fetchProductInfo();
+        else
+            newProduct();
 
         //Instantiate the toolbar object
         toolbar = (Toolbar) findViewById(R.id.product_toolbar); // Attaching the layout to the toolbar object
@@ -122,7 +125,16 @@ public class ProductActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void fetchProductInfo() {
+    private void fetchColorInfo() {
+        colorPrimary_id = (int) getIntent().getSerializableExtra("COLOR_PRIMARY_ID");
+        colorAccent_id = (int) getIntent().getSerializableExtra("COLOR_ACCENT_ID");
+        primaryColor = (int) getIntent().getSerializableExtra("COLOR_PRIMARY");
+        primaryColorDark = (int) getIntent().getSerializableExtra("COLOR_PRIMARY_DARK");
+        accentColor = (int) getIntent().getSerializableExtra("COLOR_ACCENT");
+        accentColorDark = (int) getIntent().getSerializableExtra("COLOR_ACCENT_DARK");
+     }
+
+    private void fetchProductInfo() {
         //fetch extra items
 
         model = new ProductStorageModel((String) getIntent().getSerializableExtra("Label"),
@@ -149,6 +161,15 @@ public class ProductActivity extends AppCompatActivity {
                 (double) getIntent().getSerializableExtra("AvgRating"));
     }
 
+    public void newProduct() {
+
+        model = new ProductStorageModel((String) getIntent().getSerializableExtra("Label"),
+                null,-1,null,null,-1,-1,-1,-1,-1,false,null,-1,-1,new int[] {0,0,0,0,0},
+                (double) getIntent().getSerializableExtra("Volume"),
+                (String) getIntent().getSerializableExtra("VolumeMeasure"),
+                -1,-1,-1,-1,-1);
+    }
+
     // A method to find height of the status bar
     public int getStatusBarHeight() {
         int result = 0;
@@ -162,14 +183,6 @@ public class ProductActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        //pull the shared preference
-        mPrefs = getSharedPreferences("COLOR_STATE", MODE_PRIVATE);
-        //when resume, pull saves states for each button
-
-        primaryColor = mPrefs.getInt("PRIMARY_STATE", PRIMARY_STATE);
-        primaryColorDark = mPrefs.getInt("PRIMARY_DARK_STATE", PRIMARY_DARK_STATE);
-        accentColor = mPrefs.getInt("ACCENT_STATE", ACCENT_STATE);
-        accentColorDark = mPrefs.getInt("ACCENT_DARK_STATE", ACCENT_DARK_STATE);
 
         CollapsingToolbarLayout ctl = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         ctl.setTitle("");
@@ -180,4 +193,7 @@ public class ProductActivity extends AppCompatActivity {
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
     }
+
+    public int getAccentColorId() { return colorAccent_id; }
+    public int getAccentColor() { return accentColor; }
 }

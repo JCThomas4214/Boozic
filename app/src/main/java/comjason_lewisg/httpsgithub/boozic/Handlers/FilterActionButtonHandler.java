@@ -308,18 +308,18 @@ public class FilterActionButtonHandler extends Activity{
 
     public void disableAll() {
         types.setEnabled(false);
-        distances.setEnabled(false);
-        prices.setEnabled(false);
-        contents.setEnabled(false);
-        ratings.setEnabled(false);
+        distances.getMenuIconView().setEnabled(false);
+        prices.getMenuIconView().setEnabled(false);
+        contents.getMenuIconView().setEnabled(false);
+        ratings.getMenuIconView().setEnabled(false);
     }
 
     public void enableAll() {
-        types.setEnabled(true);
-        distances.setEnabled(true);
-        prices.setEnabled(true);
-        contents.setEnabled(true);
-        ratings.setEnabled(true);
+        types.getMenuIconView().setEnabled(true);
+        distances.getMenuIconView().setEnabled(true);
+        prices.getMenuIconView().setEnabled(true);
+        contents.getMenuIconView().setEnabled(true);
+        ratings.getMenuIconView().setEnabled(true);
     }
 
     private void checkOpen(FloatingActionMenu menu) {

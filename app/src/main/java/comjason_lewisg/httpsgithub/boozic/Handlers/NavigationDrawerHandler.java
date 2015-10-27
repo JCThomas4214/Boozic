@@ -7,6 +7,7 @@ import android.content.res.ColorStateList;
 import android.content.res.XmlResourceParser;
 import android.graphics.Color;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.support.design.widget.NavigationView;
@@ -207,16 +208,16 @@ public class NavigationDrawerHandler {
     private void setNavTheme() {
         ColorStateList cList;
 
-        int navUnchecked = m.getResources().getColor(R.color.NavUnchecked);
-        int navUncheckedText = m.getResources().getColor(R.color.NavUncheckedText);
+        int navUnchecked = ContextCompat.getColor(m.getApplicationContext(), R.color.NavUnchecked);
+        int navUncheckedText = ContextCompat.getColor(m.getApplicationContext(), R.color.NavUncheckedText);
 
-        int cPrimary = m.getResources().getColor(R.color.ColorPrimary);
-        int cPrimary2 = m.getResources().getColor(R.color.ColorPrimary2);
-        int cPrimary3 = m.getResources().getColor(R.color.ColorPrimary3);
-        int cPrimary4 = m.getResources().getColor(R.color.ColorPrimary4);
-        int cPrimary5 = m.getResources().getColor(R.color.ColorPrimary5);
+        int cPrimary = ContextCompat.getColor(m.getApplicationContext(), R.color.ColorPrimary);
+        int cPrimary2 = ContextCompat.getColor(m.getApplicationContext(), R.color.ColorPrimary2);
+        int cPrimary3 = ContextCompat.getColor(m.getApplicationContext(), R.color.ColorPrimary3);
+        int cPrimary4 = ContextCompat.getColor(m.getApplicationContext(), R.color.ColorPrimary4);
+        int cPrimary5 = ContextCompat.getColor(m.getApplicationContext(), R.color.ColorPrimary5);
 
-        switch (m.getColorPrimary_id()) {
+        switch (m.getColorPrimaryId()) {
             case 1:
                 cList = new ColorStateList(
                         new int[][]{
@@ -338,5 +339,9 @@ public class NavigationDrawerHandler {
                 navigationView.setItemTextColor(cList);
                 break;
         }
+    }
+
+    public void setMenuItenChecked(int index) {
+        navigationView.getMenu().getItem(index).setChecked(true);
     }
 }

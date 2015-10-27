@@ -1,11 +1,13 @@
 package comjason_lewisg.httpsgithub.boozic.Fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -79,7 +81,7 @@ public class TopTensFragment extends Fragment {
         mAdapter = new AdapterHandler(DataSet, (MainActivity) getActivity());
         mRecyclerView.setAdapter(mAdapter);
 
-        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView mRecyclerView, int dx, int dy) {
                 super.onScrolled(mRecyclerView, dx, dy);
@@ -88,8 +90,7 @@ public class TopTensFragment extends Fragment {
                         ((MainActivity) getActivity()).FAB.menuButton.hide(true);
                         if (isMenuOpened())
                             closeFilterbuttons();
-                    }
-                    else {
+                    } else {
                         ((MainActivity) getActivity()).FAB.menuButton.show(true);
                         if (isMenuOpened())
                             closeFilterbuttons();
@@ -99,8 +100,11 @@ public class TopTensFragment extends Fragment {
         });
 
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
-        swipeRefreshLayout.setColorSchemeColors(rootView.getResources().getColor(R.color.ColorAccent),rootView.getResources().getColor(R.color.ColorAccent2),
-                rootView.getResources().getColor(R.color.ColorAccent3), rootView.getResources().getColor(R.color.ColorAccent4), rootView.getResources().getColor(R.color.ColorAccent5));
+        swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.ColorAccent),
+                ContextCompat.getColor(getActivity().getApplicationContext(), R.color.ColorAccent2),
+                ContextCompat.getColor(getActivity().getApplicationContext(), R.color.ColorAccent3),
+                ContextCompat.getColor(getActivity().getApplicationContext(), R.color.ColorAccent4),
+                ContextCompat.getColor(getActivity().getApplicationContext(), R.color.ColorAccent5));
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -147,9 +151,14 @@ public class TopTensFragment extends Fragment {
     public boolean isMenuOpened() { return dataPasser.IsMenuOpened(); }
 
     @Override
-    public void onAttach(Activity a) {
-        super.onAttach(a);
-        dataPasser = (OnPass) a;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        Activity a;
+        if( context instanceof Activity) {
+            a = (Activity) context;
+            dataPasser = (OnPass) a;
+        }
 
         askShowFilterButtons();
     }
@@ -165,15 +174,5 @@ public class TopTensFragment extends Fragment {
         super.onStart();
         manager = getActivity().getSupportFragmentManager();
         manager.popBackStack();
-    }
-
-    @Override
-    public void onStop(){
-        super.onStop();
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
     }
 }

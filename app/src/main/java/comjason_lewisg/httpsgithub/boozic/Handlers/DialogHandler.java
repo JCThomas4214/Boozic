@@ -1,6 +1,7 @@
 package comjason_lewisg.httpsgithub.boozic.Handlers;
 
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.text.InputType;
 import android.util.Log;
@@ -19,7 +20,7 @@ public class DialogHandler {
 
     public void onCreate() {}
 
-    public void OpenFeedbackDialog(final MainActivity m, final int colorAccent_id, final int primarycolor) {
+    public void OpenFeedbackDialog(final Activity m, final int colorAccent_id, final int primarycolor) {
 
         //Create the MaterialDialog object to start initiallizing attributes
         MaterialDialog dialog = new MaterialDialog.Builder(m)
@@ -51,7 +52,7 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void OpenLegalDialog(final MainActivity m, final int colorAccent_id) {
+    public void OpenLegalDialog(final Activity m, final int colorAccent_id) {
 
         //Create the MaterialDialog object to start initiallizing attributes
         MaterialDialog dialog = new MaterialDialog.Builder(m)
@@ -135,10 +136,7 @@ public class DialogHandler {
                 .build();
 
         View view = dialog.getCustomView();
-
         EditText miles = (EditText) view.findViewById(R.id.custom_mi_input);
-        String radius = miles.getText().toString();
-
         setMiles(m, miles);
 
         dialog.show();
@@ -233,7 +231,6 @@ public class DialogHandler {
     }
 
     private int changeToInt(String str) {
-        int tmp = Integer.parseInt(str);
-        return tmp;
+        return Integer.parseInt(str);
     }
 }
