@@ -427,7 +427,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     }
 
     @Override
-    public void CloseAllFilterButtons () { FBhandle.closeAll(); }
+    public void CloseMenu () { FBhandle.closeMenu(); }
 
     @Override
     public void AskToHideFilterButtons () {
@@ -450,11 +450,5 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
             anim.setDuration(350);
             toolbar.startAnimation(anim);
         }
-    }
-
-    @Override
-    public boolean IsMenuOpened() {
-        //cheaper with homemade boolean values instead of .isOpened in FloatingActionMenu
-        return FBhandle.typeMenuOpened || FBhandle.distantsMenuOpened || FBhandle.pricesMenuOpened || FBhandle.contentsMenuOpened || FBhandle.ratingsMenuOpened;
     }
 }

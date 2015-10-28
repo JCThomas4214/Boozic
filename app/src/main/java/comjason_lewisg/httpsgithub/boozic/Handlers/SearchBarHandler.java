@@ -108,7 +108,7 @@ public class SearchBarHandler {
         public void onSearchOpened() {
             // Use this to tint the screen
             m.backstackSearch = true;
-            m.FBhandle.closeAll();
+            m.FBhandle.closeMenu();
             m.FBhandle.disableAll();
         }
 

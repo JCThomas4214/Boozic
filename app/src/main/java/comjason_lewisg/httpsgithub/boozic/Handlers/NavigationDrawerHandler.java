@@ -88,7 +88,7 @@ public class NavigationDrawerHandler {
             public void onDrawerOpened(View drawerView) {
                 // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
                 super.onDrawerOpened(drawerView);
-                m.FBhandle.closeAll();
+                m.FBhandle.closeMenu();
             }
         };
 
