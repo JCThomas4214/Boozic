@@ -152,7 +152,9 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
 
                 //TODO: conditional statements for each important attribute containing Dialog to fill
                 Log.v("CLICK", "update price button clicked in " + item.label + " product view" );
-                DHandler.OpenLegalDialog(p, p.getAccentColorId());
+                if (p.model.container == null) DHandler.UpdateContainer(p);
+                else if (p.model.abv == -1) DHandler.UpdateAbv(p);
+                else DHandler.UpdateStore(p, false);
 
             }
         });

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.transition.Fade;
 import android.transition.Slide;
 import android.transition.Transition;
@@ -93,23 +94,23 @@ public class ThemeFragment extends Fragment {
 
 
         Drawable drawable = getResources().getDrawable(R.drawable.color_selector_circle, null);
-        drawable.setColorFilter(getResources().getColor(R.color.ColorPrimary), PorterDuff.Mode.MULTIPLY);
+        drawable.setColorFilter(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.ColorPrimary), PorterDuff.Mode.MULTIPLY);
         primColor1.setBackground(drawable);
 
         drawable = getResources().getDrawable(R.drawable.color_selector_circle, null);
-        drawable.setColorFilter(getResources().getColor(R.color.ColorPrimary2), PorterDuff.Mode.MULTIPLY);
+        drawable.setColorFilter(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.ColorPrimary2), PorterDuff.Mode.MULTIPLY);
         primColor2.setBackground(drawable);
 
         drawable = getResources().getDrawable(R.drawable.color_selector_circle, null);
-        drawable.setColorFilter(getResources().getColor(R.color.ColorPrimary3), PorterDuff.Mode.MULTIPLY);
+        drawable.setColorFilter(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.ColorPrimary3), PorterDuff.Mode.MULTIPLY);
         primColor3.setBackground(drawable);
 
         drawable = getResources().getDrawable(R.drawable.color_selector_circle, null);
-        drawable.setColorFilter(getResources().getColor(R.color.ColorPrimary4), PorterDuff.Mode.MULTIPLY);
+        drawable.setColorFilter(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.ColorPrimary4), PorterDuff.Mode.MULTIPLY);
         primColor4.setBackground(drawable);
 
         drawable = getResources().getDrawable(R.drawable.color_selector_circle, null);
-        drawable.setColorFilter(getResources().getColor(R.color.ColorPrimary5), PorterDuff.Mode.MULTIPLY);
+        drawable.setColorFilter(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.ColorPrimary5), PorterDuff.Mode.MULTIPLY);
         primColor5.setBackground(drawable);
 
         ImageView colorAccent1 = (ImageView)rootView.findViewById(R.id.Color_accent_1);
@@ -119,23 +120,23 @@ public class ThemeFragment extends Fragment {
         ImageView colorAccent5 = (ImageView)rootView.findViewById(R.id.Color_accent_5);
 
         drawable = getResources().getDrawable(R.drawable.color_selector_circle, null);
-        drawable.setColorFilter(getResources().getColor(R.color.ColorAccent), PorterDuff.Mode.MULTIPLY);
+        drawable.setColorFilter(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.ColorAccent), PorterDuff.Mode.MULTIPLY);
         colorAccent1.setBackground(drawable);
 
         drawable = getResources().getDrawable(R.drawable.color_selector_circle, null);
-        drawable.setColorFilter(getResources().getColor(R.color.ColorAccent2), PorterDuff.Mode.MULTIPLY);
+        drawable.setColorFilter(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.ColorAccent2), PorterDuff.Mode.MULTIPLY);
         colorAccent2.setBackground(drawable);
 
         drawable = getResources().getDrawable(R.drawable.color_selector_circle, null);
-        drawable.setColorFilter(getResources().getColor(R.color.ColorAccent3), PorterDuff.Mode.MULTIPLY);
+        drawable.setColorFilter(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.ColorAccent3), PorterDuff.Mode.MULTIPLY);
         colorAccent3.setBackground(drawable);
 
         drawable = getResources().getDrawable(R.drawable.color_selector_circle, null);
-        drawable.setColorFilter(getResources().getColor(R.color.ColorAccent4), PorterDuff.Mode.MULTIPLY);
+        drawable.setColorFilter(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.ColorAccent4), PorterDuff.Mode.MULTIPLY);
         colorAccent4.setBackground(drawable);
 
         drawable = getResources().getDrawable(R.drawable.color_selector_circle, null);
-        drawable.setColorFilter(getResources().getColor(R.color.ColorAccent5), PorterDuff.Mode.MULTIPLY);
+        drawable.setColorFilter(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.ColorAccent5), PorterDuff.Mode.MULTIPLY);
         colorAccent5.setBackground(drawable);
 
         primColor1.setOnClickListener(primaryColorOnClickListener);

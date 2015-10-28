@@ -148,11 +148,11 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         mToast = Toast.makeText(this, "", Toast.LENGTH_LONG);
     }
 
-    public void startFragment(android.support.v4.app.FragmentTransaction fragmentTransaction, Fragment fragment, boolean backstack) {
+    public void startFragment(Fragment fragment, boolean backstack) {
         this.backstack = backstack;
         fragment.setEnterTransition(new Fade().setStartDelay(350));
         fragment.setExitTransition(new Slide(Gravity.BOTTOM));
-        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame3, fragment);
         fragmentTransaction.commit();
     }
@@ -170,11 +170,11 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public int getColorAccentDark() { return accentColorDark; }
 
     public void callRangeDialog(String title, String units) {
-        DHandle.OpenRangeDialog(this, getColorAccentId(), title, units);
+        DHandle.OpenRangeDialog(this, title, units);
     }
 
     public void callCustommiDialog() {
-        DHandle.OpenCustomMileDialog(this, getColorAccentId());
+        DHandle.OpenCustomMileDialog(this);
     }
 
     //Data Handlers//

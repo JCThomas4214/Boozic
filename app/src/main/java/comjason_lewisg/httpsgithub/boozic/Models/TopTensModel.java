@@ -146,40 +146,15 @@ public class TopTensModel {
         float tdtmp = (float)closestPrice - (float)cheapestPrice - (float)pdd;
         return (double)tdtmp;
     }
-    private String findVolMeasure() {
-        String volMeasure = "";
-
-        switch (container) {
-            case "handle":
-                volMeasure = "L";
-                break;
-            case "fifth":
-                volMeasure = "ml";
-                break;
-            case "(6) bottle":
-                volMeasure = "oz";
-                break;
-            case "(12) bottle":
-                volMeasure = "oz";
-                break;
-            case "(12) can":
-                volMeasure = "oz";
-                break;
-            case "(24) can":
-                volMeasure = "oz";
-                break;
-        }
-
-        return volMeasure;
-    }
 
     private double convertVol() {
         double volumetmp = volume;
-        String volmeas = findVolMeasure();
-        if (volmeas.equals("oz"))
+
+        if (volumeMeasure.equals("oz"))
             volumetmp = volume * 29.5735;
-        else if (volmeas.equals("L"))
+        else if (volumeMeasure.equals("L"))
             volumetmp = volume * 1000;
+
         return volumetmp;
     }
 
@@ -192,8 +167,6 @@ public class TopTensModel {
             total += rating[i];
         }
 
-        double avg = ((wTotal / total) * 100) / 20;
-
-        return avg;
+        return ((wTotal / total) * 100) / 20;
     }
 }

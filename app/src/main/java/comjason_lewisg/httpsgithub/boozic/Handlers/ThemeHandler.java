@@ -1,6 +1,7 @@
 package comjason_lewisg.httpsgithub.boozic.Handlers;
 
 import android.app.Activity;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
@@ -18,24 +19,24 @@ public class ThemeHandler {
     public void setStylePrimary(int colorPrimary, Activity a) {
         switch (colorPrimary) {
             case 1:
-                primaryColor = a.getResources().getColor(R.color.ColorPrimary);
-                primaryColorDark = a.getResources().getColor(R.color.ColorPrimaryDark);
+                primaryColor = ContextCompat.getColor(a.getApplicationContext(), R.color.ColorPrimary);
+                primaryColorDark = ContextCompat.getColor(a.getApplicationContext(), R.color.ColorPrimaryDark);
                 break;
             case 2:
-                primaryColor = a.getResources().getColor(R.color.ColorPrimary2);
-                primaryColorDark = a.getResources().getColor(R.color.ColorPrimaryDark2);
+                primaryColor = ContextCompat.getColor(a.getApplicationContext(), R.color.ColorPrimary2);
+                primaryColorDark = ContextCompat.getColor(a.getApplicationContext(), R.color.ColorPrimaryDark2);
                 break;
             case 3:
-                primaryColor = a.getResources().getColor(R.color.ColorPrimary3);
-                primaryColorDark = a.getResources().getColor(R.color.ColorPrimaryDark3);
+                primaryColor = ContextCompat.getColor(a.getApplicationContext(), R.color.ColorPrimary3);
+                primaryColorDark = ContextCompat.getColor(a.getApplicationContext(), R.color.ColorPrimaryDark3);
                 break;
             case 4:
-                primaryColor = a.getResources().getColor(R.color.ColorPrimary4);
-                primaryColorDark = a.getResources().getColor(R.color.ColorPrimaryDark4);
+                primaryColor = ContextCompat.getColor(a.getApplicationContext(), R.color.ColorPrimary4);
+                primaryColorDark = ContextCompat.getColor(a.getApplicationContext(), R.color.ColorPrimaryDark4);
                 break;
             case 5:
-                primaryColor = a.getResources().getColor(R.color.ColorPrimary5);
-                primaryColorDark = a.getResources().getColor(R.color.ColorPrimaryDark5);
+                primaryColor = ContextCompat.getColor(a.getApplicationContext(), R.color.ColorPrimary5);
+                primaryColorDark = ContextCompat.getColor(a.getApplicationContext(), R.color.ColorPrimaryDark5);
                 break;
         }
     }
@@ -43,24 +44,24 @@ public class ThemeHandler {
     public void setStyleAccent(int colorAccent, Activity a) {
         switch (colorAccent) {
             case 1:
-                accentColor = a.getResources().getColor(R.color.ColorAccent);
-                accentColorDark = a.getResources().getColor(R.color.ColorAccentDark);
+                accentColor = ContextCompat.getColor(a.getApplicationContext(), R.color.ColorAccent);
+                accentColorDark = ContextCompat.getColor(a.getApplicationContext(), R.color.ColorAccentDark);
                 break;
             case 2:
-                accentColor = a.getResources().getColor(R.color.ColorAccent2);
-                accentColorDark = a.getResources().getColor(R.color.ColorAccentDark2);
+                accentColor = ContextCompat.getColor(a.getApplicationContext(), R.color.ColorAccent2);
+                accentColorDark = ContextCompat.getColor(a.getApplicationContext(), R.color.ColorAccentDark2);
                 break;
             case 3:
-                accentColor = a.getResources().getColor(R.color.ColorAccent3);
-                accentColorDark = a.getResources().getColor(R.color.ColorAccentDark3);
+                accentColor = ContextCompat.getColor(a.getApplicationContext(), R.color.ColorAccent3);
+                accentColorDark = ContextCompat.getColor(a.getApplicationContext(), R.color.ColorAccentDark3);
                 break;
             case 4:
-                accentColor = a.getResources().getColor(R.color.ColorAccent4);
-                accentColorDark = a.getResources().getColor(R.color.ColorAccentDark4);
+                accentColor = ContextCompat.getColor(a.getApplicationContext(), R.color.ColorAccent4);
+                accentColorDark = ContextCompat.getColor(a.getApplicationContext(), R.color.ColorAccentDark4);
                 break;
             case 5:
-                accentColor = a.getResources().getColor(R.color.ColorAccent5);
-                accentColorDark = a.getResources().getColor(R.color.ColorAccentDark5);
+                accentColor = ContextCompat.getColor(a.getApplicationContext(), R.color.ColorAccent5);
+                accentColorDark = ContextCompat.getColor(a.getApplicationContext(), R.color.ColorAccentDark5);
                 break;
         }
     }

@@ -1,6 +1,5 @@
 package comjason_lewisg.httpsgithub.boozic;
 
-import android.content.SharedPreferences;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,14 +11,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
 import com.quinny898.library.persistentsearch.SearchBox;
 
-import comjason_lewisg.httpsgithub.boozic.Handlers.DialogHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ProductAdapterHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ProductSearchBarHandler;
 import comjason_lewisg.httpsgithub.boozic.Models.ProductStorageModel;
+import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
+import comjason_lewisg.httpsgithub.boozic.Models.UpdateProductModel;
 
 public class ProductActivity extends AppCompatActivity {
 
@@ -38,6 +37,7 @@ public class ProductActivity extends AppCompatActivity {
     int accentColorDark;
 
     public ProductStorageModel model;
+    public UpdateProductModel updatedModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +114,7 @@ public class ProductActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == android.R.id.home) {
             //return to main activity
+            checkUpdateModel();
             finish();
             return true;
         }
@@ -159,6 +160,10 @@ public class ProductActivity extends AppCompatActivity {
                 (double) getIntent().getSerializableExtra("PDD"),
                 (double) getIntent().getSerializableExtra("TD"),
                 (double) getIntent().getSerializableExtra("AvgRating"));
+
+        updatedModel = new UpdateProductModel((String) getIntent().getSerializableExtra("Label"),
+                (double) getIntent().getSerializableExtra("Volume"),
+                (String) getIntent().getSerializableExtra("VolumeMeasure"));
     }
 
     public void newProduct() {
@@ -168,6 +173,10 @@ public class ProductActivity extends AppCompatActivity {
                 (double) getIntent().getSerializableExtra("Volume"),
                 (String) getIntent().getSerializableExtra("VolumeMeasure"),
                 -1,-1,-1,-1,-1);
+
+        updatedModel = new UpdateProductModel((String) getIntent().getSerializableExtra("Label"),
+                (double) getIntent().getSerializableExtra("Volume"),
+                (String) getIntent().getSerializableExtra("VolumeMeasure"));
     }
 
     // A method to find height of the status bar
@@ -196,4 +205,18 @@ public class ProductActivity extends AppCompatActivity {
 
     public int getAccentColorId() { return colorAccent_id; }
     public int getAccentColor() { return accentColor; }
+
+    public void checkUpdateModel() {
+        Log.v("UPDATEMODEL", "The value of container is " + updatedModel.container);
+        Log.v("UPDATEMODEL", "The value of abv is " + updatedModel.abv);
+        Log.v("UPDATEMODEL", "The value of StoreName and StoreDist is " + updatedModel.StoreName + " and " + updatedModel.StoreDist);
+        Log.v("UPDATEMODEL", "The value of Price is " + updatedModel.Price);
+    }
+
+    public int changeToInt(String str) {
+        return Integer.parseInt(str);
+    }
+    public double changeToDouble(String str) {
+        return Double.parseDouble(str);
+    }
 }

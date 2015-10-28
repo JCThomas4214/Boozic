@@ -47,6 +47,7 @@
                     android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:elevation="25dp"
                     android:id="@+id/Primary_color_1_ring"
                     android:src="@drawable/color_selector_ring"/>
             </RelativeLayout>
@@ -64,6 +65,7 @@
                     android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:elevation="25dp"
                     android:id="@+id/Color_accent_1_ring"
                     android:src="@drawable/color_selector_ring"/>
             </RelativeLayout>
@@ -87,6 +89,7 @@
                     android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:elevation="25dp"
                     android:id="@+id/Primary_color_2_ring"
                     android:src="@drawable/color_selector_ring"/>
             </RelativeLayout>
@@ -104,6 +107,7 @@
                     android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:elevation="25dp"
                     android:id="@+id/Color_accent_2_ring"
                     android:src="@drawable/color_selector_ring"/>
             </RelativeLayout>
@@ -127,6 +131,7 @@
                     android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:elevation="25dp"
                     android:id="@+id/Primary_color_3_ring"
                     android:src="@drawable/color_selector_ring"/>
             </RelativeLayout>
@@ -144,6 +149,7 @@
                     android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:elevation="25dp"
                     android:id="@+id/Color_accent_3_ring"
                     android:src="@drawable/color_selector_ring"/>
             </RelativeLayout>
@@ -167,6 +173,7 @@
                     android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:elevation="25dp"
                     android:id="@+id/Primary_color_4_ring"
                     android:src="@drawable/color_selector_ring"/>
             </RelativeLayout>
@@ -184,6 +191,7 @@
                     android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:elevation="25dp"
                     android:id="@+id/Color_accent_4_ring"
                     android:src="@drawable/color_selector_ring"/>
             </RelativeLayout>
@@ -206,6 +214,7 @@
                     android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:elevation="25dp"
                     android:id="@+id/Primary_color_5_ring"
                     android:src="@drawable/color_selector_ring"/>
             </RelativeLayout>
@@ -221,6 +230,7 @@
                     android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:elevation="25dp"
                     android:id="@+id/Color_accent_5_ring"
                     android:src="@drawable/color_selector_ring"/>
             </RelativeLayout>

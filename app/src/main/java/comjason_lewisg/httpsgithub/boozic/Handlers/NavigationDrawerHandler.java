@@ -62,7 +62,7 @@ public class NavigationDrawerHandler {
 
         themeFragment = new ThemeFragment();
 
-        m.startFragment(fragmentTransaction, topTensFragment, false);
+        m.startFragment(topTensFragment, false);
 
         //Initializing NavigationView
         navigationView = (NavigationView) m.findViewById(R.id.navigation_view);
@@ -120,7 +120,7 @@ public class NavigationDrawerHandler {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            m.startFragment(fragmentTransaction, topTensFragment, false);
+                            m.startFragment(topTensFragment, false);
                         }
                     }, delay);
                     return true;
@@ -131,7 +131,7 @@ public class NavigationDrawerHandler {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            m.startFragment(fragmentTransaction, favoritesFragment, true);
+                            m.startFragment(favoritesFragment, true);
                         }
                     }, delay);
                     return true;
@@ -143,7 +143,7 @@ public class NavigationDrawerHandler {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            m.startFragment(fragmentTransaction, themeFragment, true);
+                            m.startFragment(themeFragment, true);
                         }
                     }, delay);
 
@@ -175,7 +175,7 @@ public class NavigationDrawerHandler {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            m.DHandle.OpenFeedbackDialog(m, m.getColorAccentId(), m.AskForColorPrimary());
+                            m.DHandle.OpenFeedbackDialog(m);
                         }
                     }, delay);
 
@@ -185,7 +185,7 @@ public class NavigationDrawerHandler {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            m.DHandle.OpenLegalDialog(m, m.getColorAccentId());
+                            m.DHandle.OpenLegalDialog(m);
                         }
                     }, delay);
 
