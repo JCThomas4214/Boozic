@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     static final int ACCENT_DARK_STATE = -291840;
 
     public int TBwidth;
+    public int TBheight;
 
     private int colorPrimary_id;
     private int colorAccent_id;
@@ -132,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         Point size = new Point();
         display.getSize(size);
         TBwidth = size.x;
+        TBheight = size.y;
 
         //Create a Dialog Handler for Feedback
         DHandle = new DialogHandler();
@@ -433,7 +435,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public void AskToHideFilterButtons () {
         FBhandle.hideFilterButtons();
 
-        AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, 170);
+        AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, (int)(TBheight * 0.09));
         anim.setDuration(500);
         toolbar.startAnimation(anim);
     }
@@ -446,7 +448,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         if (toolbar.getLayoutParams().height <= 300) {
             FBhandle.showFilterButtons();
 
-            AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, 315);
+            AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, (int)(TBheight * 0.17));
             anim.setDuration(350);
             toolbar.startAnimation(anim);
         }
