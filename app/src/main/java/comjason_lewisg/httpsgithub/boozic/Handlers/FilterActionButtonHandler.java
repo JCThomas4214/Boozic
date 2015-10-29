@@ -85,7 +85,9 @@ public class FilterActionButtonHandler extends Activity{
     public FloatingActionButton abvPrevious;
     public FloatingActionButton ratingPrevious;
 
-    public FloatingActionMenu previousMenuOpen = null;
+    public FloatingActionMenu previousMenu;
+    public FloatingActionMenu currentMenu;
+    boolean startMenu;
 
     public void onCreate() {}
 
@@ -145,6 +147,10 @@ public class FilterActionButtonHandler extends Activity{
         prices.setIconAnimated(false);
         contents.setIconAnimated(false);
         ratings.setIconAnimated(false);
+
+        previousMenu = null;
+        currentMenu = null;
+        startMenu = true;
 
         adjustFBPosition();
     }
@@ -246,12 +252,16 @@ public class FilterActionButtonHandler extends Activity{
                         } else {
                             distancesButtonPressed = 0b0001;
                             milesPrevious.setColorNormal(primaryColor);
+                            closeMenu();
+                            main.callCustommiDialog();
                         }
                     } else {
                         distancesButtonPressed = 0b0001;
                         milesPrevious.setColorNormal(colorAccent);
                         milesPrevious = custommi;
                         milesPrevious.setColorNormal(primaryColor);
+                        closeMenu();
+                        main.callCustommiDialog();
                     }
                     break;
             }
@@ -302,7 +312,7 @@ public class FilterActionButtonHandler extends Activity{
                         } else {
                             pricesButtonPressed = 0b001;
                             pricePrevious.setColorNormal(primaryColor);
-                            prices.close(true);
+                            closeMenu();
                             main.callRangeDialog("Choose Price Range", "$");
                         }
                     } else {
@@ -310,7 +320,7 @@ public class FilterActionButtonHandler extends Activity{
                         pricePrevious.setColorNormal(colorAccent);
                         pricePrevious = pricerange;
                         pricePrevious.setColorNormal(primaryColor);
-                        prices.close(true);
+                        closeMenu();
                         main.callRangeDialog("Choose Price Range", "$");
                     }
                     break;
@@ -362,12 +372,16 @@ public class FilterActionButtonHandler extends Activity{
                         } else {
                             contentsButtonPressed = 0b001;
                             abvPrevious.setColorNormal(primaryColor);
+                            closeMenu();
+                            main.callRangeDialog("Choose ABV Range", "%");
                         }
                     } else {
                         contentsButtonPressed = 0b001;
                         abvPrevious.setColorNormal(colorAccent);
                         abvPrevious = contentrange;
                         abvPrevious.setColorNormal(primaryColor);
+                        closeMenu();
+                        main.callRangeDialog("Choose ABV Range", "%");
                     }
                     break;
             }
@@ -418,12 +432,16 @@ public class FilterActionButtonHandler extends Activity{
                         } else {
                             ratingsButtonPressed = 0b001;
                             ratingPrevious.setColorNormal(primaryColor);
+                            closeMenu();
+                            main.callRangeDialog("Choose Rating Range", "avg");
                         }
                     } else {
                         ratingsButtonPressed = 0b001;
                         ratingPrevious.setColorNormal(colorAccent);
                         ratingPrevious = ratingrange;
                         ratingPrevious.setColorNormal(primaryColor);
+                        closeMenu();
+                        main.callRangeDialog("Choose Rating Range", "avg");
                     }
                     break;
             }
@@ -434,8 +452,12 @@ public class FilterActionButtonHandler extends Activity{
         @Override
         public void onMenuToggle(boolean opened) {
             if (opened) {
-                if (previousMenuOpen != null) previousMenuOpen.close(true);
-                previousMenuOpen = types;
+                if (!startMenu && currentMenu != null) currentMenu.close(true);
+                currentMenu = types;
+                startMenu = false;
+            } else {
+                previousMenu = types;
+                if (currentMenu == previousMenu) startMenu = true;
             }
         }
     };
@@ -444,8 +466,12 @@ public class FilterActionButtonHandler extends Activity{
         @Override
         public void onMenuToggle(boolean opened) {
             if (opened) {
-                if (previousMenuOpen != null) previousMenuOpen.close(true);
-                previousMenuOpen = distances;
+                if (!startMenu && currentMenu != null) currentMenu.close(true);
+                currentMenu = distances;
+                startMenu = false;
+            } else {
+                previousMenu = distances;
+                if (currentMenu == previousMenu) startMenu = true;
             }
         }
     };
@@ -454,8 +480,12 @@ public class FilterActionButtonHandler extends Activity{
         @Override
         public void onMenuToggle(boolean opened) {
             if (opened) {
-                if (previousMenuOpen != null) previousMenuOpen.close(true);
-                previousMenuOpen = prices;
+                if (!startMenu && currentMenu != null) currentMenu.close(true);
+                currentMenu = prices;
+                startMenu = false;
+            } else {
+                previousMenu = prices;
+                if (currentMenu == previousMenu) startMenu = true;
             }
         }
     };
@@ -464,8 +494,12 @@ public class FilterActionButtonHandler extends Activity{
         @Override
         public void onMenuToggle(boolean opened) {
             if (opened) {
-                if (previousMenuOpen != null) previousMenuOpen.close(true);
-                previousMenuOpen = contents;
+                if (!startMenu && currentMenu != null) currentMenu.close(true);
+                currentMenu = contents;
+                startMenu = false;
+            } else {
+                previousMenu = contents;
+                if (currentMenu == previousMenu) startMenu = true;
             }
         }
     };
@@ -474,46 +508,38 @@ public class FilterActionButtonHandler extends Activity{
         @Override
         public void onMenuToggle(boolean opened) {
             if (opened) {
-                if (previousMenuOpen != null) previousMenuOpen.close(true);
-                previousMenuOpen = ratings;
+                if (!startMenu && currentMenu != null) currentMenu.close(true);
+                currentMenu = ratings;
+                startMenu = false;
+            } else {
+                previousMenu = ratings;
+                if (currentMenu == previousMenu) startMenu = true;
             }
         }
     };
 
     public void closeMenu() {
-        if (previousMenuOpen != null) {
-            previousMenuOpen.close(true);
-            previousMenuOpen = null;
+        if (currentMenu != null) {
+            currentMenu.close(true);
+            currentMenu = null;
+            System.gc();
         }
     }
 
     public void disableAll() {
         types.setEnabled(false);
-        distances.getMenuIconView().setEnabled(false);
-        prices.getMenuIconView().setEnabled(false);
-        contents.getMenuIconView().setEnabled(false);
-        ratings.getMenuIconView().setEnabled(false);
+        distances.setEnabled(false);
+        prices.setEnabled(false);
+        contents.setEnabled(false);
+        ratings.setEnabled(false);
     }
 
     public void enableAll() {
-        types.getMenuIconView().setEnabled(true);
-        distances.getMenuIconView().setEnabled(true);
-        prices.getMenuIconView().setEnabled(true);
-        contents.getMenuIconView().setEnabled(true);
-        ratings.getMenuIconView().setEnabled(true);
-    }
-
-    private void checkOpen(FloatingActionMenu menu) {
-        if (types.isOpened() && (types != menu))
-            types.close(true);
-        else if (distances.isOpened() && (distances != menu))
-            distances.close(true);
-        else if (prices.isOpened() && (prices != menu))
-            prices.close(true);
-        else if (contents.isOpened() && (contents != menu))
-            contents.close(true);
-        else if (ratings.isOpened() && (ratings != menu))
-            ratings.close(true);
+        types.setEnabled(true);
+        distances.setEnabled(true);
+        prices.setEnabled(true);
+        contents.setEnabled(true);
+        ratings.setEnabled(true);
     }
 
     private boolean checkclick(FloatingActionButton button, boolean check) {
@@ -545,10 +571,10 @@ public class FilterActionButtonHandler extends Activity{
     }
 
     public void setFilterButtons() {
-        custommi.setLabelVisibility(View.GONE);
-        pricerange.setLabelVisibility(View.GONE);
-        contentrange.setLabelVisibility(View.GONE);
-        ratingrange.setLabelVisibility(View.GONE);
+        custommi.setLabelText(custommi_miles + "mi");
+        pricerange.setLabelText("$" + pricerange_low + " to $" + pricerange_high);
+        contentrange.setLabelText(contentrange_low + "% to " + contentrange_high + "%");
+        ratingrange.setLabelText(ratingrange_low + " to " + ratingrange_high);
 
         if (typesButtonPressed / 4 == 1) {
             wines.setColorNormal(primaryColor);
@@ -573,8 +599,6 @@ public class FilterActionButtonHandler extends Activity{
         }
         if (distancesButtonPressed % 2 == 1) {
             custommi.setColorNormal(primaryColor);
-            custommi.setLabelVisibility(View.VISIBLE);
-            custommi.setLabelText(custommi_miles + "mi");
             milesPrevious = custommi;
         }
         if (pricesButtonPressed / 4 == 1) {
@@ -587,8 +611,6 @@ public class FilterActionButtonHandler extends Activity{
         }
         if (pricesButtonPressed % 2 == 1) {
             pricerange.setColorNormal(primaryColor);
-            pricerange.setLabelVisibility(View.VISIBLE);
-            pricerange.setLabelText("$" + pricerange_low + " to $" + pricerange_high);
             pricePrevious = pricerange;
         }
         if (contentsButtonPressed / 4 == 1) {
@@ -601,8 +623,6 @@ public class FilterActionButtonHandler extends Activity{
         }
         if (contentsButtonPressed % 2 == 1) {
             contentrange.setColorNormal(primaryColor);
-            contentrange.setLabelVisibility(View.VISIBLE);
-            contentrange.setLabelText(contentrange_low + "% to " + contentrange_high + "%");
             abvPrevious = contentrange;
         }
         if (ratingsButtonPressed / 4 == 1) {
@@ -613,10 +633,8 @@ public class FilterActionButtonHandler extends Activity{
             lowhirating.setColorNormal(primaryColor);
             ratingPrevious = lowhirating;
         }
-        if (contentsButtonPressed % 2 == 1) {
+        if (ratingsButtonPressed % 2 == 1) {
             ratingrange.setColorNormal(primaryColor);
-            ratingrange.setLabelVisibility(View.VISIBLE);
-            ratingrange.setLabelText(ratingrange_low + " to " + ratingrange_high);
             ratingPrevious = ratingrange;
         }
     }
