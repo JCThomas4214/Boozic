@@ -108,7 +108,7 @@ public class SearchBarHandler {
             // Use this to tint the screen
             m.backstackSearch = true;
             m.findViewById(R.id.action_search).setEnabled(false);
-            m.findViewById(R.id.action_filter).setEnabled(false);
+            if (m.filterButtonVis) m.findViewById(R.id.action_filter).setEnabled(false);
             m.hideFilterMenu();
         }
 
@@ -117,7 +117,7 @@ public class SearchBarHandler {
             // Use this to un-tint the screen
             m.backstackSearch = false;
             m.findViewById(R.id.action_search).setEnabled(true);
-            m.findViewById(R.id.action_filter).setEnabled(true);
+            if (m.filterButtonVis) m.findViewById(R.id.action_filter).setEnabled(true);
             closeSearch();
         }
 

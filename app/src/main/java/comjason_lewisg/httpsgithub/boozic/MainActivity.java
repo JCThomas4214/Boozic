@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public FilterActionButtonHandler FBhandle;
     public FilterMenuHandler FMHandle;
     public MenuItem item = null;
+    public boolean filterButtonVis = true;
 
     static final int SCANNER_CODE_REQUEST = 0;
 
@@ -481,6 +482,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     @Override
     public void AskToHideFilterButtons () {
         if (item != null) item.setVisible(false);
+        filterButtonVis = false;
         hideFilterMenu();
     }
 
@@ -490,5 +492,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     @Override
     public void AskToShowFilterButtons () {
         if (item != null) item.setVisible(true);
+        filterButtonVis = true;
     }
 }
