@@ -9,28 +9,31 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.transition.Fade;
-import android.transition.Slide;
-import android.view.Gravity;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import comjason_lewisg.httpsgithub.boozic.Handlers.AdapterHandler;
+import comjason_lewisg.httpsgithub.boozic.Handlers.FavoritesAdapterHandler;
+import comjason_lewisg.httpsgithub.boozic.Handlers.TouchHelpers.OnStartDragListener;
+import comjason_lewisg.httpsgithub.boozic.Handlers.TouchHelpers.SimpleItemTouchHelperCallback;
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
 import comjason_lewisg.httpsgithub.boozic.R;
 
-public class FavoritesFragment extends Fragment {
+public class FavoritesFragment extends Fragment implements OnStartDragListener {
     private View rootView;
-    private FragmentManager manager;
+    FragmentManager manager;
 
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    RecyclerView mRecyclerView;
+    RecyclerView.Adapter mAdapter;
+    RecyclerView.LayoutManager mLayoutManager;
+
+    private ItemTouchHelper mItemTouchHelper;
 
     int colorPrimary;
     int colorPrimaryDark;
@@ -63,23 +66,26 @@ public class FavoritesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-
         rootView =  inflater.inflate(R.layout.fragment_favorites,container,false);
-        viewSet(rootView);
-
         return rootView;
     }
 
-    private void viewSet(View rootView) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.fav_rv);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new AdapterHandler(DataSet, (MainActivity) getActivity());
+        FavoritesAdapterHandler mAdapter = new FavoritesAdapterHandler(DataSet, (MainActivity) getActivity(), this);
         mRecyclerView.setAdapter(mAdapter);
+
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mAdapter);
+        mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -88,33 +94,17 @@ public class FavoritesFragment extends Fragment {
                 if (Math.abs(dy) > 20) {
                     if (dy > 0) {
                         ((MainActivity) getActivity()).FAB.menuButton.hide(true);
-                    }
-                    else {
+                    } else {
                         ((MainActivity) getActivity()).FAB.menuButton.show(true);
                     }
                 }
             }
         });
+    }
 
-        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout_fav);
-        swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.ColorAccent),
-                ContextCompat.getColor(getActivity().getApplicationContext(), R.color.ColorAccent2),
-                ContextCompat.getColor(getActivity().getApplicationContext(), R.color.ColorAccent3),
-                ContextCompat.getColor(getActivity().getApplicationContext(), R.color.ColorAccent4),
-                ContextCompat.getColor(getActivity().getApplicationContext(), R.color.ColorAccent5));
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        askShowGPS();
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                }, 1250);
-            }
-        });
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        mItemTouchHelper.startDrag(viewHolder);
     }
 
     public interface OnPass {

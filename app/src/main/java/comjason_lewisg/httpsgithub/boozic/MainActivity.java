@@ -38,7 +38,6 @@ import comjason_lewisg.httpsgithub.boozic.Fragments.ThemeFragment;
 import comjason_lewisg.httpsgithub.boozic.Fragments.TopTensFragment;
 import comjason_lewisg.httpsgithub.boozic.Handlers.AnimateToolbarHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.DialogHandler;
-import comjason_lewisg.httpsgithub.boozic.Handlers.FilterActionButtonHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.FilterMenuHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.FloatingActionButtonHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.SearchBarHandler;
@@ -58,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public SearchBarHandler searchBarHandler;
     public ThemeHandler themeHandler;
     public FloatingActionButtonHandler FAB;
-    public FilterActionButtonHandler FBhandle;
     public FilterMenuHandler FMHandle;
     public MenuItem item = null;
     public boolean filterButtonVis = true;
@@ -363,10 +361,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         //Creates a FAB for the bottom right corner of the main screen
         FAB = new FloatingActionButtonHandler(this, primaryColor, primaryColorDark);
 
-        //Create instance for Filter buttons
-        /*FBhandle = new FilterActionButtonHandler(this, primaryColor, primaryColorDark, accentColor, accentColorDark);
-        FBhandle.initiateSharedPref(mPrefs);*/
-
+        //Create instance for Filter Menu
         FMHandle = new FilterMenuHandler(this, primaryColor);
         FMHandle.initiateSharedPref(mPrefs);
 
@@ -385,9 +380,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         //store all color states into universal sharedpreference
         ed.putInt("COLOR_STATE", colorPrimary_id);
         ed.putInt("COLOR_ACCENT_STATE", colorAccent_id);
-
-        /*Log.v("COLOR", "primaryColor = " + primaryColor + " primaryDark = " + primaryColorDark);
-        Log.v("COLOR", "accentColor = "+accentColor + " accentColorDark = "+ accentColorDark);*/
         ed.putInt("PRIMARY_STATE", primaryColor);
         ed.putInt("PRIMARY_DARK_STATE", primaryColorDark);
         ed.putInt("ACCENT_STATE", accentColor);

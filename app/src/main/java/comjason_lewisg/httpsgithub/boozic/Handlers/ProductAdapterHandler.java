@@ -2,6 +2,7 @@ package comjason_lewisg.httpsgithub.boozic.Handlers;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.support.v4.content.ContextCompat;
@@ -178,7 +179,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         if (model.userRating == -1) viewHolder.userRating.setRating(0);
         else viewHolder.userRating.setRating((float) model.userRating);
         LayerDrawable stars = (LayerDrawable) viewHolder.userRating.getProgressDrawable();
-        stars.getDrawable(2).setColorFilter(p.getAccentColor(), PorterDuff.Mode.SRC_ATOP);
+        stars.getDrawable(2).setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP);
 
         if (model.cheapestStoreName == null) {
             viewHolder.closestStoreLayout.setVisibility(View.GONE);

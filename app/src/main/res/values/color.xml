@@ -32,4 +32,6 @@
 
     <color name="NavUnchecked">#818181</color>
     <color name="NavUncheckedText">#2e2e2e</color>
+
+    <color name="Background">#ffeeeeee</color>
 </resources>
