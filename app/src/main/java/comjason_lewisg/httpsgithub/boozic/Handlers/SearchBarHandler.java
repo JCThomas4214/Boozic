@@ -80,7 +80,7 @@ public class SearchBarHandler {
 
         //logo is the initial String that's shown during reveal animation
         //set search bar logo to current toolbar title
-        search.setLogoText((String)title.getText());
+        search.setLogoText((String) title.getText());
 
         //connect to searchbar edittext xml to change hint
         EditText text = (EditText) search.findViewById(R.id.search);
@@ -89,7 +89,6 @@ public class SearchBarHandler {
         search.setSearchListener(searchListener);
         Handler handler = new Handler();
 
-        m.findViewById(R.id.action_search).setEnabled(false);
         //Lock and hide Navagation drawer and Nav drawer icon
         Nav.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         //set a delay to remove navigation drawer burger icon
@@ -108,15 +107,17 @@ public class SearchBarHandler {
         public void onSearchOpened() {
             // Use this to tint the screen
             m.backstackSearch = true;
-            /*m.FBhandle.closeMenu();
-            m.FBhandle.disableAll();*/
+            m.findViewById(R.id.action_search).setEnabled(false);
+            m.findViewById(R.id.action_filter).setEnabled(false);
+            m.hideFilterMenu();
         }
 
         @Override
         public void onSearchClosed() {
             // Use this to un-tint the screen
             m.backstackSearch = false;
-           /* m.FBhandle.enableAll();*/
+            m.findViewById(R.id.action_search).setEnabled(true);
+            m.findViewById(R.id.action_filter).setEnabled(true);
             closeSearch();
         }
 
@@ -153,7 +154,6 @@ public class SearchBarHandler {
 
     public void closeSearch() {
         //Turn buttons back on and unlock Nav drawer
-        m.findViewById(R.id.action_search).setEnabled(true);
         Nav.actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
         Nav.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
