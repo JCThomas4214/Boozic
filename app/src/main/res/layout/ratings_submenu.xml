@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="70dp"
+    android:layout_height="180dp"
+    android:gravity="center|top">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/ratings_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Rating"
+            android:textSize="17sp"
+            android:textStyle="bold|italic"
+            android:textColor="#ffffff" />
+
+        <RelativeLayout
+            android:id="@+id/lowhi_rating_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="3dp">
+            <ImageView
+                android:id="@+id/lowhirating"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:padding="7dp"
+                android:layout_marginRight="2dp"
+                android:src="@drawable/chevron_left" />
+            <ImageView
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignLeft="@id/lowhirating"
+                android:layout_alignRight="@id/lowhirating"
+                android:layout_alignTop="@id/lowhirating"
+                android:layout_alignBottom="@id/lowhirating"
+                android:id="@+id/rating_lowhi_ring"
+                android:src="@drawable/filter_selector_ring"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/hilow_rating_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="3dp">
+            <ImageView
+                android:id="@+id/hilowrating"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:padding="7dp"
+                android:layout_marginRight="2dp"
+                android:src="@drawable/chevron_right" />
+            <ImageView
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignLeft="@id/hilowrating"
+                android:layout_alignRight="@id/hilowrating"
+                android:layout_alignTop="@id/hilowrating"
+                android:layout_alignBottom="@id/hilowrating"
+                android:id="@+id/rating_hilow_ring"
+                android:src="@drawable/filter_selector_ring"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rangerating_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="3dp">
+            <ImageView
+                android:id="@+id/rangerating"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:padding="7dp"
+                android:layout_marginRight="2dp"
+                android:src="@drawable/code_tags" />
+            <ImageView
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignLeft="@id/rangerating"
+                android:layout_alignRight="@id/rangerating"
+                android:layout_alignTop="@id/rangerating"
+                android:layout_alignBottom="@id/rangerating"
+                android:id="@+id/rating_range_ring"
+                android:src="@drawable/filter_selector_ring"/>
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

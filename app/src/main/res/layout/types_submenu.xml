@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="70dp"
+    android:layout_height="190dp"
+    android:gravity="center|top">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/types_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Type"
+            android:textSize="17sp"
+            android:textStyle="bold|italic"
+            android:textColor="#ffffff" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="0dp"
+            android:id="@+id/liquors_layout">
+            <ImageView
+                android:id="@+id/liquors"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_marginRight="2dp"
+                android:src="@drawable/martini" />
+            <ImageView
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignLeft="@id/liquors"
+                android:layout_alignRight="@id/liquors"
+                android:layout_alignTop="@id/liquors"
+                android:layout_alignBottom="@id/liquors"
+                android:id="@+id/liquors_ring"
+                android:src="@drawable/filter_selector_ring"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="0dp"
+            android:id="@+id/beers_layout">
+            <ImageView
+                android:id="@+id/beers"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_marginRight="2dp"
+                android:src="@drawable/glass_mug" />
+            <ImageView
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignLeft="@id/beers"
+                android:layout_alignRight="@id/beers"
+                android:layout_alignTop="@id/beers"
+                android:layout_alignBottom="@id/beers"
+                android:id="@+id/beers_ring"
+                android:src="@drawable/filter_selector_ring"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="0dp"
+            android:id="@+id/wines_layout">
+            <ImageView
+                android:id="@+id/wines"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_marginRight="2dp"
+                android:src="@drawable/glass_tulip" />
+            <ImageView
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignLeft="@id/wines"
+                android:layout_alignRight="@id/wines"
+                android:layout_alignTop="@id/wines"
+                android:layout_alignBottom="@id/wines"
+                android:id="@+id/wines_ring"
+                android:src="@drawable/filter_selector_ring"/>
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

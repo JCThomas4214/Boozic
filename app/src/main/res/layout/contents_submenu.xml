@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="70dp"
+    android:layout_height="180dp"
+    android:gravity="center|top">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/contents_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="ABV"
+            android:textSize="17sp"
+            android:textStyle="bold|italic"
+            android:textColor="#ffffff" />
+
+        <RelativeLayout
+            android:id="@+id/lowhi_contents_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="3dp">
+            <ImageView
+                android:id="@+id/lowhicontent"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:padding="7dp"
+                android:layout_marginRight="2dp"
+                android:src="@drawable/chevron_left" />
+            <ImageView
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignLeft="@id/lowhicontent"
+                android:layout_alignRight="@id/lowhicontent"
+                android:layout_alignTop="@id/lowhicontent"
+                android:layout_alignBottom="@id/lowhicontent"
+                android:id="@+id/content_lowhi_ring"
+                android:src="@drawable/filter_selector_ring"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/hilow_contents_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="3dp">
+            <ImageView
+                android:id="@+id/hilowcontent"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:padding="7dp"
+                android:layout_marginRight="2dp"
+                android:src="@drawable/chevron_right" />
+            <ImageView
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignLeft="@id/hilowcontent"
+                android:layout_alignRight="@id/hilowcontent"
+                android:layout_alignTop="@id/hilowcontent"
+                android:layout_alignBottom="@id/hilowcontent"
+                android:id="@+id/content_hilow_ring"
+                android:src="@drawable/filter_selector_ring"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rangecontent_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="3dp">
+            <ImageView
+                android:id="@+id/rangecontent"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:padding="7dp"
+                android:layout_marginRight="2dp"
+                android:src="@drawable/code_tags" />
+            <ImageView
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignLeft="@id/rangecontent"
+                android:layout_alignRight="@id/rangecontent"
+                android:layout_alignTop="@id/rangecontent"
+                android:layout_alignBottom="@id/rangecontent"
+                android:id="@+id/content_range_ring"
+                android:src="@drawable/filter_selector_ring"/>
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

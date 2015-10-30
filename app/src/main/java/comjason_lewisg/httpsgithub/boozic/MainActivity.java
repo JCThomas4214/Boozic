@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ import comjason_lewisg.httpsgithub.boozic.Fragments.TopTensFragment;
 import comjason_lewisg.httpsgithub.boozic.Handlers.AnimateToolbarHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.DialogHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.FilterActionButtonHandler;
+import comjason_lewisg.httpsgithub.boozic.Handlers.FilterMenuHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.FloatingActionButtonHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.SearchBarHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ThemeHandler;
@@ -54,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public ThemeHandler themeHandler;
     public FloatingActionButtonHandler FAB;
     public FilterActionButtonHandler FBhandle;
+    public FilterMenuHandler FMHandle;
 
     static final int SCANNER_CODE_REQUEST = 0;
 
@@ -179,6 +182,26 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         DHandle.OpenCustomMileDialog(this);
     }
 
+    public void showFilterMenu() {
+        if (!FMHandle.menuOpen) {
+            FMHandle.showFilterMenu();
+
+            AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, (int)(TBheight * 0.36));
+            anim.setDuration(350);
+            toolbar.startAnimation(anim);
+        }
+    }
+
+    public void hideFilterMenu() {
+        if(FMHandle.menuOpen){
+            FMHandle.hideFilterMenu();
+
+            AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, (int) (TBheight * 0.09));
+            anim.setDuration(500);
+            toolbar.startAnimation(anim);
+        }
+    }
+
     //Data Handlers//
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
@@ -273,6 +296,15 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
             searchBarHandler.openSearch(title);
             return true;
         }
+        if (id == R.id.action_filter) {
+            if (FMHandle.menuOpen) {
+                hideFilterMenu();
+                item.setIcon(R.drawable.filter_outline);
+            } else {
+                showFilterMenu();
+                item.setIcon(R.drawable.filter);
+            }
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -325,8 +357,15 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         FAB = new FloatingActionButtonHandler(this, primaryColor, primaryColorDark);
 
         //Create instance for Filter buttons
-        FBhandle = new FilterActionButtonHandler(this, primaryColor, primaryColorDark, accentColor, accentColorDark);
-        FBhandle.initiateSharedPref(mPrefs);
+        /*FBhandle = new FilterActionButtonHandler(this, primaryColor, primaryColorDark, accentColor, accentColorDark);
+        FBhandle.initiateSharedPref(mPrefs);*/
+
+        FMHandle = new FilterMenuHandler(this, primaryColor);
+        FMHandle.initiateSharedPref(mPrefs);
+
+        AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, (int) (TBheight * 0.09));
+        anim.setDuration(0);
+        toolbar.startAnimation(anim);
 
         checkPlayServices();
     }
@@ -347,7 +386,9 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         ed.putInt("ACCENT_STATE", accentColor);
         ed.putInt("ACCENT_DARK_STATE", accentColorDark);
 
-        FBhandle.saveSharedPref(ed);
+        /*FBhandle.saveSharedPref(ed);*/
+        FMHandle.saveSharedPref(ed);
+        hideFilterMenu();
         //apply changes
         ed.apply();
     }
@@ -429,15 +470,11 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     }
 
     @Override
-    public void CloseMenu () { FBhandle.closeMenu(); }
+    public void CloseMenu () { /*FBhandle.closeMenu();*/ }
 
     @Override
     public void AskToHideFilterButtons () {
-        FBhandle.hideFilterButtons();
-
-        AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, (int)(TBheight * 0.09));
-        anim.setDuration(500);
-        toolbar.startAnimation(anim);
+        hideFilterMenu();
     }
 
     @Override
@@ -445,12 +482,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
     @Override
     public void AskToShowFilterButtons () {
-        if (toolbar.getLayoutParams().height <= 300) {
-            FBhandle.showFilterButtons();
-
-            AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, (int)(TBheight * 0.17));
-            anim.setDuration(350);
-            toolbar.startAnimation(anim);
-        }
+        showFilterMenu();
     }
 }

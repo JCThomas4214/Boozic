@@ -13,7 +13,7 @@ import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
 
 public class FilterActionButtonHandler extends Activity{
-
+/*
     private int colorAccent;
     private int primaryColor;
     private MainActivity main;
@@ -832,5 +832,5 @@ public class FilterActionButtonHandler extends Activity{
         ratingrange_high = high;
         ratingrange.setLabelText(low + " to " + high);
         ratingrange.setLabelVisibility(View.VISIBLE);
-    }
+    }*/
 }

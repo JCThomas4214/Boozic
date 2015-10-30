@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="70dp"
+    android:layout_height="200dp"
+    android:gravity="center|top">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/prices_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Price"
+            android:textSize="17sp"
+            android:textStyle="bold|italic"
+            android:textColor="#ffffff" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="3dp"
+            android:id="@+id/lowhi_layout">
+            <ImageView
+                android:id="@+id/lowhi"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:padding="7dp"
+                android:layout_marginRight="2dp"
+                android:src="@drawable/chevron_left" />
+            <ImageView
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignLeft="@id/lowhi"
+                android:layout_alignRight="@id/lowhi"
+                android:layout_alignTop="@id/lowhi"
+                android:layout_alignBottom="@id/lowhi"
+                android:id="@+id/price_lowhi_ring"
+                android:src="@drawable/filter_selector_ring"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="3dp"
+            android:id="@+id/hilow_layout">
+            <ImageView
+                android:id="@+id/hilow"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:padding="7dp"
+                android:layout_marginRight="2dp"
+                android:src="@drawable/chevron_right" />
+            <ImageView
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignLeft="@id/hilow"
+                android:layout_alignRight="@id/hilow"
+                android:layout_alignTop="@id/hilow"
+                android:layout_alignBottom="@id/hilow"
+                android:id="@+id/price_hilow_ring"
+                android:src="@drawable/filter_selector_ring"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="3dp"
+            android:id="@+id/pricerange_layout">
+            <ImageView
+                android:id="@+id/pricerange"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:padding="7dp"
+                android:layout_marginRight="2dp"
+                android:src="@drawable/code_tags" />
+            <ImageView
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignLeft="@id/pricerange"
+                android:layout_alignRight="@id/pricerange"
+                android:layout_alignTop="@id/pricerange"
+                android:layout_alignBottom="@id/pricerange"
+                android:id="@+id/price_range_ring"
+                android:src="@drawable/filter_selector_ring"/>
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

@@ -284,24 +284,8 @@ public class DialogHandler {
         dialog.show();
     }
 
-    private String checkIfInfoNeeded(ProductStorageModel model) {
-
-        String isNext = "DONE";
-
-        if (model.container == null)
-            isNext = "NEXT";
-        else if (model.abv == -1)
-            isNext = "NEXT";
-        else if (model.closestStoreName == null)
-            isNext = "NEXT";
-        else if (model.closestPrice == -1)
-            isNext = "NEXT";
-
-        return isNext;
-    }
-
     private void setMiles(MainActivity m, EditText miles) {
-        miles.setText(m.FBhandle.custommi_miles + "");
+        miles.setText(m.FMHandle.custommi_miles + "");
     }
 
     private void setUnits(String units, TextView low_curr, TextView low_units, EditText low_input, TextView high_curr,
@@ -313,20 +297,20 @@ public class DialogHandler {
                 high_curr.setVisibility(View.VISIBLE);
                 high_units.setVisibility(View.GONE);
 
-                low_input.setText(m.FBhandle.pricerange_low + "");
-                high_input.setText(m.FBhandle.pricerange_high + "");
+                low_input.setText(m.FMHandle.pricerange_low + "");
+                high_input.setText(m.FMHandle.pricerange_high + "");
 
                 break;
             case "%":
-                low_input.setText(m.FBhandle.contentrange_low + "");
-                high_input.setText(m.FBhandle.contentrange_high + "");
+                low_input.setText(m.FMHandle.contentrange_low + "");
+                high_input.setText(m.FMHandle.contentrange_high + "");
                 break;
             case "avg":
                 low_units.setText("avg");
                 high_units.setText("avg");
 
-                low_input.setText(m.FBhandle.ratingrange_low + "");
-                high_input.setText(m.FBhandle.ratingrange_high + "");
+                low_input.setText(m.FMHandle.ratingrange_low + "");
+                high_input.setText(m.FMHandle.ratingrange_high + "");
                 break;
         }
     }
@@ -336,7 +320,7 @@ public class DialogHandler {
         int radiuss = changeToInt(radius);
 
         //set the filterbutton model's low/high variables
-        m.FBhandle.setCustommi(radiuss);
+        m.FMHandle.setCustommi(radiuss);
     }
 
     private void checkDialog(MainActivity m, String units, String low, String high) {
@@ -355,13 +339,13 @@ public class DialogHandler {
         //set the filterbutton model's low/high variables
         switch (units) {
             case "$":
-                m.FBhandle.setPriceRange(loww, highh);
+                m.FMHandle.setPriceRange(loww, highh);
                 break;
             case "%":
-                m.FBhandle.setContentRange(loww, highh);
+                m.FMHandle.setContentRange(loww, highh);
                 break;
             case "avg":
-                m.FBhandle.setRatingRange(loww, highh);
+                m.FMHandle.setRatingRange(loww, highh);
                 break;
         }
     }
