@@ -154,13 +154,13 @@ public class TopTensFragment extends Fragment {
             a = (Activity) context;
             dataPasser = (OnPass) a;
         }
+        askShowFilterButtons();
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         askHideFilterButtons();
-
     }
 
     @Override

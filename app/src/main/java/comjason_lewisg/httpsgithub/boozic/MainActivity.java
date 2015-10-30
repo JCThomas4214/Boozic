@@ -1,5 +1,6 @@
 package comjason_lewisg.httpsgithub.boozic;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,11 +14,13 @@ import android.transition.Slide;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.SubMenu;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public FloatingActionButtonHandler FAB;
     public FilterActionButtonHandler FBhandle;
     public FilterMenuHandler FMHandle;
+    public MenuItem item = null;
 
     static final int SCANNER_CODE_REQUEST = 0;
 
@@ -184,6 +188,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
     public void showFilterMenu() {
         if (!FMHandle.menuOpen) {
+            item.setIcon(R.drawable.filter);
             FMHandle.showFilterMenu();
 
             AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, (int)(TBheight * 0.36));
@@ -194,6 +199,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
     public void hideFilterMenu() {
         if(FMHandle.menuOpen){
+            item.setIcon(R.drawable.filter_outline);
             FMHandle.hideFilterMenu();
 
             AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, (int) (TBheight * 0.09));
@@ -208,6 +214,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_main, menu);
+
+        item = menu.findItem(R.id.action_filter);
 
         return true;
     }
@@ -299,10 +307,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         if (id == R.id.action_filter) {
             if (FMHandle.menuOpen) {
                 hideFilterMenu();
-                item.setIcon(R.drawable.filter_outline);
             } else {
                 showFilterMenu();
-                item.setIcon(R.drawable.filter);
             }
         }
 
@@ -470,10 +476,11 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     }
 
     @Override
-    public void CloseMenu () { /*FBhandle.closeMenu();*/ }
+    public void CloseMenu () { hideFilterMenu(); }
 
     @Override
     public void AskToHideFilterButtons () {
+        if (item != null) item.setVisible(false);
         hideFilterMenu();
     }
 
@@ -482,6 +489,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
     @Override
     public void AskToShowFilterButtons () {
-        showFilterMenu();
+        if (item != null) item.setVisible(true);
     }
 }
