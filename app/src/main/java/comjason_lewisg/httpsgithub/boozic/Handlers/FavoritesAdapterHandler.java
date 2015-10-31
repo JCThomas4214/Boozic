@@ -31,6 +31,8 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
     private List<TopTensModel> removeItems;
     MainActivity m;
 
+    static View view;
+
     private final OnStartDragListener mDragStartListener;
 
     // Provide a reference to the views for each data item
@@ -80,6 +82,7 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
         if (modeldata == null) {
             throw new IllegalArgumentException("modelData must not be null");
         }
+        view = m.findViewById(R.id.frame3);
         removeItems = new ArrayList<TopTensModel>() {};
         items = modeldata;
         this.m = m;
