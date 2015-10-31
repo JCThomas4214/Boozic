@@ -27,7 +27,7 @@ dependencies {
     compile 'com.android.support:design:23.1.0'
     compile 'com.quinny898.library.persistentsearch:library:1.1.0-SNAPSHOT'
     compile 'com.github.clans:fab:1.6.1'
-    compile 'me.dm7.barcodescanner:zbar:1.7.2'
+    compile 'me.dm7.barcodescanner:zbar:1.8.3'
     compile 'com.google.android.gms:play-services:8.1.0'
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.5'
     compile('com.afollestad.material-dialogs:core:0.8.4.2@aar') {
