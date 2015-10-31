@@ -31,8 +31,6 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
     private List<TopTensModel> removeItems;
     MainActivity m;
 
-    static int BackGround;
-
     private final OnStartDragListener mDragStartListener;
 
     // Provide a reference to the views for each data item
@@ -65,12 +63,10 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
 
         @Override
         public void onItemSelected() {
-            //itemView.setBackgroundColor(BackGround);
         }
 
         @Override
         public void onItemClear() {
-            //itemView.setBackgroundColor(0);
         }
 
         public interface IMyViewHolderClicks {
@@ -81,7 +77,6 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
     // Provide a suitable constructor (depends on the kind of data set)
     public FavoritesAdapterHandler(List<TopTensModel> modeldata, MainActivity m, OnStartDragListener dragStartListener) {
         mDragStartListener = dragStartListener;
-        BackGround = ContextCompat.getColor(m.getApplicationContext(), R.color.Background);
         if (modeldata == null) {
             throw new IllegalArgumentException("modelData must not be null");
         }

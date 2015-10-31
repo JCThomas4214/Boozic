@@ -30,7 +30,7 @@ public class FavoritesFragment extends Fragment implements OnStartDragListener {
     FragmentManager manager;
 
     RecyclerView mRecyclerView;
-    RecyclerView.Adapter mAdapter;
+    FavoritesAdapterHandler mAdapter;
     RecyclerView.LayoutManager mLayoutManager;
 
     private ItemTouchHelper mItemTouchHelper;
@@ -80,7 +80,7 @@ public class FavoritesFragment extends Fragment implements OnStartDragListener {
 
         mRecyclerView.setHasFixedSize(true);
 
-        FavoritesAdapterHandler mAdapter = new FavoritesAdapterHandler(DataSet, (MainActivity) getActivity(), this);
+        mAdapter = new FavoritesAdapterHandler(DataSet, (MainActivity) getActivity(), this);
         mRecyclerView.setAdapter(mAdapter);
 
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mAdapter);
@@ -130,6 +130,12 @@ public class FavoritesFragment extends Fragment implements OnStartDragListener {
         super.onStart();
         manager = getActivity().getSupportFragmentManager();
         manager.popBackStack();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        //use mAdapter.getRemovedList(); and remove deleted favorites from server
     }
 }
 
