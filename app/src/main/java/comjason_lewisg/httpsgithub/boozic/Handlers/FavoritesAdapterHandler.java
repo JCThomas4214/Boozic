@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,7 +28,8 @@ import comjason_lewisg.httpsgithub.boozic.R;
 public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapterHandler.ListItemViewHolder>
             implements ItemTouchHelperAdapter {
     private List<TopTensModel> items;
-    static MainActivity m;
+    private List<TopTensModel> removeItems;
+    MainActivity m;
 
     static int BackGround;
 
@@ -83,6 +85,7 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
         if (modeldata == null) {
             throw new IllegalArgumentException("modelData must not be null");
         }
+        removeItems = new ArrayList<TopTensModel>() {};
         items = modeldata;
         this.m = m;
     }
@@ -167,20 +170,25 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
 
     @Override
     public void onItemDismiss(int position) {
+        removeItems.add(items.get(position));
         items.remove(position);
         notifyItemRemoved(position);
     }
 
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
-        /*Collections.swap(items, fromPosition, toPosition);
-        notifyItemMoved(fromPosition, toPosition);*/
-        return false;
+        Collections.swap(items, fromPosition, toPosition);
+        notifyItemMoved(fromPosition, toPosition);
+        return true;
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return items.size();
+    }
+
+    public List<TopTensModel> getRemovedList() {
+        return removeItems;
     }
 }
