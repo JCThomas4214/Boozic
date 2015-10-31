@@ -43,8 +43,8 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     @Override
     public boolean isLongPressDragEnabled() {
-        return true;
-    }
+        return false;
+    } //change to true for drag and drop
 
     @Override
     public boolean isItemViewSwipeEnabled() {

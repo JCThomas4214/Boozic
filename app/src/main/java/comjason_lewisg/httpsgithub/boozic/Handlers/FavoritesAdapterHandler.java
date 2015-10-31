@@ -173,9 +173,9 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
 
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
-        Collections.swap(items, fromPosition, toPosition);
-        notifyItemMoved(fromPosition, toPosition);
-        return true;
+        /*Collections.swap(items, fromPosition, toPosition);
+        notifyItemMoved(fromPosition, toPosition);*/
+        return false;
     }
 
     // Return the size of your dataset (invoked by the layout manager)
