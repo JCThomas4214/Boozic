@@ -21,15 +21,14 @@ public class FilterMenuHandler {
 
     static final int TYPESBUTTONS = 0b111;
     static final int DISTANCESBUTTONS = 0b100;
-    static final int PRICESBUTTONS = 0b100;
-    static final int CONTENTSBUTTONS = 0b010;
-    static final int RATINGSBUTTONS = 0b010;
+    static final int ORDERBUTTONS = 0b100000;
+    static final int PRICECONTRATEBUTTONS = 0b000;
+
 
     public int typesButtonPressed;
     public int distancesButtonPressed;
-    public int pricesButtonPressed;
-    public int contentsButtonPressed;
-    public int ratingsButtonPressed;
+    public int orderButtonPressed;
+    public int priceContRateButtonPressed;
 
     static final int CUSTOMMI_MILES = 15;
     static final int PRICE_RANGE_LOW = 0;
@@ -82,9 +81,7 @@ public class FilterMenuHandler {
     public int ratingrange_high;
 
     private ImageView milesPrevious;
-    private ImageView pricePrevious;
-    private ImageView abvPrevious;
-    private ImageView ratingPrevious;
+    private ImageView orderPrevious;
 
     private View view;
 
@@ -130,9 +127,7 @@ public class FilterMenuHandler {
         button_rating_range_ring = (ImageView) m.findViewById(R.id.rating_range_ring);
 
         milesPrevious = button_twomi_ring;
-        pricePrevious = button_price_lowhi_ring;
-        abvPrevious = button_content_hilow_ring;
-        ratingPrevious = button_rating_hilow_ring;
+        orderPrevious = button_price_lowhi_ring;
 
         view = m.findViewById(R.id.filter_menu_layout);
         menu_anim_out = fadeOutLayout(view, 0);
@@ -255,53 +250,45 @@ public class FilterMenuHandler {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.lowhi:
-                    if (pricePrevious == button_price_lowhi_ring) {
-                        if (pricesButtonPressed == 0b100) {
-                            pricesButtonPressed = 0b000;
-                            pricePrevious.setVisibility(View.GONE);
+                    if (orderPrevious == button_price_lowhi_ring) {
+                        if (orderButtonPressed == 0b100000) {
+                            orderButtonPressed = 0b000000;
+                            orderPrevious.setVisibility(View.GONE);
                         } else {
-                            pricesButtonPressed = 0b100;
-                            pricePrevious.setVisibility(View.VISIBLE);
+                            orderButtonPressed = 0b100000;
+                            orderPrevious.setVisibility(View.VISIBLE);
                         }
                     } else {
-                        pricesButtonPressed = 0b100;
-                        pricePrevious.setVisibility(View.GONE);
-                        pricePrevious = button_price_lowhi_ring;
-                        pricePrevious.setVisibility(View.VISIBLE);
+                        orderButtonPressed = 0b100000;
+                        orderPrevious.setVisibility(View.GONE);
+                        orderPrevious = button_price_lowhi_ring;
+                        orderPrevious.setVisibility(View.VISIBLE);
                     }
                     break;
                 case R.id.hilow:
-                    if (pricePrevious == button_price_hilow_ring) {
-                        if (pricesButtonPressed == 0b010) {
-                            pricesButtonPressed = 0b000;
-                            pricePrevious.setVisibility(View.GONE);
+                    if (orderPrevious == button_price_hilow_ring) {
+                        if (orderButtonPressed == 0b010000) {
+                            orderButtonPressed = 0b000000;
+                            orderPrevious.setVisibility(View.GONE);
                         } else {
-                            pricesButtonPressed = 0b010;
-                            pricePrevious.setVisibility(View.VISIBLE);
+                            orderButtonPressed = 0b010000;
+                            orderPrevious.setVisibility(View.VISIBLE);
                         }
                     } else {
-                        pricesButtonPressed = 0b010;
-                        pricePrevious.setVisibility(View.GONE);
-                        pricePrevious = button_price_hilow_ring;
-                        pricePrevious.setVisibility(View.VISIBLE);
+                        orderButtonPressed = 0b010000;
+                        orderPrevious.setVisibility(View.GONE);
+                        orderPrevious = button_price_hilow_ring;
+                        orderPrevious.setVisibility(View.VISIBLE);
                     }
                     break;
                 case R.id.pricerange:
-                    if (pricePrevious == button_price_range_ring) {
-                        if (pricesButtonPressed == 0b001) {
-                            pricesButtonPressed = 0b000;
-                            pricePrevious.setVisibility(View.GONE);
-                        } else {
-                            pricesButtonPressed = 0b001;
-                            pricePrevious.setVisibility(View.VISIBLE);
-                            main.callRangeDialog("Choose Price Range", "$");
-                        }
-                    } else {
-                        pricesButtonPressed = 0b001;
-                        pricePrevious.setVisibility(View.GONE);
-                        pricePrevious = button_price_range_ring;
-                        pricePrevious.setVisibility(View.VISIBLE);
+                    if ((priceContRateButtonPressed) / 4 != 1) {
+                        priceContRateButtonPressed += 0b100;
                         main.callRangeDialog("Choose Price Range", "$");
+                        button_price_range_ring.setVisibility(View.VISIBLE);
+                    } else {
+                        priceContRateButtonPressed -= 0b100;
+                        button_price_range_ring.setVisibility(View.GONE);
                     }
                     break;
             }
@@ -313,53 +300,45 @@ public class FilterMenuHandler {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.lowhicontent:
-                    if (abvPrevious == button_content_lowhi_ring) {
-                        if (contentsButtonPressed == 0b100) {
-                            contentsButtonPressed = 0b000;
-                            abvPrevious.setVisibility(View.GONE);
+                    if (orderPrevious == button_content_lowhi_ring) {
+                        if (orderButtonPressed == 0b001000) {
+                            orderButtonPressed = 0b000000;
+                            orderPrevious.setVisibility(View.GONE);
                         } else {
-                            contentsButtonPressed = 0b100;
-                            abvPrevious.setVisibility(View.VISIBLE);
+                            orderButtonPressed = 0b001000;
+                            orderPrevious.setVisibility(View.VISIBLE);
                         }
                     } else {
-                        contentsButtonPressed = 0b100;
-                        abvPrevious.setVisibility(View.GONE);
-                        abvPrevious = button_content_lowhi_ring;
-                        abvPrevious.setVisibility(View.VISIBLE);
+                        orderButtonPressed = 0b001000;
+                        orderPrevious.setVisibility(View.GONE);
+                        orderPrevious = button_content_lowhi_ring;
+                        orderPrevious.setVisibility(View.VISIBLE);
                     }
                     break;
                 case R.id.hilowcontent:
-                    if (abvPrevious == button_content_hilow_ring) {
-                        if (contentsButtonPressed == 0b010) {
-                            contentsButtonPressed = 0b000;
-                            abvPrevious.setVisibility(View.GONE);
+                    if (orderPrevious == button_content_hilow_ring) {
+                        if (orderButtonPressed == 0b000100) {
+                            orderButtonPressed = 0b000000;
+                            orderPrevious.setVisibility(View.GONE);
                         } else {
-                            contentsButtonPressed = 0b010;
-                            abvPrevious.setVisibility(View.VISIBLE);
+                            orderButtonPressed = 0b000100;
+                            orderPrevious.setVisibility(View.VISIBLE);
                         }
                     } else {
-                        contentsButtonPressed = 0b010;
-                        abvPrevious.setVisibility(View.GONE);
-                        abvPrevious = button_content_hilow_ring;
-                        abvPrevious.setVisibility(View.VISIBLE);
+                        orderButtonPressed = 0b000100;
+                        orderPrevious.setVisibility(View.GONE);
+                        orderPrevious = button_content_hilow_ring;
+                        orderPrevious.setVisibility(View.VISIBLE);
                     }
                     break;
                 case R.id.rangecontent:
-                    if (abvPrevious == button_content_range_ring) {
-                        if (contentsButtonPressed == 0b001) {
-                            contentsButtonPressed = 0b000;
-                            abvPrevious.setVisibility(View.GONE);
-                        } else {
-                            contentsButtonPressed = 0b001;
-                            abvPrevious.setVisibility(View.VISIBLE);
-                            main.callRangeDialog("Choose ABV Range", "%");
-                        }
-                    } else {
-                        contentsButtonPressed = 0b001;
-                        abvPrevious.setVisibility(View.GONE);
-                        abvPrevious = button_content_range_ring;
-                        abvPrevious.setVisibility(View.VISIBLE);
+                    if ((priceContRateButtonPressed) / 2 % 2 != 1) {
+                        priceContRateButtonPressed += 0b010;
                         main.callRangeDialog("Choose ABV Range", "%");
+                        button_content_range_ring.setVisibility(View.VISIBLE);
+                    } else {
+                        priceContRateButtonPressed -= 0b010;
+                        button_content_range_ring.setVisibility(View.GONE);
                     }
                     break;
             }
@@ -371,53 +350,45 @@ public class FilterMenuHandler {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.lowhirating:
-                    if (ratingPrevious == button_rating_lowhi_ring) {
-                        if (ratingsButtonPressed == 0b100) {
-                            ratingsButtonPressed = 0b000;
-                            ratingPrevious.setVisibility(View.GONE);
+                    if (orderPrevious == button_rating_lowhi_ring) {
+                        if (orderButtonPressed == 0b000010) {
+                            orderButtonPressed = 0b000000;
+                            orderPrevious.setVisibility(View.GONE);
                         } else {
-                            ratingsButtonPressed = 0b100;
-                            ratingPrevious.setVisibility(View.VISIBLE);
+                            orderButtonPressed = 0b000010;
+                            orderPrevious.setVisibility(View.VISIBLE);
                         }
                     } else {
-                        ratingsButtonPressed = 0b100;
-                        ratingPrevious.setVisibility(View.GONE);
-                        ratingPrevious = button_rating_lowhi_ring;
-                        ratingPrevious.setVisibility(View.VISIBLE);
+                        orderButtonPressed = 0b000010;
+                        orderPrevious.setVisibility(View.GONE);
+                        orderPrevious = button_rating_lowhi_ring;
+                        orderPrevious.setVisibility(View.VISIBLE);
                     }
                     break;
                 case R.id.hilowrating:
-                    if (ratingPrevious == button_rating_hilow_ring) {
-                        if (ratingsButtonPressed == 0b010) {
-                            ratingsButtonPressed = 0b000;
-                            ratingPrevious.setVisibility(View.GONE);
+                    if (orderPrevious == button_rating_hilow_ring) {
+                        if (orderButtonPressed == 0b000001) {
+                            orderButtonPressed = 0b000000;
+                            orderPrevious.setVisibility(View.GONE);
                         } else {
-                            ratingsButtonPressed = 0b010;
-                            ratingPrevious.setVisibility(View.VISIBLE);
+                            orderButtonPressed = 0b000001;
+                            orderPrevious.setVisibility(View.VISIBLE);
                         }
                     } else {
-                        ratingsButtonPressed = 0b010;
-                        ratingPrevious.setVisibility(View.GONE);
-                        ratingPrevious = button_rating_hilow_ring;
-                        ratingPrevious.setVisibility(View.VISIBLE);
+                        orderButtonPressed = 0b000001;
+                        orderPrevious.setVisibility(View.GONE);
+                        orderPrevious = button_rating_hilow_ring;
+                        orderPrevious.setVisibility(View.VISIBLE);
                     }
                     break;
                 case R.id.rangerating:
-                    if (ratingPrevious == button_rating_range_ring) {
-                        if (ratingsButtonPressed == 0b001) {
-                            ratingsButtonPressed = 0b000;
-                            ratingPrevious.setVisibility(View.GONE);
-                        } else {
-                            ratingsButtonPressed = 0b001;
-                            ratingPrevious.setVisibility(View.VISIBLE);
-                            main.callRangeDialog("Choose Rating Range", "avg");
-                        }
-                    } else {
-                        ratingsButtonPressed = 0b001;
-                        ratingPrevious.setVisibility(View.GONE);
-                        ratingPrevious = button_rating_range_ring;
-                        ratingPrevious.setVisibility(View.VISIBLE);
+                    if ((priceContRateButtonPressed) % 2 != 1) {
+                        priceContRateButtonPressed += 0b001;
                         main.callRangeDialog("Choose Rating Range", "avg");
+                        button_rating_range_ring.setVisibility(View.VISIBLE);
+                    } else {
+                        priceContRateButtonPressed -= 0b001;
+                        button_rating_range_ring.setVisibility(View.GONE);
                     }
                     break;
             }
@@ -447,41 +418,38 @@ public class FilterMenuHandler {
             button_custommi_ring.setVisibility(View.VISIBLE);
             milesPrevious = button_custommi_ring;
         }
-        if (pricesButtonPressed / 4 == 1) {
+        if (orderButtonPressed / 32 == 1) {
             button_price_lowhi_ring.setVisibility(View.VISIBLE);
-            pricePrevious = button_price_lowhi_ring;
+            orderPrevious = button_price_lowhi_ring;
         }
-        if (pricesButtonPressed / 2 % 2 == 1) {
+        if (orderButtonPressed / 16 % 2 == 1) {
             button_price_hilow_ring.setVisibility(View.VISIBLE);
-            pricePrevious = button_price_hilow_ring;
+            orderPrevious = button_price_hilow_ring;
         }
-        if (pricesButtonPressed % 2 == 1) {
+        if (priceContRateButtonPressed / 4 == 1) {
             button_price_range_ring.setVisibility(View.VISIBLE);
-            pricePrevious = button_price_range_ring;
         }
-        if (contentsButtonPressed / 4 == 1) {
+        if (orderButtonPressed / 8 % 2 == 1) {
             button_content_lowhi_ring.setVisibility(View.VISIBLE);
-            abvPrevious = button_content_lowhi_ring;
+            orderPrevious = button_content_lowhi_ring;
         }
-        if (contentsButtonPressed / 2 % 2 == 1) {
+        if (orderButtonPressed / 4 % 2 == 1) {
             button_content_hilow_ring.setVisibility(View.VISIBLE);
-            abvPrevious = button_content_hilow_ring;
+            orderPrevious = button_content_hilow_ring;
         }
-        if (contentsButtonPressed % 2 == 1) {
+        if (priceContRateButtonPressed / 2 % 2 == 1) {
             button_content_range_ring.setVisibility(View.VISIBLE);
-            abvPrevious = button_content_range_ring;
         }
-        if (ratingsButtonPressed / 4 == 1) {
+        if (orderButtonPressed / 2 % 2 == 1) {
             button_rating_lowhi_ring.setVisibility(View.VISIBLE);
-            ratingPrevious = button_rating_lowhi_ring;
+            orderPrevious = button_rating_lowhi_ring;
         }
-        if (ratingsButtonPressed / 2 % 2 == 1) {
+        if (orderButtonPressed % 2 == 1) {
             button_rating_hilow_ring.setVisibility(View.VISIBLE);
-            ratingPrevious = button_rating_hilow_ring;
+            orderPrevious = button_rating_hilow_ring;
         }
-        if (ratingsButtonPressed % 2 == 1) {
+        if (priceContRateButtonPressed % 2 == 1) {
             button_rating_range_ring.setVisibility(View.VISIBLE);
-            ratingPrevious = button_rating_range_ring;
         }
     }
 
@@ -513,9 +481,8 @@ public class FilterMenuHandler {
         //when resume, pull saves states for each button
         typesButtonPressed = mPrefs.getInt("TYPESBUTTONS", TYPESBUTTONS);
         distancesButtonPressed = mPrefs.getInt("DISTANCESBUTTONS", DISTANCESBUTTONS);
-        pricesButtonPressed = mPrefs.getInt("PRICESBUTTONS", PRICESBUTTONS);
-        contentsButtonPressed = mPrefs.getInt("CONTENTSBUTTONS", CONTENTSBUTTONS);
-        ratingsButtonPressed = mPrefs.getInt("RATINGSBUTTONS", RATINGSBUTTONS);
+        priceContRateButtonPressed = mPrefs.getInt("PRICECONTRATEBUTTONS", PRICECONTRATEBUTTONS);
+        orderButtonPressed = mPrefs.getInt("ORDERBUTTONS", ORDERBUTTONS);
 
         custommi_miles = mPrefs.getInt("CUSTOMMI_MILES", CUSTOMMI_MILES);
         pricerange_low = mPrefs.getInt("PRICE_RANGE_LOW", PRICE_RANGE_LOW);
@@ -532,9 +499,8 @@ public class FilterMenuHandler {
         //store all color states into universal sharedpreference
         ed.putInt("TYPESBUTTONS", typesButtonPressed);
         ed.putInt("DISTANCESBUTTONS", distancesButtonPressed);
-        ed.putInt("PRICESBUTTONS", pricesButtonPressed);
-        ed.putInt("CONTENTSBUTTONS", contentsButtonPressed);
-        ed.putInt("RATINGSBUTTONS", ratingsButtonPressed);
+        ed.putInt("PRICECONTRATEBUTTONS", priceContRateButtonPressed);
+        ed.putInt("ORDERBUTTONS", orderButtonPressed);
 
         ed.putInt("CUSTOMMI_MILES", custommi_miles);
         ed.putInt("PRICE_RANGE_LOW", pricerange_low);

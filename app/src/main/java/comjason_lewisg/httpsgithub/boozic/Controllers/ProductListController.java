@@ -18,6 +18,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
+import comjason_lewisg.httpsgithub.boozic.Handlers.FilterMenuHandler;
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
 
@@ -33,8 +34,8 @@ public class ProductListController {
         checkPlayServices(m);
     }
 
-    public List<TopTensModel> callList(MainActivity m) {
-        if (playService) return getListInBackground(m);
+    public List<TopTensModel> callList(MainActivity m, FilterMenuHandler fm, int latitude, int longitude) {
+        if (playService) return getListInBackground(m, fm, latitude, longitude);
         else return null;
     }
 
@@ -45,7 +46,7 @@ public class ProductListController {
         else playService = false;
     }
 
-    private List<TopTensModel> getListInBackground(final MainActivity m) {
+    private List<TopTensModel> getListInBackground(final MainActivity m, final FilterMenuHandler fm, final int latitude, final int longitude) {
 
         new AsyncTask<Void, Void, String>() {
 
@@ -54,8 +55,27 @@ public class ProductListController {
                 try {
                     StringBuilder urlString = new StringBuilder();
                     //TODO: Store the Server IP in global locaiton
-                    urlString.append("http://54.210.175.98:9080//api/GCM/addGCMRegkey?");
-                    //urlString.append("&DeviceId=").append(android_id);
+                    urlString.append("http://54.210.175.98:9080/api/products/getProducts?");
+                    //append location
+                    urlString.append("latitude=").append(latitude+"?").append("longitude=").append(longitude+"?");
+                    //append types selected in filter menu
+                    if (fm.typesButtonPressed != 0) urlString.append("ProductParentTypeId=").append(fm.typesButtonPressed+"?");
+                    //append mile radius selected in filter menu
+                    if (fm.distancesButtonPressed != 0) {
+                        urlString.append("Radius=");
+                        if (fm.distancesButtonPressed / 4 == 1 ) urlString.append(2+"?");
+                        else if (fm.distancesButtonPressed / 2 % 2 == 1) urlString.append(5+"?");
+                        else if (fm.distancesButtonPressed % 2 == 1) urlString.append(fm.custommi_miles+"?");
+                    }
+                    //append price range if selected in filter menu
+                    if (fm.priceContRateButtonPressed / 4 == 1)
+                        urlString.append("LowestPrice=").append(fm.pricerange_low+"?").append("HighestPrice=").append(fm.pricerange_high+"?");
+                    //append ABV range if selected in filter menu
+                    if (fm.priceContRateButtonPressed / 2 % 2 == 1)
+                        urlString.append("LowestABV=").append(fm.contentrange_low+"?").append("HighestABV=").append(fm.contentrange_high+"?");
+                    //append rating range if selected in filter menu
+                    if (fm.priceContRateButtonPressed % 2 == 1)
+                        urlString.append("LowestRating=").append(fm.ratingrange_low+"?").append("HighestRating=").append(fm.ratingrange_high+"?");
 
                     URL url = new URL(urlString.toString());
                     HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
