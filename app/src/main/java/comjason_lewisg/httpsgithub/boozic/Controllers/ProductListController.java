@@ -25,25 +25,14 @@ import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
 public class ProductListController {
     List<TopTensModel> productList;
     JSONObject jObject = null;
-    boolean playService;
 
-    public void onCreate() {
-    }
+    public void onCreate() {}
 
-    public ProductListController(MainActivity m) {
-        checkPlayServices(m);
-    }
+    public ProductListController() {}
 
     public List<TopTensModel> callList(MainActivity m, FilterMenuHandler fm, int latitude, int longitude) {
-        if (playService) return getListInBackground(m, fm, latitude, longitude);
+        if (m.checkPlayServices()) return getListInBackground(m, fm, latitude, longitude);
         else return null;
-    }
-
-    private void checkPlayServices(MainActivity m) {
-        // Check if Google Play Service is installed in Device
-        // Play services is needed to handle GCM stuffs
-        if (m.checkPlayServices()) playService = true;
-        else playService = false;
     }
 
     private List<TopTensModel> getListInBackground(final MainActivity m, final FilterMenuHandler fm, final int latitude, final int longitude) {
@@ -57,25 +46,25 @@ public class ProductListController {
                     //TODO: Store the Server IP in global locaiton
                     urlString.append("http://54.210.175.98:9080/api/products/getProducts?");
                     //append location
-                    urlString.append("latitude=").append(latitude+"?").append("longitude=").append(longitude+"?");
+                    urlString.append("latitude=").append(latitude).append("?").append("longitude=").append(longitude).append("?");
                     //append types selected in filter menu
-                    if (fm.typesButtonPressed != 0) urlString.append("ProductParentTypeId=").append(fm.typesButtonPressed+"?");
+                    if (fm.typesButtonPressed != 0) urlString.append("ProductParentTypeId=").append(fm.typesButtonPressed).append("?");
                     //append mile radius selected in filter menu
                     if (fm.distancesButtonPressed != 0) {
                         urlString.append("Radius=");
                         if (fm.distancesButtonPressed / 4 == 1 ) urlString.append(2+"?");
                         else if (fm.distancesButtonPressed / 2 % 2 == 1) urlString.append(5+"?");
-                        else if (fm.distancesButtonPressed % 2 == 1) urlString.append(fm.custommi_miles+"?");
+                        else if (fm.distancesButtonPressed % 2 == 1) urlString.append(fm.custommi_miles).append("?");
                     }
                     //append price range if selected in filter menu
                     if (fm.priceContRateButtonPressed / 4 == 1)
-                        urlString.append("LowestPrice=").append(fm.pricerange_low+"?").append("HighestPrice=").append(fm.pricerange_high+"?");
+                        urlString.append("LowestPrice=").append(fm.pricerange_low).append("?").append("HighestPrice=").append(fm.pricerange_high).append("?");
                     //append ABV range if selected in filter menu
                     if (fm.priceContRateButtonPressed / 2 % 2 == 1)
-                        urlString.append("LowestABV=").append(fm.contentrange_low+"?").append("HighestABV=").append(fm.contentrange_high+"?");
+                        urlString.append("LowestABV=").append(fm.contentrange_low).append("?").append("HighestABV=").append(fm.contentrange_high).append("?");
                     //append rating range if selected in filter menu
                     if (fm.priceContRateButtonPressed % 2 == 1)
-                        urlString.append("LowestRating=").append(fm.ratingrange_low+"?").append("HighestRating=").append(fm.ratingrange_high+"?");
+                        urlString.append("LowestRating=").append(fm.ratingrange_low).append("?").append("HighestRating=").append(fm.ratingrange_high).append("?");
 
                     URL url = new URL(urlString.toString());
                     HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -104,8 +93,7 @@ public class ProductListController {
                 } else {
                     try {
                         jObject = new JSONObject(response);
-                    } catch (JSONException e) {
-                    }
+                    } catch (JSONException e) {}
                 }
             }
 
