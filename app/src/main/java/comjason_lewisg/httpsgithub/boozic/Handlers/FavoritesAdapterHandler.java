@@ -1,5 +1,6 @@
 package comjason_lewisg.httpsgithub.boozic.Handlers;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -31,8 +32,10 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
             implements ItemTouchHelperAdapter {
     private List<TopTensModel> items;
     private List<TopTensModel> removeItems;
-    static public int sizeX = 100;
-    static public int sizeY = 250;
+    //size for Normal Screen
+    //use changeSize() to set for difference screen sizes
+    static public int sizeX = 535;
+    static public int sizeY = ActionBar.LayoutParams.MATCH_PARENT;
     MainActivity m;
 
     static View view;

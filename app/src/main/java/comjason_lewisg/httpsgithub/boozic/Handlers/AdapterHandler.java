@@ -1,5 +1,6 @@
 package comjason_lewisg.httpsgithub.boozic.Handlers;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,8 +23,10 @@ import comjason_lewisg.httpsgithub.boozic.R;
 
 public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItemViewHolder> {
     private List<TopTensModel> items = new ArrayList<>();
-    static public int sizeX = 100;
-    static public int sizeY = 250;
+    //size for Normal Screen
+    //use changeSize() to set for difference screen sizes
+    static public int sizeX = 535;
+    static public int sizeY = ActionBar.LayoutParams.MATCH_PARENT;
     MainActivity m;
 
     // Provide a reference to the views for each data item
