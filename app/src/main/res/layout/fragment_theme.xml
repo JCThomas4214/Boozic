@@ -47,7 +47,10 @@
                     android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:elevation="25dp"
+                    android:layout_alignLeft="@id/Primary_color_1"
+                    android:layout_alignRight="@id/Primary_color_1"
+                    android:layout_alignTop="@id/Primary_color_1"
+                    android:layout_alignBottom="@id/Primary_color_1"
                     android:id="@+id/Primary_color_1_ring"
                     android:src="@drawable/color_selector_ring"/>
             </RelativeLayout>
@@ -65,7 +68,10 @@
                     android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:elevation="25dp"
+                    android:layout_alignLeft="@id/Color_accent_1"
+                    android:layout_alignRight="@id/Color_accent_1"
+                    android:layout_alignTop="@id/Color_accent_1"
+                    android:layout_alignBottom="@id/Color_accent_1"
                     android:id="@+id/Color_accent_1_ring"
                     android:src="@drawable/color_selector_ring"/>
             </RelativeLayout>
@@ -89,7 +95,10 @@
                     android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:elevation="25dp"
+                    android:layout_alignLeft="@id/Primary_color_2"
+                    android:layout_alignRight="@id/Primary_color_2"
+                    android:layout_alignTop="@id/Primary_color_2"
+                    android:layout_alignBottom="@id/Primary_color_2"
                     android:id="@+id/Primary_color_2_ring"
                     android:src="@drawable/color_selector_ring"/>
             </RelativeLayout>
@@ -107,7 +116,10 @@
                     android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:elevation="25dp"
+                    android:layout_alignLeft="@id/Color_accent_2"
+                    android:layout_alignRight="@id/Color_accent_2"
+                    android:layout_alignTop="@id/Color_accent_2"
+                    android:layout_alignBottom="@id/Color_accent_2"
                     android:id="@+id/Color_accent_2_ring"
                     android:src="@drawable/color_selector_ring"/>
             </RelativeLayout>
@@ -131,7 +143,10 @@
                     android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:elevation="25dp"
+                    android:layout_alignLeft="@id/Primary_color_3"
+                    android:layout_alignRight="@id/Primary_color_3"
+                    android:layout_alignTop="@id/Primary_color_3"
+                    android:layout_alignBottom="@id/Primary_color_3"
                     android:id="@+id/Primary_color_3_ring"
                     android:src="@drawable/color_selector_ring"/>
             </RelativeLayout>
@@ -149,7 +164,10 @@
                     android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:elevation="25dp"
+                    android:layout_alignLeft="@id/Color_accent_3"
+                    android:layout_alignRight="@id/Color_accent_3"
+                    android:layout_alignTop="@id/Color_accent_3"
+                    android:layout_alignBottom="@id/Color_accent_3"
                     android:id="@+id/Color_accent_3_ring"
                     android:src="@drawable/color_selector_ring"/>
             </RelativeLayout>
@@ -173,7 +191,10 @@
                     android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:elevation="25dp"
+                    android:layout_alignLeft="@id/Primary_color_4"
+                    android:layout_alignRight="@id/Primary_color_4"
+                    android:layout_alignTop="@id/Primary_color_4"
+                    android:layout_alignBottom="@id/Primary_color_4"
                     android:id="@+id/Primary_color_4_ring"
                     android:src="@drawable/color_selector_ring"/>
             </RelativeLayout>
@@ -191,7 +212,10 @@
                     android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:elevation="25dp"
+                    android:layout_alignLeft="@id/Color_accent_4"
+                    android:layout_alignRight="@id/Color_accent_4"
+                    android:layout_alignTop="@id/Color_accent_4"
+                    android:layout_alignBottom="@id/Color_accent_4"
                     android:id="@+id/Color_accent_4_ring"
                     android:src="@drawable/color_selector_ring"/>
             </RelativeLayout>
@@ -214,7 +238,10 @@
                     android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:elevation="25dp"
+                    android:layout_alignLeft="@id/Primary_color_5"
+                    android:layout_alignRight="@id/Primary_color_5"
+                    android:layout_alignTop="@id/Primary_color_5"
+                    android:layout_alignBottom="@id/Primary_color_5"
                     android:id="@+id/Primary_color_5_ring"
                     android:src="@drawable/color_selector_ring"/>
             </RelativeLayout>
@@ -227,10 +254,13 @@
                     android:layout_width="wrap_content"
                     android:id="@+id/Color_accent_5"/>
                 <ImageView
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:elevation="25dp"
+                    android:layout_alignLeft="@id/Color_accent_5"
+                    android:layout_alignRight="@id/Color_accent_5"
+                    android:layout_alignTop="@id/Color_accent_5"
+                    android:layout_alignBottom="@id/Color_accent_5"
                     android:id="@+id/Color_accent_5_ring"
                     android:src="@drawable/color_selector_ring"/>
             </RelativeLayout>
@@ -251,6 +281,7 @@
         <Button
             style="?android:attr/buttonStyleSmall"
             android:background="@color/ColorPrimary"
+            android:foreground="?android:attr/selectableItemBackground"
             android:clickable="true"
             android:id="@+id/color_select_button"
             android:text="SET"

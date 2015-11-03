@@ -1,19 +1,18 @@
 package comjason_lewisg.httpsgithub.boozic.Handlers;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
@@ -22,7 +21,9 @@ import comjason_lewisg.httpsgithub.boozic.ProductActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
 
 public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItemViewHolder> {
-    private List<TopTensModel> items;
+    private List<TopTensModel> items = new ArrayList<>();
+    static public int sizeX = 100;
+    static public int sizeY = 250;
     MainActivity m;
 
     // Provide a reference to the views for each data item
@@ -40,6 +41,7 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         public ListItemViewHolder(View itemView, IMyViewHolderClicks listener) {
             super(itemView);
             mListener = listener;
+            changeListItemSize(itemView, sizeX, sizeY);
             label = (TextView) itemView.findViewById(R.id.txt_label_item);
             storeName = (TextView) itemView.findViewById(R.id.txt_desc_item);
             price = (TextView) itemView.findViewById(R.id.price_item);
@@ -47,6 +49,19 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
             volume = (TextView) itemView.findViewById(R.id.volume_item);
             itemView.setOnClickListener(this);
         }
+
+        public void changeListItemSize(View itemView, int x, int y) {
+            LinearLayout linearLayout = (LinearLayout) itemView.findViewById(R.id.common_item_width);
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) linearLayout.getLayoutParams();
+            layoutParams.width = x;
+            linearLayout.setLayoutParams(layoutParams);
+
+            linearLayout = (LinearLayout) itemView.findViewById(R.id.common_item_layout);
+            FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) linearLayout.getLayoutParams();
+            layoutParams2.height = y;
+            linearLayout.setLayoutParams(layoutParams2);
+        }
+
         @Override
         public void onClick(View v) {
             mListener.onPotato(v, getAdapterPosition());
@@ -57,11 +72,7 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
     }
 
     // Provide a suitable constructor (depends on the kind of data set)
-    public AdapterHandler(List<TopTensModel> modeldata, MainActivity m) {
-        if (modeldata == null) {
-            throw new IllegalArgumentException("modelData must not be null");
-        }
-        items = modeldata;
+    public AdapterHandler(MainActivity m) {
         this.m = m;
     }
 
@@ -125,9 +136,10 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         // - replace the contents of the view with that element
         TopTensModel model = items.get(position);
         DecimalFormat df = new DecimalFormat("####0.##");
+        DecimalFormat df2 = new DecimalFormat("#0.#");
 
         viewHolder.label.setText(model.label);
-        viewHolder.storeName.setText(model.closestStoreName + " (" + model.closestStoreDist + "mi)");
+        viewHolder.storeName.setText(model.closestStoreName + " (" + df2.format(model.closestStoreDist) + "mi)");
         viewHolder.price.setText(NumberFormat.getCurrencyInstance().format(model.closestPrice));
         viewHolder.volume.setText("(" + df.format(model.volume) + model.volumeMeasure + ")");
         switch (model.typePic) {
@@ -140,6 +152,9 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
             case 3:
                 viewHolder.picture.setBackgroundResource(R.mipmap.liquor);
                 break;
+            case 4:
+                viewHolder.picture.setBackgroundResource(R.mipmap.ic_launcher);
+                break;
         }
     }
 
@@ -147,5 +162,31 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
     @Override
     public int getItemCount() {
         return items.size();
+    }
+    public void addList(List<TopTensModel> productList) {
+        items.clear();
+        items.addAll(productList);
+        this.notifyDataSetChanged();
+    }
+
+    public void addItem(TopTensModel item) {
+        items.add(item);
+        this.notifyDataSetChanged();
+    }
+
+    public void clearData() {
+        int size = this.items.size();
+        if (size > 0) {
+            for (int i = 0; i < size; i++) {
+                this.items.remove(0);
+            }
+
+            this.notifyItemRangeRemoved(0, size);
+        }
+    }
+
+    public void changeSize(int x, int y) {
+        sizeX = x;
+        sizeY = y;
     }
 }

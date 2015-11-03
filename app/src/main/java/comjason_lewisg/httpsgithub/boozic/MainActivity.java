@@ -1,14 +1,17 @@
 package comjason_lewisg.httpsgithub.boozic;
 
+import android.app.ActionBar;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.transition.Fade;
 import android.transition.Slide;
 import android.util.Log;
@@ -21,7 +24,11 @@ import android.view.MenuItem;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.SubMenu;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,18 +40,25 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import comjason_lewisg.httpsgithub.boozic.Controllers.DeviceIdController;
+import comjason_lewisg.httpsgithub.boozic.Controllers.ProductListController;
 import comjason_lewisg.httpsgithub.boozic.Fragments.FavoritesFragment;
 import comjason_lewisg.httpsgithub.boozic.Fragments.ThemeFragment;
 import comjason_lewisg.httpsgithub.boozic.Fragments.TopTensFragment;
+import comjason_lewisg.httpsgithub.boozic.Handlers.AdapterHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.AnimateToolbarHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.DialogHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.FilterMenuHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.FloatingActionButtonHandler;
+import comjason_lewisg.httpsgithub.boozic.Handlers.NavigationDrawerHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.SearchBarHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ThemeHandler;
+import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.quinny898.library.persistentsearch.SearchBox;
+
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements ThemeFragment.OnDataPass, TopTensFragment.OnPass, FavoritesFragment.OnPass,
@@ -54,7 +68,9 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public TextView title;
     public DialogHandler DHandle;
     public DeviceIdController DIDcon;
+    public ProductListController PLcon;
     public SearchBarHandler searchBarHandler;
+    public NavigationDrawerHandler Nav;
     public ThemeHandler themeHandler;
     public FloatingActionButtonHandler FAB;
     public FilterMenuHandler FMHandle;
@@ -72,6 +88,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
     public int TBwidth;
     public int TBheight;
+    private double expandConst;
+    private double srinkConst;
 
     private int colorPrimary_id;
     private int colorAccent_id;
@@ -83,13 +101,11 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
     private Location mLastLocation;
     private GoogleApiClient mGoogleApiClient;
-    private LocationRequest mLocationRequest;
+    LocationRequest mLocationRequest;
     private SharedPreferences mPrefs;
 
     private boolean backstack;
     public boolean backstackSearch;
-
-    private Toast mToast;
 
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     GoogleCloudMessaging gcmObj;
@@ -100,9 +116,19 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //pull the shared preference
         mPrefs = getSharedPreferences("COLOR_STATE", MODE_PRIVATE);
         //when resume, pull saves states for each button
         colorPrimary_id = mPrefs.getInt("COLOR_STATE", COLOR_STATE);
+        colorAccent_id = mPrefs.getInt("COLOR_ACCENT_STATE", COLOR_ACCENT_STATE);
+
+        //store the previous state colors into their variables
+        primaryColor = mPrefs.getInt("PRIMARY_STATE", PRIMARY_STATE);
+        primaryColorDark = mPrefs.getInt("PRIMARY_DARK_STATE", PRIMARY_DARK_STATE);
+        accentColor = mPrefs.getInt("ACCENT_STATE", ACCENT_STATE);
+        accentColorDark = mPrefs.getInt("ACCENT_DARK_STATE", ACCENT_DARK_STATE);
+
         switch (colorPrimary_id) {
             case 1:
                 setTheme(R.style.AppTheme);
@@ -121,10 +147,16 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
                 break;
         }
         applicationContext = getApplicationContext();
-        DIDcon = new DeviceIdController(this);
 
         buildGoogleApiClient();
         createLocationRequest();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
+        checkPlayServices();
+
+        DIDcon = new DeviceIdController(this);
+        PLcon = new ProductListController();
 
         setContentView(R.layout.activity_main);
 
@@ -149,12 +181,107 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
         //connect to search bar and create new search handler
         searchBarHandler = new SearchBarHandler(this);
+        Nav = new NavigationDrawerHandler(this,toolbar);
 
-        String str = getIntent().getStringExtra("msg");
-        mToast = Toast.makeText(this, str, Toast.LENGTH_LONG);
+        //change the FAB icons depending on state color
+        findViewById(R.id.toolbar).setBackgroundColor(primaryColor);
 
-        mToast = Toast.makeText(this, "", Toast.LENGTH_LONG);
+        //Creates a FAB for the bottom right corner of the main screen
+        FAB = new FloatingActionButtonHandler(this, primaryColor, primaryColorDark);
+
+        //Create instance for Filter Menu
+        FMHandle = new FilterMenuHandler(this, primaryColor);
+        FMHandle.initiateSharedPref(mPrefs);
+
+        int screenSize = getResources().getConfiguration().screenLayout &
+                Configuration.SCREENLAYOUT_SIZE_MASK;
+
+        switch(screenSize) {
+            case Configuration.SCREENLAYOUT_SIZE_LARGE:
+                Log.v("SCREEN", "Screen size is large");
+                setLarge();
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+                Log.v("SCREEN", "Screen size is Normal");
+                setNormal();
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_SMALL:
+                Log.v("SCREEN", "Screen size is Small");
+                setSmall();
+                break;
+            default:
+                Log.v("SCREEN", "Screen size is Xlarge");
+                setXLarge();
+        }
     }
+
+    public void setLarge() {
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) toolbar.getLayoutParams();
+        layoutParams.height = (int)(TBheight * 0.07);
+        toolbar.setLayoutParams(layoutParams);
+
+        SearchBox search = (SearchBox) findViewById(R.id.searchbox);
+        layoutParams = (FrameLayout.LayoutParams) search.getLayoutParams();
+        layoutParams.leftMargin = (2);
+        layoutParams.rightMargin = (2);
+        layoutParams.topMargin = (1);
+        search.setLayoutParams(layoutParams);
+        searchBarHandler.setSearchButtonXY(-10, -10);
+
+        changeFilterMenuWidth(250);
+
+        expandConst = 0.25;
+        srinkConst = 0.07;
+    }
+    public void setNormal() {
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) toolbar.getLayoutParams();
+        layoutParams.height = (int)(TBheight * 0.09);
+        toolbar.setLayoutParams(layoutParams);
+
+        searchBarHandler.setSearchButtonXY(20, 0);
+
+        expandConst = 0.35;
+        srinkConst = 0.09;
+    }
+    public void setSmall() {
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) toolbar.getLayoutParams();
+        layoutParams.height = 42;
+        toolbar.setLayoutParams(layoutParams);
+        //searchBarHandler.search.setTop(20);
+    }
+    public void setXLarge() {
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) toolbar.getLayoutParams();
+        layoutParams.height = 42;
+        toolbar.setLayoutParams(layoutParams);
+        //searchBarHandler.search.setTop(20);
+    }
+    private void changeFilterMenuWidth(int x) {
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.types_submenu);
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) relativeLayout.getLayoutParams();
+        layoutParams.width = (x);
+        relativeLayout.setLayoutParams(layoutParams);
+
+        relativeLayout = (RelativeLayout) findViewById(R.id.distances_submenu);
+        layoutParams = (LinearLayout.LayoutParams) relativeLayout.getLayoutParams();
+        layoutParams.width = (x);
+        relativeLayout.setLayoutParams(layoutParams);
+
+        relativeLayout = (RelativeLayout) findViewById(R.id.prices_submenu);
+        layoutParams = (LinearLayout.LayoutParams) relativeLayout.getLayoutParams();
+        layoutParams.width = (x);
+        relativeLayout.setLayoutParams(layoutParams);
+
+        relativeLayout = (RelativeLayout) findViewById(R.id.contents_submenu);
+        layoutParams = (LinearLayout.LayoutParams) relativeLayout.getLayoutParams();
+        layoutParams.width = (x);
+        relativeLayout.setLayoutParams(layoutParams);
+
+        relativeLayout = (RelativeLayout) findViewById(R.id.ratings_submenu);
+        layoutParams = (LinearLayout.LayoutParams) relativeLayout.getLayoutParams();
+        layoutParams.width = (x);
+        relativeLayout.setLayoutParams(layoutParams);
+    }
+
 
     public void startFragment(Fragment fragment, boolean backstack) {
         this.backstack = backstack;
@@ -185,12 +312,23 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         DHandle.OpenCustomMileDialog(this);
     }
 
+    public void callProductRefresh(AdapterHandler mAdapter, SwipeRefreshLayout swipeRefreshLayout) {
+        mLastLocation = LocationServices.FusedLocationApi
+                .getLastLocation(mGoogleApiClient);
+
+        if (mLastLocation != null) {
+            PLcon.callList(this, FMHandle, mAdapter, swipeRefreshLayout, mLastLocation.getLatitude(), mLastLocation.getLongitude());
+        } else {
+            Log.v("LOCATION", "Couldn't get the location. Make sure location is enabled on the device");
+        }
+    }
+
     public void showFilterMenu() {
         if (!FMHandle.menuOpen) {
             item.setIcon(R.drawable.filter);
             FMHandle.showFilterMenu();
 
-            AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, (int)(TBheight * 0.36));
+            AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, (int)(TBheight * expandConst));
             anim.setDuration(350);
             toolbar.startAnimation(anim);
         }
@@ -201,7 +339,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
             item.setIcon(R.drawable.filter_outline);
             FMHandle.hideFilterMenu();
 
-            AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, (int) (TBheight * 0.09));
+            AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, (int) (TBheight * srinkConst));
             anim.setDuration(500);
             toolbar.startAnimation(anim);
         }
@@ -243,11 +381,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
                 .getLastLocation(mGoogleApiClient);
 
         if (mLastLocation != null) {
-            mToast.setText("Latitude " + mLastLocation.getLatitude() + " , " +"Longitude " + mLastLocation.getLongitude());
-            mToast.show();
         } else {
-            mToast.setText("Couldn't get the location. Make sure location is enabled on the device");
-            mToast.show();
+            Log.v("LOCATION", "Couldn't get the location. Make sure location is enabled on the device");
         }
     }
 
@@ -322,8 +457,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
             if (resultCode == RESULT_OK) {
                 // A contact was picked.  Here we will just display it
                 // to the user.
-                mToast.setText(data.getExtras().getString("RESULT"));
-                mToast.show();
+                Log.v("CAM RESULT", data.getExtras().getString("RESULT"));
                 //TODO PING LOCATION HERE
                 //TODO SEND TO BACKEND HERE
             }
@@ -337,38 +471,12 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         if (mGoogleApiClient != null) {
             mGoogleApiClient.connect();
         }
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        //pull the shared preference
-        mPrefs = getSharedPreferences("COLOR_STATE", MODE_PRIVATE);
-        //when resume, pull saves states for each button
-        colorPrimary_id = mPrefs.getInt("COLOR_STATE", COLOR_STATE);
-        colorAccent_id = mPrefs.getInt("COLOR_ACCENT_STATE", COLOR_ACCENT_STATE);
-
-        //store the previous state colors into their variables
-        primaryColor = mPrefs.getInt("PRIMARY_STATE", PRIMARY_STATE);
-        primaryColorDark = mPrefs.getInt("PRIMARY_DARK_STATE", PRIMARY_DARK_STATE);
-        accentColor = mPrefs.getInt("ACCENT_STATE", ACCENT_STATE);
-        accentColorDark = mPrefs.getInt("ACCENT_DARK_STATE", ACCENT_DARK_STATE);
-
-        //change the FAB icons depending on state color
-        findViewById(R.id.toolbar).setBackgroundColor(primaryColor);
-
-        //Creates a FAB for the bottom right corner of the main screen
-        FAB = new FloatingActionButtonHandler(this, primaryColor, primaryColorDark);
-
-        //Create instance for Filter Menu
-        FMHandle = new FilterMenuHandler(this, primaryColor);
-        FMHandle.initiateSharedPref(mPrefs);
-
-        AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, (int) (TBheight * 0.09));
-        anim.setDuration(0);
-        toolbar.startAnimation(anim);
-
         checkPlayServices();
     }
 
@@ -387,7 +495,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
         /*FBhandle.saveSharedPref(ed);*/
         FMHandle.saveSharedPref(ed);
-        hideFilterMenu();
         //apply changes
         ed.apply();
     }
@@ -396,6 +503,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     protected void onStop() {
         mGoogleApiClient.disconnect();
         super.onStop();
+        hideFilterMenu();
     }
 
     @Override
@@ -403,11 +511,11 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         /*if (backstackSearch) {
             searchBarHandler.closeSearch();
         } else*/ if (backstack) {
-            MenuItem toptens = searchBarHandler.Nav.navigationView.getMenu().getItem(0);
-            searchBarHandler.Nav.delay = 0;
-            searchBarHandler.Nav.NavListener.onNavigationItemSelected(toptens);
-            searchBarHandler.Nav.setMenuItenChecked(0);
-            searchBarHandler.Nav.delay = 320;
+            MenuItem toptens = Nav.navigationView.getMenu().getItem(0);
+            Nav.delay = 0;
+            Nav.NavListener.onNavigationItemSelected(toptens);
+            Nav.setMenuItenChecked(0);
+            Nav.delay = 320;
             this.backstack = false;
         } else {
             super.onBackPressed();
@@ -479,7 +587,14 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     }
 
     @Override
-    public void AskToShowGPS () { displayLocation(); }
+    public void AskForProductListrefresh (AdapterHandler mAdapter, SwipeRefreshLayout swipeRefreshLayout) {
+        callProductRefresh(mAdapter, swipeRefreshLayout);
+    }
+
+    @Override
+    public List<TopTensModel> AskForProductList() {
+        return PLcon.productList;
+    }
 
     @Override
     public void AskToShowFilterButtons () {

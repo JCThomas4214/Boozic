@@ -70,9 +70,7 @@ public class DialogHandler {
                 .title(title)
                 .customView(R.layout.custom_range, true)
                 .positiveText("SET")
-                .negativeText("CANCEL")
                 .positiveColor(m.getColorAccent())
-                .negativeColor(m.getColorAccent())
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -112,9 +110,7 @@ public class DialogHandler {
                 .title("Custom Mile Radius")
                 .customView(R.layout.custom_mi, true)
                 .positiveText("SET")
-                .negativeText("CANCEL")
                 .positiveColor(m.getColorAccent())
-                .negativeColor(m.getColorAccent())
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {

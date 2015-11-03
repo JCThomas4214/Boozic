@@ -4,7 +4,8 @@ public class UpdateProductModel {
 
     public String label;
     public double userRating;
-    public int deviceID;
+    public String upc;
+    public int productId;
 
     public String StoreName;
     public double StoreDist;
@@ -26,7 +27,6 @@ public class UpdateProductModel {
         updateABV(abv);
 
         userRating = -1;
-        deviceID = -1;
         StoreName = null;
         StoreDist = -1;
         Price = -1;
@@ -40,7 +40,6 @@ public class UpdateProductModel {
         this.volumeMeasure = volumeMeasure;
 
         userRating = -1;
-        deviceID = -1;
         StoreName = null;
         StoreDist = -1;
         Price = -1;

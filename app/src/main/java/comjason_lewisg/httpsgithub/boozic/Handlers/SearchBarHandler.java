@@ -35,10 +35,11 @@ import io.codetailps.animation.ViewAnimationUtils;
 public class SearchBarHandler {
 
     private MainActivity m;
-    public NavigationDrawerHandler Nav;
     public SearchSuggestHandler searchSuggestHandler;
     public SearchBox search;
     private int dist;
+    private int searchButtY;
+    private int searchButtX;
 
     public void onCreate() {}
 
@@ -50,7 +51,6 @@ public class SearchBarHandler {
     public void setActivity(Toolbar t) {
         //Creates a Navigation Drawer
         //When you swipe from the left
-        Nav = new NavigationDrawerHandler(m,t);
 
         SearchBox search = (SearchBox) m.findViewById(R.id.searchbox);
         search.setY(m.findViewById(R.id.searchbox).getHeight() / 2);
@@ -90,13 +90,13 @@ public class SearchBarHandler {
         Handler handler = new Handler();
 
         //Lock and hide Navagation drawer and Nav drawer icon
-        Nav.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        m.Nav.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         //set a delay to remove navigation drawer burger icon
         //this makes the icon unclickable and the user doesn't see it happen
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Nav.actionBarDrawerToggle.setDrawerIndicatorEnabled(false);
+                m.Nav.actionBarDrawerToggle.setDrawerIndicatorEnabled(false);
             }
         }, 400);
     }
@@ -130,7 +130,7 @@ public class SearchBarHandler {
         @Override
         public void onSearch(String searchTerm) {
             search.setLogoText(searchTerm);
-            Nav.navigationView.getMenu().getItem(Nav.titleIndex).setCheckable(false);
+            m.Nav.navigationView.getMenu().getItem(m.Nav.titleIndex).setCheckable(false);
             //m.title.setText(searchTerm);
 
             //TODO: we need to connect to the backend here and query for product search to populate product activity
@@ -154,8 +154,8 @@ public class SearchBarHandler {
 
     public void closeSearch() {
         //Turn buttons back on and unlock Nav drawer
-        Nav.actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
-        Nav.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        m.Nav.actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
+        m.Nav.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
         final FloatingActionButton menu = (FloatingActionButton) m.findViewById(R.id.fabtop);
         Handler handler = new Handler();
@@ -173,9 +173,9 @@ public class SearchBarHandler {
         //if no characters inputted or erased
         if(search.getSearchText().isEmpty()) {
             //set Toolbar title to previously selected content and set true for Nav drawer congruency
-            Nav.navigationView.getMenu().getItem(Nav.titleIndex).setCheckable(true);
-            m.title.setText(Nav.title);
-            search.setLogoText(Nav.title);
+            m.Nav.navigationView.getMenu().getItem(m.Nav.titleIndex).setCheckable(true);
+            m.title.setText(m.Nav.title);
+            search.setLogoText(m.Nav.title);
         }
     }
 
@@ -201,8 +201,8 @@ public class SearchBarHandler {
         Resources r = m.getResources();
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96,
                 r.getDisplayMetrics());
-        int cx = m.findViewById(R.id.toolbar).getWidth() - (m.findViewById(R.id.action_search).getWidth() / 2) + 20;
-        int cy = m.findViewById(R.id.toolbar).getHeight() / 2 + dist;
+        int cx = m.findViewById(R.id.toolbar).getWidth() - (m.findViewById(R.id.action_search).getWidth() / 2) + searchButtX;
+        int cy = m.findViewById(R.id.toolbar).getHeight() / 2 + dist + searchButtY;
 
         int finalRadius = (int) Math.max(layout.getWidth(), px);
 
@@ -246,8 +246,8 @@ public class SearchBarHandler {
         Resources r = m.getResources();
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96,
                 r.getDisplayMetrics());
-        int cx = m.findViewById(R.id.toolbar).getWidth() - (m.findViewById(R.id.action_search).getWidth() / 2) + 20;
-        int cy = m.findViewById(R.id.toolbar).getHeight() / 2 + dist;
+        int cx = m.findViewById(R.id.toolbar).getWidth() - (m.findViewById(R.id.action_search).getWidth() / 2) + searchButtX;
+        int cy = m.findViewById(R.id.toolbar).getHeight() / 2 + dist + searchButtY;
         int finalRadius = (int) Math.max(layout.getWidth()*1.5, px);
 
         SupportAnimator animator = ViewAnimationUtils.createCircularReveal(
@@ -278,5 +278,10 @@ public class SearchBarHandler {
             }
 
         });
+    }
+
+    public void setSearchButtonXY(int x, int y) {
+        searchButtX = x;
+        searchButtY = y;
     }
 }

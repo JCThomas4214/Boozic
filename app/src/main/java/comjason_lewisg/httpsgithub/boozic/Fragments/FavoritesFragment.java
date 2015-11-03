@@ -1,5 +1,6 @@
 package comjason_lewisg.httpsgithub.boozic.Fragments;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -80,12 +81,27 @@ public class FavoritesFragment extends Fragment implements OnStartDragListener {
 
         mRecyclerView.setHasFixedSize(true);
 
+        int screenSize = getResources().getConfiguration().screenLayout &
+                Configuration.SCREENLAYOUT_SIZE_MASK;
+
         mAdapter = new FavoritesAdapterHandler(DataSet, (MainActivity) getActivity(), this);
+        switch(screenSize) {
+            case Configuration.SCREENLAYOUT_SIZE_LARGE:
+                mAdapter.changeSize(840, 175);
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_SMALL:
+                break;
+            default:
+        }
         mRecyclerView.setAdapter(mAdapter);
 
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mAdapter);
         mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(mRecyclerView);
+
+
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -112,7 +128,6 @@ public class FavoritesFragment extends Fragment implements OnStartDragListener {
         int AskForColorPrimaryDark();
         int AskForColorAccent();
         int AskForColorAccentDark();
-        void AskToShowGPS();
     }
 
     public int askColorPrimary() { return dataPasser.AskForColorPrimary(); }
@@ -122,8 +137,6 @@ public class FavoritesFragment extends Fragment implements OnStartDragListener {
     public int askColorAccent() { return dataPasser.AskForColorAccent(); }
 
     public int askColorAccentDark() { return dataPasser.AskForColorAccentDark(); }
-
-    public void askShowGPS() { dataPasser.AskToShowGPS(); }
 
     @Override
     public void onStart() {

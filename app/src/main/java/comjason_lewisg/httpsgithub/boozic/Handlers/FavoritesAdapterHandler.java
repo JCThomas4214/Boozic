@@ -8,7 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
@@ -29,6 +31,8 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
             implements ItemTouchHelperAdapter {
     private List<TopTensModel> items;
     private List<TopTensModel> removeItems;
+    static public int sizeX = 100;
+    static public int sizeY = 250;
     MainActivity m;
 
     static View view;
@@ -50,12 +54,25 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
         public ListItemViewHolder(View itemView, IMyViewHolderClicks listener) {
             super(itemView);
             mListener = listener;
+            changeListItemSize(itemView, sizeX, sizeY);
             label = (TextView) itemView.findViewById(R.id.txt_label_item);
             storeName = (TextView) itemView.findViewById(R.id.txt_desc_item);
             price = (TextView) itemView.findViewById(R.id.price_item);
             picture = (ImageView) itemView.findViewById(R.id.type_image);
             volume = (TextView) itemView.findViewById(R.id.volume_item);
             itemView.setOnClickListener(this);
+        }
+
+        public void changeListItemSize(View itemView, int x, int y) {
+            LinearLayout linearLayout = (LinearLayout) itemView.findViewById(R.id.common_item_width);
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) linearLayout.getLayoutParams();
+            layoutParams.width = x;
+            linearLayout.setLayoutParams(layoutParams);
+
+            linearLayout = (LinearLayout) itemView.findViewById(R.id.common_item_layout);
+            FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) linearLayout.getLayoutParams();
+            layoutParams2.height = y;
+            linearLayout.setLayoutParams(layoutParams2);
         }
 
         @Override
@@ -188,5 +205,10 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
 
     public List<TopTensModel> getRemovedList() {
         return removeItems;
+    }
+
+    public void changeSize(int x, int y) {
+        sizeX = x;
+        sizeY = y;
     }
 }

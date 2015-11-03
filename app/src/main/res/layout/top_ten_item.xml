@@ -9,6 +9,7 @@
     android:background="@color/white"
     android:foreground="?android:attr/selectableItemBackground">
 
-    <include layout="@layout/common_item_layout" />
+    <include android:id="@+id/common_item_layout"
+        layout="@layout/common_item_layout" />
 
 </FrameLayout>

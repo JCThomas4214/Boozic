@@ -2,14 +2,11 @@ package comjason_lewisg.httpsgithub.boozic.Handlers;
 
 
 import android.content.SharedPreferences;
-import android.os.Handler;
-import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import comjason_lewisg.httpsgithub.boozic.MainActivity;

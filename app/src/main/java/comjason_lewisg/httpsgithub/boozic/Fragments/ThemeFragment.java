@@ -2,6 +2,7 @@ package comjason_lewisg.httpsgithub.boozic.Fragments;
 
 
 import android.app.Activity;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;

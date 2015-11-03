@@ -245,6 +245,9 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             case 3:
                 viewHolder.typePic.setBackgroundResource(R.mipmap.liquor);
                 break;
+            case 4:
+                viewHolder.typePic.setBackgroundResource(R.mipmap.ic_launcher);
+                break;
         }
     }
 

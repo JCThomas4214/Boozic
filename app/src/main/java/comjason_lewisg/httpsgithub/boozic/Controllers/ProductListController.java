@@ -1,7 +1,7 @@
 package comjason_lewisg.httpsgithub.boozic.Controllers;
 
 import android.os.AsyncTask;
-import android.provider.Settings;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -12,59 +12,65 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
+import comjason_lewisg.httpsgithub.boozic.Handlers.AdapterHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.FilterMenuHandler;
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
 
 public class ProductListController {
-    List<TopTensModel> productList;
-    JSONObject jObject = null;
+    public List<TopTensModel> productList = new ArrayList<>();
 
     public void onCreate() {}
 
     public ProductListController() {}
 
-    public List<TopTensModel> callList(MainActivity m, FilterMenuHandler fm, int latitude, int longitude) {
-        if (m.checkPlayServices()) return getListInBackground(m, fm, latitude, longitude);
-        else return null;
+    public void callList(MainActivity m, FilterMenuHandler fm, AdapterHandler mAdapter, SwipeRefreshLayout swipeRefreshLayout, double latitude, double longitude) {
+        if (m.checkPlayServices()) {
+            getListInBackground(m, fm, mAdapter, swipeRefreshLayout, latitude, longitude);
+        }
     }
 
-    private List<TopTensModel> getListInBackground(final MainActivity m, final FilterMenuHandler fm, final int latitude, final int longitude) {
+    private void getListInBackground(final MainActivity m, final FilterMenuHandler fm, final AdapterHandler mAdapter, final SwipeRefreshLayout swipeRefreshLayout, final double latitude, final double longitude) {
 
-        new AsyncTask<Void, Void, String>() {
+        if (!swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(true);
+        productList.clear();
+
+        new AsyncTask<Void, Void, JSONArray>() {
 
             @Override
-            protected String doInBackground(Void... urls) {
+            protected JSONArray doInBackground(Void... urls) {
                 try {
                     StringBuilder urlString = new StringBuilder();
                     //TODO: Store the Server IP in global locaiton
                     urlString.append("http://54.210.175.98:9080/api/products/getProducts?");
                     //append location
-                    urlString.append("latitude=").append(latitude).append("?").append("longitude=").append(longitude).append("?");
+                    urlString.append("latitude=").append(latitude).append("&longitude=").append(longitude);
                     //append types selected in filter menu
-                    if (fm.typesButtonPressed != 0) urlString.append("ProductParentTypeId=").append(fm.typesButtonPressed).append("?");
+                    if (fm.typesButtonPressed != 0) urlString.append("&ProductParentTypeId=").append(fm.typesButtonPressed);
                     //append mile radius selected in filter menu
                     if (fm.distancesButtonPressed != 0) {
-                        urlString.append("Radius=");
-                        if (fm.distancesButtonPressed / 4 == 1 ) urlString.append(2+"?");
-                        else if (fm.distancesButtonPressed / 2 % 2 == 1) urlString.append(5+"?");
-                        else if (fm.distancesButtonPressed % 2 == 1) urlString.append(fm.custommi_miles).append("?");
+                        urlString.append("&Radius=");
+                        if (fm.distancesButtonPressed / 4 == 1 ) urlString.append(2);
+                        else if (fm.distancesButtonPressed / 2 % 2 == 1) urlString.append(5);
+                        else if (fm.distancesButtonPressed % 2 == 1) urlString.append(fm.custommi_miles);
                     }
                     //append price range if selected in filter menu
                     if (fm.priceContRateButtonPressed / 4 == 1)
-                        urlString.append("LowestPrice=").append(fm.pricerange_low).append("?").append("HighestPrice=").append(fm.pricerange_high).append("?");
+                        urlString.append("&LowestPrice=").append(fm.pricerange_low).append("&HighestPrice=").append(fm.pricerange_high);
                     //append ABV range if selected in filter menu
                     if (fm.priceContRateButtonPressed / 2 % 2 == 1)
-                        urlString.append("LowestABV=").append(fm.contentrange_low).append("?").append("HighestABV=").append(fm.contentrange_high).append("?");
+                        urlString.append("&LowestABV=").append(fm.contentrange_low).append("&HighestABV=").append(fm.contentrange_high);
                     //append rating range if selected in filter menu
                     if (fm.priceContRateButtonPressed % 2 == 1)
-                        urlString.append("LowestRating=").append(fm.ratingrange_low).append("?").append("HighestRating=").append(fm.ratingrange_high).append("?");
+                        urlString.append("&LowestRating=").append(fm.ratingrange_low).append("&HighestRating=").append(fm.ratingrange_high);
+
+                    if (fm.orderButtonPressed != 0) urlString.append("&SortOption=").append(fm.orderButtonPressed);
 
                     URL url = new URL(urlString.toString());
                     HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -76,7 +82,7 @@ public class ProductListController {
                             stringBuilder.append(line).append("\n");
                         }
                         bufferedReader.close();
-                        return stringBuilder.toString();
+                        return new JSONArray(stringBuilder.toString());
                     } finally {
                         urlConnection.disconnect();
                     }
@@ -87,50 +93,45 @@ public class ProductListController {
             }
 
             @Override
-            protected void onPostExecute(String response) {
-                if (response == null) {
-                    response = "THERE WAS AN ERROR";
-                } else {
-                    try {
-                        jObject = new JSONObject(response);
-                    } catch (JSONException e) {}
-                }
+            protected void onPostExecute(JSONArray jsonData) {
+                mAdapter.clearData();
+                parseJsonObject(jsonData, mAdapter);
+                swipeRefreshLayout.setRefreshing(false);
             }
-
         }.execute();
-        return parseJsonObject(jObject);
     }
 
-    public List<TopTensModel> parseJsonObject(JSONObject jObject) {
-        JSONArray jArray;
+    public void parseJsonObject(JSONArray jArr, AdapterHandler mAdapter) {
 
-        try {
-            jArray = jObject.getJSONArray("PRODUCT_LIST_ARRAY");
+        TopTensModel product;
 
-            for (int i = 0; i < jArray.length(); i++) {
-                try {
-                    JSONObject oneObject = jArray.getJSONObject(i);
+        for (int i = 0; i < jArr.length(); i++) {
+            try {
+                JSONObject oneObject = jArr.getJSONObject(i);
+                JSONObject closestStoreObject = oneObject.getJSONObject("ClosestStore");
+                JSONObject cheapestStoreObject = oneObject.getJSONObject("CheapestStore");
 
-                    productList.add(new TopTensModel(oneObject.getString("PRODUCT_LABEL"),
-                            oneObject.getString("PRODUCT_UPDATED"),
-                            oneObject.getDouble("PRODUCT_USERRATING"),
-                            oneObject.getString("PRODUCT_CLOSEST_STORE"),
-                            oneObject.getString("PRODUCT_CHEAPEST_STORE"),
-                            oneObject.getDouble("PRODUCT_CLOSEST_DIST"),
-                            oneObject.getDouble("PRODUCT_CHEAPEST_DIST"),
-                            oneObject.getDouble("PRODUCT_CLOSEST_PRICE"),
-                            oneObject.getDouble("PRIDUCT_CHEAPEST_PRICE"),
-                            oneObject.getInt("PRODUCT_TYPE"),
-                            oneObject.getBoolean("FAVORITE_PRODUCT"),
-                            oneObject.getString("PRODUCT_CONTAINER"),
-                            oneObject.getDouble("PRODUCT_ABV"),
-                            oneObject.getInt("PRODUCT_PROOF"),
-                            new int[] {oneObject.getInt("PRODUCT_RATING_FIVE"),oneObject.getInt("PRODUCT_RATING_FOUR"),
-                                    oneObject.getInt("PRODUCT_RATING_THREE"),oneObject.getInt("PRODUCT_RATING_TWO"),oneObject.getInt("PRODUCT_RATING_ONE")}));
-                } catch (JSONException e) {}
-            }
+                product = new TopTensModel(oneObject.getString("ProductName"),
+                        oneObject.getString("LastUpdated"),
+                        0, //oneObject.getDouble("PRODUCT_USERRATING"),
+                        closestStoreObject.getString("StoreName"),
+                        null, //oneObject.getString("PRODUCT_CHEAPEST_STORE"),
+                        oneObject.getDouble("DistanceCalculatedInMiles"),
+                        -1, //oneObject.getDouble("PRODUCT_CHEAPEST_DIST"),
+                        oneObject.getDouble("Price"),
+                        -1, //oneObject.getDouble("PRIDUCT_CHEAPEST_PRICE"),
+                        oneObject.getInt("ProductParentTypeId"),
+                        false, //favorite
+                        oneObject.getString("ContainerType"),
+                        oneObject.getDouble("ABV"),
+                        (int) (oneObject.getDouble("ABV") * 2),
+                        new int[]{oneObject.getInt("Rating1"), oneObject.getInt("Rating2"),
+                                oneObject.getInt("Rating3"), oneObject.getInt("Rating4"), oneObject.getInt("Rating5")});
 
-        } catch (JSONException e) {}
-        return productList;
+                mAdapter.addItem(product);
+                productList.add(product);
+
+            } catch (JSONException e) {}
+        }
     }
 }

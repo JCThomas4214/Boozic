@@ -1,14 +1,10 @@
 package comjason_lewisg.httpsgithub.boozic.Handlers;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.content.res.XmlResourceParser;
-import android.graphics.Color;
+import android.content.res.Configuration;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -18,11 +14,9 @@ import android.view.View;
 import android.widget.Toast;
 
 import comjason_lewisg.httpsgithub.boozic.Fragments.FavoritesFragment;
-import comjason_lewisg.httpsgithub.boozic.Fragments.SpendingFragment;
 import comjason_lewisg.httpsgithub.boozic.Fragments.ThemeFragment;
 import comjason_lewisg.httpsgithub.boozic.Fragments.TopTensFragment;
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
-import comjason_lewisg.httpsgithub.boozic.ProductActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
 import comjason_lewisg.httpsgithub.boozic.SettingsActivity;
 
@@ -37,7 +31,6 @@ public class NavigationDrawerHandler {
     public TopTensFragment topTensFragment;
     public FavoritesFragment favoritesFragment;
     public ThemeFragment themeFragment;
-    public android.support.v4.app.FragmentTransaction fragmentTransaction;
 
     private MainActivity m;
 
@@ -61,6 +54,19 @@ public class NavigationDrawerHandler {
         /*spendingFragment = new SpendingFragment();*/
 
         themeFragment = new ThemeFragment();
+
+        int screenSize = m.getResources().getConfiguration().screenLayout &
+                Configuration.SCREENLAYOUT_SIZE_MASK;
+
+        switch(screenSize) {
+            case Configuration.SCREENLAYOUT_SIZE_LARGE:
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_SMALL:
+                break;
+            default:
+        }
 
         m.startFragment(topTensFragment, false);
 

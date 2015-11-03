@@ -13,6 +13,9 @@ public class TopTensModel {
     public double userRating;
     public int boozicScore;
 
+    public String upc;
+    public int productId;
+
     public String closestStoreName;
     public String cheapestStoreName;
     public double closestStoreDist;
@@ -25,7 +28,7 @@ public class TopTensModel {
 
     public String container;
     public double volume;
-    public String volumeMeasure;
+    public String volumeMeasure = null;
 
     public double pbv;
     public double abv;
@@ -58,11 +61,13 @@ public class TopTensModel {
         this.proof = proof;
         System.arraycopy(rating,0,this.rating,0,rating.length);
 
-        volume = findVol();
-        pbv = findPBV();
-        abp = findABP();
-        pdd = findPDD();
-        td = findTD();
+        if (container != null) volume = findVol();
+        if (closestPrice != -1 && volumeMeasure != null) pbv = findPBV();
+        if (abv != -1 && volumeMeasure != null) abp = findABP();
+        if (cheapestPrice != -1) {
+            pdd = findPDD();
+            td = findTD();
+        }
         avgRating = findAverage();
     }
 
@@ -127,7 +132,7 @@ public class TopTensModel {
 
     public double findABP() {
         double volumetmp = convertVol();
-        float abptmp = (float)cheapestPrice / (((float)abv/100f) * (float)volumetmp);
+        float abptmp = (float)closestPrice / (((float)abv/100f) * (float)volumetmp);
 
         return (double)abptmp;
     }
@@ -139,7 +144,7 @@ public class TopTensModel {
         return (double)pddtmp;
     }
     private double findPBV() {
-        float pbvtmp = (float)cheapestPrice / (float)convertVol();
+        float pbvtmp = (float)closestPrice / (float)convertVol();
         return (double)pbvtmp;
     }
     private double findTD() {

@@ -13,10 +13,15 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_horizontal">
-        <include layout="@layout/types_submenu" />
-        <include layout="@layout/distances_submenu" />
-        <include layout="@layout/prices_submenu" />
-        <include layout="@layout/contents_submenu" />
-        <include layout="@layout/ratings_submenu" />
+        <include android:id="@+id/types_submenu"
+            layout="@layout/types_submenu" />
+        <include android:id="@+id/distances_submenu"
+            layout="@layout/distances_submenu" />
+        <include android:id="@+id/prices_submenu"
+            layout="@layout/prices_submenu" />
+        <include android:id="@+id/contents_submenu"
+            layout="@layout/contents_submenu" />
+        <include android:id="@+id/ratings_submenu"
+            layout="@layout/ratings_submenu" />
     </LinearLayout>
 </LinearLayout>
