@@ -254,7 +254,7 @@
                     android:layout_width="wrap_content"
                     android:id="@+id/Color_accent_5"/>
                 <ImageView
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:layout_alignLeft="@id/Color_accent_5"

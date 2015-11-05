@@ -83,13 +83,13 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     private double expandConst;
     private double srinkConst;
 
-    private int colorPrimary_id;
-    private int colorAccent_id;
+    private int colorPrimary_id = 1;
+    private int colorAccent_id = 1;
 
-    private int primaryColor;
-    private int primaryColorDark;
-    private int accentColor;
-    private int accentColorDark;
+    private int primaryColor = -15374912;
+    private int primaryColorDark = -15906911;
+    private int accentColor = -26624;
+    private int accentColorDark = -291840;
 
     private Location mLastLocation;
     private GoogleApiClient mGoogleApiClient;
@@ -378,7 +378,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
         //initial query to populate list
         if (firstStartRefresh) {
-            Nav.topTensFragment.askForProductListrefresh(Nav.topTensFragment.getmAdapter(), Nav.topTensFragment.getSwipeRefreshLayout());
+            //Nav.topTensFragment.askForProductListrefresh(Nav.topTensFragment.getmAdapter(), Nav.topTensFragment.getSwipeRefreshLayout());
             firstStartRefresh = false;
         }
     }
