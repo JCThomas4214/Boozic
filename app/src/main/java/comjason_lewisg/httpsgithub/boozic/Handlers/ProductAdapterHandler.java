@@ -171,6 +171,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         DecimalFormat df = new DecimalFormat("####0.##");
         DecimalFormat monFormat = new DecimalFormat("####0.00");
         DecimalFormat pbvFormat = new DecimalFormat("####0.00#");
+        DecimalFormat distanceFormat = new DecimalFormat("#0.0");
 
         viewHolder.label.setText(model.label);
         if (model.lastUpdate == null) viewHolder.lastUpdate.setText("N/A");
@@ -194,12 +195,12 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
                 viewHolder.pdd.setText("N/A");
                 viewHolder.td.setText("N/A");
             } else {
-                viewHolder.closestStore.setText("(" + model.closestStoreDist + "mi) " + model.closestStoreName);
+                viewHolder.closestStore.setText("(" + distanceFormat.format(model.closestStoreDist) + "mi) " + model.closestStoreName);
                 viewHolder.closestPrice.setText("$" + monFormat.format(model.closestPrice));
                 viewHolder.pdd.setText("$" + monFormat.format(model.pdd));
                 viewHolder.td.setText("$" + monFormat.format(model.td));
             }
-            viewHolder.cheapestStore.setText("(" + model.cheapestStoreDist + "mi) " + model.cheapestStoreName);
+            viewHolder.cheapestStore.setText("(" + distanceFormat.format(model.cheapestStoreDist) + "mi) " + model.cheapestStoreName);
             viewHolder.cheapestPrice.setText("$" + monFormat.format(model.cheapestPrice));
         }
 
@@ -237,10 +238,10 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
     public void selectTypePic(ProductStorageModel model, ProductInfoHolder viewHolder) {
         switch (model.typePic) {
             case 1:
-                viewHolder.typePic.setBackgroundResource(R.mipmap.beer);
+                viewHolder.typePic.setBackgroundResource(R.mipmap.wine);
                 break;
             case 2:
-                viewHolder.typePic.setBackgroundResource(R.mipmap.wine);
+                viewHolder.typePic.setBackgroundResource(R.mipmap.beer);
                 break;
             case 3:
                 viewHolder.typePic.setBackgroundResource(R.mipmap.liquor);

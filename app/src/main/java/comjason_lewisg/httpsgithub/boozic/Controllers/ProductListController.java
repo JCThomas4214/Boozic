@@ -1,6 +1,7 @@
 package comjason_lewisg.httpsgithub.boozic.Controllers;
 
 import android.os.AsyncTask;
+import android.provider.Settings;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 
@@ -47,10 +48,13 @@ public class ProductListController {
             protected JSONArray doInBackground(Void... urls) {
                 try {
                     StringBuilder urlString = new StringBuilder();
+                    String android_id = Settings.Secure.getString(m.applicationContext.getContentResolver(),Settings.Secure.ANDROID_ID);
                     //TODO: Store the Server IP in global locaiton
                     urlString.append("http://54.210.175.98:9080/api/products/getProducts?");
                     //append location
                     urlString.append("latitude=").append(latitude).append("&longitude=").append(longitude);
+                    //append Device id
+                    //urlString.append("&DeviceId=").append( android_id );
                     //append types selected in filter menu
                     if (fm.typesButtonPressed != 0) urlString.append("&ProductParentTypeId=").append(fm.typesButtonPressed);
                     //append mile radius selected in filter menu
@@ -108,29 +112,10 @@ public class ProductListController {
         for (int i = 0; i < jArr.length(); i++) {
             try {
                 JSONObject oneObject = jArr.getJSONObject(i);
-                JSONObject closestStoreObject = oneObject.getJSONObject("ClosestStore");
-                JSONObject cheapestStoreObject = oneObject.getJSONObject("CheapestStore");
-
-                product = new TopTensModel(oneObject.getString("ProductName"),
-                        oneObject.getString("LastUpdated"),
-                        0, //oneObject.getDouble("PRODUCT_USERRATING"),
-                        closestStoreObject.getString("StoreName"),
-                        null, //oneObject.getString("PRODUCT_CHEAPEST_STORE"),
-                        oneObject.getDouble("DistanceCalculatedInMiles"),
-                        -1, //oneObject.getDouble("PRODUCT_CHEAPEST_DIST"),
-                        oneObject.getDouble("Price"),
-                        -1, //oneObject.getDouble("PRIDUCT_CHEAPEST_PRICE"),
-                        oneObject.getInt("ProductParentTypeId"),
-                        false, //favorite
-                        oneObject.getString("ContainerType"),
-                        oneObject.getDouble("ABV"),
-                        (int) (oneObject.getDouble("ABV") * 2),
-                        new int[]{oneObject.getInt("Rating1"), oneObject.getInt("Rating2"),
-                                oneObject.getInt("Rating3"), oneObject.getInt("Rating4"), oneObject.getInt("Rating5")});
+                product = new TopTensModel(oneObject);
 
                 mAdapter.addItem(product);
                 productList.add(product);
-
             } catch (JSONException e) {}
         }
     }

@@ -44,7 +44,7 @@ public class FavoritesFragment extends Fragment implements OnStartDragListener {
     OnPass dataPasser;
 
     private List<TopTensModel> DataSet = new ArrayList<TopTensModel>() {
-        {
+        /*{
             //this is where we call backend connector
             //to populate Arraylist
             add(new TopTensModel("Skyy Vodka", "12/02/14", 3.5, "ABC liquor","Publix liquor",  1.3, 1.80, 18.73,
@@ -61,7 +61,7 @@ public class FavoritesFragment extends Fragment implements OnStartDragListener {
             add(new TopTensModel("Domaine Gavoty Provence Rose", "02/26/15", 3.5, "ABC liquor", "Publix liquor", 1.3, 1.8, 29.99,
                     28.36, 2, true, "fifth",  13, 26, new int[] {612, 345, 61, 124, 10}));
             add(new TopTensModel("Ciroc French Pineapple Vodka", "10/11/15", 3.5, "Publix liquor", 1.8, 22.99, 3, true, "fifth", 35, 70, new int[] {236, 61, 96, 23, 9}));
-        }
+        }*/
     };
 
     @Nullable

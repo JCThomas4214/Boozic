@@ -144,13 +144,16 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         viewHolder.label.setText(model.label);
         viewHolder.storeName.setText(model.closestStoreName + " (" + df2.format(model.closestStoreDist) + "mi)");
         viewHolder.price.setText(NumberFormat.getCurrencyInstance().format(model.closestPrice));
-        viewHolder.volume.setText("(" + df.format(model.volume) + model.volumeMeasure + ")");
+
+        if (model.volume != -1) viewHolder.volume.setText("(" + df.format(model.volume) + model.volumeMeasure + ")");
+        else viewHolder.volume.setText("N/A");
+
         switch (model.typePic) {
             case 1:
-                viewHolder.picture.setBackgroundResource(R.mipmap.beer);
+                viewHolder.picture.setBackgroundResource(R.mipmap.wine);
                 break;
             case 2:
-                viewHolder.picture.setBackgroundResource(R.mipmap.wine);
+                viewHolder.picture.setBackgroundResource(R.mipmap.beer);
                 break;
             case 3:
                 viewHolder.picture.setBackgroundResource(R.mipmap.liquor);

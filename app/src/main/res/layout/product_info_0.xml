@@ -93,8 +93,10 @@
                     android:id="@+id/product_cheapest_store"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    android:singleLine="true"
+                    android:maxWidth="155dp"
+                    android:ellipsize="end" />
             </LinearLayout>
 
             <LinearLayout
@@ -149,8 +151,10 @@
                     android:id="@+id/product_closest_store"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    android:singleLine="true"
+                    android:maxWidth="155dp"
+                    android:ellipsize="end"  />
             </LinearLayout>
 
             <LinearLayout

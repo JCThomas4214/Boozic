@@ -1,5 +1,10 @@
 package comjason_lewisg.httpsgithub.boozic.Models;
 
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -30,18 +35,73 @@ public class TopTensModel {
     public double volume;
     public String volumeMeasure = null;
 
-    public double pbv;
-    public double abv;
-    public int proof;
-    public double abp;
-    public double pdd;
-    public double td;
+    public double pbv = -1;
+    public double abv = -1;
+    public int proof = -1;
+    public double abp = -1;
+    public double pdd = -1;
+    public double td = -1;
 
-    public int[] rating = new int[5];
+    public int[] rating;
     public double avgRating;
 
+    public TopTensModel(JSONObject object) {
+
+        try {
+            JSONObject closestStoreObject = object.getJSONObject("ClosestStore");
+            JSONObject cheapestStoreObject = object.getJSONObject("CheapestStore");
+
+            label = object.getString("ProductName");
+            lastUpdate = "mm/dd/yy"; //object.getString("LastUpdated");
+            userRating = 0; //oneObject.getDouble("PRODUCT_USERRATING");
+
+            closestStoreName = closestStoreObject.getString("StoreName");
+            cheapestStoreName = cheapestStoreObject.getString("StoreName");
+            closestStoreDist = closestStoreObject.getDouble("DistanceInMiles");
+            cheapestStoreDist = cheapestStoreObject.getDouble("DistanceInMiles");
+            closestPrice = closestStoreObject.getDouble("Price");
+            cheapestPrice = cheapestStoreObject.getDouble("Price");
+
+            typePic = object.getInt("ProductParentTypeId");
+            favorite = false; //favorite
+
+            container = object.getString("ContainerType");
+            if (container.equals("null")) container = "N/A";
+
+            volume = object.getDouble("Volume");
+            if (volume == 0) volume = -1;
+
+            //must be changed when backend -1
+            abv = object.getDouble("ABV");
+            if (abv == 0) abv = -1;
+
+            //must be changed when backend -1
+            proof = (int) (object.getDouble("ABV") * 2);
+            if (proof == 0) proof = -1;
+
+            rating = new int[]{object.getInt("Rating1"), object.getInt("Rating2"),
+                            object.getInt("Rating3"), object.getInt("Rating4"), object.getInt("Rating5")};
+            avgRating = object.getDouble("CombinedRating");//findAverage();
+
+            getVolMeasure(object.getString("VolumeUnit"));
+
+            if (cheapestPrice != -1) {
+
+                pdd = findPDD();
+                td = findTD();
+                if (this.volumeMeasure != null && volume != -1) {
+                    pbv = findPBV();
+                    if (abv != -1) abp = findABP();
+                }
+            }
+
+        } catch (JSONException e) {
+            Log.e("TT ERROR", e.getMessage(), e);
+        }
+    }
+
     public TopTensModel(String label, String lastUpdate, double userRating, String closestStoreName, String cheapestStoreName, double closestStoreDist, double cheapestStoreDist,
-                        double closestPrice, double cheapestPrice, int type, boolean favorite, String container,
+                        double closestPrice, double cheapestPrice, int type, boolean favorite, String container, double volume, String volumeMeasure,
                         double abv, int proof, int[] rating) {
 
         this.label = label;
@@ -57,12 +117,13 @@ public class TopTensModel {
         this.cheapestPrice = cheapestPrice;
         this.favorite = favorite;
         this.container = container;
+        this.volume = volume;
         this.abv = abv;
         this.proof = proof;
         System.arraycopy(rating,0,this.rating,0,rating.length);
 
-        if (container != null) volume = findVol();
-        if (closestPrice != -1 && volumeMeasure != null) pbv = findPBV();
+        getVolMeasure(volumeMeasure);
+        if (closestPrice != -1 && this.volumeMeasure != null) pbv = findPBV();
         if (abv != -1 && volumeMeasure != null) abp = findABP();
         if (cheapestPrice != -1) {
             pdd = findPDD();
@@ -91,43 +152,25 @@ public class TopTensModel {
         this.proof = proof;
         System.arraycopy(rating,0,this.rating,0,rating.length);
 
-        volume = findVol();
         pbv = findPBV();
         abp = findABP();
         avgRating = findAverage();
     }
 
-    private double findVol() {
-        double volumetmp = 0;
+    private void getVolMeasure(String volumeMeasure) {
 
         switch (container) {
             case "handle":
-                volumetmp = 1.75;
-                volumeMeasure = "L";
+                volume = volume / 1000;
+                this.volumeMeasure = "L";
                 break;
             case "fifth":
-                volumetmp = 750;
-                volumeMeasure = "ml";
+                this.volumeMeasure = "ml";
                 break;
-            case "(6) bottle":
-                volumetmp = 72;
-                volumeMeasure = "oz";
-                break;
-            case "(12) bottle":
-                volumetmp = 144;
-                volumeMeasure = "oz";
-                break;
-            case "(12) can":
-                volumetmp = 144;
-                volumeMeasure = "oz";
-                break;
-            case "(24) can":
-                volumetmp = 288;
-                volumeMeasure = "oz";
+            default:
+                this.volumeMeasure = "ml";
                 break;
         }
-
-        return volumetmp;
     }
 
     public double findABP() {

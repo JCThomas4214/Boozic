@@ -167,21 +167,25 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         TopTensModel model = items.get(position);
-        DecimalFormat df = new DecimalFormat("####0.##");
+        DecimalFormat volumeFormat = new DecimalFormat("####0.##");
+        DecimalFormat distanceFormat = new DecimalFormat("#0.#");
 
         viewHolder.label.setText(model.label);
-        viewHolder.storeName.setText(model.closestStoreName + " (" + model.closestStoreDist + "mi)");
+        viewHolder.storeName.setText(model.closestStoreName + " (" + distanceFormat.format(model.closestStoreDist) + "mi)");
         viewHolder.price.setText(NumberFormat.getCurrencyInstance().format(model.closestPrice));
-        viewHolder.volume.setText("(" + df.format(model.volume) + model.volumeMeasure + ")");
+        viewHolder.volume.setText("(" + volumeFormat.format(model.volume) + model.volumeMeasure + ")");
         switch (model.typePic) {
             case 1:
-                viewHolder.picture.setBackgroundResource(R.mipmap.beer);
+                viewHolder.picture.setBackgroundResource(R.mipmap.wine);
                 break;
             case 2:
-                viewHolder.picture.setBackgroundResource(R.mipmap.wine);
+                viewHolder.picture.setBackgroundResource(R.mipmap.beer);
                 break;
             case 3:
                 viewHolder.picture.setBackgroundResource(R.mipmap.liquor);
+                break;
+            case 4:
+                viewHolder.picture.setBackgroundResource(R.mipmap.ic_launcher);
                 break;
         }
     }
