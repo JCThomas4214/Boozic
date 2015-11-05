@@ -217,10 +217,9 @@ public class DialogHandler {
 
         final double[] distances = {1.3, 1.8, 2.34};
         final CharSequence[] stores = {"ABC liquor", "Publix Liquor", "Walmart"};
-        CharSequence[] combined = storeDistCombine(distances, stores);
         MaterialDialog dialog = new MaterialDialog.Builder(p)
                 .title("Select Store")
-                .items(combined)
+                .items(stores)
                 .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
@@ -233,9 +232,11 @@ public class DialogHandler {
                 })
                 .positiveText("NEXT")
                 .negativeText(tmp)
+                .neutralText("NOT FOUND")
                 .widgetColorRes(R.color.NavUnchecked)
                 .positiveColor(p.getAccentColor())
                 .negativeColor(p.getAccentColor())
+                .neutralColor(p.getAccentColor())
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -247,6 +248,12 @@ public class DialogHandler {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         if (cameFrom) UpdateAbv(p);
+                    }
+                })
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        //TODO: places and distance API
                     }
                 })
                 .build();
@@ -344,17 +351,6 @@ public class DialogHandler {
                 m.FMHandle.setRatingRange(loww, highh);
                 break;
         }
-    }
-
-    private CharSequence[] storeDistCombine(double[] distances, CharSequence[] stores) {
-
-        if (distances.length == stores.length) {
-            CharSequence[] combine = new CharSequence[distances.length];
-            for (int i = 0; i < distances.length; i++)
-                combine[i] = stores[i] + " (" + distances[i] + "mi)";
-            return combine;
-        }
-        return null;
     }
 
     private int changeToInt(String str) {

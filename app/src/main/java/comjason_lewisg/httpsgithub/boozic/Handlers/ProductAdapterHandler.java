@@ -54,6 +54,8 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
 
         TextView closestStore;
         TextView cheapestStore;
+        TextView closestStoreAddress;
+        TextView cheapestStoreAddress;
         TextView closestPrice;
         TextView cheapestPrice;
 
@@ -71,6 +73,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
 
         RatingBar userRating;
         LinearLayout closestStoreLayout;
+        LinearLayout cheapestStoreLayout;
         PieChart ratingChart;
         public IMyViewHolderClicks mListener;
 
@@ -88,13 +91,16 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             userRating = (RatingBar) itemView.findViewById(R.id.product_ratingBar);
 
             closestStoreLayout = (LinearLayout) itemView.findViewById(R.id.closest_store_layout);
+            cheapestStoreLayout = (LinearLayout) itemView.findViewById(R.id.cheapest_store_layout);
             pdd = (TextView) itemView.findViewById(R.id.product_pdd);
             td = (TextView) itemView.findViewById(R.id.product_td);
 
             closestStore = (TextView) itemView.findViewById(R.id.product_closest_store);
+            closestStoreAddress = (TextView) itemView.findViewById(R.id.closest_store_address);
             closestPrice = (TextView) itemView.findViewById(R.id.product_closest_price);
 
             cheapestStore = (TextView) itemView.findViewById(R.id.product_cheapest_store);
+            cheapestStoreAddress = (TextView) itemView.findViewById(R.id.cheapest_store_address);
             cheapestPrice = (TextView) itemView.findViewById(R.id.product_cheapest_price);
 
 
@@ -110,6 +116,8 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             ratingChart = (PieChart) itemView.findViewById(R.id.rating_chart);
 
             updateProduct.setOnClickListener(clickListener);
+            closestStoreLayout.setOnClickListener(clickListener);
+            cheapestStoreLayout.setOnClickListener(clickListener);
         }
 
         public View.OnClickListener clickListener = new View.OnClickListener() {
@@ -119,12 +127,20 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
                     case R.id.new_price_button:
                         mListener.startUpdateDialog(v);
                         break;
+                    case R.id.closest_store_layout:
+                        mListener.startClosestNavigation(v);
+                        break;
+                    case R.id.cheapest_store_layout:
+                        mListener.startCheapestNavigation(v);
+                        break;
                 }
             }
         };
 
         public interface IMyViewHolderClicks {
             void startUpdateDialog(View caller);
+            void startClosestNavigation(View caller);
+            void startCheapestNavigation(View caller);
         }
     }
 
@@ -150,13 +166,16 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         // set the view's size, margins, paddings and layout parameters
         return new ProductInfoHolder(itemView, new ProductAdapterHandler.ProductInfoHolder.IMyViewHolderClicks() {
             public void startUpdateDialog(View caller) {
-
-                //TODO: conditional statements for each important attribute containing Dialog to fill
-                Log.v("CLICK", "update price button clicked in " + item.label + " product view" );
                 if (p.model.container.equals("N/A")) DHandler.UpdateContainer(p);
                 else if (p.model.abv == -1) DHandler.UpdateAbv(p);
                 else DHandler.UpdateStore(p, false);
 
+            }
+            public void startClosestNavigation(View caller) {
+                p.startNavigationIntent(p.model.closestStoreName, p.model.closestStoreAddress);
+            }
+            public void startCheapestNavigation(View caller) {
+                p.startNavigationIntent(p.model.cheapestStoreName, p.model.cheapestStoreAddress);
             }
         });
     }
@@ -188,6 +207,8 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             viewHolder.td.setText("N/A");
             viewHolder.cheapestStore.setText("N/A");
             viewHolder.cheapestPrice.setText("N/A");
+            viewHolder.closestStoreAddress.setText("N/A");
+            viewHolder.cheapestStoreAddress.setText("N/A");
         }
         else {
             if (model.closestStoreId == model.cheapestStoreId) {
@@ -195,12 +216,14 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
                 viewHolder.pdd.setText("N/A");
                 viewHolder.td.setText("N/A");
             } else {
-                viewHolder.closestStore.setText("(" + distanceFormat.format(model.closestStoreDist) + "mi) " + model.closestStoreName);
+                viewHolder.closestStore.setText(model.closestStoreName);
+                viewHolder.closestStoreAddress.setText(model.closestStoreAddress);
                 viewHolder.closestPrice.setText("$" + monFormat.format(model.closestPrice));
                 viewHolder.pdd.setText("$" + monFormat.format(model.pdd));
                 viewHolder.td.setText("$" + monFormat.format(model.td));
             }
-            viewHolder.cheapestStore.setText("(" + distanceFormat.format(model.cheapestStoreDist) + "mi) " + model.cheapestStoreName);
+            viewHolder.cheapestStore.setText(model.cheapestStoreName);
+            viewHolder.cheapestStoreAddress.setText(model.cheapestStoreAddress);
             viewHolder.cheapestPrice.setText("$" + monFormat.format(model.cheapestPrice));
         }
 

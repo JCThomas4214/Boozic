@@ -13,6 +13,8 @@ public class ProductStorageModel {
     public int cheapestStoreId;
     public String closestStoreName;
     public String cheapestStoreName;
+    public String closestStoreAddress;
+    public String cheapestStoreAddress;
     public double closestStoreDist;
     public double cheapestStoreDist;
     public double closestPrice;
@@ -36,8 +38,8 @@ public class ProductStorageModel {
     public double avgRating;
 
     public ProductStorageModel(String label, String upc, int productId, String lastUpdate, double userRating, int closestStoreId, int cheapestStoreId, String closestStoreName, String cheapestStoreName,
-                               double closestStoreDist, double cheapestStoreDist, double closestPrice, double cheapestPrice, int type, boolean favorite, String container, double abv, int proof, int[] rating,
-                               double volume, String volumeMeasure, double pbv, double abp, double pdd, double td, double avgRating) {
+                               String closestStoreAddress, String cheapestStoreAddress, double closestStoreDist, double cheapestStoreDist, double closestPrice, double cheapestPrice, int type, boolean favorite, String container,
+                               double abv, int proof, int[] rating, double volume, String volumeMeasure, double pbv, double abp, double pdd, double td, double avgRating) {
 
         this.label = label;
         this.lastUpdate = lastUpdate;
@@ -51,6 +53,8 @@ public class ProductStorageModel {
         this.cheapestStoreId = cheapestStoreId;
         this.closestStoreName = closestStoreName;
         this.cheapestStoreName = cheapestStoreName;
+        this.closestStoreAddress = closestStoreAddress;
+        this.cheapestStoreAddress = cheapestStoreAddress;
         this.closestStoreDist = closestStoreDist;
         this.cheapestStoreDist = cheapestStoreDist;
         this.closestPrice = closestPrice;

@@ -102,6 +102,8 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
                 i.putExtra("CheapestStoreId", items.get(position).cheapestStoreId);
                 i.putExtra("ClosestStore", items.get(position).closestStoreName);
                 i.putExtra("CheapestStore", items.get(position).cheapestStoreName);
+                i.putExtra("ClosestStoreAddress", items.get(position).closestStoreAddress);
+                i.putExtra("CheapestStoreAddress", items.get(position).cheapestStoreAddress);
                 i.putExtra("ClosestStoreDist", items.get(position).closestStoreDist);
                 i.putExtra("CheapestStoreDist", items.get(position).cheapestStoreDist);
                 i.putExtra("ClosestPrice", items.get(position).closestPrice);
@@ -143,10 +145,9 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         // - replace the contents of the view with that element
         TopTensModel model = items.get(position);
         DecimalFormat df = new DecimalFormat("####0.##");
-        DecimalFormat df2 = new DecimalFormat("#0.#");
 
         viewHolder.label.setText(model.label);
-        viewHolder.storeName.setText(model.closestStoreName + " (" + df2.format(model.closestStoreDist) + "mi)");
+        viewHolder.storeName.setText(model.closestStoreName);
         viewHolder.price.setText(NumberFormat.getCurrencyInstance().format(model.closestPrice));
 
         if (model.volume != -1) viewHolder.volume.setText("(" + df.format(model.volume) + model.volumeMeasure + ")");

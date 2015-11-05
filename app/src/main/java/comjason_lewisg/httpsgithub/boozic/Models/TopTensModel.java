@@ -25,6 +25,8 @@ public class TopTensModel {
     public int cheapestStoreId;
     public String closestStoreName;
     public String cheapestStoreName;
+    public String closestStoreAddress;
+    public String cheapestStoreAddress;
     public double closestStoreDist;
     public double cheapestStoreDist;
     public double closestPrice;
@@ -64,6 +66,8 @@ public class TopTensModel {
             cheapestStoreId = cheapestStoreObject.getInt("StoreID");
             closestStoreName = closestStoreObject.getString("StoreName");
             cheapestStoreName = cheapestStoreObject.getString("StoreName");
+            closestStoreAddress = closestStoreObject.getString("Address");
+            cheapestStoreAddress = cheapestStoreObject.getString("Address");
             closestStoreDist = closestStoreObject.getDouble("DistanceInMiles");
             cheapestStoreDist = cheapestStoreObject.getDouble("DistanceInMiles");
             closestPrice = closestStoreObject.getDouble("Price");

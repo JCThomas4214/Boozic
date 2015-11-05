@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -378,7 +379,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
         //initial query to populate list
         if (firstStartRefresh) {
-            //Nav.topTensFragment.askForProductListrefresh(Nav.topTensFragment.getmAdapter(), Nav.topTensFragment.getSwipeRefreshLayout());
+            Nav.topTensFragment.askForProductListrefresh(Nav.topTensFragment.getmAdapter(), Nav.topTensFragment.getSwipeRefreshLayout());
             firstStartRefresh = false;
         }
     }

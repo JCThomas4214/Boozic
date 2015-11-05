@@ -1,5 +1,7 @@
 package comjason_lewisg.httpsgithub.boozic;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -126,6 +128,14 @@ public class ProductActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //start google maps navigation
+    public void startNavigationIntent(String storeName, String destination) {
+        Uri gmmIntentUri = Uri.parse("geo:0,0?q="+ destination + "(" + storeName + ")");
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        startActivity(mapIntent);
+    }
+
     private void fetchColorInfo() {
         colorPrimary_id = (int) getIntent().getSerializableExtra("COLOR_PRIMARY_ID");
         colorAccent_id = (int) getIntent().getSerializableExtra("COLOR_ACCENT_ID");
@@ -147,6 +157,8 @@ public class ProductActivity extends AppCompatActivity {
                 (int) getIntent().getSerializableExtra("CheapestStoreId"),
                 (String) getIntent().getSerializableExtra("ClosestStore"),
                 (String) getIntent().getSerializableExtra("CheapestStore"),
+                (String) getIntent().getSerializableExtra("ClosestStoreAddress"),
+                (String) getIntent().getSerializableExtra("CheapestStoreAddress"),
                 (double) getIntent().getSerializableExtra("ClosestStoreDist"),
                 (double) getIntent().getSerializableExtra("CheapestStoreDist"),
                 (double) getIntent().getSerializableExtra("ClosestPrice"),
@@ -177,7 +189,7 @@ public class ProductActivity extends AppCompatActivity {
         model = new ProductStorageModel((String) getIntent().getSerializableExtra("Label"),
                 (String) getIntent().getSerializableExtra("UPC"),
                 (int) getIntent().getSerializableExtra("ProductId"),
-                null,-1,-1,-1,null,null,-1,-1,-1,-1,-1,false,null,-1,-1,new int[] {0,0,0,0,0},
+                null,-1,-1,-1,null,null,null,null,-1,-1,-1,-1,-1,false,null,-1,-1,new int[] {0,0,0,0,0},
                 (double) getIntent().getSerializableExtra("Volume"),
                 (String) getIntent().getSerializableExtra("VolumeMeasure"),
                 -1,-1,-1,-1,-1);
