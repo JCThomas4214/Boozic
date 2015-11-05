@@ -20,11 +20,12 @@ public class UpdateProductModel {
     public double abv;
     public int proof;
 
-    public UpdateProductModel(String label, double volume, String volumeMeasure, double abv) {
+    public UpdateProductModel(String label, String upc, int productId, double volume, String volumeMeasure) {
         this.label = label;
+        this.upc = upc;
+        this.productId = productId;
         this.volume = volume;
         this.volumeMeasure = volumeMeasure;
-        updateABV(abv);
 
         userRating = -1;
         StoreName = null;
@@ -34,7 +35,7 @@ public class UpdateProductModel {
         container = null;
     }
 
-    public UpdateProductModel(String label, double volume, String volumeMeasure) {
+    /*public UpdateProductModel(String label, double volume, String volumeMeasure) {
         this.label = label;
         this.volume = volume;
         this.volumeMeasure = volumeMeasure;
@@ -47,7 +48,7 @@ public class UpdateProductModel {
         container = null;
         abv = -1;
         proof = -1;
-    }
+    }*/
 
     public void updateContainer(String container) {
         this.container = container;

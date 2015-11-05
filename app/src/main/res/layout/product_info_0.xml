@@ -153,7 +153,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
                     android:singleLine="true"
-                    android:maxWidth="155dp"
+                    android:maxWidth="165dp"
                     android:ellipsize="end"  />
             </LinearLayout>
 

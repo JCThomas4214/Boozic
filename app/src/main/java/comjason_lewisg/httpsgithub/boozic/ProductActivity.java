@@ -139,8 +139,12 @@ public class ProductActivity extends AppCompatActivity {
         //fetch extra items
 
         model = new ProductStorageModel((String) getIntent().getSerializableExtra("Label"),
+                (String) getIntent().getSerializableExtra("UPC"),
+                (int) getIntent().getSerializableExtra("ProductId"),
                 (String) getIntent().getSerializableExtra("LastUpdate"),
                 (double) getIntent().getSerializableExtra("UserRating"),
+                (int) getIntent().getSerializableExtra("ClosestStoreId"),
+                (int) getIntent().getSerializableExtra("CheapestStoreId"),
                 (String) getIntent().getSerializableExtra("ClosestStore"),
                 (String) getIntent().getSerializableExtra("CheapestStore"),
                 (double) getIntent().getSerializableExtra("ClosestStoreDist"),
@@ -162,6 +166,8 @@ public class ProductActivity extends AppCompatActivity {
                 (double) getIntent().getSerializableExtra("AvgRating"));
 
         updatedModel = new UpdateProductModel((String) getIntent().getSerializableExtra("Label"),
+                (String) getIntent().getSerializableExtra("UPC"),
+                (int) getIntent().getSerializableExtra("ProductId"),
                 (double) getIntent().getSerializableExtra("Volume"),
                 (String) getIntent().getSerializableExtra("VolumeMeasure"));
     }
@@ -169,12 +175,16 @@ public class ProductActivity extends AppCompatActivity {
     public void newProduct() {
 
         model = new ProductStorageModel((String) getIntent().getSerializableExtra("Label"),
-                null,-1,null,null,-1,-1,-1,-1,-1,false,null,-1,-1,new int[] {0,0,0,0,0},
+                (String) getIntent().getSerializableExtra("UPC"),
+                (int) getIntent().getSerializableExtra("ProductId"),
+                null,-1,-1,-1,null,null,-1,-1,-1,-1,-1,false,null,-1,-1,new int[] {0,0,0,0,0},
                 (double) getIntent().getSerializableExtra("Volume"),
                 (String) getIntent().getSerializableExtra("VolumeMeasure"),
                 -1,-1,-1,-1,-1);
 
         updatedModel = new UpdateProductModel((String) getIntent().getSerializableExtra("Label"),
+                (String) getIntent().getSerializableExtra("UPC"),
+                (int) getIntent().getSerializableExtra("ProductId"),
                 (double) getIntent().getSerializableExtra("Volume"),
                 (String) getIntent().getSerializableExtra("VolumeMeasure"));
     }

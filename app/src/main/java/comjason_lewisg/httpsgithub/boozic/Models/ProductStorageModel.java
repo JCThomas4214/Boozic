@@ -6,6 +6,11 @@ public class ProductStorageModel {
     public double userRating;
     public int boozicScore;
 
+    public String upc;
+    public int productId;
+
+    public int closestStoreId;
+    public int cheapestStoreId;
     public String closestStoreName;
     public String cheapestStoreName;
     public double closestStoreDist;
@@ -30,8 +35,8 @@ public class ProductStorageModel {
     public int[] rating = new int[5];
     public double avgRating;
 
-    public ProductStorageModel(String label, String lastUpdate, double userRating, String closestStoreName, String cheapestStoreName, double closestStoreDist, double cheapestStoreDist,
-                        double closestPrice, double cheapestPrice, int type, boolean favorite, String container, double abv, int proof, int[] rating,
+    public ProductStorageModel(String label, String upc, int productId, String lastUpdate, double userRating, int closestStoreId, int cheapestStoreId, String closestStoreName, String cheapestStoreName,
+                               double closestStoreDist, double cheapestStoreDist, double closestPrice, double cheapestPrice, int type, boolean favorite, String container, double abv, int proof, int[] rating,
                                double volume, String volumeMeasure, double pbv, double abp, double pdd, double td, double avgRating) {
 
         this.label = label;
@@ -39,6 +44,11 @@ public class ProductStorageModel {
         this.userRating = userRating;
         typePic = type;
 
+        this.upc = upc;
+        this.productId = productId;
+
+        this.closestStoreId = closestStoreId;
+        this.cheapestStoreId = cheapestStoreId;
         this.closestStoreName = closestStoreName;
         this.cheapestStoreName = cheapestStoreName;
         this.closestStoreDist = closestStoreDist;

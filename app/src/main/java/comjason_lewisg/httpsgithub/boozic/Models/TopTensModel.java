@@ -19,8 +19,10 @@ public class TopTensModel {
     public int boozicScore;
 
     public String upc;
-    public int productId;
+    public int productId = -1;
 
+    public int closestStoreId;
+    public int cheapestStoreId;
     public String closestStoreName;
     public String cheapestStoreName;
     public double closestStoreDist;
@@ -52,9 +54,14 @@ public class TopTensModel {
             JSONObject cheapestStoreObject = object.getJSONObject("CheapestStore");
 
             label = object.getString("ProductName");
-            lastUpdate = "mm/dd/yy"; //object.getString("LastUpdated");
+            lastUpdate = closestStoreObject.getString("LastUpdated");
             userRating = 0; //oneObject.getDouble("PRODUCT_USERRATING");
 
+            upc = object.getString("UPC");
+            //productId = object.getInt("ProductId");
+
+            closestStoreId = closestStoreObject.getInt("StoreID");
+            cheapestStoreId = cheapestStoreObject.getInt("StoreID");
             closestStoreName = closestStoreObject.getString("StoreName");
             cheapestStoreName = cheapestStoreObject.getString("StoreName");
             closestStoreDist = closestStoreObject.getDouble("DistanceInMiles");

@@ -1,7 +1,5 @@
 package comjason_lewisg.httpsgithub.boozic;
 
-import android.app.ActionBar;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,23 +8,18 @@ import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.transition.Fade;
 import android.transition.Slide;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.SubMenu;
-import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -36,6 +29,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
@@ -54,15 +48,13 @@ import comjason_lewisg.httpsgithub.boozic.Handlers.SearchBarHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ThemeHandler;
 import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.quinny898.library.persistentsearch.SearchBox;
 
 import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements ThemeFragment.OnDataPass, TopTensFragment.OnPass, FavoritesFragment.OnPass,
-        GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     public Toolbar toolbar;
     public TextView title;
@@ -103,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     private GoogleApiClient mGoogleApiClient;
     LocationRequest mLocationRequest;
     private SharedPreferences mPrefs;
+    private boolean firstStartRefresh = true;
 
     private boolean backstack;
     public boolean backstackSearch;
@@ -149,11 +142,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         applicationContext = getApplicationContext();
 
         buildGoogleApiClient();
-        createLocationRequest();
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.connect();
-        }
         checkPlayServices();
+        createLocationRequest();
 
         DIDcon = new DeviceIdController(this);
         PLcon = new ProductListController();
@@ -313,8 +303,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     }
 
     public void callProductRefresh(AdapterHandler mAdapter, SwipeRefreshLayout swipeRefreshLayout) {
-        mLastLocation = LocationServices.FusedLocationApi
-                .getLastLocation(mGoogleApiClient);
+        /*mLastLocation = LocationServices.FusedLocationApi
+                .getLastLocation(mGoogleApiClient);*/
 
         if (mLastLocation != null) {
             PLcon.callList(this, FMHandle, mAdapter, swipeRefreshLayout, mLastLocation.getLatitude(), mLastLocation.getLongitude());
@@ -368,21 +358,28 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
-        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setInterval(60000);
+        mLocationRequest.setFastestInterval(30000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
-    /**
-     * Method to display the location on UI
-     * */
-    private void displayLocation() {
-        mLastLocation = LocationServices.FusedLocationApi
-                .getLastLocation(mGoogleApiClient);
+    protected void startLocationUpdates() {
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+    }
 
-        if (mLastLocation != null) {
-        } else {
-            Log.v("LOCATION", "Couldn't get the location. Make sure location is enabled on the device");
+    protected void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(
+                mGoogleApiClient, this);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mLastLocation = location;
+
+        //initial query to populate list
+        if (firstStartRefresh) {
+            Nav.topTensFragment.askForProductListrefresh(Nav.topTensFragment.getmAdapter(), Nav.topTensFragment.getSwipeRefreshLayout());
+            firstStartRefresh = false;
         }
     }
 
@@ -409,6 +406,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
     @Override
     public void onConnected(Bundle connectionHint) {
+        startLocationUpdates();
     }
 
     @Override
@@ -448,7 +446,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
         return super.onOptionsItemSelected(item);
     }
-    ////////////////
+
     //Recieves the result from Camera Activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode,
@@ -468,21 +466,24 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public void onStart() {
         super.onStart();
 
-        if (mGoogleApiClient != null) {
+        if (mGoogleApiClient != null && !mGoogleApiClient.isConnected()) {
             mGoogleApiClient.connect();
         }
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
         checkPlayServices();
+        if (mGoogleApiClient.isConnected()) {
+            startLocationUpdates();
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        stopLocationUpdates();
         //connect universal sharedpreference edit to ed
         SharedPreferences.Editor ed = mPrefs.edit();
         //store all color states into universal sharedpreference

@@ -76,6 +76,7 @@ public class ProductListController {
 
                     if (fm.orderButtonPressed != 0) urlString.append("&SortOption=").append(fm.orderButtonPressed);
 
+                    Log.v("URL", urlString.toString());
                     URL url = new URL(urlString.toString());
                     HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                     try {

@@ -153,7 +153,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
 
                 //TODO: conditional statements for each important attribute containing Dialog to fill
                 Log.v("CLICK", "update price button clicked in " + item.label + " product view" );
-                if (p.model.container == null) DHandler.UpdateContainer(p);
+                if (p.model.container.equals("N/A")) DHandler.UpdateContainer(p);
                 else if (p.model.abv == -1) DHandler.UpdateAbv(p);
                 else DHandler.UpdateStore(p, false);
 
@@ -190,7 +190,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             viewHolder.cheapestPrice.setText("N/A");
         }
         else {
-            if (model.closestStoreName.equals(model.cheapestStoreName)) {
+            if (model.closestStoreId == model.cheapestStoreId) {
                 viewHolder.closestStoreLayout.setVisibility(View.GONE);
                 viewHolder.pdd.setText("N/A");
                 viewHolder.td.setText("N/A");

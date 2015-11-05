@@ -94,8 +94,12 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
                 i.putExtra("Found", true);
                 //inject model variables
                 i.putExtra("Label", items.get(position).label);
+                i.putExtra("ProductId", items.get(position).productId);
+                i.putExtra("UPC", items.get(position).upc);
                 i.putExtra("LastUpdate", items.get(position).lastUpdate);
                 i.putExtra("UserRating", items.get(position).userRating);
+                i.putExtra("ClosestStoreId", items.get(position).closestStoreId);
+                i.putExtra("CheapestStoreId", items.get(position).cheapestStoreId);
                 i.putExtra("ClosestStore", items.get(position).closestStoreName);
                 i.putExtra("CheapestStore", items.get(position).cheapestStoreName);
                 i.putExtra("ClosestStoreDist", items.get(position).closestStoreDist);

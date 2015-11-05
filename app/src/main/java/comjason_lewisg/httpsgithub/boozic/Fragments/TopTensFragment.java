@@ -33,6 +33,7 @@ public class TopTensFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private AdapterHandler mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     int colorPrimary;
     int colorPrimaryDark;
@@ -92,7 +93,7 @@ public class TopTensFragment extends Fragment {
             }
         });
 
-        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.ColorAccent),
                 ContextCompat.getColor(getActivity().getApplicationContext(), R.color.ColorAccent2),
                 ContextCompat.getColor(getActivity().getApplicationContext(), R.color.ColorAccent3),
@@ -104,6 +105,14 @@ public class TopTensFragment extends Fragment {
                 askForProductListrefresh(mAdapter, swipeRefreshLayout);
             }
         });
+    }
+
+    public AdapterHandler getmAdapter() {
+        return mAdapter;
+    }
+
+    public SwipeRefreshLayout getSwipeRefreshLayout() {
+        return swipeRefreshLayout;
     }
 
     public interface OnPass {
