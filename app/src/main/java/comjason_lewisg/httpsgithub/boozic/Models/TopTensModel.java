@@ -94,7 +94,7 @@ public class TopTensModel {
                             object.getInt("Rating3"), object.getInt("Rating4"), object.getInt("Rating5")};
             avgRating = object.getDouble("CombinedRating");//findAverage();
 
-            getVolMeasure(object.getString("VolumeUnit"));
+            getVolMeasure();
 
             if (cheapestPrice != -1) {
 
@@ -111,64 +111,7 @@ public class TopTensModel {
         }
     }
 
-    public TopTensModel(String label, String lastUpdate, double userRating, String closestStoreName, String cheapestStoreName, double closestStoreDist, double cheapestStoreDist,
-                        double closestPrice, double cheapestPrice, int type, boolean favorite, String container, double volume, String volumeMeasure,
-                        double abv, int proof, int[] rating) {
-
-        this.label = label;
-        this.lastUpdate = lastUpdate;
-        this.userRating = userRating;
-        typePic = type;
-
-        this.closestStoreName = closestStoreName;
-        this.cheapestStoreName = cheapestStoreName;
-        this.closestStoreDist = closestStoreDist;
-        this.cheapestStoreDist = cheapestStoreDist;
-        this.closestPrice = closestPrice;
-        this.cheapestPrice = cheapestPrice;
-        this.favorite = favorite;
-        this.container = container;
-        this.volume = volume;
-        this.abv = abv;
-        this.proof = proof;
-        System.arraycopy(rating,0,this.rating,0,rating.length);
-
-        getVolMeasure(volumeMeasure);
-        if (closestPrice != -1 && this.volumeMeasure != null) pbv = findPBV();
-        if (abv != -1 && volumeMeasure != null) abp = findABP();
-        if (cheapestPrice != -1) {
-            pdd = findPDD();
-            td = findTD();
-        }
-        avgRating = findAverage();
-    }
-
-    public TopTensModel(String label, String lastUpdate, double userRating, String closestStoreName, double closestStoreDist, double closestPrice, int type, boolean favorite,
-                        String container, double abv, int proof, int[] rating) {
-
-        this.label = label;
-        this.lastUpdate = lastUpdate;
-        this.userRating = userRating;
-        typePic = type;
-
-        this.closestStoreName = closestStoreName;
-        this.cheapestStoreName = closestStoreName;
-        this.closestStoreDist = closestStoreDist;
-        this.cheapestStoreDist = closestStoreDist;
-        this.closestPrice = closestPrice;
-        this.cheapestPrice = closestPrice;
-        this.favorite = favorite;
-        this.container = container;
-        this.abv = abv;
-        this.proof = proof;
-        System.arraycopy(rating,0,this.rating,0,rating.length);
-
-        pbv = findPBV();
-        abp = findABP();
-        avgRating = findAverage();
-    }
-
-    private void getVolMeasure(String volumeMeasure) {
+    private void getVolMeasure() {
 
         switch (container) {
             case "handle":
@@ -179,6 +122,7 @@ public class TopTensModel {
                 this.volumeMeasure = "ml";
                 break;
             default:
+                if ((volume /  1000) >= 1) volume = volume / 1000;
                 this.volumeMeasure = "ml";
                 break;
         }

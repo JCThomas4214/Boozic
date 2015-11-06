@@ -1,7 +1,10 @@
 package comjason_lewisg.httpsgithub.boozic.Handlers;
 
+import android.app.ActionBar;
 import android.support.annotation.NonNull;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -10,6 +13,11 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.blackcat.currencyedittext.CurrencyEditText;
+
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.Models.ProductStorageModel;
@@ -91,15 +99,21 @@ public class DialogHandler {
 
         View view = dialog.getCustomView();
 
-        TextView low_curr = (TextView) view.findViewById(R.id.range_low_currency);
-        TextView low_units = (TextView) view.findViewById(R.id.range_low_units);
         EditText low_input = (EditText) view.findViewById(R.id.range_low_input);
-
-        TextView high_curr = (TextView) view.findViewById(R.id.range_high_currency);
-        TextView high_units = (TextView) view.findViewById(R.id.range_high_units);
         EditText high_input = (EditText) view.findViewById(R.id.range_high_input);
 
-        setUnits(units, low_curr, low_units, low_input, high_curr, high_units, high_input, m);
+        setUnits(units, low_input, high_input, m);
+
+        if (units.equals("$")) {
+            low_input.addTextChangedListener(makeTextWatcher(low_input, units));
+            high_input.addTextChangedListener(makeTextWatcher(high_input, units));
+        } else if (units.equals("%")) {
+            low_input.addTextChangedListener(makeTextWatcher(low_input, units));
+            high_input.addTextChangedListener(makeTextWatcher(high_input, units));
+        } else {
+            low_input.addTextChangedListener(makeTextWatcher(low_input, units));
+            high_input.addTextChangedListener(makeTextWatcher(high_input, units));
+        }
 
         dialog.show();
     }
@@ -274,7 +288,7 @@ public class DialogHandler {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         View view = dialog.getCustomView();
                         EditText price = (EditText) view.findViewById(R.id.price_dia_input);
-                        p.updatedModel.updateStorePrice(p.changeToInt(price.getText().toString()));
+                        p.updatedModel.updateStorePrice(p.changeToDouble(price.getText().toString().replace("$", "")));
                     }
                 })
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -284,36 +298,96 @@ public class DialogHandler {
                     }
                 })
                 .build();
+
+        View view = dialog.getCustomView();
+        final EditText price = (EditText) view.findViewById(R.id.price_dia_input);
+        price.addTextChangedListener(makeTextWatcher(price, "$"));
+
         dialog.show();
     }
+
+    private TextWatcher makeTextWatcher(final EditText text, final String units) {
+        TextWatcher tw = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+            private String current = "";
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!s.toString().equals(current)){
+                    text.removeTextChangedListener(this);
+
+                    String cleanString = s.toString().replaceAll("[ avg,$,%,.]", "");
+                    String formatted;
+
+                    if (units.equals("$")) {
+                        BigDecimal parsed = new BigDecimal(cleanString).setScale(2, BigDecimal.ROUND_FLOOR).divide(new BigDecimal(100), BigDecimal.ROUND_FLOOR);
+                        formatted = NumberFormat.getCurrencyInstance().format(parsed);
+                        current = formatted;
+                        text.setText(formatted);
+                        text.setSelection(current.length());
+                    }
+                    else if (units.equals("%")) {
+                        BigDecimal parsed = new BigDecimal(cleanString).setScale(2, BigDecimal.ROUND_FLOOR).divide(new BigDecimal(100), BigDecimal.ROUND_FLOOR);
+                        NumberFormat nf = NumberFormat.getNumberInstance();
+                        nf.setMinimumFractionDigits(2);
+                        formatted = nf.format(parsed);
+                        current = formatted;
+                        text.setText(formatted + "%");
+                        text.setSelection(current.length());
+                    } else {
+                        Integer parsed;
+                        if (cleanString.isEmpty()) parsed = new Integer("0");
+                        else parsed = new Integer(cleanString);
+
+                        if (parsed % 10 >= 5) parsed = 5;
+                        else parsed = parsed % 10;
+
+                        NumberFormat nf = NumberFormat.getNumberInstance();
+                        nf.setMinimumIntegerDigits(1);
+                        formatted = nf.format(parsed);
+                        current = formatted;
+                        text.setText(formatted + " avg");
+                        text.setSelection(current.length());
+                    }
+
+                    text.addTextChangedListener(this);
+                }
+            }
+        };
+
+        return tw;
+    }
+
 
     private void setMiles(MainActivity m, EditText miles) {
         miles.setText(m.FMHandle.custommi_miles + "");
     }
 
-    private void setUnits(String units, TextView low_curr, TextView low_units, EditText low_input, TextView high_curr,
-                          TextView high_units, EditText high_input, MainActivity m) {
+    private void setUnits(String units, EditText low_input, EditText high_input, MainActivity m) {
+
+        DecimalFormat formatter = new DecimalFormat("#0.00");
+
         switch (units) {
             case "$":
-                low_curr.setVisibility(View.VISIBLE);
-                low_units.setVisibility(View.GONE);
-                high_curr.setVisibility(View.VISIBLE);
-                high_units.setVisibility(View.GONE);
 
-                low_input.setText(m.FMHandle.pricerange_low + "");
-                high_input.setText(m.FMHandle.pricerange_high + "");
+                low_input.setText("$" + formatter.format(m.FMHandle.pricerange_low));
+                high_input.setText("$" + formatter.format(m.FMHandle.pricerange_high));
 
                 break;
             case "%":
-                low_input.setText(m.FMHandle.contentrange_low + "");
-                high_input.setText(m.FMHandle.contentrange_high + "");
+                low_input.setText(formatter.format(m.FMHandle.contentrange_low) + "%");
+                high_input.setText(formatter.format(m.FMHandle.contentrange_high) + "%");
                 break;
             case "avg":
-                low_units.setText("avg");
-                high_units.setText("avg");
-
-                low_input.setText(m.FMHandle.ratingrange_low + "");
-                high_input.setText(m.FMHandle.ratingrange_high + "");
+                low_input.setText(m.FMHandle.ratingrange_low + " avg");
+                high_input.setText(m.FMHandle.ratingrange_high + " avg");
                 break;
         }
     }
@@ -328,32 +402,55 @@ public class DialogHandler {
 
     private void checkDialog(MainActivity m, String units, String low, String high) {
 
-        int loww = changeToInt(low);
-        int highh = changeToInt(high);
-        int tmp;
-
-        //if user fucks up the input...
-        if (highh < loww) {
-            tmp = loww;
-            loww = highh;
-            highh = tmp;
-        }
+        int lowInt;
+        int highInt;
+        int tmpInt;
+        double lowDouble;
+        double highDouble;
+        double tmpDouble;
 
         //set the filterbutton model's low/high variables
         switch (units) {
             case "$":
-                m.FMHandle.setPriceRange(loww, highh);
+                lowDouble = changeToDouble(low.replace("$", ""));
+                highDouble = changeToDouble(high.replace("$", ""));
+                //if user fucks up the input...
+                if (highDouble < lowDouble) {
+                    tmpDouble = lowDouble;
+                    lowDouble = highDouble;
+                    highDouble = tmpDouble;
+                }
+                m.FMHandle.setPriceRange((float)lowDouble, (float)highDouble);
                 break;
             case "%":
-                m.FMHandle.setContentRange(loww, highh);
+                lowDouble = changeToDouble(low.replace("%", ""));
+                highDouble = changeToDouble(high.replace("%", ""));
+                //if user fucks up the input...
+                if (highDouble < lowDouble) {
+                    tmpDouble = lowDouble;
+                    lowDouble = highDouble;
+                    highDouble = tmpDouble;
+                }
+                m.FMHandle.setContentRange((float)lowDouble, (float)highDouble);
                 break;
             case "avg":
-                m.FMHandle.setRatingRange(loww, highh);
+                lowInt = changeToInt(low.replace(" avg",""));
+                highInt = changeToInt(high.replace(" avg",""));
+                //if user fucks up the input...
+                if (highInt < lowInt) {
+                    tmpInt = lowInt;
+                    lowInt = highInt;
+                    highInt = tmpInt;
+                }
+                m.FMHandle.setRatingRange(lowInt, highInt);
                 break;
         }
     }
 
     private int changeToInt(String str) {
         return Integer.parseInt(str);
+    }
+    public double changeToDouble(String str) {
+        return Double.parseDouble(str);
     }
 }

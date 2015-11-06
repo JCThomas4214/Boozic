@@ -379,7 +379,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
         //initial query to populate list
         if (firstStartRefresh) {
-            Nav.topTensFragment.askForProductListrefresh(Nav.topTensFragment.getmAdapter(), Nav.topTensFragment.getSwipeRefreshLayout());
+            //Nav.topTensFragment.askForProductListrefresh(Nav.topTensFragment.getmAdapter(), Nav.topTensFragment.getSwipeRefreshLayout());
             firstStartRefresh = false;
         }
     }

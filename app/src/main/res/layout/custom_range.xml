@@ -11,36 +11,17 @@
         android:orientation="horizontal"
         android:layout_gravity="center"
         android:gravity="center_vertical">
-
-        <TextView
-            android:id="@+id/range_low_currency"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingRight="5dp"
-            android:text="$"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#000000"
-            android:visibility="gone"/>
         <EditText
             android:id="@+id/range_low_input"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:inputType="number"
-            android:maxLength="2"
+            android:maxLength="6"
             android:selectAllOnFocus="true"
             android:hint="low"
             android:background="@null"
             android:textCursorDrawable="@drawable/custom_cursor"/>
-        <TextView
-            android:id="@+id/range_low_units"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:text="%"
-            android:textSize="18sp"
-            android:textColor="#000000"
-            android:textStyle="bold" />
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -55,35 +36,16 @@
                 android:textStyle="bold"/>
 
         </LinearLayout>
-        <TextView
-            android:id="@+id/range_high_currency"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingRight="5dp"
-            android:text="$"
-            android:textSize="18sp"
-            android:textColor="#000000"
-            android:textStyle="bold"
-            android:visibility="gone" />
         <EditText
             android:id="@+id/range_high_input"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:inputType="number"
-            android:maxLength="2"
+            android:maxLength="6"
             android:selectAllOnFocus="true"
             android:hint="high"
             android:background="@null"
             android:textCursorDrawable="@drawable/custom_cursor"/>
-        <TextView
-            android:id="@+id/range_high_units"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:text="%"
-            android:textSize="18sp"
-            android:textColor="#000000"
-            android:textStyle="bold" />
-
     </LinearLayout>
 </LinearLayout>

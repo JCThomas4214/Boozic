@@ -28,10 +28,10 @@ public class FilterMenuHandler {
     public int priceContRateButtonPressed;
 
     static final int CUSTOMMI_MILES = 15;
-    static final int PRICE_RANGE_LOW = 0;
-    static final int PRICE_RANGE_HIGH = 30;
-    static final int CONTENT_RANGE_LOW = 0;
-    static final int CONTENT_RANGE_HIGH = 60;
+    static final float PRICE_RANGE_LOW = (float)0.00;
+    static final float PRICE_RANGE_HIGH = (float)30.00;
+    static final float CONTENT_RANGE_LOW = (float)0.00;
+    static final float CONTENT_RANGE_HIGH = (float)60.00;
     static final int RATING_RANGE_LOW = 0;
     static final int RATING_RANGE_HIGH = 5;
 
@@ -70,10 +70,10 @@ public class FilterMenuHandler {
     private ImageView button_rating_range_ring;
 
     public int custommi_miles;
-    public int pricerange_low;
-    public int pricerange_high;
-    public int contentrange_low;
-    public int contentrange_high;
+    public float pricerange_low;
+    public float pricerange_high;
+    public float contentrange_low;
+    public float contentrange_high;
     public int ratingrange_low;
     public int ratingrange_high;
 
@@ -482,10 +482,10 @@ public class FilterMenuHandler {
         orderButtonPressed = mPrefs.getInt("ORDERBUTTONS", ORDERBUTTONS);
 
         custommi_miles = mPrefs.getInt("CUSTOMMI_MILES", CUSTOMMI_MILES);
-        pricerange_low = mPrefs.getInt("PRICE_RANGE_LOW", PRICE_RANGE_LOW);
-        pricerange_high = mPrefs.getInt("PRICE_RANGE_HIGH", PRICE_RANGE_HIGH);
-        contentrange_low = mPrefs.getInt("CONTENT_RANGE_LOW", CONTENT_RANGE_LOW);
-        contentrange_high = mPrefs.getInt("CONTENT_RANGE_HIGH", CONTENT_RANGE_HIGH);
+        pricerange_low = mPrefs.getFloat("PRICE_RANGE_LOW", PRICE_RANGE_LOW);
+        pricerange_high = mPrefs.getFloat("PRICE_RANGE_HIGH", PRICE_RANGE_HIGH);
+        contentrange_low = mPrefs.getFloat("CONTENT_RANGE_LOW", CONTENT_RANGE_LOW);
+        contentrange_high = mPrefs.getFloat("CONTENT_RANGE_HIGH", CONTENT_RANGE_HIGH);
         ratingrange_low = mPrefs.getInt("RATING_RANGE_LOW", RATING_RANGE_LOW);
         ratingrange_high = mPrefs.getInt("RATING_RANGE_HIGH", RATING_RANGE_HIGH);
 
@@ -500,10 +500,10 @@ public class FilterMenuHandler {
         ed.putInt("ORDERBUTTONS", orderButtonPressed);
 
         ed.putInt("CUSTOMMI_MILES", custommi_miles);
-        ed.putInt("PRICE_RANGE_LOW", pricerange_low);
-        ed.putInt("PRICE_RANGE_HIGH", pricerange_high);
-        ed.putInt("CONTENT_RANGE_LOW", contentrange_low);
-        ed.putInt("CONTENT_RANGE_HIGH", contentrange_high);
+        ed.putFloat("PRICE_RANGE_LOW", pricerange_low);
+        ed.putFloat("PRICE_RANGE_HIGH", pricerange_high);
+        ed.putFloat("CONTENT_RANGE_LOW", contentrange_low);
+        ed.putFloat("CONTENT_RANGE_HIGH", contentrange_high);
         ed.putInt("RATING_RANGE_LOW", ratingrange_low);
         ed.putInt("RATING_RANGE_HIGH", ratingrange_high);
     }
@@ -557,7 +557,7 @@ public class FilterMenuHandler {
         custommi_miles = radius;
     }
 
-    public void setPriceRange(int low, int high) {
+    public void setPriceRange(float low, float high) {
 
         Log.v("DATA", "The low and high for setPriceRange is " + low + " and " + high);
 
@@ -565,7 +565,7 @@ public class FilterMenuHandler {
         pricerange_high = high;
     }
 
-    public void setContentRange(int low, int high) {
+    public void setContentRange(float low, float high) {
 
         Log.v("DATA", "The low and high for setContentRange is " + low + "% and " + high);
 
