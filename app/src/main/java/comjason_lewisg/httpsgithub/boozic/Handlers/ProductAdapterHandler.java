@@ -68,12 +68,13 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         TextView abv;
         TextView proof;
         TextView abp;
-        TextView pdd;
         TextView td;
 
         RatingBar userRating;
+        TextView containerLabel;
         LinearLayout closestStoreLayout;
         LinearLayout cheapestStoreLayout;
+        LinearLayout containerLayout;
         PieChart ratingChart;
         public IMyViewHolderClicks mListener;
 
@@ -90,9 +91,10 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             lastUpdate = (TextView) itemView.findViewById(R.id.product_last_updated);
             userRating = (RatingBar) itemView.findViewById(R.id.product_ratingBar);
 
+            containerLabel = (TextView) itemView.findViewById(R.id.container_label);
             closestStoreLayout = (LinearLayout) itemView.findViewById(R.id.closest_store_layout);
             cheapestStoreLayout = (LinearLayout) itemView.findViewById(R.id.cheapest_store_layout);
-            pdd = (TextView) itemView.findViewById(R.id.product_pdd);
+            containerLayout = (LinearLayout) itemView.findViewById(R.id.product_container_layout);
             td = (TextView) itemView.findViewById(R.id.product_td);
 
             closestStore = (TextView) itemView.findViewById(R.id.product_closest_store);
@@ -203,7 +205,6 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
 
         if (model.cheapestStoreName == null) {
             viewHolder.closestStoreLayout.setVisibility(View.GONE);
-            viewHolder.pdd.setText("N/A");
             viewHolder.td.setText("N/A");
             viewHolder.cheapestStore.setText("N/A");
             viewHolder.cheapestPrice.setText("N/A");
@@ -213,13 +214,11 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         else {
             if (model.closestStoreId == model.cheapestStoreId) {
                 viewHolder.closestStoreLayout.setVisibility(View.GONE);
-                viewHolder.pdd.setText("N/A");
                 viewHolder.td.setText("N/A");
             } else {
                 viewHolder.closestStore.setText(model.closestStoreName);
                 viewHolder.closestStoreAddress.setText(model.closestStoreAddress);
                 viewHolder.closestPrice.setText("$" + monFormat.format(model.closestPrice));
-                viewHolder.pdd.setText("$" + monFormat.format(model.pdd));
                 viewHolder.td.setText("$" + monFormat.format(model.td));
             }
             viewHolder.cheapestStore.setText(model.cheapestStoreName);
@@ -227,11 +226,10 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             viewHolder.cheapestPrice.setText("$" + monFormat.format(model.cheapestPrice));
         }
 
-        if (model.typePic == -1) viewHolder.typePic.setBackgroundResource(R.mipmap.ic_launcher);
-        else selectTypePic(model, viewHolder);
-
-        if (model.container == null) viewHolder.container.setText("N/A");
+        if (model.container.equals("N/A")) viewHolder.containerLayout.setVisibility(View.GONE);
         else viewHolder.container.setText(model.container);
+
+        selectTypePic(model, viewHolder);
 
         if (model.volume == -1) viewHolder.volume.setText("N/A");
         else viewHolder.volume.setText(df.format(model.volume) + model.volumeMeasure);
@@ -262,12 +260,15 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         switch (model.typePic) {
             case 1:
                 viewHolder.typePic.setBackgroundResource(R.mipmap.wine);
+                viewHolder.containerLayout.setVisibility(View.GONE);
                 break;
             case 2:
                 viewHolder.typePic.setBackgroundResource(R.mipmap.beer);
+                viewHolder.containerLabel.setText(":Total Vol");
                 break;
             case 3:
                 viewHolder.typePic.setBackgroundResource(R.mipmap.liquor);
+                viewHolder.containerLayout.setVisibility(View.GONE);
                 break;
             case 4:
                 viewHolder.typePic.setBackgroundResource(R.mipmap.ic_launcher);
