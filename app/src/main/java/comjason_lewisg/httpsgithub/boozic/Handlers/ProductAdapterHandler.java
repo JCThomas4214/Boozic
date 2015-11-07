@@ -168,9 +168,9 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         // set the view's size, margins, paddings and layout parameters
         return new ProductInfoHolder(itemView, new ProductAdapterHandler.ProductInfoHolder.IMyViewHolderClicks() {
             public void startUpdateDialog(View caller) {
-                if (p.model.container.equals("N/A")) DHandler.UpdateContainer(p);
-                else if (p.model.abv == -1) DHandler.UpdateAbv(p);
-                else DHandler.UpdateStore(p, false);
+                if (p.model.container.equals("N/A") && p.model.typePic == 2) DHandler.UpdateContainer(p);
+                else if (p.model.abv == -1) DHandler.UpdateAbv(p, false);
+                else DHandler.UpdateStore(p, false, false);
 
             }
             public void startClosestNavigation(View caller) {
@@ -243,7 +243,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         if (model.abp == -1) viewHolder.abp.setText("N/A");
         else viewHolder.abp.setText("$" + monFormat.format(model.abp) + "/ml");
 
-        if (model.pbv == -1) viewHolder.pbv.setText("N/A");
+        if (model.pbv == -1 || model.abv == -1) viewHolder.pbv.setText("N/A");
         else viewHolder.pbv.setText("$" + pbvFormat.format(model.pbv) + "/ml");
 
         if (model.avgRating == -1) emptyChart(viewHolder);

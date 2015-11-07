@@ -15,20 +15,13 @@
             android:id="@+id/abv_dia_input"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:inputType="number"
-            android:maxLength="2"
+            android:maxLength="6"
             android:selectAllOnFocus="true"
-            android:hint="ABV"
+            android:hint="Set ABV"
             android:background="@null"
             android:textCursorDrawable="@drawable/custom_cursor"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:text="%"
-            android:textSize="18sp"
-            android:textColor="#000000"
-            android:textStyle="bold" />
 
     </LinearLayout>
 </LinearLayout>

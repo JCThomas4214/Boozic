@@ -484,7 +484,9 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     @Override
     public void onPause() {
         super.onPause();
-        stopLocationUpdates();
+        if (mGoogleApiClient.isConnected()) {
+            stopLocationUpdates();
+        }
         //connect universal sharedpreference edit to ed
         SharedPreferences.Editor ed = mPrefs.edit();
         //store all color states into universal sharedpreference

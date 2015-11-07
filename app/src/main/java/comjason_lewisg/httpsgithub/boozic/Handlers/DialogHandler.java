@@ -147,7 +147,7 @@ public class DialogHandler {
     }
 
     public void UpdateContainer(final ProductActivity p) {
-        CharSequence[] items = {"custom", "handle", "fifth", "(1) bottle", "(6) bottle", "(12) bottle", "(6) can", "(12) can", "(24) can"};
+        CharSequence[] items = {"(1) bottle", "(6) bottle", "(12) bottle", "(6) can", "(12) can", "(24) can"};
         MaterialDialog dialog = new MaterialDialog.Builder(p)
                 .title("Select Container")
                 .items(items)
@@ -170,14 +170,14 @@ public class DialogHandler {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        UpdateAbv(p);
+                        UpdateAbv(p, true);
                         //save selected
                     }
                 })
                 .onNeutral(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        UpdateAbv(p);
+                        UpdateAbv(p, true);
                     }
                 })
                 .build();
@@ -185,12 +185,16 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void UpdateAbv(final ProductActivity p) {
+    public void UpdateAbv(final ProductActivity p, final boolean isBeer) {
+        String tmp;
+        if (isBeer) tmp = "BACK";
+        else tmp = "CANCEL";
+
         MaterialDialog dialog = new MaterialDialog.Builder(p)
                 .title("Input ABV")
                 .customView(R.layout.input_abv, true)
                 .positiveText("NEXT")
-                .negativeText("BACK")
+                .negativeText(tmp)
                 .neutralText("SKIP")
                 .positiveColor(p.getAccentColor())
                 .negativeColor(p.getAccentColor())
@@ -204,27 +208,32 @@ public class DialogHandler {
                         EditText percent = (EditText) view.findViewById(R.id.abv_dia_input);
                         p.updatedModel.updateABV(p.changeToDouble(percent.getText().toString()));
 
-                        UpdateStore(p, true);
+                        UpdateStore(p, true, isBeer);
                         //save input
                     }
                 })
                 .onNeutral(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        UpdateStore(p, true);
+                        UpdateStore(p, true, isBeer);
                     }
                 })
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        UpdateContainer(p);
+                        if (isBeer) UpdateContainer(p);
                     }
                 })
                 .build();
+
+        View view = dialog.getCustomView();
+        EditText input = (EditText) view.findViewById(R.id.abv_dia_input);
+        input.addTextChangedListener(makeTextWatcher(input, "%"));
+
         dialog.show();
     }
 
-    public void UpdateStore(final ProductActivity p, final boolean cameFrom) {
+    public void UpdateStore(final ProductActivity p, final boolean cameFrom, final boolean isBeer) {
         String tmp;
         if (cameFrom) tmp = "BACK";
         else tmp = "CANCEL";
@@ -237,7 +246,7 @@ public class DialogHandler {
                 .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        if (text == null) UpdateStore(p, cameFrom);
+                        if (text == null) UpdateStore(p, cameFrom, isBeer);
                         else {
                             p.updatedModel.updateStore((String) stores[which], distances[which]);
                         }
@@ -254,14 +263,14 @@ public class DialogHandler {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        UpdatePrice(p, cameFrom);
+                        UpdatePrice(p, cameFrom, isBeer);
                         //save selected
                     }
                 })
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        if (cameFrom) UpdateAbv(p);
+                        if (cameFrom) UpdateAbv(p, isBeer);
                     }
                 })
                 .onNeutral(new MaterialDialog.SingleButtonCallback() {
@@ -274,7 +283,7 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void UpdatePrice(final ProductActivity p, final boolean cameFrom) {
+    public void UpdatePrice(final ProductActivity p, final boolean cameFrom, final boolean isBeer) {
         MaterialDialog dialog = new MaterialDialog.Builder(p)
                 .title("Update Price")
                 .customView(R.layout.input_price, true)
@@ -294,7 +303,7 @@ public class DialogHandler {
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        UpdateStore(p, cameFrom);
+                        UpdateStore(p, cameFrom, isBeer);
                     }
                 })
                 .build();
@@ -376,10 +385,8 @@ public class DialogHandler {
 
         switch (units) {
             case "$":
-
                 low_input.setText("$" + formatter.format(m.FMHandle.pricerange_low));
                 high_input.setText("$" + formatter.format(m.FMHandle.pricerange_high));
-
                 break;
             case "%":
                 low_input.setText(formatter.format(m.FMHandle.contentrange_low) + "%");
@@ -393,11 +400,8 @@ public class DialogHandler {
     }
 
     private void checkDialog(MainActivity m, String radius) {
-
-        int radiuss = changeToInt(radius);
-
         //set the filterbutton model's low/high variables
-        m.FMHandle.setCustommi(radiuss);
+        m.FMHandle.setCustommi(changeToInt(radius));
     }
 
     private void checkDialog(MainActivity m, String units, String low, String high) {
