@@ -189,33 +189,60 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         return shownItems.size();
     }
 
-    public void startList(List<TopTensModel> productList) {
-        allItems.clear();
-        shownItems.clear();
-        allItems.addAll(productList);
+    public void startList(final List<TopTensModel> productList) {
+        new AsyncTask<Void, Void, Boolean>() {
+            @Override
+            protected void onPreExecute() {
+            }
+            @Override
+            protected Boolean doInBackground(Void... params) {
 
-        cursor = 25;
-        cursorCheck = true;
+                allItems.clear();
+                shownItems.clear();
+                allItems.addAll(productList);
 
-        if (productList.size() > cursor) {
-            shownItems.addAll(productList.subList(0,cursor));
-        } else shownItems.addAll(productList);
-        this.notifyDataSetChanged();
+                cursor = 25;
+                cursorCheck = true;
+
+                if (productList.size() > cursor) {
+                    shownItems.addAll(productList.subList(0,cursor));
+                } else shownItems.addAll(productList);
+                return true;
+            }
+            @Override
+            protected void onPostExecute(Boolean result) {
+                notifyList();
+            }
+        }.execute();
     }
 
-    public void startList(List<TopTensModel> productList, SwipeRefreshLayout swipeRefreshLayout) {
-        allItems.clear();
-        shownItems.clear();
-        allItems.addAll(productList);
+    public void startList(final List<TopTensModel> productList, final SwipeRefreshLayout swipeRefreshLayout) {
 
-        cursor = 25;
-        cursorCheck = true;
+        new AsyncTask<Void, Void, Boolean>() {
+            @Override
+            protected void onPreExecute() {
+            }
+            @Override
+            protected Boolean doInBackground(Void... params) {
 
-        if (productList.size() > cursor) {
-            shownItems.addAll(productList.subList(0,cursor));
-        } else shownItems.addAll(productList);
-        this.notifyDataSetChanged();
-        swipeRefreshLayout.setRefreshing(false);
+                allItems.clear();
+                shownItems.clear();
+                allItems.addAll(productList);
+
+                cursor = 25;
+                cursorCheck = true;
+
+                if (productList.size() > cursor) {
+                    shownItems.addAll(productList.subList(0,cursor));
+                } else shownItems.addAll(productList);
+                return true;
+            }
+            @Override
+            protected void onPostExecute(Boolean result) {
+                notifyList();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        }.execute();
     }
 
     public void addList(List<TopTensModel> productList) {
