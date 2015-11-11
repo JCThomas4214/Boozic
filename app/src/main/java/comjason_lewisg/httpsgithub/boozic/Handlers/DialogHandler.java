@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.blackcat.currencyedittext.CurrencyEditText;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;

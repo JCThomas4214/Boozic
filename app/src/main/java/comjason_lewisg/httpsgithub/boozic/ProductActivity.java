@@ -130,7 +130,7 @@ public class ProductActivity extends AppCompatActivity {
 
     //start google maps navigation
     public void startNavigationIntent(String storeName, String destination) {
-        Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + destination + "(" + storeName + ")");
+        Uri gmmIntentUri = Uri.parse("geo:0,0=d?q=" + destination + "(" + storeName + ")");
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         //mapIntent.setPackage("com.google.android.apps.maps");
         startActivity(mapIntent);

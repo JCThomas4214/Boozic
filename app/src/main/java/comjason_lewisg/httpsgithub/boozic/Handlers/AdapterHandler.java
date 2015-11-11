@@ -2,6 +2,8 @@ package comjason_lewisg.httpsgithub.boozic.Handlers;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.github.clans.fab.FloatingActionButton;
+import com.mikhaellopez.circularimageview.CircularImageView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -22,7 +31,11 @@ import comjason_lewisg.httpsgithub.boozic.ProductActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
 
 public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItemViewHolder> {
-    private List<TopTensModel> items = new ArrayList<>();
+    private List<TopTensModel> shownItems = new ArrayList<>();
+    private List<TopTensModel> allItems = new ArrayList<>();
+    private int cursor;
+    private int addedItems = 50;
+    private boolean cursorCheck = true;
     //size for Normal Screen
     //use changeSize() to set for difference screen sizes
     static public int sizeX = 535;
@@ -30,30 +43,30 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
     MainActivity m;
 
     // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
+    // Complex data shownItems may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public static class ListItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView label;
         TextView storeName;
         TextView price;
         TextView volume;
-        ImageView picture;
+        CircularImageView picture;
         public IMyViewHolderClicks mListener;
 
         // each data item is just a string in this case
         public ListItemViewHolder(View itemView, IMyViewHolderClicks listener) {
             super(itemView);
             mListener = listener;
-            changeListItemSize(itemView, sizeX, sizeY);
+            changeListshownItemsize(itemView, sizeX, sizeY);
             label = (TextView) itemView.findViewById(R.id.txt_label_item);
             storeName = (TextView) itemView.findViewById(R.id.txt_desc_item);
             price = (TextView) itemView.findViewById(R.id.price_item);
-            picture = (ImageView) itemView.findViewById(R.id.type_image);
+            picture = (CircularImageView) itemView.findViewById(R.id.type_image);
             volume = (TextView) itemView.findViewById(R.id.volume_item);
             itemView.setOnClickListener(this);
         }
 
-        public void changeListItemSize(View itemView, int x, int y) {
+        public void changeListshownItemsize(View itemView, int x, int y) {
             LinearLayout linearLayout = (LinearLayout) itemView.findViewById(R.id.common_item_width);
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) linearLayout.getLayoutParams();
             layoutParams.width = x;
@@ -69,6 +82,7 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         public void onClick(View v) {
             mListener.onPotato(v, getAdapterPosition());
         }
+
         public interface IMyViewHolderClicks {
             void onPotato(View caller, int position);
         }
@@ -93,38 +107,38 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
                 //if the product is in the list, it is not a new product
                 i.putExtra("Found", true);
                 //inject model variables
-                i.putExtra("Label", items.get(position).label);
-                i.putExtra("ProductId", items.get(position).productId);
-                i.putExtra("UPC", items.get(position).upc);
-                i.putExtra("LastUpdate", items.get(position).lastUpdate);
-                i.putExtra("UserRating", items.get(position).userRating);
-                i.putExtra("ClosestStoreId", items.get(position).closestStoreId);
-                i.putExtra("CheapestStoreId", items.get(position).cheapestStoreId);
-                i.putExtra("ClosestStore", items.get(position).closestStoreName);
-                i.putExtra("CheapestStore", items.get(position).cheapestStoreName);
-                i.putExtra("ClosestStoreAddress", items.get(position).closestStoreAddress);
-                i.putExtra("CheapestStoreAddress", items.get(position).cheapestStoreAddress);
-                i.putExtra("ClosestStoreDist", items.get(position).closestStoreDist);
-                i.putExtra("CheapestStoreDist", items.get(position).cheapestStoreDist);
-                i.putExtra("ClosestPrice", items.get(position).closestPrice);
-                i.putExtra("CheapestPrice", items.get(position).cheapestPrice);
-                i.putExtra("Type", items.get(position).typePic);
-                i.putExtra("Favorites", items.get(position).favorite);
-                i.putExtra("Container", items.get(position).container);
-                i.putExtra("Volume", items.get(position).volume);
-                i.putExtra("Type", items.get(position).typePic);
-                i.putExtra("ABV", items.get(position).abv);
-                i.putExtra("Proof", items.get(position).proof);
-                i.putExtra("ABP", items.get(position).abp);
-                i.putExtra("PDD", items.get(position).pdd);
-                i.putExtra("Rating", items.get(position).rating);
-                i.putExtra("Volume", items.get(position).volume);
-                i.putExtra("VolumeMeasure", items.get(position).volumeMeasure);
-                i.putExtra("PBV", items.get(position).pbv);
-                i.putExtra("ABP", items.get(position).abp);
-                i.putExtra("PDD", items.get(position).pdd);
-                i.putExtra("TD", items.get(position).td);
-                i.putExtra("AvgRating", items.get(position).avgRating);
+                i.putExtra("Label", shownItems.get(position).label);
+                i.putExtra("ProductId", shownItems.get(position).productId);
+                i.putExtra("UPC", shownItems.get(position).upc);
+                i.putExtra("LastUpdate", shownItems.get(position).lastUpdate);
+                i.putExtra("UserRating", shownItems.get(position).userRating);
+                i.putExtra("ClosestStoreId", shownItems.get(position).closestStoreId);
+                i.putExtra("CheapestStoreId", shownItems.get(position).cheapestStoreId);
+                i.putExtra("ClosestStore", shownItems.get(position).closestStoreName);
+                i.putExtra("CheapestStore", shownItems.get(position).cheapestStoreName);
+                i.putExtra("ClosestStoreAddress", shownItems.get(position).closestStoreAddress);
+                i.putExtra("CheapestStoreAddress", shownItems.get(position).cheapestStoreAddress);
+                i.putExtra("ClosestStoreDist", shownItems.get(position).closestStoreDist);
+                i.putExtra("CheapestStoreDist", shownItems.get(position).cheapestStoreDist);
+                i.putExtra("ClosestPrice", shownItems.get(position).closestPrice);
+                i.putExtra("CheapestPrice", shownItems.get(position).cheapestPrice);
+                i.putExtra("Type", shownItems.get(position).typePic);
+                i.putExtra("Favorites", shownItems.get(position).favorite);
+                i.putExtra("Container", shownItems.get(position).container);
+                i.putExtra("Volume", shownItems.get(position).volume);
+                i.putExtra("Type", shownItems.get(position).typePic);
+                i.putExtra("ABV", shownItems.get(position).abv);
+                i.putExtra("Proof", shownItems.get(position).proof);
+                i.putExtra("ABP", shownItems.get(position).abp);
+                i.putExtra("PDD", shownItems.get(position).pdd);
+                i.putExtra("Rating", shownItems.get(position).rating);
+                i.putExtra("Volume", shownItems.get(position).volume);
+                i.putExtra("VolumeMeasure", shownItems.get(position).volumeMeasure);
+                i.putExtra("PBV", shownItems.get(position).pbv);
+                i.putExtra("ABP", shownItems.get(position).abp);
+                i.putExtra("PDD", shownItems.get(position).pdd);
+                i.putExtra("TD", shownItems.get(position).td);
+                i.putExtra("AvgRating", shownItems.get(position).avgRating);
 
                 i.putExtra("COLOR_PRIMARY_ID", m.getColorPrimaryId());
                 i.putExtra("COLOR_ACCENT_ID", m.getColorAccentId());
@@ -143,7 +157,7 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
     public void onBindViewHolder(ListItemViewHolder viewHolder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        TopTensModel model = items.get(position);
+        TopTensModel model = shownItems.get(position);
         DecimalFormat df = new DecimalFormat("####0.##");
 
         viewHolder.label.setText(model.label);
@@ -155,16 +169,16 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
 
         switch (model.typePic) {
             case 1:
-                viewHolder.picture.setBackgroundResource(R.mipmap.wine);
+                viewHolder.picture.setImageResource(R.mipmap.wine);
                 break;
             case 2:
-                viewHolder.picture.setBackgroundResource(R.mipmap.beer);
+                viewHolder.picture.setImageResource(R.mipmap.beer);
                 break;
             case 3:
-                viewHolder.picture.setBackgroundResource(R.mipmap.liquor);
+                viewHolder.picture.setImageResource(R.mipmap.liquor);
                 break;
             case 4:
-                viewHolder.picture.setBackgroundResource(R.mipmap.ic_launcher);
+                viewHolder.picture.setImageResource(R.mipmap.ic_launcher);
                 break;
         }
     }
@@ -172,32 +186,106 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return items.size();
+        return shownItems.size();
     }
-    public void addList(List<TopTensModel> productList) {
-        items.clear();
-        items.addAll(productList);
+
+    public void startList(List<TopTensModel> productList) {
+        allItems.clear();
+        shownItems.clear();
+        allItems.addAll(productList);
+
+        cursor = 25;
+        cursorCheck = true;
+
+        if (productList.size() > cursor) {
+            shownItems.addAll(productList.subList(0,cursor));
+        } else shownItems.addAll(productList);
         this.notifyDataSetChanged();
     }
 
+    public void startList(List<TopTensModel> productList, SwipeRefreshLayout swipeRefreshLayout) {
+        allItems.clear();
+        shownItems.clear();
+        allItems.addAll(productList);
+
+        cursor = 25;
+        cursorCheck = true;
+
+        if (productList.size() > cursor) {
+            shownItems.addAll(productList.subList(0,cursor));
+        } else shownItems.addAll(productList);
+        this.notifyDataSetChanged();
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    public void addList(List<TopTensModel> productList) {
+        allItems.addAll(productList);
+    }
+
     public void addItem(TopTensModel item) {
-        items.add(item);
+        shownItems.add(item);
+        this.notifyDataSetChanged();
+    }
+
+    public void addWithScroll() {
+
+        final int size = allItems.size();
+
+        new AsyncTask<Void, Void, Boolean>() {
+
+            @Override
+            protected void onPreExecute() {
+                if (size <= cursor) cursorCheck = false;
+                else cursorCheck = true;
+            }
+            @Override
+            protected Boolean doInBackground(Void... params) {
+                if (cursorCheck) {
+                    if (cursor+addedItems < size) {
+                        shownItems.addAll(allItems.subList(cursor, cursor+addedItems));
+                        cursor += addedItems;
+                    }
+                    else {
+                        shownItems.addAll(allItems.subList(cursor, size));
+                        cursor = size;
+                    }
+                }
+                return cursorCheck;
+            }
+            @Override
+            protected void onPostExecute(Boolean result) {
+                notifyList();
+            }
+        }.execute();
+    }
+
+    public void notifyList() {
         this.notifyDataSetChanged();
     }
 
     public void clearData() {
-        int size = this.items.size();
+        int size = this.allItems.size();
+        int showSize = this.shownItems.size();
         if (size > 0) {
             for (int i = 0; i < size; i++) {
-                this.items.remove(0);
+                if (i < showSize) this.shownItems.remove(0);
+                this.allItems.remove(0);
             }
 
-            this.notifyItemRangeRemoved(0, size);
+            this.notifyItemRangeRemoved(0, showSize);
         }
+    }
+
+    public List<TopTensModel> getProductList() {
+        return shownItems;
     }
 
     public void changeSize(int x, int y) {
         sizeX = x;
         sizeY = y;
+    }
+
+    public boolean getCursorCheck() {
+        return cursorCheck;
     }
 }

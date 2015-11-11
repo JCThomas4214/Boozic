@@ -24,6 +24,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -59,7 +60,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         TextView closestPrice;
         TextView cheapestPrice;
 
-        ImageView typePic;
+        CircularImageView typePic;
 
         TextView container;
         TextView volume;
@@ -86,7 +87,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             updateProduct = (Button) itemView.findViewById(R.id.new_price_button);
 
             label = (TextView) itemView.findViewById(R.id.product_label);
-            typePic = (ImageView) itemView.findViewById(R.id.product_type);
+            typePic = (CircularImageView) itemView.findViewById(R.id.product_type);
             boozicScore = (TextView) itemView.findViewById(R.id.product_metascore);
             lastUpdate = (TextView) itemView.findViewById(R.id.product_last_updated);
             userRating = (RatingBar) itemView.findViewById(R.id.product_ratingBar);
@@ -192,7 +193,6 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         DecimalFormat df = new DecimalFormat("####0.##");
         DecimalFormat monFormat = new DecimalFormat("####0.00");
         DecimalFormat pbvFormat = new DecimalFormat("####0.00#");
-        DecimalFormat distanceFormat = new DecimalFormat("#0.0");
 
         viewHolder.label.setText(model.label);
         if (model.lastUpdate == null) viewHolder.lastUpdate.setText("N/A");
@@ -259,19 +259,19 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
     public void selectTypePic(ProductStorageModel model, ProductInfoHolder viewHolder) {
         switch (model.typePic) {
             case 1:
-                viewHolder.typePic.setBackgroundResource(R.mipmap.wine);
+                viewHolder.typePic.setImageResource(R.mipmap.wine);
                 viewHolder.containerLayout.setVisibility(View.GONE);
                 break;
             case 2:
-                viewHolder.typePic.setBackgroundResource(R.mipmap.beer);
+                viewHolder.typePic.setImageResource(R.mipmap.beer);
                 viewHolder.containerLabel.setText(":Total Vol");
                 break;
             case 3:
-                viewHolder.typePic.setBackgroundResource(R.mipmap.liquor);
+                viewHolder.typePic.setImageResource(R.mipmap.liquor);
                 viewHolder.containerLayout.setVisibility(View.GONE);
                 break;
             case 4:
-                viewHolder.typePic.setBackgroundResource(R.mipmap.ic_launcher);
+                viewHolder.typePic.setImageResource(R.mipmap.ic_launcher);
                 break;
         }
     }

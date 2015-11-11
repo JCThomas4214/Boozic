@@ -111,6 +111,65 @@ public class TopTensModel {
         }
     }
 
+    public TopTensModel(String label, String lastUpdate, double userRating, String closestStoreName, String cheapestStoreName, double closestStoreDist, double cheapestStoreDist,
+                        double closestPrice, double cheapestPrice, int type, boolean favorite, String container,
+                        double abv, int proof, int[] rating, double volume) {
+
+        this.label = label;
+        this.lastUpdate = lastUpdate;
+        this.userRating = userRating;
+        typePic = type;
+
+        this.closestStoreName = closestStoreName;
+        this.cheapestStoreName = cheapestStoreName;
+        this.closestStoreDist = closestStoreDist;
+        this.cheapestStoreDist = cheapestStoreDist;
+        this.closestPrice = closestPrice;
+        this.cheapestPrice = cheapestPrice;
+        this.favorite = favorite;
+        this.container = container;
+        getVolMeasure();
+        this.abv = abv;
+        this.proof = proof;
+        //System.arraycopy(rating,0,this.rating,0,rating.length);
+        this.rating = rating;
+
+        this.volume = volume;
+        pbv = findPBV();
+        abp = findABP();
+        pdd = findPDD();
+        td = findTD();
+        avgRating = findAverage();
+    }
+
+    public TopTensModel(String label, String lastUpdate, double userRating, String closestStoreName, double closestStoreDist, double closestPrice, int type, boolean favorite,
+                        String container, double abv, int proof, int[] rating, double volume) {
+
+        this.label = label;
+        this.lastUpdate = lastUpdate;
+        this.userRating = userRating;
+        typePic = type;
+
+        this.closestStoreName = closestStoreName;
+        this.cheapestStoreName = closestStoreName;
+        this.closestStoreDist = closestStoreDist;
+        this.cheapestStoreDist = closestStoreDist;
+        this.closestPrice = closestPrice;
+        this.cheapestPrice = closestPrice;
+        this.favorite = favorite;
+        this.container = container;
+        getVolMeasure();
+        this.abv = abv;
+        this.proof = proof;
+        //System.arraycopy(rating,0,this.rating,0,rating.length);
+        this.rating = rating;
+
+        this.volume = volume;
+        pbv = findPBV();
+        abp = findABP();
+        avgRating = findAverage();
+    }
+
     private void getVolMeasure() {
 
         switch (container) {

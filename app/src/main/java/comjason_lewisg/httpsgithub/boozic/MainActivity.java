@@ -51,6 +51,7 @@ import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
 
 import com.quinny898.library.persistentsearch.SearchBox;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -304,9 +305,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     }
 
     public void callProductRefresh(AdapterHandler mAdapter, SwipeRefreshLayout swipeRefreshLayout) {
-        /*mLastLocation = LocationServices.FusedLocationApi
-                .getLastLocation(mGoogleApiClient);*/
-
         if (mLastLocation != null) {
             PLcon.callList(this, FMHandle, mAdapter, swipeRefreshLayout, mLastLocation.getLatitude(), mLastLocation.getLongitude());
         } else {
@@ -597,7 +595,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
     @Override
     public List<TopTensModel> AskForProductList() {
-        return PLcon.productList;
+        return PLcon.getProductList();
     }
 
     @Override

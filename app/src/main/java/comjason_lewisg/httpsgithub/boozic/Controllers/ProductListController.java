@@ -25,7 +25,8 @@ import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
 
 public class ProductListController {
-    public List<TopTensModel> productList = new ArrayList<>();
+
+    private List<TopTensModel> productList = new ArrayList<>();
 
     public void onCreate() {}
 
@@ -40,7 +41,6 @@ public class ProductListController {
     private void getListInBackground(final MainActivity m, final FilterMenuHandler fm, final AdapterHandler mAdapter, final SwipeRefreshLayout swipeRefreshLayout, final double latitude, final double longitude) {
 
         if (!swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(true);
-        productList.clear();
 
         new AsyncTask<Void, Void, JSONArray>() {
 
@@ -100,24 +100,42 @@ public class ProductListController {
             @Override
             protected void onPostExecute(JSONArray jsonData) {
                 mAdapter.clearData();
-                parseJsonObject(jsonData, mAdapter);
-                swipeRefreshLayout.setRefreshing(false);
+                parseJsonObject(jsonData, mAdapter, swipeRefreshLayout);
             }
         }.execute();
     }
 
-    public void parseJsonObject(JSONArray jArr, AdapterHandler mAdapter) {
+    public void parseJsonObject(JSONArray jArr, AdapterHandler mAdapter, SwipeRefreshLayout swipeRefreshLayout) {
 
-        TopTensModel product;
+        productList.clear();
+        int size = jArr.length();
+        boolean firstSet = true;
+        int mod;
 
-        for (int i = 0; i < jArr.length(); i++) {
+        for (int i = 1; i <= size; i++) {
+            mod = i % 25;
             try {
-                JSONObject oneObject = jArr.getJSONObject(i);
-                product = new TopTensModel(oneObject);
-
-                mAdapter.addItem(product);
-                productList.add(product);
+                JSONObject oneObject = jArr.getJSONObject(i-1);
+                //continue to add models to list
+                productList.add(new TopTensModel(oneObject));
+                //start the list so the user will not have to wait for 500 toptensproducts to be created for the entire list
+                if (mod == 0 && firstSet) {
+                    mAdapter.startList(productList, swipeRefreshLayout);
+                    firstSet = false;
+                }
+                else if (mod == 0) {
+                    mAdapter.addList(productList.subList(i-25, i));
+                }
+                //above only adds to list every 25 items, use this to get the last items
+                else if (i == size && mod != 0) {
+                    mAdapter.addList(productList.subList((size/25)*25, size));
+                }
             } catch (JSONException e) {}
         }
+        Log.v("...", "start: " + (size/25)*25 + " Finish: " + size);
+    }
+
+    public List<TopTensModel> getProductList() {
+        return productList;
     }
 }
