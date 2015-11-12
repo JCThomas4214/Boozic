@@ -96,6 +96,9 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     private int accentColorDark = -291840;
 
     private Location mLastLocation;
+    private double latitude;
+    private double longitude;
+
     private GoogleApiClient mGoogleApiClient;
     LocationRequest mLocationRequest;
     private SharedPreferences mPrefs;
@@ -125,6 +128,9 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         primaryColorDark = mPrefs.getInt("PRIMARY_DARK_STATE", PRIMARY_DARK_STATE);
         accentColor = mPrefs.getInt("ACCENT_STATE", ACCENT_STATE);
         accentColorDark = mPrefs.getInt("ACCENT_DARK_STATE", ACCENT_DARK_STATE);
+
+        latitude = mPrefs.getFloat("LAST_LATITUDE", (float) 0.00);
+        longitude = mPrefs.getFloat("LAST_LONGITUDE", (float) 0.00);
 
         switch (colorPrimary_id) {
             case 1:
@@ -312,11 +318,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     }
 
     public void callProductRefresh(AdapterHandler mAdapter, SwipeRefreshLayout swipeRefreshLayout) {
-        if (mLastLocation != null) {
-            PLcon.callList(this, FMHandle, mAdapter, swipeRefreshLayout, mLastLocation.getLatitude(), mLastLocation.getLongitude());
-        } else {
-            Log.v("LOCATION", "Couldn't get the location. Make sure location is enabled on the device");
-        }
+        PLcon.callList(this, FMHandle, mAdapter, swipeRefreshLayout, latitude, longitude);
     }
 
     public void showFilterMenu() {
@@ -381,10 +383,12 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     @Override
     public void onLocationChanged(Location location) {
         mLastLocation = location;
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
 
         //initial query to populate list
         if (firstStartRefresh) {
-            //Nav.topTensFragment.askForProductListrefresh(Nav.topTensFragment.getmAdapter(), Nav.topTensFragment.getSwipeRefreshLayout());
+            Nav.topTensFragment.askForProductListrefresh(Nav.topTensFragment.getmAdapter(), Nav.topTensFragment.getSwipeRefreshLayout());
             firstStartRefresh = false;
         }
     }
@@ -462,8 +466,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
                 // A contact was picked.  Here we will just display it
                 // to the user.
                 Log.v("CAM RESULT", data.getExtras().getString("RESULT"));
-                upcFPC.callProduct(this, data.getExtras().getString("RESULT"),
-                        mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                upcFPC.callProduct(this, data.getExtras().getString("RESULT"), latitude, longitude);
             }
         }
     }
@@ -501,8 +504,9 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         ed.putInt("PRIMARY_DARK_STATE", primaryColorDark);
         ed.putInt("ACCENT_STATE", accentColor);
         ed.putInt("ACCENT_DARK_STATE", accentColorDark);
+        ed.putFloat("LAST_LATITUDE", (float) latitude);
+        ed.putFloat("LAST_LONGITUDE", (float) longitude);
 
-        /*FBhandle.saveSharedPref(ed);*/
         FMHandle.saveSharedPref(ed);
         //apply changes
         ed.apply();

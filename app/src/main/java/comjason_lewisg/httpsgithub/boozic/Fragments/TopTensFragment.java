@@ -48,8 +48,7 @@ public class TopTensFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-
-        rootView =  inflater.inflate(R.layout.fragment_toptens,container,false);
+        rootView = inflater.inflate(R.layout.fragment_toptens,container,false);
         viewSet(rootView);
 
         return rootView;
@@ -62,7 +61,7 @@ public class TopTensFragment extends Fragment {
 
         mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new AdapterHandler((MainActivity) getActivity());
+        mAdapter = new AdapterHandler((MainActivity) getActivity(), askForProductList());
         mRecyclerView.setAdapter(mAdapter);
 
         int screenSize = getResources().getConfiguration().screenLayout &
@@ -121,16 +120,8 @@ public class TopTensFragment extends Fragment {
             @Override
             public void onRefresh() {
                 askForProductListrefresh(mAdapter, swipeRefreshLayout);
-                swipeRefreshLayout.setRefreshing(false);
-
-                /*mAdapter.clearData();
-                mAdapter.startList(DataSet);*/
             }
         });
-
-        //mAdapter.clearData();
-        mAdapter.startList(askForProductList());
-        //mAdapter.startList(DataSet);
     }
 
     public AdapterHandler getmAdapter() {
@@ -181,6 +172,12 @@ public class TopTensFragment extends Fragment {
             dataPasser = (OnPass) a;
         }
         askShowFilterButtons();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
     }
 
     @Override

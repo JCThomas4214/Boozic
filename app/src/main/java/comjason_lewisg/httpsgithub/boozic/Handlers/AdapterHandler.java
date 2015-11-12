@@ -89,8 +89,19 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
     }
 
     // Provide a suitable constructor (depends on the kind of data set)
-    public AdapterHandler(MainActivity m) {
+    public AdapterHandler(MainActivity m, List<TopTensModel> productList) {
         this.m = m;
+
+        if (!productList.isEmpty()) {
+            allItems.addAll(productList);
+
+            cursor = 25;
+            cursorCheck = true;
+
+            if (productList.size() > cursor) {
+                shownItems.addAll(productList.subList(0, cursor));
+            } else shownItems.addAll(productList);
+        }
     }
 
     // Create new views (invoked by the layout manager)
