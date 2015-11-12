@@ -46,6 +46,8 @@ public class ProductActivity extends AppCompatActivity {
     int accentColor;
     int accentColorDark;
 
+    int found;
+
     public ProductStorageModel model;
     public UpdateProductModel updatedModel;
 
@@ -75,8 +77,8 @@ public class ProductActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product);
 
         //if not a new product inject serializable objects
-        int found = (int) getIntent().getSerializableExtra("Found");
-        if (found == 0 || found == 1) fetchProductInfo();
+        found = (int) getIntent().getSerializableExtra("Found");
+        if (found == 0) fetchProductInfo();
         else newProduct();
 
         //Instantiate the toolbar object
@@ -161,15 +163,16 @@ public class ProductActivity extends AppCompatActivity {
 
     private void fetchProductInfo() {
         //fetch latitude and longitude
-        new NearbyStoresController(this,
+        //TODO: wait for script to use distance formula
+        /*new NearbyStoresController(this,
                 (double) getIntent().getSerializableExtra("LAT"),
-                (double) getIntent().getSerializableExtra("LONG"));
+                (double) getIntent().getSerializableExtra("LONG"));*/
         //fetch extra items
         model = new ProductStorageModel((String) getIntent().getSerializableExtra("Label"),
                 (String) getIntent().getSerializableExtra("UPC"),
                 (int) getIntent().getSerializableExtra("ProductId"),
                 (String) getIntent().getSerializableExtra("LastUpdate"),
-                (double) getIntent().getSerializableExtra("UserRating"),
+                0, //(double) getIntent().getSerializableExtra("UserRating")
                 (int) getIntent().getSerializableExtra("ClosestStoreId"),
                 (int) getIntent().getSerializableExtra("CheapestStoreId"),
                 (String) getIntent().getSerializableExtra("ClosestStore"),
@@ -206,10 +209,8 @@ public class ProductActivity extends AppCompatActivity {
         model = new ProductStorageModel((String) getIntent().getSerializableExtra("Label"),
                 (String) getIntent().getSerializableExtra("UPC"),
                 (int) getIntent().getSerializableExtra("ProductId"),
-                null,-1,-1,-1,null,null,null,null,-1,-1,-1,-1,-1,false,null,-1,-1,new int[] {0,0,0,0,0},
                 (double) getIntent().getSerializableExtra("Volume"),
-                (String) getIntent().getSerializableExtra("VolumeMeasure"),
-                -1,-1,-1,-1,-1);
+                (String) getIntent().getSerializableExtra("VolumeMeasure"));
 
         updatedModel = new UpdateProductModel((String) getIntent().getSerializableExtra("Label"),
                 (String) getIntent().getSerializableExtra("UPC"),

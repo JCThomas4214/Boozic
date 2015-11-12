@@ -195,21 +195,24 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         DecimalFormat pbvFormat = new DecimalFormat("####0.00#");
 
         viewHolder.label.setText(model.label);
+        if (model.boozicScore <= 0) viewHolder.boozicScore.setText("N/A");
+        else viewHolder.boozicScore.setText("" + model.boozicScore);
         if (model.lastUpdate == null) viewHolder.lastUpdate.setText("N/A");
         else viewHolder.lastUpdate.setText("" + model.lastUpdate);
 
-        if (model.userRating == -1) viewHolder.userRating.setRating(0);
+        if (model.userRating <= 0) viewHolder.userRating.setRating(0);
         else viewHolder.userRating.setRating((float) model.userRating);
         LayerDrawable stars = (LayerDrawable) viewHolder.userRating.getProgressDrawable();
         stars.getDrawable(2).setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP);
 
         if (model.cheapestStoreName == null) {
             viewHolder.closestStoreLayout.setVisibility(View.GONE);
+            viewHolder.cheapestStoreLayout.setVisibility(View.GONE);
             viewHolder.td.setText("N/A");
-            viewHolder.cheapestStore.setText("N/A");
+            /*viewHolder.cheapestStore.setText("N/A");
             viewHolder.cheapestPrice.setText("N/A");
             viewHolder.closestStoreAddress.setText("N/A");
-            viewHolder.cheapestStoreAddress.setText("N/A");
+            viewHolder.cheapestStoreAddress.setText("N/A");*/
         }
         else {
             if (model.closestStoreId == model.cheapestStoreId) {
@@ -231,22 +234,22 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
 
         selectTypePic(model, viewHolder);
 
-        if (model.volume == -1) viewHolder.volume.setText("N/A");
+        if (model.volume <= 0) viewHolder.volume.setText("N/A");
         else viewHolder.volume.setText(df.format(model.volume) + model.volumeMeasure);
 
-        if (model.abv == -1) viewHolder.abv.setText("N/A");
+        if (model.abv <= 0) viewHolder.abv.setText("N/A");
         else viewHolder.abv.setText(df.format(model.abv) + "%");
 
-        if (model.proof == -1) viewHolder.proof.setText("N/A");
+        if (model.proof <= 0) viewHolder.proof.setText("N/A");
         else viewHolder.proof.setText("" + model.proof);
 
-        if (model.abp == -1) viewHolder.abp.setText("N/A");
+        if (model.abp <= 0) viewHolder.abp.setText("N/A");
         else viewHolder.abp.setText("$" + monFormat.format(model.abp) + "/ml");
 
-        if (model.pbv == -1 || model.abv == -1) viewHolder.pbv.setText("N/A");
+        if (model.pbv <= 0 || model.abv <= 0) viewHolder.pbv.setText("N/A");
         else viewHolder.pbv.setText("$" + pbvFormat.format(model.pbv) + "/ml");
 
-        if (model.avgRating == -1) emptyChart(viewHolder);
+        if (model.avgRating <= 0) emptyChart(viewHolder);
         else setChart(model, viewHolder);
     }
 

@@ -462,7 +462,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
                 // A contact was picked.  Here we will just display it
                 // to the user.
                 Log.v("CAM RESULT", data.getExtras().getString("RESULT"));
-                upcFPC.callProduct(this, "080686121046",
+                upcFPC.callProduct(this, data.getExtras().getString("RESULT"),
                         mLastLocation.getLatitude(), mLastLocation.getLongitude());
             }
         }
