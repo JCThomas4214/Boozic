@@ -118,6 +118,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
 
             ratingChart = (PieChart) itemView.findViewById(R.id.rating_chart);
 
+            userRating.setOnClickListener(ratingListener);
             updateProduct.setOnClickListener(clickListener);
             closestStoreLayout.setOnClickListener(clickListener);
             cheapestStoreLayout.setOnClickListener(clickListener);
@@ -139,11 +140,22 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
                 }
             }
         };
+        public View.OnClickListener ratingListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch(v.getId()) {
+                    case R.id.product_ratingBar:
+                        mListener.changeUpdateModelRating((RatingBar)v);
+                        break;
+                }
+            }
+        };
 
         public interface IMyViewHolderClicks {
             void startUpdateDialog(View caller);
             void startClosestNavigation(View caller);
             void startCheapestNavigation(View caller);
+            void changeUpdateModelRating(RatingBar caller);
         }
     }
 
@@ -180,6 +192,9 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             }
             public void startCheapestNavigation(View caller) {
                 p.startNavigationIntent(p.model.cheapestStoreName, p.model.cheapestStoreAddress);
+            }
+            public void changeUpdateModelRating(RatingBar caller) {
+                p.updatedModel.updateRating(caller.getRating());
             }
         });
     }

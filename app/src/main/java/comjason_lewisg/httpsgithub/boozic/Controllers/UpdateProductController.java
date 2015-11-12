@@ -1,21 +1,13 @@
 package comjason_lewisg.httpsgithub.boozic.Controllers;
 
-
-import android.app.Activity;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.provider.Settings;
 import android.util.Log;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.ProductActivity;
 
 public class UpdateProductController {
@@ -30,14 +22,14 @@ public class UpdateProductController {
 
     private void getProductInBackground(final ProductActivity p) {
 
-        new AsyncTask<Void, Void, JSONObject>() {
+        new AsyncTask<Void, Void, String>() {
 
             @Override
-            protected JSONObject doInBackground(Void... urls) {
+            protected String doInBackground(Void... urls) {
                 try {
                     StringBuilder urlString = new StringBuilder();
                     //TODO: Store the Server IP in global locaiton
-                    urlString.append("http://54.210.175.98:9080/api/products/UpdateProduct?");
+                    urlString.append("http://54.210.175.98:9080/api/products/updateProduct?");
                     //append productID
                     urlString.append("ProductId=").append(p.updatedModel.productId);
                     //if store information was updated, append store info
@@ -57,7 +49,7 @@ public class UpdateProductController {
                     String android_id = "" + android.provider.Settings.Secure.getString(p.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
                     urlString.append("&DeviceId=").append(android_id);
                     //append user rating
-                    if (p.updatedModel.userRating != -1) urlString.append("&rating=").append(p.updatedModel.userRating);
+                    if (p.updatedModel.userRating != -1) urlString.append("&Rating=").append(p.updatedModel.userRating);
 
                     Log.v("updateProductURL", urlString.toString());
                     URL url = new URL(urlString.toString());
@@ -70,7 +62,7 @@ public class UpdateProductController {
                             stringBuilder.append(line).append("\n");
                         }
                         bufferedReader.close();
-                        return new JSONObject(stringBuilder.toString());
+                        return stringBuilder.toString();
                     } finally {
                         urlConnection.disconnect();
                     }
@@ -81,7 +73,10 @@ public class UpdateProductController {
             }
 
             @Override
-            protected void onPostExecute(JSONObject object) {
+            protected void onPostExecute(String response) {
+                if (response == null) {
+                    Log.v("ERROR", "There was an error");
+                }
             }
         }.execute();
     }

@@ -16,11 +16,14 @@ import android.transition.Slide;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.KeyCharacterMap;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -234,7 +237,11 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
         changeFilterMenuWidth(250);
 
-        expandConst = 0.25;
+        boolean hasMenuKey = ViewConfiguration.get(this).hasPermanentMenuKey();
+        boolean hasBackKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK);
+
+        if (!hasMenuKey && !hasBackKey) expandConst = 0.27;
+        else expandConst = 0.25;
         srinkConst = 0.07;
     }
     public void setNormal() {
@@ -244,7 +251,11 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
         searchBarHandler.setSearchButtonXY(20, 0);
 
-        expandConst = 0.35;
+        boolean hasMenuKey = ViewConfiguration.get(this).hasPermanentMenuKey();
+        boolean hasBackKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK);
+
+        if (!hasMenuKey && !hasBackKey) expandConst = 0.37;
+        else expandConst = 0.35;
         srinkConst = 0.09;
     }
     public void setSmall() {
