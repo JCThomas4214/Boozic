@@ -105,7 +105,7 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
             public void onPotato(View caller, int position) {
                 Intent i = new Intent(m, ProductActivity.class);
                 //if the product is in the list, it is not a new product
-                i.putExtra("Found", true);
+                i.putExtra("Found", 0);
                 //inject model variables
                 i.putExtra("Label", shownItems.get(position).label);
                 i.putExtra("ProductId", shownItems.get(position).productId);
@@ -126,19 +126,18 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
                 i.putExtra("Favorites", shownItems.get(position).favorite);
                 i.putExtra("Container", shownItems.get(position).container);
                 i.putExtra("Volume", shownItems.get(position).volume);
-                i.putExtra("Type", shownItems.get(position).typePic);
+                i.putExtra("VolumeMeasure", shownItems.get(position).volumeMeasure);
                 i.putExtra("ABV", shownItems.get(position).abv);
                 i.putExtra("Proof", shownItems.get(position).proof);
                 i.putExtra("ABP", shownItems.get(position).abp);
                 i.putExtra("PDD", shownItems.get(position).pdd);
                 i.putExtra("Rating", shownItems.get(position).rating);
-                i.putExtra("Volume", shownItems.get(position).volume);
-                i.putExtra("VolumeMeasure", shownItems.get(position).volumeMeasure);
                 i.putExtra("PBV", shownItems.get(position).pbv);
-                i.putExtra("ABP", shownItems.get(position).abp);
-                i.putExtra("PDD", shownItems.get(position).pdd);
                 i.putExtra("TD", shownItems.get(position).td);
                 i.putExtra("AvgRating", shownItems.get(position).avgRating);
+
+                i.putExtra("LAT", m.getLastLocation().getLatitude());
+                i.putExtra("LONG", m.getLastLocation().getLongitude());
 
                 i.putExtra("COLOR_PRIMARY_ID", m.getColorPrimaryId());
                 i.putExtra("COLOR_ACCENT_ID", m.getColorAccentId());

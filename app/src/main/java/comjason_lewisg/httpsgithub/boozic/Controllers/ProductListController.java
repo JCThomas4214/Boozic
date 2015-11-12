@@ -128,11 +128,11 @@ public class ProductListController {
                 }
                 //above only adds to list every 25 items, use this to get the last items
                 else if (i == size && mod != 0) {
-                    mAdapter.addList(productList.subList((size/25)*25, size));
+                    if (i < 25) mAdapter.startList(productList, swipeRefreshLayout);
+                    else mAdapter.addList(productList.subList((size/25)*25, size));
                 }
             } catch (JSONException e) {}
         }
-        Log.v("...", "start: " + (size/25)*25 + " Finish: " + size);
     }
 
     public List<TopTensModel> getProductList() {

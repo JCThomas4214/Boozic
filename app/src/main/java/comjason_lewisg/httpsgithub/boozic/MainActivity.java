@@ -36,6 +36,7 @@ import com.google.android.gms.location.LocationServices;
 
 import comjason_lewisg.httpsgithub.boozic.Controllers.DeviceIdController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.ProductListController;
+import comjason_lewisg.httpsgithub.boozic.Controllers.UPCFindProductController;
 import comjason_lewisg.httpsgithub.boozic.Fragments.FavoritesFragment;
 import comjason_lewisg.httpsgithub.boozic.Fragments.ThemeFragment;
 import comjason_lewisg.httpsgithub.boozic.Fragments.TopTensFragment;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public DialogHandler DHandle;
     public DeviceIdController DIDcon;
     public ProductListController PLcon;
+    public UPCFindProductController upcFPC;
     public SearchBarHandler searchBarHandler;
     public NavigationDrawerHandler Nav;
     public ThemeHandler themeHandler;
@@ -149,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
         DIDcon = new DeviceIdController(this);
         PLcon = new ProductListController();
+        upcFPC = new UPCFindProductController();
 
         setContentView(R.layout.activity_main);
 
@@ -287,6 +290,10 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public void themeChange() {
         finish();
         startActivity(getIntent());
+    }
+
+    public Location getLastLocation() {
+        return mLastLocation;
     }
 
     public int getColorPrimaryId() { return colorPrimary_id; }
@@ -455,8 +462,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
                 // A contact was picked.  Here we will just display it
                 // to the user.
                 Log.v("CAM RESULT", data.getExtras().getString("RESULT"));
-                //TODO PING LOCATION HERE
-                //TODO SEND TO BACKEND HERE
+                upcFPC.callProduct(this, "080686121046",
+                        mLastLocation.getLatitude(), mLastLocation.getLongitude());
             }
         }
     }

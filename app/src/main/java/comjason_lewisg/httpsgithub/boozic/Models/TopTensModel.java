@@ -19,7 +19,7 @@ public class TopTensModel {
     public int boozicScore;
 
     public String upc;
-    public int productId = -1;
+    public int productId;
 
     public int closestStoreId;
     public int cheapestStoreId;
@@ -56,6 +56,7 @@ public class TopTensModel {
             JSONObject cheapestStoreObject = object.getJSONObject("CheapestStore");
 
             label = object.getString("ProductName");
+            productId = object.getInt("ProductID");
             lastUpdate = closestStoreObject.getString("LastUpdated");
             userRating = 0; //oneObject.getDouble("PRODUCT_USERRATING");
 
@@ -87,13 +88,14 @@ public class TopTensModel {
             if (abv == 0) abv = -1;
 
             //must be changed when backend -1
-            proof = (int) (object.getDouble("ABV") * 2);
+            proof = (int) (abv * 2);
             if (proof == 0) proof = -1;
 
             rating = new int[]{object.getInt("Rating1"), object.getInt("Rating2"),
                             object.getInt("Rating3"), object.getInt("Rating4"), object.getInt("Rating5")};
             avgRating = object.getDouble("CombinedRating");//findAverage();
 
+            volumeMeasure = object.getString("VolumeUnit");
             getVolMeasure();
 
             if (cheapestPrice != -1) {
@@ -172,17 +174,23 @@ public class TopTensModel {
 
     private void getVolMeasure() {
 
-        switch (container) {
-            case "handle":
-                volume = volume / 1000;
-                this.volumeMeasure = "L";
+        switch (volumeMeasure) {
+            case "ML":
+                if (volume > 1000) {
+                    volume = volume / 1000;
+                    volumeMeasure = "L";
+                } else {
+                    volumeMeasure = "ml";
+                }
                 break;
-            case "fifth":
-                this.volumeMeasure = "ml";
+            case "L":
+                break;
+            case "oz":
                 break;
             default:
-                if ((volume /  1000) >= 1) volume = volume / 1000;
-                this.volumeMeasure = "ml";
+                if (volume < 50) {
+                    volumeMeasure = "oz";
+                }
                 break;
         }
     }

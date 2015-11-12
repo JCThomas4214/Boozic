@@ -15,27 +15,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
+import comjason_lewisg.httpsgithub.boozic.ProductActivity;
 
 public class NearbyStoresController {
     public List<String> storeList = new ArrayList<>();
-    public List<Double> distanceList = new ArrayList<>();
-    //public List<Integer> storeIdList = new ArrayList<>();
+    public List<Integer> storeIdList = new ArrayList<>();
 
     public void onCreate() {}
 
-    public NearbyStoresController() {}
-
-    public void callList(MainActivity m, double latitude, double longitude) {
-        if (m.checkPlayServices()) {
-            getListInBackground(m, latitude, longitude);
-        }
+    public NearbyStoresController(ProductActivity p, double latitude, double longitude) {
+        getListInBackground(p, latitude, longitude);
     }
 
-    private void getListInBackground(final MainActivity m, final double latitude, final double longitude) {
+    private void getListInBackground(final ProductActivity p, final double latitude, final double longitude) {
 
         storeList.clear();
-        distanceList.clear();
-        //storeIdList.clear();
+        storeIdList.clear();
 
         new AsyncTask<Void, Void, JSONArray>() {
 
@@ -47,7 +42,7 @@ public class NearbyStoresController {
                     urlString.append("http://54.210.175.98:9080/api/Location/getStoresInRadius?");
                     //append location
                     urlString.append("latitude=").append(latitude).append("&longitude=").append(longitude);
-                    urlString.append("&Radius=10");
+                    urlString.append("&Radius=6");
 
                     Log.v("NearbyStoresURL", urlString.toString());
                     URL url = new URL(urlString.toString());
@@ -75,12 +70,12 @@ public class NearbyStoresController {
                 for (int i = 0; i < jsonData.length(); i++) {
                     try {
                         storeList.add(jsonData.getJSONObject(i).getString("StoreName"));
-                        distanceList.add(jsonData.getJSONObject(i).getDouble("Distance"));
-                        //storeIdList.add(jsonData.getJSONObject(i).getInt("StoreID"));
+                        storeIdList.add(jsonData.getJSONObject(i).getInt("StoreID"));
                     } catch (JSONException e) {
                         Log.e("ERROR", e.getMessage(), e);
                     }
                 }
+                p.setNearByStores(storeList, storeIdList);
             }
         }.execute();
     }

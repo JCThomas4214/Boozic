@@ -1,5 +1,6 @@
 package comjason_lewisg.httpsgithub.boozic;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -16,6 +17,10 @@ import android.view.View;
 
 import com.quinny898.library.persistentsearch.SearchBox;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import comjason_lewisg.httpsgithub.boozic.Controllers.NearbyStoresController;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ProductAdapterHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ProductSearchBarHandler;
 import comjason_lewisg.httpsgithub.boozic.Models.ProductStorageModel;
@@ -26,6 +31,9 @@ public class ProductActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     public ProductSearchBarHandler searchBarHandler;
+
+    private List<String> stores = new ArrayList<>();
+    private List<Integer> storeIDs = new ArrayList<>();
 
     RecyclerView mRecyclerView;
     RecyclerView.Adapter mAdapter;
@@ -67,10 +75,9 @@ public class ProductActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product);
 
         //if not a new product inject serializable objects
-        if ((boolean) getIntent().getSerializableExtra("Found"))
-            fetchProductInfo();
-        else
-            newProduct();
+        int found = (int) getIntent().getSerializableExtra("Found");
+        if (found == 0 || found == 1) fetchProductInfo();
+        else newProduct();
 
         //Instantiate the toolbar object
         toolbar = (Toolbar) findViewById(R.id.product_toolbar); // Attaching the layout to the toolbar object
@@ -128,6 +135,13 @@ public class ProductActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void setNearByStores(List<String> stores, List<Integer> storeIDs) {
+        this.stores.addAll(stores);
+        this.storeIDs.addAll(storeIDs);
+
+        Log.v("First Store", "The First Store is " + stores.get(0) + " and its ID is " + storeIDs.get(0));
+    }
+
     //start google maps navigation
     public void startNavigationIntent(String storeName, String destination) {
         Uri gmmIntentUri = Uri.parse("geo:0,0=d?q=" + destination + "(" + storeName + ")");
@@ -146,8 +160,11 @@ public class ProductActivity extends AppCompatActivity {
      }
 
     private void fetchProductInfo() {
+        //fetch latitude and longitude
+        new NearbyStoresController(this,
+                (double) getIntent().getSerializableExtra("LAT"),
+                (double) getIntent().getSerializableExtra("LONG"));
         //fetch extra items
-
         model = new ProductStorageModel((String) getIntent().getSerializableExtra("Label"),
                 (String) getIntent().getSerializableExtra("UPC"),
                 (int) getIntent().getSerializableExtra("ProductId"),
