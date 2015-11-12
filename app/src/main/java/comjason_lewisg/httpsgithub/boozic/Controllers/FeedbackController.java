@@ -12,9 +12,6 @@ import java.nio.charset.Charset;
 
 public class FeedbackController {
 
-    private final Charset UTF8_CHARSET = Charset.forName("UTF-8");
-    private URLEncoder encoder;
-
     public void onCreate() {}
 
     public FeedbackController() {}
@@ -65,20 +62,5 @@ public class FeedbackController {
                 }
             }
         }.execute();
-    }
-
-    private String encodeString(String input) {
-        String tmp = "";
-        byte[] array = encodeUTF8(input);
-
-        for (int i = 0; i < array.length; i++){
-            tmp = tmp + array[i];
-        }
-
-        return tmp;
-    }
-
-    private byte[] encodeUTF8(String string) {
-        return string.getBytes(UTF8_CHARSET);
     }
 }
