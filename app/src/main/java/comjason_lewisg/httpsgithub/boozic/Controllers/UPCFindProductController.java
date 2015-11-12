@@ -15,9 +15,6 @@ import java.net.URL;
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.ProductActivity;
 
-/**
- * Created by JLewi on 11/11/2015.
- */
 public class UPCFindProductController {
 
     static final int nullInt = 0;

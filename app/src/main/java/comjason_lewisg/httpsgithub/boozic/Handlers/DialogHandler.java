@@ -1,6 +1,7 @@
 package comjason_lewisg.httpsgithub.boozic.Handlers;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.InputType;
@@ -34,12 +35,12 @@ public class DialogHandler {
         //Create the MaterialDialog object to start initiallizing attributes
         MaterialDialog dialog = new MaterialDialog.Builder(m)
                 .title("Send us feedback")
-                .inputRange(0, 250, m.getColorPrimary())
+                .inputRange(5, 250, m.getColorPrimary())
                 .inputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_CLASS_TEXT)
                 .input("What can we improve upon?", null, new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
-                        //something
+                        //send input to backend for email
                     }
                 })
                 .positiveText("SEND")
@@ -147,8 +148,35 @@ public class DialogHandler {
     }
 
     public void UpdateType(final ProductActivity p) {
+        CharSequence[] items = {"Wine", "Beer", "Liquor", "Mixed"};
+        MaterialDialog dialog = new MaterialDialog.Builder(p)
+                .title("Select Product Type")
+                .items(items)
+                .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        Log.v("TYPE", "string = " + text);
+                        if (text == null) UpdateType(p);
+                        else p.updatedModel.updateType(which + 1);
 
+                        if (p.model.container.equals("N/A") && p.updatedModel.type == 2) UpdateContainer(p);
+                        else if (p.model.abv <= 0 && p.updatedModel.type == 2) UpdateAbv(p, true);
+                        else if (p.model.abv <= 0) UpdateAbv(p, false);
+                        return true;
+                    }
+                })
+                .positiveText("OK")
+                .widgetColor(p.getAccentColor())
+                .positiveColor(p.getAccentColor())
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        //save selected
+                    }
+                })
+                .build();
 
+        dialog.show();
     }
 
     public void UpdateContainer(final ProductActivity p) {
@@ -168,7 +196,7 @@ public class DialogHandler {
                 .positiveText("NEXT")
                 .negativeText("CANCEL")
                 .neutralText("SKIP")
-                .widgetColorRes(R.color.NavUnchecked)
+                .widgetColor(p.getAccentColor())
                 .positiveColor(p.getAccentColor())
                 .negativeColor(p.getAccentColor())
                 .neutralColor(p.getAccentColor())
@@ -262,7 +290,7 @@ public class DialogHandler {
                 .positiveText("NEXT")
                 .negativeText(tmp)
                 .neutralText("NOT FOUND")
-                .widgetColorRes(R.color.NavUnchecked)
+                .widgetColor(p.getAccentColor())
                 .positiveColor(p.getAccentColor())
                 .negativeColor(p.getAccentColor())
                 .neutralColor(p.getAccentColor())

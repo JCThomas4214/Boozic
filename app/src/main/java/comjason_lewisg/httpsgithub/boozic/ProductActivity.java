@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import comjason_lewisg.httpsgithub.boozic.Controllers.NearbyStoresController;
+import comjason_lewisg.httpsgithub.boozic.Controllers.UpdateProductController;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ProductAdapterHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ProductSearchBarHandler;
 import comjason_lewisg.httpsgithub.boozic.Models.ProductStorageModel;
@@ -29,6 +30,7 @@ public class ProductActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     public ProductSearchBarHandler searchBarHandler;
+    private UpdateProductController UPC;
 
     public List<String> stores = new ArrayList<>();
     public List<Integer> storeIDs = new ArrayList<>();
@@ -73,6 +75,8 @@ public class ProductActivity extends AppCompatActivity {
                 break;
         }
         setContentView(R.layout.activity_product);
+
+        UPC = new UpdateProductController();
 
         //if not a new product inject serializable objects
         found = (int) getIntent().getSerializableExtra("Found");
@@ -124,6 +128,7 @@ public class ProductActivity extends AppCompatActivity {
         if (id == android.R.id.home) {
             //return to main activity
             checkUpdateModel();
+            if (updatedModel.updated) UPC.updateProduct(this);
             finish();
             return true;
         }
@@ -241,7 +246,7 @@ public class ProductActivity extends AppCompatActivity {
     public void checkUpdateModel() {
         Log.v("UPDATEMODEL", "The value of container is " + updatedModel.container);
         Log.v("UPDATEMODEL", "The value of abv is " + updatedModel.abv);
-        Log.v("UPDATEMODEL", "The value of StoreName and StoreDist is " + updatedModel.StoreName + " and " + updatedModel.StoreDist);
+        Log.v("UPDATEMODEL", "The value of StoreName and ID is " + updatedModel.StoreName + " and " + updatedModel.StoreID);
         Log.v("UPDATEMODEL", "The value of Price is " + updatedModel.Price);
     }
 

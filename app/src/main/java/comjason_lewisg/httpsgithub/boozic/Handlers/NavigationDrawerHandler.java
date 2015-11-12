@@ -3,6 +3,7 @@ package comjason_lewisg.httpsgithub.boozic.Handlers;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.view.MenuItem;
@@ -167,13 +168,15 @@ public class NavigationDrawerHandler {
                     return true;
                 case R.id.about:
 
-                    //link to facebook page
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            //put about
-                        }
-                    }, delay);
+                    Intent fb;
+
+                    try {
+                        m.getPackageManager().getPackageInfo("com.facebook.katana", 0);
+                        fb = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/936925356386759"));
+                    } catch (Exception e) {
+                        fb = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/dancetotheboozic"));
+                    }
+                    m.startActivity(fb);
 
                     return true;
                 case R.id.feedback:

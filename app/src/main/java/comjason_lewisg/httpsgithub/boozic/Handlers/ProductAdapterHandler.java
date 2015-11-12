@@ -169,7 +169,8 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         // set the view's size, margins, paddings and layout parameters
         return new ProductInfoHolder(itemView, new ProductAdapterHandler.ProductInfoHolder.IMyViewHolderClicks() {
             public void startUpdateDialog(View caller) {
-                if (p.model.container.equals("N/A") && p.model.typePic == 2) DHandler.UpdateContainer(p);
+                if (p.model.typePic == 4) DHandler.UpdateType(p);
+                else if (p.model.container.equals("N/A") && p.model.typePic == 2) DHandler.UpdateContainer(p);
                 else if (p.model.abv <= 0) DHandler.UpdateAbv(p, false);
                 else DHandler.UpdateStore(p, false, false);
 

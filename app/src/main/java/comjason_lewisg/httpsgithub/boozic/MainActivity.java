@@ -1,5 +1,6 @@
 package comjason_lewisg.httpsgithub.boozic;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public FilterMenuHandler FMHandle;
     public MenuItem item = null;
     public boolean filterButtonVis = true;
+    public static Activity activity;
 
     static final int SCANNER_CODE_REQUEST = 0;
 
@@ -117,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        activity = this;
         //pull the shared preference
         mPrefs = getSharedPreferences("COLOR_STATE", MODE_PRIVATE);
         //when resume, pull saves states for each button
