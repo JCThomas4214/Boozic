@@ -8,8 +8,10 @@ import android.graphics.drawable.LayerDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -35,6 +37,7 @@ import comjason_lewisg.httpsgithub.boozic.Models.ProductStorageModel;
 import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
 import comjason_lewisg.httpsgithub.boozic.ProductActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
+import comjason_lewisg.httpsgithub.boozic.SettingsActivity;
 
 public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHandler.ProductInfoHolder> {
     private ProductStorageModel item;
@@ -76,6 +79,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         LinearLayout closestStoreLayout;
         LinearLayout cheapestStoreLayout;
         LinearLayout containerLayout;
+        LinearLayout productInfoTable;
         PieChart ratingChart;
         public IMyViewHolderClicks mListener;
 
@@ -96,6 +100,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             closestStoreLayout = (LinearLayout) itemView.findViewById(R.id.closest_store_layout);
             cheapestStoreLayout = (LinearLayout) itemView.findViewById(R.id.cheapest_store_layout);
             containerLayout = (LinearLayout) itemView.findViewById(R.id.product_container_layout);
+            productInfoTable = (LinearLayout) itemView.findViewById(R.id.product_info_table_table_layout);
             td = (TextView) itemView.findViewById(R.id.product_td);
 
             closestStore = (TextView) itemView.findViewById(R.id.product_closest_store);
@@ -118,7 +123,18 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
 
             ratingChart = (PieChart) itemView.findViewById(R.id.rating_chart);
 
-            userRating.setOnClickListener(ratingListener);
+            productInfoTable.setOnLongClickListener(longClickListener);
+
+            userRating.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        mListener.changeUpdateModelRating((RatingBar)v);
+                    }
+                    return false;
+                }
+            });
+
             updateProduct.setOnClickListener(clickListener);
             closestStoreLayout.setOnClickListener(clickListener);
             cheapestStoreLayout.setOnClickListener(clickListener);
@@ -140,14 +156,15 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
                 }
             }
         };
-        public View.OnClickListener ratingListener = new View.OnClickListener() {
+        public View.OnLongClickListener longClickListener = new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onLongClick(View v) {
                 switch(v.getId()) {
-                    case R.id.product_ratingBar:
-                        mListener.changeUpdateModelRating((RatingBar)v);
+                    case R.id.product_info_table_table_layout:
+                        mListener.startProductInfoDialog(v);
                         break;
                 }
+                return true;
             }
         };
 
@@ -156,6 +173,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             void startClosestNavigation(View caller);
             void startCheapestNavigation(View caller);
             void changeUpdateModelRating(RatingBar caller);
+            void startProductInfoDialog(View caller);
         }
     }
 
@@ -181,7 +199,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         // set the view's size, margins, paddings and layout parameters
         return new ProductInfoHolder(itemView, new ProductAdapterHandler.ProductInfoHolder.IMyViewHolderClicks() {
             public void startUpdateDialog(View caller) {
-                if (p.model.typePic == 4) DHandler.UpdateType(p);
+                if (p.model.typePic == 4) DHandler.UpdateType(p, false);
                 else if (p.model.container.equals("N/A") && p.model.typePic == 2) DHandler.UpdateContainer(p);
                 else if (p.model.abv <= 0) DHandler.UpdateAbv(p, false);
                 else DHandler.UpdateStore(p, false, false);
@@ -193,8 +211,18 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             public void startCheapestNavigation(View caller) {
                 p.startNavigationIntent(p.model.cheapestStoreName, p.model.cheapestStoreAddress);
             }
-            public void changeUpdateModelRating(RatingBar caller) {
-                p.updatedModel.updateRating(caller.getRating());
+            public void changeUpdateModelRating(final RatingBar caller) {
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.v("RATINGUPDATE", "new rating = " + caller.getRating());
+                        p.updatedModel.updateRating(caller.getRating());
+                    }
+                }, 50);
+            }
+            public void startProductInfoDialog(View caller) {
+                DHandler.StartProductInfoDialog(p);
             }
         });
     }

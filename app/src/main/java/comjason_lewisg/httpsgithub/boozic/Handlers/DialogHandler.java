@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -148,21 +149,16 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void UpdateType(final ProductActivity p) {
-        CharSequence[] items = {"Wine", "Beer", "Liquor", "Mixed"};
+    public void StartProductInfoDialog(final ProductActivity p) {
+        CharSequence[] items = {"Type of Product", "Volume"};
         MaterialDialog dialog = new MaterialDialog.Builder(p)
-                .title("Select Product Type")
+                .title("What must Change?")
                 .items(items)
                 .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        Log.v("TYPE", "string = " + text);
-                        if (text == null) UpdateType(p);
-                        else p.updatedModel.updateType(which + 1);
-
-                        if (p.model.container.equals("N/A") && p.updatedModel.type == 2) UpdateContainer(p);
-                        else if (p.model.abv <= 0 && p.updatedModel.type == 2) UpdateAbv(p, true);
-                        else if (p.model.abv <= 0) UpdateAbv(p, false);
+                        if (which == 0) UpdateType(p,true);
+                        else if (which == 1) UpdateVolume(p);
                         return true;
                     }
                 })
@@ -176,6 +172,83 @@ public class DialogHandler {
                     }
                 })
                 .build();
+
+        dialog.show();
+    }
+
+    public void UpdateType(final ProductActivity p, final boolean cameFromStartProductInfo) {
+        CharSequence[] items = {"Wine", "Beer", "Liquor", "Mixed"};
+        MaterialDialog dialog = new MaterialDialog.Builder(p)
+                .title("Select Product Type")
+                .items(items)
+                .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        Log.v("TYPE", "string = " + text);
+                        if (text == null) UpdateType(p, cameFromStartProductInfo);
+                        else p.updatedModel.updateType(which + 1);
+
+                        if (!cameFromStartProductInfo) {
+                            if (p.model.container.equals("N/A") && p.updatedModel.type == 2) UpdateContainer(p);
+                            else if (p.model.abv <= 0 && p.updatedModel.type == 2) UpdateAbv(p, true);
+                            else if (p.model.abv <= 0) UpdateAbv(p, false);
+                        }
+                        return true;
+                    }
+                })
+                .positiveText("OK")
+                .widgetColor(p.getAccentColor())
+                .positiveColor(p.getAccentColor())
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        //save selected
+                    }
+                })
+                .build();
+
+        dialog.show();
+    }
+
+    public void UpdateVolume(final ProductActivity p) {
+        MaterialDialog dialog = new MaterialDialog.Builder(p)
+                .title("Input Volume")
+                .customView(R.layout.input_abv, true)
+                .positiveText("SET")
+                .negativeText("CANCEL")
+                .positiveColor(p.getAccentColor())
+                .negativeColor(p.getAccentColor())
+                .neutralColor(p.getAccentColor())
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        View view = dialog.getCustomView();
+
+                        EditText percent = (EditText) view.findViewById(R.id.abv_dia_input);
+                        p.updatedModel.updateVolume(changeToDouble(percent.getText().toString().replaceAll("[oz,L,ml]", "")));
+                        //save input
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    }
+                })
+                .build();
+
+        View view = dialog.getCustomView();
+        EditText input = (EditText) view.findViewById(R.id.abv_dia_input);
+        input.setHint("new Volume");
+        switch (p.model.volumeMeasure) {
+            case "ml":
+                setMaxLength(input, 7);
+                break;
+            case "L":
+                setMaxLength(input, 5);
+                break;
+        }
+        input.addTextChangedListener(makeTextWatcher(input, p.model.volumeMeasure));
 
         dialog.show();
     }
@@ -367,10 +440,11 @@ public class DialogHandler {
                 if(!s.toString().equals(current)){
                     text.removeTextChangedListener(this);
 
-                    String cleanString = s.toString().replaceAll("[ avg,$,%,.]", "");
+                    String cleanString;
                     String formatted;
 
                     if (units.equals("$")) {
+                        cleanString = s.toString().replaceAll("[oz,L,ml, avg,$,%,.]", "");
                         BigDecimal parsed = new BigDecimal(cleanString).setScale(2, BigDecimal.ROUND_FLOOR).divide(new BigDecimal(100), BigDecimal.ROUND_FLOOR);
                         formatted = NumberFormat.getCurrencyInstance().format(parsed);
                         current = formatted;
@@ -378,6 +452,7 @@ public class DialogHandler {
                         text.setSelection(current.length());
                     }
                     else if (units.equals("%")) {
+                        cleanString = s.toString().replaceAll("[oz,L,ml, avg,$,%,.]", "");
                         BigDecimal parsed = new BigDecimal(cleanString).setScale(2, BigDecimal.ROUND_FLOOR).divide(new BigDecimal(100), BigDecimal.ROUND_FLOOR);
                         NumberFormat nf = NumberFormat.getNumberInstance();
                         nf.setMinimumFractionDigits(2);
@@ -385,7 +460,8 @@ public class DialogHandler {
                         current = formatted;
                         text.setText(formatted + "%");
                         text.setSelection(current.length());
-                    } else {
+                    } else if (units.equals("avg")){
+                        cleanString = s.toString().replaceAll("[oz,L,ml, avg,$,%,.]", "");
                         Integer parsed;
                         if (cleanString.isEmpty()) parsed = new Integer("0");
                         else parsed = new Integer(cleanString);
@@ -399,6 +475,38 @@ public class DialogHandler {
                         current = formatted;
                         text.setText(formatted + " avg");
                         text.setSelection(current.length());
+                    } else if (units.equals("ml")) {
+                        cleanString = s.toString().replaceAll("[oz,L,ml, avg,$,%,.]", "");
+                        if (cleanString.isEmpty()) cleanString = "0.0";
+                        BigDecimal parsed = new BigDecimal(cleanString).setScale(2, BigDecimal.ROUND_FLOOR).divide(new BigDecimal(10), BigDecimal.ROUND_FLOOR);
+                        NumberFormat nf = NumberFormat.getNumberInstance();
+                        nf.setMinimumFractionDigits(1);
+                        formatted = nf.format(parsed);
+                        current = formatted;
+                        text.setText(formatted + "ml");
+                        text.setSelection(current.length());
+                    } else if (units.equals("L")) {
+                        if (text.length() <= 3 || text.getText().toString().charAt(0) == '0') {
+                            cleanString = s.toString().replaceAll("[oz,L,ml, avg,$,%,.]", "");
+                            if (cleanString.isEmpty()) cleanString = "0.0";
+                            BigDecimal parsed = new BigDecimal(cleanString).setScale(2, BigDecimal.ROUND_FLOOR).divide(new BigDecimal(10), BigDecimal.ROUND_FLOOR);
+                            NumberFormat nf = NumberFormat.getNumberInstance();
+                            nf.setMinimumFractionDigits(1);
+                            formatted = nf.format(parsed);
+                            current = formatted;
+                            text.setText(formatted + "L");
+                            text.setSelection(current.length());
+                        }
+                    } else if (units.equals("oz")) {
+                        cleanString = s.toString().replaceAll("[oz,L,ml, avg,$,%,.]", "");
+                        if (cleanString.isEmpty()) cleanString = "0.0";
+                        BigDecimal parsed = new BigDecimal(cleanString).setScale(2, BigDecimal.ROUND_FLOOR).divide(new BigDecimal(10), BigDecimal.ROUND_FLOOR);
+                        NumberFormat nf = NumberFormat.getNumberInstance();
+                        nf.setMinimumFractionDigits(1);
+                        formatted = nf.format(parsed);
+                        current = formatted;
+                        text.setText(formatted + "oz");
+                        text.setSelection(current.length());
                     }
 
                     text.addTextChangedListener(this);
@@ -408,7 +516,11 @@ public class DialogHandler {
 
         return tw;
     }
-
+    private void setMaxLength(EditText input, int maxLength) {
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+        input.setFilters(FilterArray);
+    }
 
     private void setMiles(MainActivity m, EditText miles) {
         miles.setText(m.FMHandle.custommi_miles + "");

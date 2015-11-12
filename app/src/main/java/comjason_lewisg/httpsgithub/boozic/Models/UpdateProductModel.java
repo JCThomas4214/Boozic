@@ -47,7 +47,7 @@ public class UpdateProductModel {
         updated = true;
     }
 
-    public void updateVolume(int volume) {
+    public void updateVolume(double volume) {
         this.volume = volume;
         updated = true;
     }
