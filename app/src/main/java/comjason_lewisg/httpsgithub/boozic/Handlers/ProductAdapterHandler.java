@@ -201,7 +201,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             public void startUpdateDialog(View caller) {
                 if (p.model.typePic == 4) DHandler.UpdateType(p, false);
                 else if (p.model.container.equals("N/A") && p.model.typePic == 2) DHandler.UpdateContainer(p);
-                else if (p.model.abv <= 0) DHandler.UpdateAbv(p, false);
+                else if (p.model.abv <= 0) DHandler.UpdateAbv(p, false, false);
                 else DHandler.UpdateStore(p, false, false);
 
             }

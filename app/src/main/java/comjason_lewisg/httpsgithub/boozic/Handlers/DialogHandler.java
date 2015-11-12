@@ -1,7 +1,5 @@
 package comjason_lewisg.httpsgithub.boozic.Handlers;
 
-import android.app.ActionBar;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -11,19 +9,15 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.math.BigDecimal;
-import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.List;
 
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
-import comjason_lewisg.httpsgithub.boozic.Models.ProductStorageModel;
 import comjason_lewisg.httpsgithub.boozic.ProductActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
 
@@ -150,15 +144,26 @@ public class DialogHandler {
     }
 
     public void StartProductInfoDialog(final ProductActivity p) {
-        CharSequence[] items = {"Type of Product", "Volume"};
+        CharSequence[] items = {"Type of Product", "Volume", "Alcohol by Volume"};
         MaterialDialog dialog = new MaterialDialog.Builder(p)
                 .title("What must Change?")
                 .items(items)
                 .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        if (which == 0) UpdateType(p,true);
-                        else if (which == 1) UpdateVolume(p);
+                        switch (which) {
+                            case 0:
+                                UpdateType(p,true);
+                                break;
+                            case 1:
+                                UpdateVolume(p);
+                                break;
+                            case 2:
+                                boolean isBeer = false;
+                                if (p.model.typePic == 2 || p.updatedModel.type == 2) isBeer = true;
+                                UpdateAbv(p,isBeer,true);
+                                break;
+                        }
                         return true;
                     }
                 })
@@ -177,7 +182,7 @@ public class DialogHandler {
     }
 
     public void UpdateType(final ProductActivity p, final boolean cameFromStartProductInfo) {
-        CharSequence[] items = {"Wine", "Beer", "Liquor", "Mixed"};
+        CharSequence[] items = {"Wine", "Beer", "Liquor", "Cocktail"};
         MaterialDialog dialog = new MaterialDialog.Builder(p)
                 .title("Select Product Type")
                 .items(items)
@@ -190,8 +195,8 @@ public class DialogHandler {
 
                         if (!cameFromStartProductInfo) {
                             if (p.model.container.equals("N/A") && p.updatedModel.type == 2) UpdateContainer(p);
-                            else if (p.model.abv <= 0 && p.updatedModel.type == 2) UpdateAbv(p, true);
-                            else if (p.model.abv <= 0) UpdateAbv(p, false);
+                            else if (p.model.abv <= 0 && p.updatedModel.type == 2) UpdateAbv(p, true, false);
+                            else if (p.model.abv <= 0) UpdateAbv(p, false, false);
                         }
                         return true;
                     }
@@ -277,14 +282,14 @@ public class DialogHandler {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        UpdateAbv(p, true);
+                        UpdateAbv(p, true, false);
                         //save selected
                     }
                 })
                 .onNeutral(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        UpdateAbv(p, true);
+                        UpdateAbv(p, true, false);
                     }
                 })
                 .build();
@@ -292,17 +297,24 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void UpdateAbv(final ProductActivity p, final boolean isBeer) {
-        String tmp;
-        if (isBeer) tmp = "BACK";
-        else tmp = "CANCEL";
+    public void UpdateAbv(final ProductActivity p, final boolean isBeer, final boolean cameFromStartProductInfo) {
+        String negative = "CANCEL";
+        if (isBeer) negative = "BACK";
+
+        String positive = "NEXT";
+        String neutral = "SKIP";
+        if (cameFromStartProductInfo) {
+            positive = "SET";
+            neutral = "";
+        }
+
 
         MaterialDialog dialog = new MaterialDialog.Builder(p)
                 .title("Input ABV")
                 .customView(R.layout.input_abv, true)
-                .positiveText("NEXT")
-                .negativeText(tmp)
-                .neutralText("SKIP")
+                .positiveText(positive)
+                .negativeText(negative)
+                .neutralText(neutral)
                 .positiveColor(p.getAccentColor())
                 .negativeColor(p.getAccentColor())
                 .neutralColor(p.getAccentColor())
@@ -315,7 +327,7 @@ public class DialogHandler {
                         EditText percent = (EditText) view.findViewById(R.id.abv_dia_input);
                         p.updatedModel.updateABV(changeToDouble(percent.getText().toString().replace("%", "")));
 
-                        UpdateStore(p, true, isBeer);
+                        if (!cameFromStartProductInfo) UpdateStore(p, true, isBeer);
                         //save input
                     }
                 })
@@ -378,7 +390,7 @@ public class DialogHandler {
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        if (cameFrom) UpdateAbv(p, isBeer);
+                        if (cameFrom) UpdateAbv(p, isBeer, false);
                     }
                 })
                 .onNeutral(new MaterialDialog.SingleButtonCallback() {
