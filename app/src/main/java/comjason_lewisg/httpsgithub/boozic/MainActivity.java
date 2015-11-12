@@ -8,11 +8,13 @@ import android.content.res.Configuration;
 import android.graphics.Point;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.transition.Fade;
 import android.transition.Slide;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -24,6 +26,7 @@ import android.view.MenuItem;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.ViewConfiguration;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -223,12 +226,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     }
 
     public void setLarge() {
-        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) toolbar.getLayoutParams();
-        layoutParams.height = (int)(TBheight * 0.07);
-        toolbar.setLayoutParams(layoutParams);
-
         SearchBox search = (SearchBox) findViewById(R.id.searchbox);
-        layoutParams = (FrameLayout.LayoutParams) search.getLayoutParams();
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) search.getLayoutParams();
         layoutParams.leftMargin = (2);
         layoutParams.rightMargin = (2);
         layoutParams.topMargin = (1);
@@ -237,26 +236,42 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
         changeFilterMenuWidth(250);
 
-        boolean hasMenuKey = ViewConfiguration.get(this).hasPermanentMenuKey();
-        boolean hasBackKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK);
+        boolean hasSoftKeys = hasSoftKeys(this);
 
-        if (!hasMenuKey && !hasBackKey) expandConst = 0.27;
-        else expandConst = 0.25;
-        srinkConst = 0.07;
+        layoutParams = (FrameLayout.LayoutParams) toolbar.getLayoutParams();
+        if (hasSoftKeys) {
+            layoutParams.height = (int)(TBheight * 0.08);
+            toolbar.setLayoutParams(layoutParams);
+
+            expandConst = 0.27;
+            srinkConst = 0.08;
+        }
+        else {
+            layoutParams.height = (int)(TBheight * 0.07);
+            toolbar.setLayoutParams(layoutParams);
+
+            expandConst = 0.25;
+            srinkConst = 0.07;
+        }
     }
     public void setNormal() {
-        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) toolbar.getLayoutParams();
-        layoutParams.height = (int)(TBheight * 0.09);
-        toolbar.setLayoutParams(layoutParams);
-
         searchBarHandler.setSearchButtonXY(20, 0);
 
-        boolean hasMenuKey = ViewConfiguration.get(this).hasPermanentMenuKey();
-        boolean hasBackKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK);
+        boolean hasSoftKeys = hasSoftKeys(this);
 
-        if (!hasMenuKey && !hasBackKey) expandConst = 0.37;
-        else expandConst = 0.35;
-        srinkConst = 0.09;
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) toolbar.getLayoutParams();
+        if (hasSoftKeys) {
+            layoutParams.height = (int)(TBheight * 0.10);
+            toolbar.setLayoutParams(layoutParams);
+            expandConst = 0.38;
+            srinkConst = 0.10;
+        }
+        else {
+            layoutParams.height = (int)(TBheight * 0.09);
+            toolbar.setLayoutParams(layoutParams);
+            expandConst = 0.35;
+            srinkConst = 0.09;
+        }
     }
     public void setSmall() {
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) toolbar.getLayoutParams();
@@ -295,6 +310,32 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         layoutParams = (LinearLayout.LayoutParams) relativeLayout.getLayoutParams();
         layoutParams.width = (x);
         relativeLayout.setLayoutParams(layoutParams);
+    }
+    public static boolean hasSoftKeys(MainActivity m){
+        boolean hasSoftwareKeys = true;
+
+        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.JELLY_BEAN_MR1){
+            Display d = m.getWindowManager().getDefaultDisplay();
+
+            DisplayMetrics realDisplayMetrics = new DisplayMetrics();
+            d.getRealMetrics(realDisplayMetrics);
+
+            int realHeight = realDisplayMetrics.heightPixels;
+            int realWidth = realDisplayMetrics.widthPixels;
+
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            d.getMetrics(displayMetrics);
+
+            int displayHeight = displayMetrics.heightPixels;
+            int displayWidth = displayMetrics.widthPixels;
+
+            hasSoftwareKeys =  (realWidth - displayWidth) > 0 || (realHeight - displayHeight) > 0;
+        }else{
+            boolean hasMenuKey = ViewConfiguration.get(m).hasPermanentMenuKey();
+            boolean hasBackKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK);
+            hasSoftwareKeys = !hasMenuKey && !hasBackKey;
+        }
+        return hasSoftwareKeys;
     }
 
 
