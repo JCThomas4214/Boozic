@@ -30,7 +30,7 @@ dependencies {
     compile 'me.dm7.barcodescanner:zbar:1.8.3'
     compile 'com.google.android.gms:play-services:8.3.0'
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.5'
-    compile('com.afollestad.material-dialogs:core:0.8.4.2@aar') {
+    compile('com.afollestad.material-dialogs:core:0.8.5.0@aar') {
         transitive = true
     }
 }

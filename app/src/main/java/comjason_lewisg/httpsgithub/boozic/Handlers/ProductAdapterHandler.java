@@ -170,7 +170,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         return new ProductInfoHolder(itemView, new ProductAdapterHandler.ProductInfoHolder.IMyViewHolderClicks() {
             public void startUpdateDialog(View caller) {
                 if (p.model.container.equals("N/A") && p.model.typePic == 2) DHandler.UpdateContainer(p);
-                else if (p.model.abv == -1) DHandler.UpdateAbv(p, false);
+                else if (p.model.abv <= 0) DHandler.UpdateAbv(p, false);
                 else DHandler.UpdateStore(p, false, false);
 
             }

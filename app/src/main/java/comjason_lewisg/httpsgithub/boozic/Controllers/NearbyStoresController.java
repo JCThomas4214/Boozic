@@ -19,6 +19,7 @@ import comjason_lewisg.httpsgithub.boozic.ProductActivity;
 
 public class NearbyStoresController {
     public List<String> storeList = new ArrayList<>();
+    public List<String> storeAddressList = new ArrayList<>();
     public List<Integer> storeIdList = new ArrayList<>();
 
     public void onCreate() {}
@@ -42,7 +43,7 @@ public class NearbyStoresController {
                     urlString.append("http://54.210.175.98:9080/api/Location/getStoresInRadius?");
                     //append location
                     urlString.append("latitude=").append(latitude).append("&longitude=").append(longitude);
-                    urlString.append("&Radius=6");
+                    urlString.append("&Radius=5");
 
                     Log.v("NearbyStoresURL", urlString.toString());
                     URL url = new URL(urlString.toString());
@@ -67,9 +68,13 @@ public class NearbyStoresController {
 
             @Override
             protected void onPostExecute(JSONArray jsonData) {
+                String store;
+                String address;
                 for (int i = 0; i < jsonData.length(); i++) {
                     try {
-                        storeList.add(jsonData.getJSONObject(i).getString("StoreName"));
+                        store = jsonData.getJSONObject(i).getString("StoreName");
+                        address = jsonData.getJSONObject(i).getString("Address");
+                        storeList.add(store + " at " + address);
                         storeIdList.add(jsonData.getJSONObject(i).getInt("StoreID"));
                     } catch (JSONException e) {
                         Log.e("ERROR", e.getMessage(), e);

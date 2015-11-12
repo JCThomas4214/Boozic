@@ -1,6 +1,5 @@
 package comjason_lewisg.httpsgithub.boozic;
 
-import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -24,7 +23,6 @@ import comjason_lewisg.httpsgithub.boozic.Controllers.NearbyStoresController;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ProductAdapterHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ProductSearchBarHandler;
 import comjason_lewisg.httpsgithub.boozic.Models.ProductStorageModel;
-import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
 import comjason_lewisg.httpsgithub.boozic.Models.UpdateProductModel;
 
 public class ProductActivity extends AppCompatActivity {
@@ -32,8 +30,8 @@ public class ProductActivity extends AppCompatActivity {
     Toolbar toolbar;
     public ProductSearchBarHandler searchBarHandler;
 
-    private List<String> stores = new ArrayList<>();
-    private List<Integer> storeIDs = new ArrayList<>();
+    public List<String> stores = new ArrayList<>();
+    public List<Integer> storeIDs = new ArrayList<>();
 
     RecyclerView mRecyclerView;
     RecyclerView.Adapter mAdapter;
@@ -141,7 +139,7 @@ public class ProductActivity extends AppCompatActivity {
         this.stores.addAll(stores);
         this.storeIDs.addAll(storeIDs);
 
-        Log.v("First Store", "The First Store is " + stores.get(0) + " and its ID is " + storeIDs.get(0));
+        //Log.v("First Store", "The First Store is " + stores.get(0) + " and its ID is " + storeIDs.get(0));
     }
 
     //start google maps navigation
@@ -164,9 +162,9 @@ public class ProductActivity extends AppCompatActivity {
     private void fetchProductInfo() {
         //fetch latitude and longitude
         //TODO: wait for script to use distance formula
-        /*new NearbyStoresController(this,
+        new NearbyStoresController(this,
                 (double) getIntent().getSerializableExtra("LAT"),
-                (double) getIntent().getSerializableExtra("LONG"));*/
+                (double) getIntent().getSerializableExtra("LONG"));
         //fetch extra items
         model = new ProductStorageModel((String) getIntent().getSerializableExtra("Label"),
                 (String) getIntent().getSerializableExtra("UPC"),
@@ -197,11 +195,8 @@ public class ProductActivity extends AppCompatActivity {
                 (double) getIntent().getSerializableExtra("TD"),
                 (double) getIntent().getSerializableExtra("AvgRating"));
 
-        updatedModel = new UpdateProductModel((String) getIntent().getSerializableExtra("Label"),
-                (String) getIntent().getSerializableExtra("UPC"),
-                (int) getIntent().getSerializableExtra("ProductId"),
-                (double) getIntent().getSerializableExtra("Volume"),
-                (String) getIntent().getSerializableExtra("VolumeMeasure"));
+        updatedModel = new UpdateProductModel((String) getIntent().getSerializableExtra("UPC"),
+                (int) getIntent().getSerializableExtra("ProductId"));
     }
 
     public void newProduct() {
@@ -212,11 +207,8 @@ public class ProductActivity extends AppCompatActivity {
                 (double) getIntent().getSerializableExtra("Volume"),
                 (String) getIntent().getSerializableExtra("VolumeMeasure"));
 
-        updatedModel = new UpdateProductModel((String) getIntent().getSerializableExtra("Label"),
-                (String) getIntent().getSerializableExtra("UPC"),
-                (int) getIntent().getSerializableExtra("ProductId"),
-                (double) getIntent().getSerializableExtra("Volume"),
-                (String) getIntent().getSerializableExtra("VolumeMeasure"));
+        updatedModel = new UpdateProductModel((String) getIntent().getSerializableExtra("UPC"),
+                (int) getIntent().getSerializableExtra("ProductId"));
     }
 
     // A method to find height of the status bar

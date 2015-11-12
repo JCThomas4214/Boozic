@@ -17,6 +17,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.List;
 
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.Models.ProductStorageModel;
@@ -145,6 +146,11 @@ public class DialogHandler {
         dialog.show();
     }
 
+    public void UpdateType(final ProductActivity p) {
+
+
+    }
+
     public void UpdateContainer(final ProductActivity p) {
         CharSequence[] items = {"(1) bottle", "(6) bottle", "(12) bottle", "(6) can", "(12) can", "(24) can"};
         MaterialDialog dialog = new MaterialDialog.Builder(p)
@@ -205,7 +211,7 @@ public class DialogHandler {
                         View view = dialog.getCustomView();
 
                         EditText percent = (EditText) view.findViewById(R.id.abv_dia_input);
-                        p.updatedModel.updateABV(p.changeToDouble(percent.getText().toString()));
+                        p.updatedModel.updateABV(changeToDouble(percent.getText().toString().replace("%", "")));
 
                         UpdateStore(p, true, isBeer);
                         //save input
@@ -237,8 +243,9 @@ public class DialogHandler {
         if (cameFrom) tmp = "BACK";
         else tmp = "CANCEL";
 
-        final double[] distances = {1.3, 1.8, 2.34};
-        final CharSequence[] stores = {"ABC liquor", "Publix Liquor", "Walmart"};
+        final Integer[] storeIDs = p.storeIDs.toArray(new Integer[p.storeIDs.size()]);
+        final CharSequence[] stores = p.stores.toArray(new CharSequence[p.stores.size()]);
+
         MaterialDialog dialog = new MaterialDialog.Builder(p)
                 .title("Select Store")
                 .items(stores)
@@ -247,7 +254,7 @@ public class DialogHandler {
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         if (text == null) UpdateStore(p, cameFrom, isBeer);
                         else {
-                            p.updatedModel.updateStore((String) stores[which], distances[which]);
+                            p.updatedModel.updateStore((String) stores[which], storeIDs[which]);
                         }
                         return true;
                     }
@@ -296,7 +303,7 @@ public class DialogHandler {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         View view = dialog.getCustomView();
                         EditText price = (EditText) view.findViewById(R.id.price_dia_input);
-                        p.updatedModel.updateStorePrice(p.changeToDouble(price.getText().toString().replace("$", "")));
+                        p.updatedModel.updateStorePrice(changeToDouble(price.getText().toString().replace("$", "")));
                     }
                 })
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -448,6 +455,15 @@ public class DialogHandler {
                 m.FMHandle.setRatingRange(lowInt, highInt);
                 break;
         }
+    }
+
+    private CharSequence[] appendCharSequences(CharSequence[] stores, CharSequence[] addresses) {
+        CharSequence[] combined = new CharSequence[stores.length];
+
+        for (int i = 0; i < stores.length; i++) {
+            combined[i] = stores[i] + " at " + addresses[i];
+        }
+        return combined;
     }
 
     private int changeToInt(String str) {
