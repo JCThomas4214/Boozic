@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,7 +25,6 @@ import android.view.MenuItem;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.ViewConfiguration;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -42,6 +40,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import comjason_lewisg.httpsgithub.boozic.Controllers.DeviceIdController;
+import comjason_lewisg.httpsgithub.boozic.Controllers.FeedbackController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.ProductListController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.UPCFindProductController;
 import comjason_lewisg.httpsgithub.boozic.Fragments.FavoritesFragment;
@@ -59,7 +58,6 @@ import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
 
 import com.quinny898.library.persistentsearch.SearchBox;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -72,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public DeviceIdController DIDcon;
     public ProductListController PLcon;
     public UPCFindProductController upcFPC;
+    public FeedbackController FC;
     public SearchBarHandler searchBarHandler;
     public NavigationDrawerHandler Nav;
     public ThemeHandler themeHandler;
@@ -116,10 +115,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public boolean backstackSearch;
 
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    GoogleCloudMessaging gcmObj;
-    String PROJECT_NUMBER = "845607826709";
     public Context applicationContext;
-    String regId="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         DIDcon = new DeviceIdController(this);
         PLcon = new ProductListController();
         upcFPC = new UPCFindProductController();
+        FC = new FeedbackController();
 
         setContentView(R.layout.activity_main);
 

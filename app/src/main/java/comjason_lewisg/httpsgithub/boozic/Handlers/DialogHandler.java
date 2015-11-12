@@ -16,6 +16,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
@@ -40,7 +41,7 @@ public class DialogHandler {
                 .input("What can we improve upon?", null, new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
-                        //send input to backend for email
+                        m.FC.sendFeedback(input.toString());
                     }
                 })
                 .positiveText("SEND")
