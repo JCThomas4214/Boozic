@@ -154,8 +154,8 @@ public class UPCFindProductController {
                                 object.getInt("Rating3"), object.getInt("Rating4"), object.getInt("Rating5")});
                         i.putExtra("AvgRating", object.getDouble("CombinedRating"));
 
-                        i.putExtra("LAT", m.getLastLocation().getLatitude());
-                        i.putExtra("LONG", m.getLastLocation().getLongitude());
+                        i.putExtra("LAT", m.latitude);
+                        i.putExtra("LONG", m.longitude);
 
                         i.putExtra("COLOR_PRIMARY_ID", m.getColorPrimaryId());
                         i.putExtra("COLOR_ACCENT_ID", m.getColorAccentId());

@@ -103,8 +103,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     private int accentColorDark = -291840;
 
     private Location mLastLocation;
-    private double latitude;
-    private double longitude;
+    public double latitude;
+    public double longitude;
 
     private GoogleApiClient mGoogleApiClient;
     LocationRequest mLocationRequest;
