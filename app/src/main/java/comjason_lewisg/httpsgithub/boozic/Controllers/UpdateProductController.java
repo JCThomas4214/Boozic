@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import comjason_lewisg.httpsgithub.boozic.ProductActivity;
 
@@ -37,6 +38,13 @@ public class UpdateProductController {
                         urlString.append("&StoreId=").append(p.updatedModel.StoreID);
                         urlString.append("&Price=").append(p.updatedModel.Price);
                     }
+                    //append productName
+                    if (p.updatedModel.label != null) {
+                        String value = URLEncoder.encode(p.updatedModel.label, "UTF-8");
+                        urlString.append("&ProductName=").append(value);
+                    }
+                    //append productID
+                    if (p.updatedModel.type != -1) urlString.append("&ProductTypeId=").append(p.updatedModel.type);
                     //append ABV
                     if (p.updatedModel.abv != -1) urlString.append("&ABV=").append(p.updatedModel.abv);
                     //append volume if changed
@@ -44,12 +52,19 @@ public class UpdateProductController {
                     //append units
                     if (p.updatedModel.volumeMeasure != null) urlString.append("&VolumeUnit=").append(p.updatedModel.volumeMeasure);
                     //append container
-                    if (p.updatedModel.container != null) urlString.append("&ContainerType=").append(p.updatedModel.container);
-                    //append DeviceID
-                    String android_id = "" + android.provider.Settings.Secure.getString(p.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
-                    urlString.append("&DeviceId=").append(android_id);
+                    if (p.updatedModel.containerType != null) {
+                        String container = URLEncoder.encode(p.updatedModel.containerType, "UTF-8");
+                        urlString.append("&ContainerType=").append(container);
+                    }
+                    //append container quantity
+                    if (p.updatedModel.containerQuantity != -1) urlString.append("&ContainerQty=").append(p.updatedModel.containerQuantity);
                     //append user rating
-                    if (p.updatedModel.userRating != -1) urlString.append("&Rating=").append(p.updatedModel.userRating);
+                    if (p.updatedModel.userRating != -1) {
+                        urlString.append("&Rating=").append((int)p.updatedModel.userRating);
+                        //append DeviceID
+                        String android_id = "" + android.provider.Settings.Secure.getString(p.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+                        urlString.append("&DeviceId=").append(android_id);
+                    }
 
                     Log.v("updateProductURL", urlString.toString());
                     URL url = new URL(urlString.toString());

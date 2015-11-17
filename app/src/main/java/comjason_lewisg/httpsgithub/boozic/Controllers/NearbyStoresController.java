@@ -81,6 +81,7 @@ public class NearbyStoresController {
                     }
                 }
                 p.setNearByStores(storeList, storeIdList);
+                p.hasStores = true;
             }
         }.execute();
     }

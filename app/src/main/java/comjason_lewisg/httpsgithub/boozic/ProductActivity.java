@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import comjason_lewisg.httpsgithub.boozic.Controllers.NearbyStoresController;
+import comjason_lewisg.httpsgithub.boozic.Controllers.ProductTypeListController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.UpdateProductController;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ProductAdapterHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ProductSearchBarHandler;
@@ -31,6 +32,7 @@ public class ProductActivity extends AppCompatActivity {
     Toolbar toolbar;
     public ProductSearchBarHandler searchBarHandler;
     private UpdateProductController UPC;
+    public ProductTypeListController PTLC;
 
     public List<String> stores = new ArrayList<>();
     public List<Integer> storeIDs = new ArrayList<>();
@@ -50,6 +52,8 @@ public class ProductActivity extends AppCompatActivity {
 
     public ProductStorageModel model;
     public UpdateProductModel updatedModel;
+
+    public boolean hasStores = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +81,7 @@ public class ProductActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product);
 
         UPC = new UpdateProductController();
+        PTLC = new ProductTypeListController();
 
         //if not a new product inject serializable objects
         found = (int) getIntent().getSerializableExtra("Found");
@@ -173,7 +178,7 @@ public class ProductActivity extends AppCompatActivity {
         //fetch extra items
         model = new ProductStorageModel((String) getIntent().getSerializableExtra("Label"),
                 (String) getIntent().getSerializableExtra("UPC"),
-                (int) getIntent().getSerializableExtra("ProductId"),
+                (int) getIntent().getSerializableExtra("ProductID"),
                 (String) getIntent().getSerializableExtra("LastUpdate"),
                 0, //(double) getIntent().getSerializableExtra("UserRating")
                 (int) getIntent().getSerializableExtra("ClosestStoreId"),
@@ -189,6 +194,7 @@ public class ProductActivity extends AppCompatActivity {
                 (int) getIntent().getSerializableExtra("Type"),
                 (boolean) getIntent().getSerializableExtra("Favorites"),
                 (String) getIntent().getSerializableExtra("Container"),
+                (int) getIntent().getSerializableExtra("ContainerQty"),
                 (double) getIntent().getSerializableExtra("ABV"),
                 (int) getIntent().getSerializableExtra("Proof"),
                 (int[]) getIntent().getSerializableExtra("Rating"),
@@ -201,19 +207,19 @@ public class ProductActivity extends AppCompatActivity {
                 (double) getIntent().getSerializableExtra("AvgRating"));
 
         updatedModel = new UpdateProductModel((String) getIntent().getSerializableExtra("UPC"),
-                (int) getIntent().getSerializableExtra("ProductId"));
+                (int) getIntent().getSerializableExtra("ProductID"));
     }
 
     public void newProduct() {
 
         model = new ProductStorageModel((String) getIntent().getSerializableExtra("Label"),
                 (String) getIntent().getSerializableExtra("UPC"),
-                (int) getIntent().getSerializableExtra("ProductId"),
+                (int) getIntent().getSerializableExtra("ProductID"),
                 (double) getIntent().getSerializableExtra("Volume"),
                 (String) getIntent().getSerializableExtra("VolumeMeasure"));
 
         updatedModel = new UpdateProductModel((String) getIntent().getSerializableExtra("UPC"),
-                (int) getIntent().getSerializableExtra("ProductId"));
+                (int) getIntent().getSerializableExtra("ProductID"));
     }
 
     // A method to find height of the status bar
@@ -244,7 +250,7 @@ public class ProductActivity extends AppCompatActivity {
     public int getAccentColor() { return accentColor; }
 
     public void checkUpdateModel() {
-        Log.v("UPDATEMODEL", "The value of container is " + updatedModel.container);
+        Log.v("UPDATEMODEL", "The value of container is " + updatedModel.containerType);
         Log.v("UPDATEMODEL", "The value of abv is " + updatedModel.abv);
         Log.v("UPDATEMODEL", "The value of StoreName and ID is " + updatedModel.StoreName + " and " + updatedModel.StoreID);
         Log.v("UPDATEMODEL", "The value of Price is " + updatedModel.Price);

@@ -124,6 +124,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             ratingChart = (PieChart) itemView.findViewById(R.id.rating_chart);
 
             productInfoTable.setOnLongClickListener(longClickListener);
+            label.setOnLongClickListener(longClickListener);
 
             userRating.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -163,6 +164,9 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
                     case R.id.product_info_table_table_layout:
                         mListener.startProductInfoDialog(v);
                         break;
+                    case R.id.product_label:
+                        mListener.startProductNameDialog(v);
+                        break;
                 }
                 return true;
             }
@@ -174,6 +178,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             void startCheapestNavigation(View caller);
             void changeUpdateModelRating(RatingBar caller);
             void startProductInfoDialog(View caller);
+            void startProductNameDialog(View caller);
         }
     }
 
@@ -199,8 +204,8 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         // set the view's size, margins, paddings and layout parameters
         return new ProductInfoHolder(itemView, new ProductAdapterHandler.ProductInfoHolder.IMyViewHolderClicks() {
             public void startUpdateDialog(View caller) {
-                if (p.model.typePic == 4) DHandler.UpdateType(p, false);
-                else if (p.model.container.equals("N/A") && p.model.typePic == 2) DHandler.UpdateContainer(p);
+                if (p.model.typePic == 4 && p.updatedModel.type == -1) DHandler.UpdateProductParentType(p, false);
+                else if (p.model.containerType.equals("N/A") && (p.model.typePic == 2 || p.updatedModel.type == 2)) DHandler.UpdateContainer(p, false);
                 else if (p.model.abv <= 0) DHandler.UpdateAbv(p, false, false);
                 else DHandler.UpdateStore(p, false, false);
 
@@ -224,6 +229,9 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             public void startProductInfoDialog(View caller) {
                 DHandler.StartProductInfoDialog(p);
             }
+            public void startProductNameDialog(View caller) {
+                DHandler.UpdateProductLabel(p);
+            }
         });
     }
 
@@ -244,7 +252,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         if (model.lastUpdate == null) viewHolder.lastUpdate.setText("N/A");
         else viewHolder.lastUpdate.setText("" + model.lastUpdate);
 
-        if (model.userRating <= 0) viewHolder.userRating.setRating(0);
+        if (model.userRating <= 0) viewHolder.userRating.setRating((float)model.userRating);
         else viewHolder.userRating.setRating((float) model.userRating);
         LayerDrawable stars = (LayerDrawable) viewHolder.userRating.getProgressDrawable();
         stars.getDrawable(2).setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP);
@@ -273,8 +281,12 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             viewHolder.cheapestPrice.setText("$" + monFormat.format(model.cheapestPrice));
         }
 
-        if (model.container.equals("N/A")) viewHolder.containerLayout.setVisibility(View.GONE);
-        else viewHolder.container.setText(model.container);
+        if (model.containerType.equals("N/A")) viewHolder.containerLayout.setVisibility(View.GONE);
+        else {
+            String tmp = "(" + model.containerQuantity + ") " + model.containerType;
+            viewHolder.container.setText(tmp);
+        }
+
 
         selectTypePic(model, viewHolder);
 

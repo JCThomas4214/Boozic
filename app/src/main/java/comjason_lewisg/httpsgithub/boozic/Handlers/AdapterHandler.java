@@ -119,7 +119,7 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
                 i.putExtra("Found", 0);
                 //inject model variables
                 i.putExtra("Label", shownItems.get(position).label);
-                i.putExtra("ProductId", shownItems.get(position).productId);
+                i.putExtra("ProductID", shownItems.get(position).productID);
                 i.putExtra("UPC", shownItems.get(position).upc);
                 i.putExtra("LastUpdate", shownItems.get(position).lastUpdate);
                 i.putExtra("UserRating", shownItems.get(position).userRating);
@@ -135,7 +135,8 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
                 i.putExtra("CheapestPrice", shownItems.get(position).cheapestPrice);
                 i.putExtra("Type", shownItems.get(position).typePic);
                 i.putExtra("Favorites", shownItems.get(position).favorite);
-                i.putExtra("Container", shownItems.get(position).container);
+                i.putExtra("Container", shownItems.get(position).containerType);
+                i.putExtra("ContainerQty", shownItems.get(position).containerQuantity);
                 i.putExtra("Volume", shownItems.get(position).volume);
                 i.putExtra("VolumeMeasure", shownItems.get(position).volumeMeasure);
                 i.putExtra("ABV", shownItems.get(position).abv);
@@ -174,7 +175,10 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         viewHolder.storeName.setText(model.closestStoreName);
         viewHolder.price.setText(NumberFormat.getCurrencyInstance().format(model.closestPrice));
 
-        if (model.volume != -1) viewHolder.volume.setText("(" + df.format(model.volume) + model.volumeMeasure + ")");
+        if (model.volume != -1) {
+            String volume = "(" + df.format(model.volume) + model.volumeMeasure + ")";
+            viewHolder.volume.setText(volume);
+        }
         else viewHolder.volume.setText("N/A");
 
         switch (model.typePic) {

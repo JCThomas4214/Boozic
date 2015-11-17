@@ -15,11 +15,11 @@ import java.util.Date;
 public class TopTensModel {
     public String label;
     public String lastUpdate;
-    public double userRating;
+    public double userRating = -1;
     public int boozicScore;
 
     public String upc;
-    public int productId;
+    public int productID;
 
     public int closestStoreId;
     public int cheapestStoreId;
@@ -35,7 +35,8 @@ public class TopTensModel {
     public int typePic;
     public boolean favorite;
 
-    public String container;
+    public String containerType;
+    public int containerQuantity;
     public double volume;
     public String volumeMeasure = null;
 
@@ -56,12 +57,11 @@ public class TopTensModel {
             JSONObject cheapestStoreObject = object.getJSONObject("CheapestStore");
 
             label = object.getString("ProductName");
-            productId = object.getInt("ProductID");
+            productID = object.getInt("ProductID");
             lastUpdate = closestStoreObject.getString("LastUpdated");
             userRating = 0; //oneObject.getDouble("PRODUCT_USERRATING");
 
             upc = object.getString("UPC");
-            //productId = object.getInt("ProductId");
 
             closestStoreId = closestStoreObject.getInt("StoreID");
             cheapestStoreId = cheapestStoreObject.getInt("StoreID");
@@ -77,8 +77,10 @@ public class TopTensModel {
             typePic = object.getInt("ProductParentTypeId");
             favorite = false; //favorite
 
-            container = object.getString("ContainerType");
-            if (container.equals("null")) container = "N/A";
+            containerType = object.getString("ContainerType");
+            if (containerType.equals("null")) containerType = "N/A";
+
+            containerQuantity = object.getInt("ContainerQty");
 
             volume = object.getDouble("Volume");
             if (volume == 0) volume = -1;
@@ -129,7 +131,7 @@ public class TopTensModel {
         this.closestPrice = closestPrice;
         this.cheapestPrice = cheapestPrice;
         this.favorite = favorite;
-        this.container = container;
+        this.containerType = container;
         getVolMeasure();
         this.abv = abv;
         this.proof = proof;
@@ -159,7 +161,7 @@ public class TopTensModel {
         this.closestPrice = closestPrice;
         this.cheapestPrice = closestPrice;
         this.favorite = favorite;
-        this.container = container;
+        this.containerType = container;
         getVolMeasure();
         this.abv = abv;
         this.proof = proof;

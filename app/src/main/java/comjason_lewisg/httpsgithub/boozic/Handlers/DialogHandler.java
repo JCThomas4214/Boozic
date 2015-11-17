@@ -16,6 +16,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.List;
 
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.ProductActivity;
@@ -144,7 +145,10 @@ public class DialogHandler {
     }
 
     public void StartProductInfoDialog(final ProductActivity p) {
-        CharSequence[] items = {"Type of Product", "Volume", "Alcohol by Volume"};
+        CharSequence[] items;
+        if (p.model.typePic == 2 || p.updatedModel.parentType == 2) items = new CharSequence[] {"Type of Product", "Volume", "Alcohol by Volume", "Product Container"};
+        else items = new CharSequence[] {"Type of Product", "Volume", "Alcohol by Volume"};
+
         MaterialDialog dialog = new MaterialDialog.Builder(p)
                 .title("What must Change?")
                 .items(items)
@@ -153,15 +157,18 @@ public class DialogHandler {
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
                             case 0:
-                                UpdateType(p,true);
+                                UpdateProductParentType(p, true);
                                 break;
                             case 1:
                                 UpdateVolume(p);
                                 break;
                             case 2:
                                 boolean isBeer = false;
-                                if (p.model.typePic == 2 || p.updatedModel.type == 2) isBeer = true;
+                                if (p.model.typePic == 2 || p.updatedModel.parentType == 2) isBeer = true;
                                 UpdateAbv(p,isBeer,true);
+                                break;
+                            case 3:
+                                UpdateContainer(p, true);
                                 break;
                         }
                         return true;
@@ -181,27 +188,60 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void UpdateType(final ProductActivity p, final boolean cameFromStartProductInfo) {
-        CharSequence[] items = {"Wine", "Beer", "Liquor", "Cocktail"};
+    public void UpdateProductParentType(final ProductActivity p, final boolean cameFromStartProductInfo) {
+        CharSequence[] items = {"Wine", "Beer/Mix Drinks", "Liquor"};
         MaterialDialog dialog = new MaterialDialog.Builder(p)
-                .title("Select Product Type")
+                .title("Select Product Parent Type")
                 .items(items)
                 .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         Log.v("TYPE", "string = " + text);
-                        if (text == null) UpdateType(p, cameFromStartProductInfo);
-                        else p.updatedModel.updateType(which + 1);
-
-                        if (!cameFromStartProductInfo) {
-                            if (p.model.container.equals("N/A") && p.updatedModel.type == 2) UpdateContainer(p);
-                            else if (p.model.abv <= 0 && p.updatedModel.type == 2) UpdateAbv(p, true, false);
-                            else if (p.model.abv <= 0) UpdateAbv(p, false, false);
+                        if (text == null) UpdateProductParentType(p, cameFromStartProductInfo);
+                        else {
+                            p.updatedModel.updateParentType(which+1);
+                            p.PTLC.getList(p, which+1, cameFromStartProductInfo);
                         }
                         return true;
                     }
                 })
                 .positiveText("OK")
+                .widgetColor(p.getAccentColor())
+                .positiveColor(p.getAccentColor())
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        //save selected
+                    }
+                })
+                .build();
+
+        dialog.show();
+    }
+
+    public void UpdateProductType(final ProductActivity p, List<String> productTypeName, List<Integer> productTypeID, final boolean cameFromStartProductInfo) {
+
+        final Integer[] productID = productTypeID.toArray(new Integer[productTypeID.size()]);
+        final CharSequence[] productName = productTypeName.toArray(new CharSequence[productTypeName.size()]);
+
+        MaterialDialog dialog = new MaterialDialog.Builder(p)
+                .title("Select Product Type")
+                .items(productName)
+                .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        p.updatedModel.updateType(productID[which]);
+
+                        if (!cameFromStartProductInfo) {
+                            if (p.model.containerType.equals("N/A") && p.updatedModel.type == 2) UpdateContainer(p, false);
+                            else if (p.model.abv <= 0 && p.updatedModel.type == 2) UpdateAbv(p, true, false);
+                            else if (p.model.abv <= 0) UpdateAbv(p, false, false);
+                            else UpdateStore(p, false, false);
+                        }
+                        return true;
+                    }
+                })
+                .positiveText("SET")
                 .widgetColor(p.getAccentColor())
                 .positiveColor(p.getAccentColor())
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -231,7 +271,7 @@ public class DialogHandler {
                         View view = dialog.getCustomView();
 
                         EditText percent = (EditText) view.findViewById(R.id.abv_dia_input);
-                        p.updatedModel.updateVolume(changeToDouble(percent.getText().toString().replaceAll("[oz,L,ml]", "")));
+                        p.updatedModel.updateVolume(changeToDouble(percent.getText().toString().replaceAll("[oz,L,ml]", "")), p.model.containerQuantity, p.model.volumeMeasure);
                         //save input
                     }
                 })
@@ -247,10 +287,10 @@ public class DialogHandler {
         input.setHint("new Volume");
         switch (p.model.volumeMeasure) {
             case "ml":
-                setMaxLength(input, 7);
+                setMaxLength(input, 9);
                 break;
             case "L":
-                setMaxLength(input, 5);
+                setMaxLength(input, 9);
                 break;
         }
         input.addTextChangedListener(makeTextWatcher(input, p.model.volumeMeasure));
@@ -258,8 +298,15 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void UpdateContainer(final ProductActivity p) {
-        CharSequence[] items = {"(1) bottle", "(6) bottle", "(12) bottle", "(6) can", "(12) can", "(24) can"};
+    public void UpdateContainer(final ProductActivity p, final boolean cameFromStartProductInfo) {
+        String positive = "NEXT";
+        String neutral = "SKIP";
+        if (cameFromStartProductInfo) {
+            positive = "NEXT";
+            neutral = "";
+        }
+
+        CharSequence[] items = {"bottle","can"};
         MaterialDialog dialog = new MaterialDialog.Builder(p)
                 .title("Select Container")
                 .items(items)
@@ -267,14 +314,22 @@ public class DialogHandler {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         Log.v("CONTAINER", "string = " + text);
-                        if (text == null) UpdateContainer(p);
-                        else p.updatedModel.updateContainer((String) text);
+                        if (!cameFromStartProductInfo) {
+                            if (text == null) UpdateContainer(p, false);
+                            else {
+                                if (!p.model.containerType.equals(text)) p.updatedModel.updateContainerType((String) text);
+                                UpdateContainerQuant(p, false);
+                            }
+                        } else {
+                            if (!p.model.containerType.equals(text)) p.updatedModel.updateContainerType((String) text);
+                            UpdateContainerQuant(p, true);
+                        }
                         return true;
                     }
                 })
-                .positiveText("NEXT")
+                .positiveText(positive)
                 .negativeText("CANCEL")
-                .neutralText("SKIP")
+                .neutralText(neutral)
                 .widgetColor(p.getAccentColor())
                 .positiveColor(p.getAccentColor())
                 .negativeColor(p.getAccentColor())
@@ -282,14 +337,65 @@ public class DialogHandler {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        UpdateAbv(p, true, false);
                         //save selected
                     }
                 })
                 .onNeutral(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        UpdateAbv(p, true, false);
+                    }
+                })
+                .build();
+
+        dialog.show();
+    }
+
+    public void UpdateContainerQuant(final ProductActivity p, final boolean cameFromStartProductInfo) {
+        String positive = "NEXT";
+        String neutral = "SKIP";
+        if (cameFromStartProductInfo) {
+            positive = "SET";
+            neutral = "";
+        }
+
+        CharSequence[] items = {"1", "6", "12", "24"};
+        MaterialDialog dialog = new MaterialDialog.Builder(p)
+                .title("Container Quantity for purchase")
+                .items(items)
+                .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        Log.v("CONTAINER", "string = " + text);
+                        if (!cameFromStartProductInfo) {
+                            if (text == null) UpdateContainer(p, false);
+                            else {
+                                int tmp = changeToInt((String) text);
+                                if (p.model.containerQuantity != tmp) p.updatedModel.updateContainerQuant(tmp, p.model.volume, p.model.containerQuantity);
+                            }
+                            UpdateAbv(p, true, false);
+                        } else {
+                            int tmp = changeToInt((String) text);
+                            if (p.model.containerQuantity != tmp) p.updatedModel.updateContainerQuant(tmp, p.model.volume, p.model.containerQuantity);
+                        }
+                        return true;
+                    }
+                })
+                .positiveText(positive)
+                .negativeText("CANCEL")
+                .neutralText(neutral)
+                .widgetColor(p.getAccentColor())
+                .positiveColor(p.getAccentColor())
+                .negativeColor(p.getAccentColor())
+                .neutralColor(p.getAccentColor())
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        //save selected
+                    }
+                })
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     }
                 })
                 .build();
@@ -340,7 +446,7 @@ public class DialogHandler {
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        if (isBeer) UpdateContainer(p);
+                        if (isBeer) UpdateContainer(p, false);
                     }
                 })
                 .build();
@@ -435,6 +541,45 @@ public class DialogHandler {
         dialog.show();
     }
 
+    public MaterialDialog progressDialog(final ProductActivity p) {
+        MaterialDialog dialog = new MaterialDialog.Builder(p)
+                .title("Waiting For Stores")
+                .content("Searching...")
+                .progress(true, 0)
+                .widgetColor(p.getAccentColor())
+                .build();
+
+        dialog.show();
+        return dialog;
+    }
+
+    public void UpdateProductLabel(final ProductActivity p) {
+        MaterialDialog dialog = new MaterialDialog.Builder(p)
+                .title("Correct Product Label")
+                .inputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS | InputType.TYPE_CLASS_TEXT)
+                .input("Help keep our products correct", null, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        p.updatedModel.updateLabel(input.toString());
+                    }
+                })
+                .positiveText("SET")
+                .negativeText("CANCEL")
+                .widgetColor(p.getAccentColor())
+                .positiveColor(p.getAccentColor())
+                .negativeColor(p.getAccentColor())
+                .build();
+
+        EditText input = dialog.getInputEditText();
+        input.setSingleLine(true);
+        input.setVerticalScrollBarEnabled(true);
+        input.setBackground(null);
+        input.setLines(1);
+        input.setGravity(Gravity.TOP);
+
+        dialog.show();
+    }
+
     private TextWatcher makeTextWatcher(final EditText text, final String units) {
         TextWatcher tw = new TextWatcher() {
             @Override
@@ -498,7 +643,7 @@ public class DialogHandler {
                         text.setText(formatted + "ml");
                         text.setSelection(current.length());
                     } else if (units.equals("L")) {
-                        if (text.length() <= 3 || text.getText().toString().charAt(0) == '0') {
+                        /*if (text.length() <= 3 || text.getText().toString().charAt(0) == '0') {
                             cleanString = s.toString().replaceAll("[oz,L,ml, avg,$,%,.]", "");
                             if (cleanString.isEmpty()) cleanString = "0.0";
                             BigDecimal parsed = new BigDecimal(cleanString).setScale(2, BigDecimal.ROUND_FLOOR).divide(new BigDecimal(10), BigDecimal.ROUND_FLOOR);
@@ -508,7 +653,16 @@ public class DialogHandler {
                             current = formatted;
                             text.setText(formatted + "L");
                             text.setSelection(current.length());
-                        }
+                        }*/
+                        cleanString = s.toString().replaceAll("[oz,L,ml, avg,$,%,.]", "");
+                        if (cleanString.isEmpty()) cleanString = "0.0";
+                        BigDecimal parsed = new BigDecimal(cleanString).setScale(2, BigDecimal.ROUND_FLOOR).divide(new BigDecimal(10), BigDecimal.ROUND_FLOOR);
+                        NumberFormat nf = NumberFormat.getNumberInstance();
+                        nf.setMinimumFractionDigits(1);
+                        formatted = nf.format(parsed);
+                        current = formatted;
+                        text.setText(formatted + "ml");
+                        text.setSelection(current.length());
                     } else if (units.equals("oz")) {
                         cleanString = s.toString().replaceAll("[oz,L,ml, avg,$,%,.]", "");
                         if (cleanString.isEmpty()) cleanString = "0.0";

@@ -133,7 +133,7 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
                 i.putExtra("CheapestPrice", items.get(position).cheapestPrice);
                 i.putExtra("Type", items.get(position).typePic);
                 i.putExtra("Favorites", items.get(position).favorite);
-                i.putExtra("Container", items.get(position).container);
+                i.putExtra("Container", items.get(position).containerType);
                 i.putExtra("Volume", items.get(position).volume);
                 i.putExtra("Type", items.get(position).typePic);
                 i.putExtra("ABV", items.get(position).abv);
