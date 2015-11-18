@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
     android:id="@+id/container_list_item"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -9,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="11dp"
         android:layout_marginRight="11dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="5dp"
         android:gravity="center_vertical"
         android:orientation="vertical">
 
@@ -269,14 +270,21 @@
             </LinearLayout>
         </LinearLayout>
 
-        <Button
-            android:id="@+id/new_price_button"
-            style="?android:attr/buttonStyleSmall"
+        <LinearLayout
+            android:gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:clickable="true"
-            android:text="Update Price"
-            android:textColor="#fff" />
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+            <Button
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:id="@+id/new_price_button"
+                android:text="Update Price"
+                android:textSize="20dp"
+                android:textColor="#fff"
+                android:layout_height="wrap_content"
+                android:layout_width="300dp" />
+        </LinearLayout>
 
     </LinearLayout>
 </RelativeLayout>

@@ -190,7 +190,7 @@ public class ProductActivity extends AppCompatActivity {
                 (double) getIntent().getSerializableExtra("ClosestPrice"),
                 (double) getIntent().getSerializableExtra("CheapestPrice"),
                 (int) getIntent().getSerializableExtra("Type"),
-                (boolean) getIntent().getSerializableExtra("Favorites"),
+                (int) getIntent().getSerializableExtra("Favorites"),
                 (String) getIntent().getSerializableExtra("Container"),
                 (int) getIntent().getSerializableExtra("ContainerQty"),
                 (double) getIntent().getSerializableExtra("ABV"),
@@ -244,6 +244,8 @@ public class ProductActivity extends AppCompatActivity {
 
     }
 
+    public int getPrimaryColor() { return primaryColor; }
+    public int getPrimaryColorDark() { return primaryColorDark; }
     public int getAccentColorId() { return colorAccent_id; }
     public int getAccentColor() { return accentColor; }
 

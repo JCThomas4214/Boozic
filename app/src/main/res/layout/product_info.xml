@@ -4,6 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include layout="@layout/favorites_flag_submenu" />
+
     <include layout="@layout/product_info_0" />
 
     <include layout="@layout/product_info_table" />

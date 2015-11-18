@@ -21,7 +21,7 @@ public class ProductStorageModel {
     public double cheapestPrice;
 
     public int typePic = 4;
-    public boolean favorite = false;
+    public int favorite = 0;
 
     public String containerType = "N/A";
     public int containerQuantity = -1;
@@ -39,7 +39,7 @@ public class ProductStorageModel {
     public double avgRating;
 
     public ProductStorageModel(String label, String upc, int productId, String lastUpdate, double userRating, int closestStoreId, int cheapestStoreId, String closestStoreName, String cheapestStoreName,
-                               String closestStoreAddress, String cheapestStoreAddress, double closestStoreDist, double cheapestStoreDist, double closestPrice, double cheapestPrice, int type, boolean favorite, String container,
+                               String closestStoreAddress, String cheapestStoreAddress, double closestStoreDist, double cheapestStoreDist, double closestPrice, double cheapestPrice, int type, int favorite, String container,
                                int containerQuantity, double abv, int proof, int[] rating, double volume, String volumeMeasure, double pbv, double abp, double pdd, double td, double avgRating) {
 
         this.label = label;

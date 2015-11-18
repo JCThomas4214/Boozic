@@ -15,7 +15,7 @@ public class UpdateProductModel {
     public String StoreName = null;
     public double Price = -1;
 
-    public Boolean favorite = null;
+    public int favorite = -1;
 
     public String containerType = null;
     public int containerQuantity = -1;
@@ -76,7 +76,7 @@ public class UpdateProductModel {
         updated = true;
     }
 
-    public void updateFavorite(boolean favorite) {
+    public void updateFavorite(int favorite) {
         this.favorite = favorite;
         updated = true;
     }

@@ -12,7 +12,7 @@
                 android:width="50dp"
                 android:height="50dp"/>
             <corners
-                android:radius="6dp"/>
+                android:radius="10dp"/>
         </shape>
     </item>
 </ripple>

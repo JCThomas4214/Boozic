@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.os.Handler;
 import android.util.Log;
@@ -29,12 +29,9 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.List;
 
 import comjason_lewisg.httpsgithub.boozic.Models.ProductStorageModel;
-import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
 import comjason_lewisg.httpsgithub.boozic.ProductActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
 import comjason_lewisg.httpsgithub.boozic.SettingsActivity;
@@ -55,6 +52,8 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         TextView label;
         TextView lastUpdate;
         TextView boozicScore;
+        ImageView favorite;
+        ImageView flag;
 
         TextView closestStore;
         TextView cheapestStore;
@@ -76,6 +75,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
 
         RatingBar userRating;
         TextView containerLabel;
+        LinearLayout favoriteFlagLayout;
         LinearLayout closestStoreLayout;
         LinearLayout cheapestStoreLayout;
         LinearLayout containerLayout;
@@ -89,12 +89,18 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             main = itemView;
             mListener = listener;
             updateProduct = (Button) itemView.findViewById(R.id.new_price_button);
+            mListener.setButtonColor(updateProduct);
 
             label = (TextView) itemView.findViewById(R.id.product_label);
             typePic = (CircularImageView) itemView.findViewById(R.id.product_type);
             boozicScore = (TextView) itemView.findViewById(R.id.product_metascore);
             lastUpdate = (TextView) itemView.findViewById(R.id.product_last_updated);
             userRating = (RatingBar) itemView.findViewById(R.id.product_ratingBar);
+            favorite = (ImageView) itemView.findViewById(R.id.favorite_button);
+            mListener.checkIfFavorite(favorite);
+
+            flag = (ImageView) itemView.findViewById(R.id.flag_button);
+            favoriteFlagLayout = (LinearLayout) itemView.findViewById(R.id.favorite_flag_layout);
 
             containerLabel = (TextView) itemView.findViewById(R.id.container_label);
             closestStoreLayout = (LinearLayout) itemView.findViewById(R.id.closest_store_layout);
@@ -130,15 +136,18 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     if (event.getAction() == MotionEvent.ACTION_UP) {
-                        mListener.changeUpdateModelRating((RatingBar)v);
+                        mListener.changeUpdateModelRating((RatingBar) v);
                     }
                     return false;
                 }
             });
 
+            favorite.setOnClickListener(clickListener);
+            flag.setOnClickListener(clickListener);
             updateProduct.setOnClickListener(clickListener);
             closestStoreLayout.setOnClickListener(clickListener);
             cheapestStoreLayout.setOnClickListener(clickListener);
+            mListener.setLayoutBackgroundColor(favoriteFlagLayout);
         }
 
         public View.OnClickListener clickListener = new View.OnClickListener() {
@@ -153,6 +162,11 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
                         break;
                     case R.id.cheapest_store_layout:
                         mListener.startCheapestNavigation(v);
+                        break;
+                    case R.id.favorite_button:
+                        mListener.toggleFavorite(favorite);
+                        break;
+                    case R.id.flag_button:
                         break;
                 }
             }
@@ -173,12 +187,18 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         };
 
         public interface IMyViewHolderClicks {
+            void setLayoutBackgroundColor(LinearLayout favoriteFlagLayout);
+            void setButtonColor(Button updateProduct);
+            void checkIfFavorite(ImageView favorite);
+            void toggleFavorite(ImageView favorite);
             void startUpdateDialog(View caller);
             void startClosestNavigation(View caller);
             void startCheapestNavigation(View caller);
             void changeUpdateModelRating(RatingBar caller);
             void startProductInfoDialog(View caller);
             void startProductNameDialog(View caller);
+            int getPrimaryColor();
+            int getPrimaryColorDark();
         }
     }
 
@@ -203,6 +223,20 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
                 .inflate(R.layout.product_info, viewGroup, false);
         // set the view's size, margins, paddings and layout parameters
         return new ProductInfoHolder(itemView, new ProductAdapterHandler.ProductInfoHolder.IMyViewHolderClicks() {
+            public void setLayoutBackgroundColor(LinearLayout favoriteFlagLayout) {
+                favoriteFlagLayout.setBackgroundColor(p.getPrimaryColor());
+            }
+            public void setButtonColor(Button updateProduct) {
+                Drawable setButton = p.getResources().getDrawable(R.drawable.custom_update_price_button, null);
+                setButton.setColorFilter(p.getPrimaryColor(), PorterDuff.Mode.MULTIPLY);
+                updateProduct.setBackground(setButton);
+            }
+            public void checkIfFavorite(ImageView favorite) {
+                setFavorite(checkFavorites(), favorite);
+            }
+            public void toggleFavorite(ImageView favorite) {
+                toggleFavoriteValue(favorite);
+            }
             public void startUpdateDialog(View caller) {
                 if (p.model.typePic == 4 && p.updatedModel.type == -1) DHandler.UpdateProductParentType(p, false);
                 else if (p.model.containerType.equals("N/A") && (p.model.typePic == 2 || p.updatedModel.type == 2)) DHandler.UpdateContainer(p, false);
@@ -232,6 +266,8 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             public void startProductNameDialog(View caller) {
                 DHandler.UpdateProductLabel(p);
             }
+            public int getPrimaryColor() { return p.getPrimaryColor(); }
+            public int getPrimaryColorDark() { return p.getPrimaryColorDark(); }
         });
     }
 
@@ -332,6 +368,31 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             case 4:
                 viewHolder.typePic.setImageResource(R.mipmap.ic_launcher);
                 break;
+        }
+    }
+
+    private boolean checkFavorites() {
+        if (item.favorite == 0) {
+            return false;
+        }
+        return true;
+    }
+
+    private void setFavorite(boolean set, ImageView favorite) {
+        if (set) {
+            favorite.setImageResource(R.drawable.star);
+        } else {
+            favorite.setImageResource(R.drawable.star_outline);
+        }
+    }
+
+    private void toggleFavoriteValue(ImageView favorite) {
+        if (p.updatedModel.favorite != 1) {
+            setFavorite(true, favorite);
+            p.updatedModel.updateFavorite(1);
+        } else {
+            setFavorite(false, favorite);
+            p.updatedModel.updateFavorite(0);
         }
     }
 

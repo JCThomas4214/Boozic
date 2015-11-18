@@ -33,7 +33,7 @@ public class TopTensModel {
     public double cheapestPrice;
 
     public int typePic;
-    public boolean favorite;
+    public int favorite;
 
     public String containerType;
     public int containerQuantity;
@@ -75,7 +75,7 @@ public class TopTensModel {
             cheapestPrice = cheapestStoreObject.getDouble("Price");
 
             typePic = object.getInt("ProductParentTypeId");
-            favorite = false; //favorite
+            favorite = 0; //favorite
 
             containerType = object.getString("ContainerType");
             if (containerType.equals("null")) containerType = "N/A";
@@ -116,7 +116,7 @@ public class TopTensModel {
     }
 
     public TopTensModel(String label, String lastUpdate, double userRating, String closestStoreName, String cheapestStoreName, double closestStoreDist, double cheapestStoreDist,
-                        double closestPrice, double cheapestPrice, int type, boolean favorite, String container,
+                        double closestPrice, double cheapestPrice, int type, int favorite, String container,
                         double abv, int proof, int[] rating, double volume) {
 
         this.label = label;
@@ -146,7 +146,7 @@ public class TopTensModel {
         avgRating = findAverage();
     }
 
-    public TopTensModel(String label, String lastUpdate, double userRating, String closestStoreName, double closestStoreDist, double closestPrice, int type, boolean favorite,
+    public TopTensModel(String label, String lastUpdate, double userRating, String closestStoreName, double closestStoreDist, double closestPrice, int type, int favorite,
                         String container, double abv, int proof, int[] rating, double volume) {
 
         this.label = label;

@@ -35,4 +35,6 @@
 
     <color name="white">#f7f7f7</color>
     <color name="Background">#ffeeeeee</color>
+
+    <color name="accent_dark">#2d1a1a1a</color>
 </resources>

@@ -27,6 +27,7 @@ public class UPCFindProductController {
     public double volume;
     public String volumeMeasure = null;
     public String container;
+    public int containerQty;
 
     public double pbv = -1;
     public double abv = -1;
@@ -76,7 +77,7 @@ public class UPCFindProductController {
                         urlConnection.disconnect();
                     }
                 } catch (Exception e) {
-                    Log.e("ERROR", e.getMessage(), e);
+
                     return null;
                 }
             }
@@ -84,116 +85,119 @@ public class UPCFindProductController {
             @Override
             protected void onPostExecute(JSONObject object) {
                 Intent i = new Intent(m, ProductActivity.class);
-                try {
-                    //if the product is in the list, it is not a new product
-                    found = object.getInt("IsFoundInDatabase");
-                    i.putExtra("Found", found);
 
-                    if (found == 0) {
-                        JSONObject closestStoreObject = object.getJSONObject("ClosestStore");
-                        JSONObject cheapestStoreObject = object.getJSONObject("CheapestStore");
+                if (object != null) {
+                    try {
+                        //if the product is in the list, it is not a new product
+                        found = object.getInt("IsFoundInDatabase");
+                        i.putExtra("Found", found);
 
-                        //inject model variables
-                        i.putExtra("Label", object.getString("ProductName"));
-                        i.putExtra("ProductId", object.getInt("ProductID"));
-                        i.putExtra("UPC", object.getString("UPC"));
-                        i.putExtra("LastUpdate", closestStoreObject.getString("LastUpdated"));
-                        i.putExtra("UserRating", 0.0);
-                        i.putExtra("ClosestStoreId", closestStoreObject.getInt("StoreID"));
-                        i.putExtra("CheapestStoreId", cheapestStoreObject.getInt("StoreID"));
-                        i.putExtra("ClosestStore", closestStoreObject.getString("StoreName"));
-                        i.putExtra("CheapestStore", cheapestStoreObject.getString("StoreName"));
-                        i.putExtra("ClosestStoreAddress", closestStoreObject.getString("Address"));
-                        i.putExtra("CheapestStoreAddress", cheapestStoreObject.getString("Address"));
-                        closestStoreDist = closestStoreObject.getDouble("DistanceInMiles");
-                        i.putExtra("ClosestStoreDist", closestStoreDist);
-                        cheapestStoreDist = cheapestStoreObject.getDouble("DistanceInMiles");
-                        i.putExtra("CheapestStoreDist", cheapestStoreDist);
-                        closestPrice = closestStoreObject.getDouble("Price");
-                        i.putExtra("ClosestPrice", closestPrice);
-                        cheapestPrice = cheapestStoreObject.getDouble("Price");
-                        i.putExtra("CheapestPrice", cheapestPrice);
-                        i.putExtra("Type", object.getInt("ProductParentTypeId"));
-                        i.putExtra("Favorites", false);
+                        if (found == 0) {
+                            JSONObject closestStoreObject = object.getJSONObject("ClosestStore");
+                            JSONObject cheapestStoreObject = object.getJSONObject("CheapestStore");
 
-                        container = object.getString("ContainerType");
-                        if (container.equals("null")) container = "N/A";
-                        i.putExtra("Container", container);
+                            //inject model variables
+                            i.putExtra("Label", object.getString("ProductName"));
+                            i.putExtra("ProductID", object.getInt("ProductID"));
+                            i.putExtra("UPC", object.getString("UPC"));
+                            i.putExtra("LastUpdate", closestStoreObject.getString("LastUpdated"));
+                            i.putExtra("UserRating", 0.0);
+                            i.putExtra("ClosestStoreId", closestStoreObject.getInt("StoreID"));
+                            i.putExtra("CheapestStoreId", cheapestStoreObject.getInt("StoreID"));
+                            i.putExtra("ClosestStore", closestStoreObject.getString("StoreName"));
+                            i.putExtra("CheapestStore", cheapestStoreObject.getString("StoreName"));
+                            i.putExtra("ClosestStoreAddress", closestStoreObject.getString("Address"));
+                            i.putExtra("CheapestStoreAddress", cheapestStoreObject.getString("Address"));
+                            closestStoreDist = closestStoreObject.getDouble("DistanceInMiles");
+                            i.putExtra("ClosestStoreDist", closestStoreDist);
+                            cheapestStoreDist = cheapestStoreObject.getDouble("DistanceInMiles");
+                            i.putExtra("CheapestStoreDist", cheapestStoreDist);
+                            closestPrice = closestStoreObject.getDouble("Price");
+                            i.putExtra("ClosestPrice", closestPrice);
+                            cheapestPrice = cheapestStoreObject.getDouble("Price");
+                            i.putExtra("CheapestPrice", cheapestPrice);
+                            i.putExtra("Type", object.getInt("ProductParentTypeId"));
+                            i.putExtra("Favorites", false);
 
-                        volume = object.getDouble("Volume");
-                        if (volume == nullInt) volume = -1;
-                        i.putExtra("Volume", volume);
+                            container = object.getString("ContainerType");
+                            if (container.equals("null")) container = "N/A";
+                            i.putExtra("Container", container);
 
-                        abv = object.getDouble("ABV");
-                        if (abv > nullInt) {
-                            proof = (int) (abv * 2);
-                        }
-                        i.putExtra("ABV", abv);
-                        i.putExtra("Proof", proof);
+                            containerQty = object.getInt("ContainerQty");
+                            i.putExtra("ContainerQty", containerQty);
 
-                        volumeMeasure = object.getString("VolumeUnit");
-                        getVolMeasure();
-                        i.putExtra("VolumeMeasure", volumeMeasure);
+                            volume = object.getDouble("Volume");
+                            if (volume == nullInt) volume = -1;
+                            i.putExtra("Volume", volume);
 
-                        if (cheapestStoreObject.getDouble("Price") > 0) {
-
-                            pdd = findPDD();
-                            td = findTD();
-                            if (volumeMeasure != null && volume <= 0) {
-                                pbv = findPBV();
-                                if (abv <= 0) abp = findABP();
+                            abv = object.getDouble("ABV");
+                            if (abv > nullInt) {
+                                proof = (int) (abv * 2);
                             }
+                            i.putExtra("ABV", abv);
+                            i.putExtra("Proof", proof);
+
+                            volumeMeasure = object.getString("VolumeUnit");
+                            getVolMeasure();
+                            i.putExtra("VolumeMeasure", volumeMeasure);
+
+                            if (cheapestStoreObject.getDouble("Price") > 0) {
+
+                                pdd = findPDD();
+                                td = findTD();
+                                if (volumeMeasure != null && volume <= 0) {
+                                    pbv = findPBV();
+                                    if (abv <= 0) abp = findABP();
+                                }
+                            }
+
+                            i.putExtra("ABP", abp);
+                            i.putExtra("PDD", pdd);
+                            i.putExtra("PBV", pbv);
+                            i.putExtra("TD", td);
+
+                            i.putExtra("Rating", new int[]{object.getInt("Rating1"), object.getInt("Rating2"),
+                                    object.getInt("Rating3"), object.getInt("Rating4"), object.getInt("Rating5")});
+                            i.putExtra("AvgRating", object.getDouble("CombinedRating"));
+
+                            i.putExtra("LAT", m.latitude);
+                            i.putExtra("LONG", m.longitude);
+
+                            i.putExtra("COLOR_PRIMARY_ID", m.getColorPrimaryId());
+                            i.putExtra("COLOR_ACCENT_ID", m.getColorAccentId());
+                            i.putExtra("COLOR_PRIMARY", m.getColorPrimary());
+                            i.putExtra("COLOR_PRIMARY_DARK", m.getColorPrimaryDark());
+                            i.putExtra("COLOR_ACCENT", m.getColorAccent());
+                            i.putExtra("COLOR_ACCENT_DARK", m.getColorAccentDark());
+
+                            m.startActivity(i);
+                        } else if (found == 1) {
+                            //inject new product variables
+                            i.putExtra("Label", object.getString("ProductName"));
+                            i.putExtra("ProductId", object.getInt("ProductID"));
+                            i.putExtra("UPC", object.getString("UPC"));
+
+                            volume = object.getDouble("Volume");
+                            if (volume == 0) volume = -1;
+                            i.putExtra("Volume", volume);
+
+                            volumeMeasure = object.getString("VolumeUnit");
+                            getVolMeasure();
+                            i.putExtra("VolumeMeasure", volumeMeasure);
+
+                            i.putExtra("LAT", m.getLastLocation().getLatitude());
+                            i.putExtra("LONG", m.getLastLocation().getLongitude());
+
+                            i.putExtra("COLOR_PRIMARY_ID", m.getColorPrimaryId());
+                            i.putExtra("COLOR_ACCENT_ID", m.getColorAccentId());
+                            i.putExtra("COLOR_PRIMARY", m.getColorPrimary());
+                            i.putExtra("COLOR_PRIMARY_DARK", m.getColorPrimaryDark());
+                            i.putExtra("COLOR_ACCENT", m.getColorAccent());
+                            i.putExtra("COLOR_ACCENT_DARK", m.getColorAccentDark());
+
+                            m.startActivity(i);
                         }
-
-                        i.putExtra("ABP", abp);
-                        i.putExtra("PDD", pdd);
-                        i.putExtra("PBV", pbv);
-                        i.putExtra("TD", td);
-
-                        i.putExtra("Rating", new int[]{object.getInt("Rating1"), object.getInt("Rating2"),
-                                object.getInt("Rating3"), object.getInt("Rating4"), object.getInt("Rating5")});
-                        i.putExtra("AvgRating", object.getDouble("CombinedRating"));
-
-                        i.putExtra("LAT", m.latitude);
-                        i.putExtra("LONG", m.longitude);
-
-                        i.putExtra("COLOR_PRIMARY_ID", m.getColorPrimaryId());
-                        i.putExtra("COLOR_ACCENT_ID", m.getColorAccentId());
-                        i.putExtra("COLOR_PRIMARY", m.getColorPrimary());
-                        i.putExtra("COLOR_PRIMARY_DARK", m.getColorPrimaryDark());
-                        i.putExtra("COLOR_ACCENT", m.getColorAccent());
-                        i.putExtra("COLOR_ACCENT_DARK", m.getColorAccentDark());
-
-                        m.startActivity(i);
-                    }
-                    else if (found == 1){
-                        //inject new product variables
-                        i.putExtra("Label", object.getString("ProductName"));
-                        i.putExtra("ProductId", object.getInt("ProductID"));
-                        i.putExtra("UPC", object.getString("UPC"));
-
-                        volume = object.getDouble("Volume");
-                        if (volume == 0) volume = -1;
-                        i.putExtra("Volume", volume);
-
-                        volumeMeasure = object.getString("VolumeUnit");
-                        getVolMeasure();
-                        i.putExtra("VolumeMeasure", volumeMeasure);
-
-                        i.putExtra("LAT", m.getLastLocation().getLatitude());
-                        i.putExtra("LONG", m.getLastLocation().getLongitude());
-
-                        i.putExtra("COLOR_PRIMARY_ID", m.getColorPrimaryId());
-                        i.putExtra("COLOR_ACCENT_ID", m.getColorAccentId());
-                        i.putExtra("COLOR_PRIMARY", m.getColorPrimary());
-                        i.putExtra("COLOR_PRIMARY_DARK", m.getColorPrimaryDark());
-                        i.putExtra("COLOR_ACCENT", m.getColorAccent());
-                        i.putExtra("COLOR_ACCENT_DARK", m.getColorAccentDark());
-
-                        m.startActivity(i);
-                    }
-                } catch (JSONException e) {
-                    Log.e("ERROR", e.getMessage(), e);
+                    } catch (JSONException e) {}
                 }
             }
         }.execute();
