@@ -148,8 +148,6 @@ public class ProductActivity extends AppCompatActivity {
     public void setNearByStores(List<String> stores, List<Integer> storeIDs) {
         this.stores.addAll(stores);
         this.storeIDs.addAll(storeIDs);
-
-        //Log.v("First Store", "The First Store is " + stores.get(0) + " and its ID is " + storeIDs.get(0));
     }
 
     //start google maps navigation
@@ -180,7 +178,7 @@ public class ProductActivity extends AppCompatActivity {
                 (String) getIntent().getSerializableExtra("UPC"),
                 (int) getIntent().getSerializableExtra("ProductID"),
                 (String) getIntent().getSerializableExtra("LastUpdate"),
-                0, //(double) getIntent().getSerializableExtra("UserRating")
+                (double) getIntent().getSerializableExtra("UserRating"),
                 (int) getIntent().getSerializableExtra("ClosestStoreId"),
                 (int) getIntent().getSerializableExtra("CheapestStoreId"),
                 (String) getIntent().getSerializableExtra("ClosestStore"),
