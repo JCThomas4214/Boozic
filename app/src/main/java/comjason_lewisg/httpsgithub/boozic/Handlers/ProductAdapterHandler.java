@@ -167,6 +167,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
                         mListener.toggleFavorite(favorite);
                         break;
                     case R.id.flag_button:
+                        mListener.startFlagDialog();
                         break;
                 }
             }
@@ -192,6 +193,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             void checkIfFavorite(ImageView favorite);
             void toggleFavorite(ImageView favorite);
             void startUpdateDialog(View caller);
+            void startFlagDialog();
             void startClosestNavigation(View caller);
             void startCheapestNavigation(View caller);
             void changeUpdateModelRating(RatingBar caller);
@@ -243,6 +245,9 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
                 else if (p.model.abv <= 0) DHandler.UpdateAbv(p, false, false);
                 else DHandler.UpdateStore(p, false, false);
 
+            }
+            public void startFlagDialog() {
+                DHandler.startFlagDialog(p);
             }
             public void startClosestNavigation(View caller) {
                 p.startNavigationIntent(p.model.closestStoreName, p.model.closestStoreAddress);

@@ -144,6 +144,30 @@ public class DialogHandler {
         dialog.show();
     }
 
+    public void startFlagDialog(final ProductActivity p) {
+        CharSequence[] items = new CharSequence[] {"Product Name is Incorrect", "Closest Price is unreasonable", "Cheapest Price is unreasonable"};
+        MaterialDialog dialog = new MaterialDialog.Builder(p)
+                .title("Flag Product Information")
+                .items(items)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        switch (which) {
+                            case 0:
+                                UpdateProductLabel(p);
+                                break;
+                            case 1:
+                                break;
+                            case 2:
+                                break;
+                        }
+                    }
+                })
+                .build();
+
+        dialog.show();
+    }
+
     public void StartProductInfoDialog(final ProductActivity p) {
         CharSequence[] items;
         if (p.model.typePic == 2 || p.updatedModel.parentType == 2) items = new CharSequence[] {"Type of Product", "Volume", "Alcohol by Volume", "Product Container"};
@@ -152,9 +176,9 @@ public class DialogHandler {
         MaterialDialog dialog = new MaterialDialog.Builder(p)
                 .title("What must Change?")
                 .items(items)
-                .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
-                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
                             case 0:
                                 UpdateProductParentType(p, true);
@@ -164,23 +188,14 @@ public class DialogHandler {
                                 break;
                             case 2:
                                 boolean isBeer = false;
-                                if (p.model.typePic == 2 || p.updatedModel.parentType == 2) isBeer = true;
-                                UpdateAbv(p,isBeer,true);
+                                if (p.model.typePic == 2 || p.updatedModel.parentType == 2)
+                                    isBeer = true;
+                                UpdateAbv(p, isBeer, true);
                                 break;
                             case 3:
                                 UpdateContainer(p, true);
                                 break;
                         }
-                        return true;
-                    }
-                })
-                .positiveText("OK")
-                .widgetColor(p.getAccentColor())
-                .positiveColor(p.getAccentColor())
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        //save selected
                     }
                 })
                 .build();
