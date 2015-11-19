@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         findViewById(R.id.toolbar).setBackgroundColor(primaryColor);
 
         //Creates a FAB for the bottom right corner of the main screen
-        FAB = new FloatingActionButtonHandler(this, primaryColor, primaryColorDark);
+        FAB = new FloatingActionButtonHandler(this, accentColor, accentColorDark);
 
         //Create instance for Filter Menu
         FMHandle = new FilterMenuHandler(this, primaryColor);

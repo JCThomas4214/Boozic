@@ -2,6 +2,8 @@ package comjason_lewisg.httpsgithub.boozic.Handlers;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -50,7 +52,8 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         TextView storeName;
         TextView price;
         TextView volume;
-        CircularImageView picture;
+        ImageView picture;
+        Drawable picBack;
         public IMyViewHolderClicks mListener;
 
         // each data item is just a string in this case
@@ -61,7 +64,9 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
             label = (TextView) itemView.findViewById(R.id.txt_label_item);
             storeName = (TextView) itemView.findViewById(R.id.txt_desc_item);
             price = (TextView) itemView.findViewById(R.id.price_item);
-            picture = (CircularImageView) itemView.findViewById(R.id.type_image);
+            picture = (ImageView) itemView.findViewById(R.id.type_image);
+            picBack = itemView.getResources().getDrawable(R.drawable.image_background, null);
+
             volume = (TextView) itemView.findViewById(R.id.volume_item);
             itemView.setOnClickListener(this);
         }
@@ -195,6 +200,8 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
                 viewHolder.picture.setImageResource(R.mipmap.ic_launcher);
                 break;
         }
+        viewHolder.picBack.setColorFilter(m.getColorPrimaryDark(), PorterDuff.Mode.MULTIPLY);
+        viewHolder.picture.setBackground(viewHolder.picBack);
     }
 
     // Return the size of your dataset (invoked by the layout manager)

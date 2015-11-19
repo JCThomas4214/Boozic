@@ -62,7 +62,8 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         TextView closestPrice;
         TextView cheapestPrice;
 
-        CircularImageView typePic;
+        ImageView typePic;
+        Drawable picBack;
 
         TextView container;
         TextView volume;
@@ -92,7 +93,9 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             mListener.setButtonColor(updateProduct);
 
             label = (TextView) itemView.findViewById(R.id.product_label);
-            typePic = (CircularImageView) itemView.findViewById(R.id.product_type);
+            typePic = (ImageView) itemView.findViewById(R.id.product_type);
+            picBack = itemView.getResources().getDrawable(R.drawable.image_background, null);
+
             boozicScore = (TextView) itemView.findViewById(R.id.product_metascore);
             lastUpdate = (TextView) itemView.findViewById(R.id.product_last_updated);
             userRating = (RatingBar) itemView.findViewById(R.id.product_ratingBar);
@@ -296,7 +299,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         if (model.userRating <= 0) viewHolder.userRating.setRating((float)model.userRating);
         else viewHolder.userRating.setRating((float) model.userRating);
         LayerDrawable stars = (LayerDrawable) viewHolder.userRating.getProgressDrawable();
-        stars.getDrawable(2).setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP);
+        stars.getDrawable(2).setColorFilter(p.getAccentColor(), PorterDuff.Mode.SRC_ATOP);
 
         if (model.cheapestStoreName == null) {
             viewHolder.closestStoreLayout.setVisibility(View.GONE);
@@ -374,6 +377,8 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
                 viewHolder.typePic.setImageResource(R.mipmap.ic_launcher);
                 break;
         }
+        viewHolder.picBack.setColorFilter(p.getPrimaryColorDark(), PorterDuff.Mode.MULTIPLY);
+        viewHolder.typePic.setBackground(viewHolder.picBack);
     }
 
     private boolean checkFavorites() {

@@ -246,8 +246,8 @@ public class ProductActivity extends AppCompatActivity {
 
     public int getPrimaryColor() { return primaryColor; }
     public int getPrimaryColorDark() { return primaryColorDark; }
-    public int getAccentColorId() { return colorAccent_id; }
     public int getAccentColor() { return accentColor; }
+    public int getAccentColorDark() { return accentColorDark; }
 
     public void checkUpdateModel() {
         Log.v("UPDATEMODEL", "The value of container is " + updatedModel.containerType);
