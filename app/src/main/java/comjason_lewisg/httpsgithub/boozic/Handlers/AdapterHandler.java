@@ -38,10 +38,6 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
     private int cursor;
     private int addedItems = 50;
     private boolean cursorCheck = true;
-    //size for Normal Screen
-    //use changeSize() to set for difference screen sizes
-    static public int sizeX = 535;
-    static public int sizeY = ActionBar.LayoutParams.MATCH_PARENT;
     MainActivity m;
 
     // Provide a reference to the views for each data item
@@ -60,7 +56,6 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         public ListItemViewHolder(View itemView, IMyViewHolderClicks listener) {
             super(itemView);
             mListener = listener;
-            changeListshownItemsize(itemView, sizeX, sizeY);
             label = (TextView) itemView.findViewById(R.id.txt_label_item);
             storeName = (TextView) itemView.findViewById(R.id.txt_desc_item);
             price = (TextView) itemView.findViewById(R.id.price_item);
@@ -69,18 +64,6 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
 
             volume = (TextView) itemView.findViewById(R.id.volume_item);
             itemView.setOnClickListener(this);
-        }
-
-        public void changeListshownItemsize(View itemView, int x, int y) {
-            LinearLayout linearLayout = (LinearLayout) itemView.findViewById(R.id.common_item_width);
-            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) linearLayout.getLayoutParams();
-            layoutParams.width = x;
-            linearLayout.setLayoutParams(layoutParams);
-
-            linearLayout = (LinearLayout) itemView.findViewById(R.id.common_item_layout);
-            FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) linearLayout.getLayoutParams();
-            layoutParams2.height = y;
-            linearLayout.setLayoutParams(layoutParams2);
         }
 
         @Override
@@ -300,11 +283,6 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
 
     public List<TopTensModel> getProductList() {
         return shownItems;
-    }
-
-    public void changeSize(int x, int y) {
-        sizeX = x;
-        sizeY = y;
     }
 
     public boolean getCursorCheck() {
