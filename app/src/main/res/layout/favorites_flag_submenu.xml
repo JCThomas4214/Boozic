@@ -29,7 +29,7 @@
             android:padding="5dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/flag"
+            android:src="@drawable/flag_outline"
             android:background="?android:attr/selectableItemBackground"/>
     </LinearLayout>
 </LinearLayout>
