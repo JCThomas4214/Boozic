@@ -200,7 +200,7 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
                 viewHolder.picture.setImageResource(R.mipmap.ic_launcher);
                 break;
         }
-        viewHolder.picBack.setColorFilter(m.getColorPrimaryDark(), PorterDuff.Mode.MULTIPLY);
+        viewHolder.picBack.setColorFilter(m.getColorPrimary(), PorterDuff.Mode.MULTIPLY);
         viewHolder.picture.setBackground(viewHolder.picBack);
     }
 
