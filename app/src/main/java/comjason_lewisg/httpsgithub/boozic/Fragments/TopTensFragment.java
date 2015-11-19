@@ -64,7 +64,8 @@ public class TopTensFragment extends Fragment {
         mAdapter = new AdapterHandler((MainActivity) getActivity(), askForProductList());
         mRecyclerView.setAdapter(mAdapter);
 
-        int screenSize = getResources().getConfiguration().screenLayout &
+        //TODO: delete
+        /*int screenSize = getResources().getConfiguration().screenLayout &
                 Configuration.SCREENLAYOUT_SIZE_MASK;
 
         switch(screenSize) {
@@ -76,7 +77,7 @@ public class TopTensFragment extends Fragment {
             case Configuration.SCREENLAYOUT_SIZE_SMALL:
                 break;
             default:
-        }
+        }*/
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
