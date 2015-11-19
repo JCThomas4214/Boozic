@@ -15,6 +15,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import comjason_lewisg.httpsgithub.boozic.Fragments.FavoritesFragment;
@@ -90,11 +93,23 @@ public class FavoritesListController {
     }
 
     private void parseJson(JSONArray jsonArray) {
+        //store the previous product list position and productID into a hashmap
+        //because product list postion is important for synchronous updates
+        int ID;
+        TopTensModel tmp;
+        HashMap<Integer, Integer> hmap = new HashMap<>();
+        for (int j = 0; j < favoritesList.size(); j++) {
+            tmp = favoritesList.get(j);
+            hmap.put(tmp.productID, tmp.position);
+        }
+
         favoritesList.clear();
         for (int i = 0; i < jsonArray.length(); i++) {
             try {
                 JSONObject oneObject = jsonArray.getJSONObject(i);
-                favoritesList.add(new TopTensModel(oneObject,i));
+                ID = oneObject.getInt("ProductID");
+                //re inject the previous product list positions from productID
+                favoritesList.add(new TopTensModel(oneObject,hmap.get(ID)));
             }
             catch (JSONException e) {}
         }
