@@ -63,7 +63,7 @@ public class TopTensModel {
             label = object.getString("ProductName");
             productID = object.getInt("ProductID");
             lastUpdate = closestStoreObject.getString("LastUpdated");
-            userRating = 0; //oneObject.getDouble("PRODUCT_USERRATING");
+            userRating = object.getInt("RatingByCurrentUser");
 
             upc = object.getString("UPC");
 

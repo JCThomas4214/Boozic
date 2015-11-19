@@ -297,8 +297,8 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         else viewHolder.lastUpdate.setText("" + model.lastUpdate);
         setFavorite(model.favorite, viewHolder.favorite);
 
-        if (model.userRating <= 0) viewHolder.userRating.setRating((float)model.userRating);
-        else viewHolder.userRating.setRating((float) model.userRating);
+        if (model.userRating > 0) viewHolder.userRating.setRating((float)model.userRating);
+
         LayerDrawable stars = (LayerDrawable) viewHolder.userRating.getProgressDrawable();
         stars.getDrawable(2).setColorFilter(p.getAccentColor(), PorterDuff.Mode.SRC_ATOP);
 
