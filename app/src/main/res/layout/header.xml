@@ -1,33 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="170dp"
-    android:background="@drawable/headerback"
-    android:orientation="vertical">
+    android:layout_height="match_parent"
+    android:background="@color/ColorPrimary"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:background="@drawable/navmenupicture"
+        android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textSize="20sp"
-        android:textColor="#FFF"
-        android:textStyle="bold"
-        android:gravity="left"
-        android:paddingBottom="4dp"
-        android:layout_marginLeft="12dp"
-        android:id="@+id/username"
-        android:layout_above="@+id/slogan"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textSize="20sp"
+            android:textColor="#FFF"
+            android:textStyle="bold"
+            android:gravity="left"
+            android:paddingBottom="4dp"
+            android:layout_marginLeft="12dp"
+            android:id="@+id/username"
+            android:layout_above="@+id/slogan"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/app_slogan"
-        android:id="@+id/slogan"
-        android:gravity="left"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="12dp"
-        android:textSize="14sp"
-        android:textColor="#fff"
-        android:layout_alignParentBottom="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_slogan"
+            android:id="@+id/slogan"
+            android:gravity="left"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="12dp"
+            android:textSize="14sp"
+            android:textColor="#fff"
+            android:layout_alignParentBottom="true"/>
 
-</RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>
