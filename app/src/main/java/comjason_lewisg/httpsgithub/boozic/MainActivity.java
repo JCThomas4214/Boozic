@@ -40,8 +40,10 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import comjason_lewisg.httpsgithub.boozic.Controllers.DeviceIdController;
+import comjason_lewisg.httpsgithub.boozic.Controllers.FavoritesListController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.FeedbackController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.ProductListController;
+import comjason_lewisg.httpsgithub.boozic.Controllers.RemoveFromFavoritesController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.UPCFindProductController;
 import comjason_lewisg.httpsgithub.boozic.Fragments.FavoritesFragment;
 import comjason_lewisg.httpsgithub.boozic.Fragments.ThemeFragment;
@@ -58,19 +60,24 @@ import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
 
 import com.quinny898.library.persistentsearch.SearchBox;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements ThemeFragment.OnDataPass, TopTensFragment.OnPass, FavoritesFragment.OnPass,
+public class MainActivity extends AppCompatActivity implements ThemeFragment.OnDataPass, TopTensFragment.OnPass,
         GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     public Toolbar toolbar;
     public TextView title;
     public DialogHandler DHandle;
+
     public DeviceIdController DIDcon;
     public ProductListController PLcon;
+    public FavoritesListController FLcon;
+    public RemoveFromFavoritesController RFFcon;
     public UPCFindProductController upcFPC;
     public FeedbackController FC;
+
     public SearchBarHandler searchBarHandler;
     public NavigationDrawerHandler Nav;
     public ThemeHandler themeHandler;
@@ -162,6 +169,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
         DIDcon = new DeviceIdController(this);
         PLcon = new ProductListController();
+        FLcon = new FavoritesListController(this);
+        RFFcon = new RemoveFromFavoritesController(this);
         upcFPC = new UPCFindProductController();
         FC = new FeedbackController();
 
@@ -336,12 +345,12 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     }
 
 
-    public void startFragment(Fragment fragment, boolean backstack) {
+    public void startFragment(Fragment fragment, boolean backstack, String tag) {
         this.backstack = backstack;
         fragment.setEnterTransition(new Fade().setStartDelay(350));
         fragment.setExitTransition(new Slide(Gravity.BOTTOM));
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.frame3, fragment);
+        fragmentTransaction.replace(R.id.frame3, fragment, tag);
         fragmentTransaction.commit();
     }
 

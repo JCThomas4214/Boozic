@@ -64,21 +64,6 @@ public class TopTensFragment extends Fragment {
         mAdapter = new AdapterHandler((MainActivity) getActivity(), askForProductList());
         mRecyclerView.setAdapter(mAdapter);
 
-        //TODO: delete
-        /*int screenSize = getResources().getConfiguration().screenLayout &
-                Configuration.SCREENLAYOUT_SIZE_MASK;
-
-        switch(screenSize) {
-            case Configuration.SCREENLAYOUT_SIZE_LARGE:
-                mAdapter.changeSize(840, 175);
-                break;
-            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
-                break;
-            case Configuration.SCREENLAYOUT_SIZE_SMALL:
-                break;
-            default:
-        }*/
-
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView mRecyclerView, int dx, int dy) {

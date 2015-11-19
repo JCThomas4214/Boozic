@@ -50,7 +50,11 @@ public class TopTensModel {
     public int[] rating;
     public double avgRating;
 
-    public TopTensModel(JSONObject object) {
+    public int position = -1;
+
+    public TopTensModel(JSONObject object, int position) {
+
+        this.position = position;
 
         try {
             JSONObject closestStoreObject = object.getJSONObject("ClosestStore");
@@ -75,7 +79,7 @@ public class TopTensModel {
             cheapestPrice = cheapestStoreObject.getDouble("Price");
 
             typePic = object.getInt("ProductParentTypeId");
-            favorite = 0; //favorite
+            favorite = object.getInt("IsFavourite");
 
             containerType = object.getString("ContainerType");
             if (containerType.equals("null")) containerType = "N/A";

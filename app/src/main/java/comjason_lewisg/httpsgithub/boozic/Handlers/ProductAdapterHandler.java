@@ -295,6 +295,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         else viewHolder.boozicScore.setText("" + model.boozicScore);
         if (model.lastUpdate == null) viewHolder.lastUpdate.setText("N/A");
         else viewHolder.lastUpdate.setText("" + model.lastUpdate);
+        setFavorite(model.favorite, viewHolder.favorite);
 
         if (model.userRating <= 0) viewHolder.userRating.setRating((float)model.userRating);
         else viewHolder.userRating.setRating((float) model.userRating);
@@ -381,15 +382,12 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         viewHolder.typePic.setBackground(viewHolder.picBack);
     }
 
-    private boolean checkFavorites() {
-        if (item.favorite == 0) {
-            return false;
-        }
-        return true;
+    private int checkFavorites() {
+        return item.favorite;
     }
 
-    private void setFavorite(boolean set, ImageView favorite) {
-        if (set) {
+    private void setFavorite(int set, ImageView favorite) {
+        if (set == 1) {
             favorite.setImageResource(R.drawable.star);
         } else {
             favorite.setImageResource(R.drawable.star_outline);
@@ -398,10 +396,10 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
 
     private void toggleFavoriteValue(ImageView favorite) {
         if (p.updatedModel.favorite != 1) {
-            setFavorite(true, favorite);
+            setFavorite(1, favorite);
             p.updatedModel.updateFavorite(1);
         } else {
-            setFavorite(false, favorite);
+            setFavorite(0, favorite);
             p.updatedModel.updateFavorite(0);
         }
     }

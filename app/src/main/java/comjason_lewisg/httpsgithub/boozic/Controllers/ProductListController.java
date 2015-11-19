@@ -27,12 +27,15 @@ import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
 public class ProductListController {
 
     private List<TopTensModel> productList = new ArrayList<>();
+    MainActivity m;
 
     public void onCreate() {}
 
     public ProductListController() {}
 
     public void callList(MainActivity m, FilterMenuHandler fm, AdapterHandler mAdapter, SwipeRefreshLayout swipeRefreshLayout, double latitude, double longitude) {
+        this.m = m;
+
         if (m.checkPlayServices()) {
             getListInBackground(m, fm, mAdapter, swipeRefreshLayout, latitude, longitude);
         }
@@ -54,7 +57,7 @@ public class ProductListController {
                     //append location
                     urlString.append("latitude=").append(latitude).append("&longitude=").append(longitude);
                     //append Device id
-                    //urlString.append("&DeviceId=").append( android_id );
+                    urlString.append("&DeviceId=").append( android_id );
                     //append types selected in filter menu
                     if (fm.typesButtonPressed != 0) urlString.append("&ProductParentTypeId=").append(fm.typesButtonPressed);
                     //append mile radius selected in filter menu
@@ -108,6 +111,7 @@ public class ProductListController {
     public void parseJsonObject(JSONArray jArr, AdapterHandler mAdapter, SwipeRefreshLayout swipeRefreshLayout) {
 
         productList.clear();
+        m.FLcon.favoritesList.clear();
         int size = jArr.length();
         boolean firstSet = true;
         int mod;
@@ -116,8 +120,9 @@ public class ProductListController {
             mod = i % 25;
             try {
                 JSONObject oneObject = jArr.getJSONObject(i-1);
+                int favorite = oneObject.getInt("IsFavourite");
                 //continue to add models to list
-                productList.add(new TopTensModel(oneObject));
+                productList.add(new TopTensModel(oneObject,i-1));
                 //start the list so the user will not have to wait for 500 toptensproducts to be created for the entire list
                 if (mod == 0 && firstSet) {
                     mAdapter.startList(productList, swipeRefreshLayout);
@@ -131,6 +136,8 @@ public class ProductListController {
                     if (i < 25) mAdapter.startList(productList, swipeRefreshLayout);
                     else mAdapter.addList(productList.subList((size/25)*25, size));
                 }
+
+                if (favorite == 1) m.FLcon.favoritesList.add(new TopTensModel(oneObject,i-1));
             } catch (JSONException e) {}
         }
     }

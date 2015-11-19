@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.view.MenuItem;
@@ -69,7 +70,7 @@ public class NavigationDrawerHandler {
             default:
         }
 
-        m.startFragment(topTensFragment, false);
+        m.startFragment(topTensFragment, false, "toptens");
 
         //Initializing NavigationView
         navigationView = (NavigationView) m.findViewById(R.id.navigation_view);
@@ -127,7 +128,7 @@ public class NavigationDrawerHandler {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            m.startFragment(topTensFragment, false);
+                            m.startFragment(topTensFragment, false, "toptens");
                         }
                     }, delay);
                     return true;
@@ -138,7 +139,8 @@ public class NavigationDrawerHandler {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            m.startFragment(favoritesFragment, true);
+                            Bundle bundle = new Bundle();
+                            m.startFragment(favoritesFragment, true, "favorites");
                         }
                     }, delay);
                     return true;
@@ -150,7 +152,7 @@ public class NavigationDrawerHandler {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            m.startFragment(themeFragment, true);
+                            m.startFragment(themeFragment, true, "theme");
                         }
                     }, delay);
 

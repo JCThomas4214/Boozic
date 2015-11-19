@@ -3,9 +3,11 @@ package comjason_lewisg.httpsgithub.boozic.Handlers;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,12 +32,8 @@ import comjason_lewisg.httpsgithub.boozic.R;
 
 public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapterHandler.ListItemViewHolder>
             implements ItemTouchHelperAdapter {
-    private List<TopTensModel> items;
-    private List<TopTensModel> removeItems;
-    //size for Normal Screen
-    //use changeSize() to set for difference screen sizes
-    static public int sizeX = 535;
-    static public int sizeY = ActionBar.LayoutParams.MATCH_PARENT;
+    private List<TopTensModel> items = new ArrayList<>();
+    private List<TopTensModel> removeItems = new ArrayList<>();
     MainActivity m;
 
     static View view;
@@ -51,31 +49,20 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
         TextView price;
         TextView volume;
         ImageView picture;
+        Drawable picBack;
         public IMyViewHolderClicks mListener;
 
         // each data item is just a string in this case
         public ListItemViewHolder(View itemView, IMyViewHolderClicks listener) {
             super(itemView);
             mListener = listener;
-            changeListItemSize(itemView, sizeX, sizeY);
             label = (TextView) itemView.findViewById(R.id.txt_label_item);
             storeName = (TextView) itemView.findViewById(R.id.txt_desc_item);
             price = (TextView) itemView.findViewById(R.id.price_item);
             picture = (ImageView) itemView.findViewById(R.id.type_image);
+            picBack = itemView.getResources().getDrawable(R.drawable.image_background, null);
             volume = (TextView) itemView.findViewById(R.id.volume_item);
             itemView.setOnClickListener(this);
-        }
-
-        public void changeListItemSize(View itemView, int x, int y) {
-            LinearLayout linearLayout = (LinearLayout) itemView.findViewById(R.id.common_item_width);
-            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) linearLayout.getLayoutParams();
-            layoutParams.width = x;
-            linearLayout.setLayoutParams(layoutParams);
-
-            linearLayout = (LinearLayout) itemView.findViewById(R.id.common_item_layout);
-            FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) linearLayout.getLayoutParams();
-            layoutParams2.height = y;
-            linearLayout.setLayoutParams(layoutParams2);
         }
 
         @Override
@@ -103,8 +90,7 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
             throw new IllegalArgumentException("modelData must not be null");
         }
         view = m.findViewById(R.id.frame3);
-        removeItems = new ArrayList<TopTensModel>() {};
-        items = modeldata;
+        items.addAll(modeldata);
         this.m = m;
     }
 
@@ -120,34 +106,40 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
             public void onPotato(View caller, int position) {
                 Intent i = new Intent(m, ProductActivity.class);
                 //if the product is in the list, it is not a new product
-                i.putExtra("Found", true);
+                i.putExtra("Found", 0);
                 //inject model variables
                 i.putExtra("Label", items.get(position).label);
+                i.putExtra("ProductID", items.get(position).productID);
+                i.putExtra("UPC", items.get(position).upc);
                 i.putExtra("LastUpdate", items.get(position).lastUpdate);
                 i.putExtra("UserRating", items.get(position).userRating);
+                i.putExtra("ClosestStoreId", items.get(position).closestStoreId);
+                i.putExtra("CheapestStoreId", items.get(position).cheapestStoreId);
                 i.putExtra("ClosestStore", items.get(position).closestStoreName);
                 i.putExtra("CheapestStore", items.get(position).cheapestStoreName);
+                i.putExtra("ClosestStoreAddress", items.get(position).closestStoreAddress);
+                i.putExtra("CheapestStoreAddress", items.get(position).cheapestStoreAddress);
                 i.putExtra("ClosestStoreDist", items.get(position).closestStoreDist);
                 i.putExtra("CheapestStoreDist", items.get(position).cheapestStoreDist);
                 i.putExtra("ClosestPrice", items.get(position).closestPrice);
                 i.putExtra("CheapestPrice", items.get(position).cheapestPrice);
                 i.putExtra("Type", items.get(position).typePic);
-                i.putExtra("Favorites", items.get(position).favorite);
+                i.putExtra("Favorites", 1);
                 i.putExtra("Container", items.get(position).containerType);
+                i.putExtra("ContainerQty", items.get(position).containerQuantity);
                 i.putExtra("Volume", items.get(position).volume);
-                i.putExtra("Type", items.get(position).typePic);
+                i.putExtra("VolumeMeasure", items.get(position).volumeMeasure);
                 i.putExtra("ABV", items.get(position).abv);
                 i.putExtra("Proof", items.get(position).proof);
                 i.putExtra("ABP", items.get(position).abp);
                 i.putExtra("PDD", items.get(position).pdd);
                 i.putExtra("Rating", items.get(position).rating);
-                i.putExtra("Volume", items.get(position).volume);
-                i.putExtra("VolumeMeasure", items.get(position).volumeMeasure);
                 i.putExtra("PBV", items.get(position).pbv);
-                i.putExtra("ABP", items.get(position).abp);
-                i.putExtra("PDD", items.get(position).pdd);
                 i.putExtra("TD", items.get(position).td);
                 i.putExtra("AvgRating", items.get(position).avgRating);
+
+                i.putExtra("LAT", m.getLastLocation().getLatitude());
+                i.putExtra("LONG", m.getLastLocation().getLongitude());
 
                 i.putExtra("COLOR_PRIMARY_ID", m.getColorPrimaryId());
                 i.putExtra("COLOR_ACCENT_ID", m.getColorAccentId());
@@ -167,32 +159,52 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         TopTensModel model = items.get(position);
-        DecimalFormat volumeFormat = new DecimalFormat("####0.##");
-        DecimalFormat distanceFormat = new DecimalFormat("#0.#");
+        DecimalFormat df = new DecimalFormat("####0.##");
 
         viewHolder.label.setText(model.label);
-        viewHolder.storeName.setText(model.closestStoreName + " (" + distanceFormat.format(model.closestStoreDist) + "mi)");
+        viewHolder.storeName.setText(model.closestStoreName);
         viewHolder.price.setText(NumberFormat.getCurrencyInstance().format(model.closestPrice));
-        viewHolder.volume.setText("(" + volumeFormat.format(model.volume) + model.volumeMeasure + ")");
+
+        if (model.volume != -1) {
+            String volume = "(" + df.format(model.volume) + model.volumeMeasure + ")";
+            viewHolder.volume.setText(volume);
+        }
+        else viewHolder.volume.setText("N/A");
         switch (model.typePic) {
             case 1:
-                viewHolder.picture.setBackgroundResource(R.mipmap.wine);
+                viewHolder.picture.setImageResource(R.mipmap.wine);
                 break;
             case 2:
-                viewHolder.picture.setBackgroundResource(R.mipmap.beer);
+                viewHolder.picture.setImageResource(R.mipmap.beer);
                 break;
             case 3:
-                viewHolder.picture.setBackgroundResource(R.mipmap.liquor);
+                viewHolder.picture.setImageResource(R.mipmap.liquor);
                 break;
             case 4:
-                viewHolder.picture.setBackgroundResource(R.mipmap.ic_launcher);
+                viewHolder.picture.setImageResource(R.mipmap.ic_launcher);
                 break;
         }
+        viewHolder.picBack.setColorFilter(m.getColorPrimary(), PorterDuff.Mode.MULTIPLY);
+        viewHolder.picture.setBackground(viewHolder.picBack);
+    }
+
+    public void setList(List<TopTensModel> list) {
+        items.clear();
+        items.addAll(list);
+        this.notifyDataSetChanged();
+    }
+
+    public void clearRemoveList() {
+        removeItems.clear();
     }
 
     @Override
     public void onItemDismiss(int position) {
-        removeItems.add(items.get(position));
+        TopTensModel tmp = items.get(position);
+        removeItems.add(tmp);
+        //change favorite from product in existing product list
+        m.PLcon.getProductList().get(tmp.position).favorite = 0;
+        Log.v("Remove Fav", "remove item " + position);
         items.remove(position);
         notifyItemRemoved(position);
     }
@@ -212,10 +224,5 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
 
     public List<TopTensModel> getRemovedList() {
         return removeItems;
-    }
-
-    public void changeSize(int x, int y) {
-        sizeX = x;
-        sizeY = y;
     }
 }

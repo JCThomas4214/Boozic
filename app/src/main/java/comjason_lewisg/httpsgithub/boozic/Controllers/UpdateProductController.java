@@ -58,12 +58,18 @@ public class UpdateProductController {
                     }
                     //append container quantity
                     if (p.updatedModel.containerQuantity != -1) urlString.append("&ContainerQty=").append(p.updatedModel.containerQuantity);
-                    //append user rating
-                    if (p.updatedModel.userRating != -1) {
-                        urlString.append("&Rating=").append((int)p.updatedModel.userRating);
-                        //append DeviceID
+
+                    if (p.updatedModel.userRating != -1 || p.updatedModel.favorite != -1) {
                         String android_id = "" + android.provider.Settings.Secure.getString(p.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
                         urlString.append("&DeviceId=").append(android_id);
+                        //append user rating
+                        if (p.updatedModel.userRating != -1) {
+                            urlString.append("&Rating=").append((int)p.updatedModel.userRating);
+                        }
+                        //append favorite
+                        if (p.updatedModel.favorite != -1) {
+                            urlString.append("&addToFavouritesList=").append(p.updatedModel.favorite);
+                        }
                     }
 
                     Log.v("updateProductURL", urlString.toString());
