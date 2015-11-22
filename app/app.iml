@@ -105,6 +105,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services/8.3.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.mikhaellopez/circularimageview/2.0.2/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.quinny898.library.persistentsearch/library/1.1.0-SNAPSHOT/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/de.keyboardsurfer.android.widget/crouton/1.8.5/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/me.dm7.barcodescanner/core/1.8.3/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/me.dm7.barcodescanner/zbar/1.8.3/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/me.zhanghai.android.materialprogressbar/library/1.1.4/jars" />
@@ -162,6 +163,7 @@
     <orderEntry type="library" exported="" name="play-services-basement-8.3.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-maps-8.3.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-nearby-8.3.0" level="project" />
+    <orderEntry type="library" exported="" name="crouton-1.8.5" level="project" />
     <orderEntry type="library" exported="" name="play-services-fitness-8.3.0" level="project" />
     <orderEntry type="library" exported="" name="fab-1.6.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-panorama-8.3.0" level="project" />

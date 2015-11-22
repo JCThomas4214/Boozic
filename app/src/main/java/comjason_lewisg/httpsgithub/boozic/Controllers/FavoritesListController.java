@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.provider.Settings;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.widget.FrameLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +26,8 @@ import comjason_lewisg.httpsgithub.boozic.Handlers.FavoritesAdapterHandler;
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
 import comjason_lewisg.httpsgithub.boozic.R;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class FavoritesListController {
 
@@ -84,7 +87,14 @@ public class FavoritesListController {
             @Override
             protected void onPostExecute(JSONArray jsonData) {
                 parseJson(jsonData);
-                if (jsonData != null) mAdapter.setList(favoritesList);
+                if (jsonData != null) {
+                    mAdapter.setList(favoritesList);
+                }
+                else {
+                    //toast no store information available
+                    FrameLayout frame = (FrameLayout) m.findViewById(R.id.frame3);
+                    Crouton.makeText(m, "You Currently Have No Favorites", Style.ALERT, frame).show();
+                }
                 swipeRefreshLayout.setRefreshing(false);
             }
         }.execute();

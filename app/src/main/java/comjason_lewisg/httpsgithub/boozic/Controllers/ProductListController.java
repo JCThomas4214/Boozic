@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.provider.Settings;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.widget.FrameLayout;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
@@ -23,6 +24,9 @@ import comjason_lewisg.httpsgithub.boozic.Handlers.AdapterHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.FilterMenuHandler;
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
+import comjason_lewisg.httpsgithub.boozic.R;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class ProductListController {
 
@@ -106,6 +110,8 @@ public class ProductListController {
                 else {
                     swipeRefreshLayout.setRefreshing(false);
                     //toast no store information available
+                    FrameLayout frame = (FrameLayout) m.findViewById(R.id.frame3);
+                    Crouton.makeText(m, "There are Currently no Products", Style.ALERT, frame).show();
                 }
             }
         }.execute();

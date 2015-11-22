@@ -57,6 +57,7 @@ import comjason_lewisg.httpsgithub.boozic.Handlers.NavigationDrawerHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.SearchBarHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ThemeHandler;
 import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
 
 import com.quinny898.library.persistentsearch.SearchBox;
 
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public int TBwidth;
     public int TBheight;
     private double expandConst;
-    private double srinkConst;
+    private double shrinkConst;
 
     private int colorPrimary_id;
     private int colorAccent_id;
@@ -252,14 +253,14 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
             toolbar.setLayoutParams(layoutParams);
 
             expandConst = 0.27;
-            srinkConst = 0.08;
+            shrinkConst = 0.08;
         }
         else {
             layoutParams.height = (int)(TBheight * 0.07);
             toolbar.setLayoutParams(layoutParams);
 
             expandConst = 0.25;
-            srinkConst = 0.07;
+            shrinkConst = 0.07;
         }
     }
     public void setNormal() {
@@ -272,13 +273,13 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
             layoutParams.height = (int)(TBheight * 0.10);
             toolbar.setLayoutParams(layoutParams);
             expandConst = 0.38;
-            srinkConst = 0.10;
+            shrinkConst = 0.10;
         }
         else {
             layoutParams.height = (int)(TBheight * 0.09);
             toolbar.setLayoutParams(layoutParams);
             expandConst = 0.35;
-            srinkConst = 0.09;
+            shrinkConst = 0.09;
         }
     }
     public void setSmall() {
@@ -400,7 +401,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
             item.setIcon(R.drawable.filter_outline);
             FMHandle.hideFilterMenu();
 
-            AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, (int) (TBheight * srinkConst));
+            AnimateToolbarHandler anim = new AnimateToolbarHandler(toolbar, (int) (TBheight * shrinkConst));
             anim.setDuration(500);
             toolbar.startAnimation(anim);
         }
@@ -580,6 +581,12 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         mGoogleApiClient.disconnect();
         super.onStop();
         hideFilterMenu();
+    }
+
+    @Override
+    protected  void onDestroy() {
+        super.onDestroy();
+        Crouton.cancelAllCroutons();
     }
 
     @Override

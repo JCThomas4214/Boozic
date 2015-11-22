@@ -33,4 +33,7 @@ dependencies {
     compile('com.afollestad.material-dialogs:core:0.8.5.0@aar') {
         transitive = true
     }
+    compile('de.keyboardsurfer.android.widget:crouton:1.8.5@aar') {
+        exclude group: 'com.google.android', module: 'support-v4'
+    }
 }

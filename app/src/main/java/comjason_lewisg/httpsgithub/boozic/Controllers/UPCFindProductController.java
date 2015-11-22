@@ -3,6 +3,7 @@ package comjason_lewisg.httpsgithub.boozic.Controllers;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.FrameLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,6 +15,9 @@ import java.net.URL;
 
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.ProductActivity;
+import comjason_lewisg.httpsgithub.boozic.R;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class UPCFindProductController {
 
@@ -196,6 +200,10 @@ public class UPCFindProductController {
                             i.putExtra("COLOR_ACCENT_DARK", m.getColorAccentDark());
 
                             m.startActivity(i);
+                        } else {
+                            //toast no store information available
+                            FrameLayout frame = (FrameLayout) m.findViewById(R.id.frame3);
+                            Crouton.makeText(m, "This Product Currently does not Exist", Style.ALERT, frame).show();
                         }
                     } catch (JSONException e) {}
                 }
