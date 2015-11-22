@@ -61,27 +61,28 @@ public class NearbyStoresController {
                         urlConnection.disconnect();
                     }
                 } catch (Exception e) {
-                    Log.e("ERROR", e.getMessage(), e);
                     return null;
                 }
             }
 
             @Override
             protected void onPostExecute(JSONArray jsonData) {
-                String store;
-                String address;
-                for (int i = 0; i < jsonData.length(); i++) {
-                    try {
-                        store = jsonData.getJSONObject(i).getString("StoreName");
-                        address = jsonData.getJSONObject(i).getString("Address");
-                        storeList.add(store + " at " + address);
-                        storeIdList.add(jsonData.getJSONObject(i).getInt("StoreID"));
-                    } catch (JSONException e) {
-                        Log.e("ERROR", e.getMessage(), e);
+                if (jsonData != null) {
+                    String store;
+                    String address;
+                    for (int i = 0; i < jsonData.length(); i++) {
+                        try {
+                            store = jsonData.getJSONObject(i).getString("StoreName");
+                            address = jsonData.getJSONObject(i).getString("Address");
+                            storeList.add(store + " at " + address);
+                            storeIdList.add(jsonData.getJSONObject(i).getInt("StoreID"));
+                        } catch (JSONException e) {
+                            Log.e("ERROR", e.getMessage(), e);
+                        }
                     }
+                    p.setNearByStores(storeList, storeIdList);
+                    p.hasStores = true;
                 }
-                p.setNearByStores(storeList, storeIdList);
-                p.hasStores = true;
             }
         }.execute();
     }

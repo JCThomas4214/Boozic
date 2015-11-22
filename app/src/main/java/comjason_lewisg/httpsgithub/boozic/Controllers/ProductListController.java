@@ -95,7 +95,6 @@ public class ProductListController {
                         urlConnection.disconnect();
                     }
                 } catch (Exception e) {
-                    Log.e("ERROR", e.getMessage(), e);
                     return null;
                 }
             }
@@ -103,7 +102,11 @@ public class ProductListController {
             @Override
             protected void onPostExecute(JSONArray jsonData) {
                 mAdapter.clearData();
-                parseJsonObject(jsonData, mAdapter, swipeRefreshLayout);
+                if (jsonData != null) parseJsonObject(jsonData, mAdapter, swipeRefreshLayout);
+                else {
+                    swipeRefreshLayout.setRefreshing(false);
+                    //toast no store information available
+                }
             }
         }.execute();
     }
