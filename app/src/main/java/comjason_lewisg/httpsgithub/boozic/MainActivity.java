@@ -91,23 +91,23 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
     static final int COLOR_STATE = 1;
     static final int COLOR_ACCENT_STATE = 1;
-    static final int PRIMARY_STATE = -15374912;
-    static final int PRIMARY_DARK_STATE = -15906911;
-    static final int ACCENT_STATE = -26624;
-    static final int ACCENT_DARK_STATE = -291840;
+    static final int PRIMARY_STATE = -10239574;
+    static final int PRIMARY_DARK_STATE = -10965094;
+    static final int ACCENT_STATE = -1537141;
+    static final int ACCENT_DARK_STATE = -4296078;
 
     public int TBwidth;
     public int TBheight;
     private double expandConst;
     private double srinkConst;
 
-    private int colorPrimary_id = 1;
-    private int colorAccent_id = 1;
+    private int colorPrimary_id;
+    private int colorAccent_id;
 
-    private int primaryColor = -15374912;
-    private int primaryColorDark = -15906911;
-    private int accentColor = -26624;
-    private int accentColorDark = -291840;
+    private int primaryColor;
+    private int primaryColorDark;
+    private int accentColor;
+    private int accentColorDark;
 
     private Location mLastLocation;
     public double latitude;
@@ -140,6 +140,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         primaryColorDark = mPrefs.getInt("PRIMARY_DARK_STATE", PRIMARY_DARK_STATE);
         accentColor = mPrefs.getInt("ACCENT_STATE", ACCENT_STATE);
         accentColorDark = mPrefs.getInt("ACCENT_DARK_STATE", ACCENT_DARK_STATE);
+        Log.v("COLOR", "" +primaryColor+" "+primaryColorDark+" "+accentColor+" "+accentColorDark);
+
 
         latitude = mPrefs.getFloat("LAST_LATITUDE", (float) 0.00);
         longitude = mPrefs.getFloat("LAST_LONGITUDE", (float) 0.00);
