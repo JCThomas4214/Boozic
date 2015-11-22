@@ -18,6 +18,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
 
+import comjason_lewisg.httpsgithub.boozic.Fragments.ProductFragment;
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.ProductActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
@@ -144,9 +145,9 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void startFlagDialog(final ProductActivity p) {
+    public void startFlagDialog(final MainActivity m, final ProductFragment pf) {
         CharSequence[] items = new CharSequence[] {"Product Name is Incorrect", "Closest Price is unreasonable", "Cheapest Price is unreasonable"};
-        MaterialDialog dialog = new MaterialDialog.Builder(p)
+        MaterialDialog dialog = new MaterialDialog.Builder(m)
                 .title("Flag Product Information")
                 .items(items)
                 .itemsCallback(new MaterialDialog.ListCallback() {
@@ -154,7 +155,7 @@ public class DialogHandler {
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
                             case 0:
-                                UpdateProductLabel(p);
+                                UpdateProductLabel(m, pf);
                                 break;
                             case 1:
                                 break;
@@ -168,12 +169,12 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void StartProductInfoDialog(final ProductActivity p) {
+    public void StartProductInfoDialog(final MainActivity m, final ProductFragment pf) {
         CharSequence[] items;
-        if (p.model.typePic == 2 || p.updatedModel.parentType == 2) items = new CharSequence[] {"Type of Product", "Volume", "Alcohol by Volume", "Product Container"};
+        if (pf.model.typePic == 2 || pf.updatedModel.parentType == 2) items = new CharSequence[] {"Type of Product", "Volume", "Alcohol by Volume", "Product Container"};
         else items = new CharSequence[] {"Type of Product", "Volume", "Alcohol by Volume"};
 
-        MaterialDialog dialog = new MaterialDialog.Builder(p)
+        MaterialDialog dialog = new MaterialDialog.Builder(m)
                 .title("What must Change?")
                 .items(items)
                 .itemsCallback(new MaterialDialog.ListCallback() {
@@ -181,19 +182,19 @@ public class DialogHandler {
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
                             case 0:
-                                UpdateProductParentType(p, true);
+                                UpdateProductParentType(m, pf, true);
                                 break;
                             case 1:
-                                UpdateVolume(p);
+                                UpdateVolume(m, pf);
                                 break;
                             case 2:
                                 boolean isBeer = false;
-                                if (p.model.typePic == 2 || p.updatedModel.parentType == 2)
+                                if (pf.model.typePic == 2 || pf.updatedModel.parentType == 2)
                                     isBeer = true;
-                                UpdateAbv(p, isBeer, true);
+                                UpdateAbv(m, pf, isBeer, true);
                                 break;
                             case 3:
-                                UpdateContainer(p, true);
+                                UpdateContainer(m, pf, true);
                                 break;
                         }
                     }
@@ -203,26 +204,26 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void UpdateProductParentType(final ProductActivity p, final boolean cameFromStartProductInfo) {
+    public void UpdateProductParentType(final MainActivity m, final ProductFragment pf, final boolean cameFromStartProductInfo) {
         CharSequence[] items = {"Wine", "Beer/Mix Drinks", "Liquor"};
-        MaterialDialog dialog = new MaterialDialog.Builder(p)
+        MaterialDialog dialog = new MaterialDialog.Builder(m)
                 .title("Select Product Parent Type")
                 .items(items)
                 .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         Log.v("TYPE", "string = " + text);
-                        if (text == null) UpdateProductParentType(p, cameFromStartProductInfo);
+                        if (text == null) UpdateProductParentType(m, pf, cameFromStartProductInfo);
                         else {
-                            p.updatedModel.updateParentType(which+1);
-                            p.PTLC.getList(p, which+1, cameFromStartProductInfo);
+                            pf.updatedModel.updateParentType(which+1);
+                            pf.PTLC.getList(m, pf, which+1, cameFromStartProductInfo);
                         }
                         return true;
                     }
                 })
                 .positiveText("OK")
-                .widgetColor(p.getAccentColor())
-                .positiveColor(p.getAccentColor())
+                .widgetColor(pf.getAccentColor())
+                .positiveColor(pf.getAccentColor())
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -234,31 +235,31 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void UpdateProductType(final ProductActivity p, List<String> productTypeName, List<Integer> productTypeID, final boolean cameFromStartProductInfo) {
+    public void UpdateProductType(final MainActivity m, final ProductFragment pf, List<String> productTypeName, List<Integer> productTypeID, final boolean cameFromStartProductInfo) {
 
         final Integer[] productID = productTypeID.toArray(new Integer[productTypeID.size()]);
         final CharSequence[] productName = productTypeName.toArray(new CharSequence[productTypeName.size()]);
 
-        MaterialDialog dialog = new MaterialDialog.Builder(p)
+        MaterialDialog dialog = new MaterialDialog.Builder(m)
                 .title("Select Product Type")
                 .items(productName)
                 .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        p.updatedModel.updateType(productID[which]);
+                        pf.updatedModel.updateType(productID[which]);
 
                         if (!cameFromStartProductInfo) {
-                            if (p.model.containerType.equals("N/A") && p.updatedModel.type == 2) UpdateContainer(p, false);
-                            else if (p.model.abv <= 0 && p.updatedModel.type == 2) UpdateAbv(p, true, false);
-                            else if (p.model.abv <= 0) UpdateAbv(p, false, false);
-                            else UpdateStore(p, false, false);
+                            if (pf.model.containerType.equals("N/A") && pf.updatedModel.type == 2) UpdateContainer(m, pf, false);
+                            else if (pf.model.abv <= 0 && pf.updatedModel.type == 2) UpdateAbv(m, pf, true, false);
+                            else if (pf.model.abv <= 0) UpdateAbv(m, pf, false, false);
+                            else UpdateStore(m, pf, false, false);
                         }
                         return true;
                     }
                 })
                 .positiveText("SET")
-                .widgetColor(p.getAccentColor())
-                .positiveColor(p.getAccentColor())
+                .widgetColor(pf.getAccentColor())
+                .positiveColor(pf.getAccentColor())
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -270,15 +271,15 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void UpdateVolume(final ProductActivity p) {
-        MaterialDialog dialog = new MaterialDialog.Builder(p)
+    public void UpdateVolume(final MainActivity m, final ProductFragment pf) {
+        MaterialDialog dialog = new MaterialDialog.Builder(m)
                 .title("Input Volume")
                 .customView(R.layout.input_abv, true)
                 .positiveText("SET")
                 .negativeText("CANCEL")
-                .positiveColor(p.getAccentColor())
-                .negativeColor(p.getAccentColor())
-                .neutralColor(p.getAccentColor())
+                .positiveColor(pf.getAccentColor())
+                .negativeColor(pf.getAccentColor())
+                .neutralColor(pf.getAccentColor())
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -286,7 +287,7 @@ public class DialogHandler {
                         View view = dialog.getCustomView();
 
                         EditText percent = (EditText) view.findViewById(R.id.abv_dia_input);
-                        p.updatedModel.updateVolume(changeToDouble(percent.getText().toString().replaceAll("[oz,L,ml]", "")), p.model.containerQuantity, p.model.volumeMeasure);
+                        pf.updatedModel.updateVolume(changeToDouble(percent.getText().toString().replaceAll("[oz,L,ml]", "")), pf.model.containerQuantity, pf.model.volumeMeasure);
                         //save input
                     }
                 })
@@ -300,7 +301,7 @@ public class DialogHandler {
         View view = dialog.getCustomView();
         EditText input = (EditText) view.findViewById(R.id.abv_dia_input);
         input.setHint("new Volume");
-        switch (p.model.volumeMeasure) {
+        switch (pf.model.volumeMeasure) {
             case "ml":
                 setMaxLength(input, 9);
                 break;
@@ -308,12 +309,12 @@ public class DialogHandler {
                 setMaxLength(input, 9);
                 break;
         }
-        input.addTextChangedListener(makeTextWatcher(input, p.model.volumeMeasure));
+        input.addTextChangedListener(makeTextWatcher(input, pf.model.volumeMeasure));
 
         dialog.show();
     }
 
-    public void UpdateContainer(final ProductActivity p, final boolean cameFromStartProductInfo) {
+    public void UpdateContainer(final MainActivity m, final ProductFragment pf, final boolean cameFromStartProductInfo) {
         String positive = "NEXT";
         String neutral = "SKIP";
         if (cameFromStartProductInfo) {
@@ -322,7 +323,7 @@ public class DialogHandler {
         }
 
         CharSequence[] items = {"bottle","can"};
-        MaterialDialog dialog = new MaterialDialog.Builder(p)
+        MaterialDialog dialog = new MaterialDialog.Builder(m)
                 .title("Select Container")
                 .items(items)
                 .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
@@ -330,14 +331,14 @@ public class DialogHandler {
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         Log.v("CONTAINER", "string = " + text);
                         if (!cameFromStartProductInfo) {
-                            if (text == null) UpdateContainer(p, false);
+                            if (text == null) UpdateContainer(m, pf, false);
                             else {
-                                if (!p.model.containerType.equals(text)) p.updatedModel.updateContainerType((String) text);
-                                UpdateContainerQuant(p, false);
+                                if (!pf.model.containerType.equals(text)) pf.updatedModel.updateContainerType((String) text);
+                                UpdateContainerQuant(m, pf, false);
                             }
                         } else {
-                            if (!p.model.containerType.equals(text)) p.updatedModel.updateContainerType((String) text);
-                            UpdateContainerQuant(p, true);
+                            if (!pf.model.containerType.equals(text)) pf.updatedModel.updateContainerType((String) text);
+                            UpdateContainerQuant(m, pf, true);
                         }
                         return true;
                     }
@@ -345,10 +346,10 @@ public class DialogHandler {
                 .positiveText(positive)
                 .negativeText("CANCEL")
                 .neutralText(neutral)
-                .widgetColor(p.getAccentColor())
-                .positiveColor(p.getAccentColor())
-                .negativeColor(p.getAccentColor())
-                .neutralColor(p.getAccentColor())
+                .widgetColor(pf.getAccentColor())
+                .positiveColor(pf.getAccentColor())
+                .negativeColor(pf.getAccentColor())
+                .neutralColor(pf.getAccentColor())
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -365,7 +366,7 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void UpdateContainerQuant(final ProductActivity p, final boolean cameFromStartProductInfo) {
+    public void UpdateContainerQuant(final MainActivity m, final ProductFragment pf, final boolean cameFromStartProductInfo) {
         String positive = "NEXT";
         String neutral = "SKIP";
         if (cameFromStartProductInfo) {
@@ -374,7 +375,7 @@ public class DialogHandler {
         }
 
         CharSequence[] items = {"1", "6", "12", "24"};
-        MaterialDialog dialog = new MaterialDialog.Builder(p)
+        MaterialDialog dialog = new MaterialDialog.Builder(m)
                 .title("Container Quantity for purchase")
                 .items(items)
                 .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
@@ -382,15 +383,15 @@ public class DialogHandler {
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         Log.v("CONTAINER", "string = " + text);
                         if (!cameFromStartProductInfo) {
-                            if (text == null) UpdateContainer(p, false);
+                            if (text == null) UpdateContainer(m, pf, false);
                             else {
                                 int tmp = changeToInt((String) text);
-                                if (p.model.containerQuantity != tmp) p.updatedModel.updateContainerQuant(tmp, p.model.volume, p.model.containerQuantity);
+                                if (pf.model.containerQuantity != tmp) pf.updatedModel.updateContainerQuant(tmp, pf.model.volume, pf.model.containerQuantity);
                             }
-                            UpdateAbv(p, true, false);
+                            UpdateAbv(m, pf, true, false);
                         } else {
                             int tmp = changeToInt((String) text);
-                            if (p.model.containerQuantity != tmp) p.updatedModel.updateContainerQuant(tmp, p.model.volume, p.model.containerQuantity);
+                            if (pf.model.containerQuantity != tmp) pf.updatedModel.updateContainerQuant(tmp, pf.model.volume, pf.model.containerQuantity);
                         }
                         return true;
                     }
@@ -398,10 +399,10 @@ public class DialogHandler {
                 .positiveText(positive)
                 .negativeText("CANCEL")
                 .neutralText(neutral)
-                .widgetColor(p.getAccentColor())
-                .positiveColor(p.getAccentColor())
-                .negativeColor(p.getAccentColor())
-                .neutralColor(p.getAccentColor())
+                .widgetColor(pf.getAccentColor())
+                .positiveColor(pf.getAccentColor())
+                .negativeColor(pf.getAccentColor())
+                .neutralColor(pf.getAccentColor())
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -418,7 +419,7 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void UpdateAbv(final ProductActivity p, final boolean isBeer, final boolean cameFromStartProductInfo) {
+    public void UpdateAbv(final MainActivity m, final ProductFragment pf, final boolean isBeer, final boolean cameFromStartProductInfo) {
         String negative = "CANCEL";
         if (isBeer) negative = "BACK";
 
@@ -430,15 +431,15 @@ public class DialogHandler {
         }
 
 
-        MaterialDialog dialog = new MaterialDialog.Builder(p)
+        MaterialDialog dialog = new MaterialDialog.Builder(m)
                 .title("Input ABV")
                 .customView(R.layout.input_abv, true)
                 .positiveText(positive)
                 .negativeText(negative)
                 .neutralText(neutral)
-                .positiveColor(p.getAccentColor())
-                .negativeColor(p.getAccentColor())
-                .neutralColor(p.getAccentColor())
+                .positiveColor(pf.getAccentColor())
+                .negativeColor(pf.getAccentColor())
+                .neutralColor(pf.getAccentColor())
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -446,22 +447,22 @@ public class DialogHandler {
                         View view = dialog.getCustomView();
 
                         EditText percent = (EditText) view.findViewById(R.id.abv_dia_input);
-                        p.updatedModel.updateABV(changeToDouble(percent.getText().toString().replace("%", "")));
+                        pf.updatedModel.updateABV(changeToDouble(percent.getText().toString().replace("%", "")));
 
-                        if (!cameFromStartProductInfo) UpdateStore(p, true, isBeer);
+                        if (!cameFromStartProductInfo) UpdateStore(m, pf, true, isBeer);
                         //save input
                     }
                 })
                 .onNeutral(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        UpdateStore(p, true, isBeer);
+                        UpdateStore(m, pf, true, isBeer);
                     }
                 })
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        if (isBeer) UpdateContainer(p, false);
+                        if (isBeer) UpdateContainer(m, pf, false);
                     }
                 })
                 .build();
@@ -473,23 +474,23 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void UpdateStore(final ProductActivity p, final boolean cameFrom, final boolean isBeer) {
+    public void UpdateStore(final MainActivity m, final ProductFragment pf, final boolean cameFrom, final boolean isBeer) {
         String tmp;
         if (cameFrom) tmp = "BACK";
         else tmp = "CANCEL";
 
-        final Integer[] storeIDs = p.storeIDs.toArray(new Integer[p.storeIDs.size()]);
-        final CharSequence[] stores = p.stores.toArray(new CharSequence[p.stores.size()]);
+        final Integer[] storeIDs = pf.storeIDs.toArray(new Integer[pf.storeIDs.size()]);
+        final CharSequence[] stores = pf.stores.toArray(new CharSequence[pf.stores.size()]);
 
-        MaterialDialog dialog = new MaterialDialog.Builder(p)
+        MaterialDialog dialog = new MaterialDialog.Builder(m)
                 .title("Select Store")
                 .items(stores)
                 .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        if (text == null) UpdateStore(p, cameFrom, isBeer);
+                        if (text == null) UpdateStore(m, pf, cameFrom, isBeer);
                         else {
-                            p.updatedModel.updateStore((String) stores[which], storeIDs[which]);
+                            pf.updatedModel.updateStore((String) stores[which], storeIDs[which]);
                         }
                         return true;
                     }
@@ -497,21 +498,21 @@ public class DialogHandler {
                 .positiveText("NEXT")
                 .negativeText(tmp)
                 .neutralText("NOT FOUND")
-                .widgetColor(p.getAccentColor())
-                .positiveColor(p.getAccentColor())
-                .negativeColor(p.getAccentColor())
-                .neutralColor(p.getAccentColor())
+                .widgetColor(pf.getAccentColor())
+                .positiveColor(pf.getAccentColor())
+                .negativeColor(pf.getAccentColor())
+                .neutralColor(pf.getAccentColor())
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        UpdatePrice(p, cameFrom, isBeer);
+                        UpdatePrice(m, pf, cameFrom, isBeer);
                         //save selected
                     }
                 })
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        if (cameFrom) UpdateAbv(p, isBeer, false);
+                        if (cameFrom) UpdateAbv(m, pf, isBeer, false);
                     }
                 })
                 .onNeutral(new MaterialDialog.SingleButtonCallback() {
@@ -524,27 +525,27 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void UpdatePrice(final ProductActivity p, final boolean cameFrom, final boolean isBeer) {
-        MaterialDialog dialog = new MaterialDialog.Builder(p)
+    public void UpdatePrice(final MainActivity m, final ProductFragment pf, final boolean cameFrom, final boolean isBeer) {
+        MaterialDialog dialog = new MaterialDialog.Builder(m)
                 .title("Update Price")
                 .customView(R.layout.input_price, true)
                 .positiveText("DONE")
                 .negativeText("BACK")
-                .positiveColor(p.getAccentColor())
-                .negativeColor(p.getAccentColor())
-                .neutralColor(p.getAccentColor())
+                .positiveColor(pf.getAccentColor())
+                .negativeColor(pf.getAccentColor())
+                .neutralColor(pf.getAccentColor())
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         View view = dialog.getCustomView();
                         EditText price = (EditText) view.findViewById(R.id.price_dia_input);
-                        p.updatedModel.updateStorePrice(changeToDouble(price.getText().toString().replace("$", "")));
+                        pf.updatedModel.updateStorePrice(changeToDouble(price.getText().toString().replace("$", "")));
                     }
                 })
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        UpdateStore(p, cameFrom, isBeer);
+                        UpdateStore(m, pf, cameFrom, isBeer);
                     }
                 })
                 .build();
@@ -556,33 +557,33 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public MaterialDialog progressDialog(final ProductActivity p) {
-        MaterialDialog dialog = new MaterialDialog.Builder(p)
+    public MaterialDialog progressDialog(final MainActivity m) {
+        MaterialDialog dialog = new MaterialDialog.Builder(m)
                 .title("Waiting For Stores")
                 .content("Searching...")
                 .progress(true, 0)
-                .widgetColor(p.getAccentColor())
+                .widgetColor(m.getColorAccent())
                 .build();
 
         dialog.show();
         return dialog;
     }
 
-    public void UpdateProductLabel(final ProductActivity p) {
-        MaterialDialog dialog = new MaterialDialog.Builder(p)
+    public void UpdateProductLabel(final MainActivity m, final ProductFragment pf) {
+        MaterialDialog dialog = new MaterialDialog.Builder(m)
                 .title("Correct Product Label")
                 .inputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS | InputType.TYPE_CLASS_TEXT)
                 .input("Help keep our products correct", null, new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
-                        p.updatedModel.updateLabel(input.toString());
+                        pf.updatedModel.updateLabel(input.toString());
                     }
                 })
                 .positiveText("SET")
                 .negativeText("CANCEL")
-                .widgetColor(p.getAccentColor())
-                .positiveColor(p.getAccentColor())
-                .negativeColor(p.getAccentColor())
+                .widgetColor(pf.getAccentColor())
+                .positiveColor(pf.getAccentColor())
+                .negativeColor(pf.getAccentColor())
                 .build();
 
         EditText input = dialog.getInputEditText();

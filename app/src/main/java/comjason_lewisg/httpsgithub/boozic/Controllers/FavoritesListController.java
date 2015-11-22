@@ -96,6 +96,7 @@ public class FavoritesListController {
         //store the previous product list position and productID into a hashmap
         //because product list postion is important for synchronous updates
         int ID;
+        int position;
         TopTensModel tmp;
         HashMap<Integer, Integer> hmap = new HashMap<>();
         for (int j = 0; j < favoritesList.size(); j++) {
@@ -109,7 +110,16 @@ public class FavoritesListController {
                 JSONObject oneObject = jsonArray.getJSONObject(i);
                 ID = oneObject.getInt("ProductID");
                 //re inject the previous product list positions from productID
-                favoritesList.add(new TopTensModel(oneObject,hmap.get(ID)));
+                //TODO: if favorite changed in productView refreshing favorite list crashed app bc of hashmap
+                //TODO: impliment fragment productView and change favorite list
+                try {
+                    position = hmap.get(ID);
+                }
+                catch (Exception e) {
+                    position = -1;
+                }
+
+                favoritesList.add(new TopTensModel(oneObject,position));
             }
             catch (JSONException e) {}
         }

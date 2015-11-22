@@ -19,7 +19,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import comjason_lewisg.httpsgithub.boozic.Fragments.ProductFragment;
 import comjason_lewisg.httpsgithub.boozic.Handlers.DialogHandler;
+import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.ProductActivity;
 
 public class ProductTypeListController {
@@ -33,13 +35,13 @@ public class ProductTypeListController {
         DHandler = new DialogHandler();
     }
 
-    public void getList(ProductActivity p, int productParentId, boolean cameFromStartProductInfo) {
-        getListInBackground(p, productParentId, cameFromStartProductInfo);
+    public void getList(MainActivity m, ProductFragment pf, int productParentId, boolean cameFromStartProductInfo) {
+        getListInBackground(m, pf, productParentId, cameFromStartProductInfo);
     }
 
-    private void getListInBackground(final ProductActivity p, final int productParentId, final boolean cameFromStartProductInfo) {
+    private void getListInBackground(final MainActivity m, final ProductFragment pf, final int productParentId, final boolean cameFromStartProductInfo) {
 
-        final MaterialDialog dialog = DHandler.progressDialog(p);
+        final MaterialDialog dialog = DHandler.progressDialog(m);
         dialog.show();
 
         productIDs.clear();
@@ -91,7 +93,7 @@ public class ProductTypeListController {
                     }
                 } catch (JSONException e) {}
                 dialog.hide();
-                DHandler.UpdateProductType(p,productLabels,productIDs,cameFromStartProductInfo);
+                DHandler.UpdateProductType(m, pf ,productLabels,productIDs,cameFromStartProductInfo);
             }
         }.execute();
     }

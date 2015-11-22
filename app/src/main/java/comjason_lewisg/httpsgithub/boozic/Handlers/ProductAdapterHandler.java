@@ -31,14 +31,18 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import comjason_lewisg.httpsgithub.boozic.Fragments.ProductFragment;
+import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.Models.ProductStorageModel;
+import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
 import comjason_lewisg.httpsgithub.boozic.ProductActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
 import comjason_lewisg.httpsgithub.boozic.SettingsActivity;
 
 public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHandler.ProductInfoHolder> {
-    private ProductStorageModel item;
-    ProductActivity p;
+    private TopTensModel item;
+    ProductFragment p;
+    MainActivity m;
     DialogHandler DHandler;
 
     // Provide a reference to the views for each data item
@@ -208,12 +212,13 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
     }
 
     // Provide a suitable constructor (depends on the kind of data set)
-    public ProductAdapterHandler(ProductStorageModel modeldata, ProductActivity p) {
+    public ProductAdapterHandler(MainActivity m, TopTensModel modeldata, ProductFragment p) {
         if (modeldata == null) {
             throw new IllegalArgumentException("modelData must not be null");
         }
         item = modeldata;
         this.p = p;
+        this.m = m;
     }
 
     // Create new views (invoked by the layout manager)
@@ -243,14 +248,14 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
                 toggleFavoriteValue(favorite);
             }
             public void startUpdateDialog(View caller) {
-                if (p.model.typePic == 4 && p.updatedModel.type == -1) DHandler.UpdateProductParentType(p, false);
-                else if (p.model.containerType.equals("N/A") && (p.model.typePic == 2 || p.updatedModel.type == 2)) DHandler.UpdateContainer(p, false);
-                else if (p.model.abv <= 0) DHandler.UpdateAbv(p, false, false);
-                else DHandler.UpdateStore(p, false, false);
+                if (p.model.typePic == 4 && p.updatedModel.type == -1) DHandler.UpdateProductParentType(m, p, false);
+                else if (p.model.containerType.equals("N/A") && (p.model.typePic == 2 || p.updatedModel.type == 2)) DHandler.UpdateContainer(m, p, false);
+                else if (p.model.abv <= 0) DHandler.UpdateAbv(m, p, false, false);
+                else DHandler.UpdateStore(m, p, false, false);
 
             }
             public void startFlagDialog() {
-                DHandler.startFlagDialog(p);
+                DHandler.startFlagDialog(m, p);
             }
             public void startClosestNavigation(View caller) {
                 p.startNavigationIntent(p.model.closestStoreName, p.model.closestStoreAddress);
@@ -269,10 +274,10 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
                 }, 50);
             }
             public void startProductInfoDialog(View caller) {
-                DHandler.StartProductInfoDialog(p);
+                DHandler.StartProductInfoDialog(m, p);
             }
             public void startProductNameDialog(View caller) {
-                DHandler.UpdateProductLabel(p);
+                DHandler.UpdateProductLabel(m, p);
             }
             public int getPrimaryColor() { return p.getPrimaryColor(); }
             public int getPrimaryColorDark() { return p.getPrimaryColorDark(); }
@@ -284,7 +289,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
     public void onBindViewHolder(ProductInfoHolder viewHolder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        ProductStorageModel model = item;
+        TopTensModel model = item;
 
         DecimalFormat df = new DecimalFormat("####0.##");
         DecimalFormat monFormat = new DecimalFormat("####0.00");
@@ -360,7 +365,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         return 1;
     }
 
-    public void selectTypePic(ProductStorageModel model, ProductInfoHolder viewHolder) {
+    public void selectTypePic(TopTensModel model, ProductInfoHolder viewHolder) {
         switch (model.typePic) {
             case 1:
                 viewHolder.typePic.setImageResource(R.mipmap.wine);
@@ -404,7 +409,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         }
     }
 
-    public void setChart(ProductStorageModel model, ProductInfoHolder viewHolder) {
+    public void setChart(TopTensModel model, ProductInfoHolder viewHolder) {
         DecimalFormat avgFormat = new DecimalFormat("0.0");
         float yData[] = {model.rating[0], model.rating[1], model.rating[2], model.rating[3], model.rating[4]};
 
@@ -457,11 +462,11 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         ArrayList<Integer> colors = new ArrayList<>();
 
 
-        colors.add(ContextCompat.getColor(p.getApplicationContext(), R.color.ColorAccent));
-        colors.add(ContextCompat.getColor(p.getApplicationContext(), R.color.ColorAccent2));
-        colors.add(ContextCompat.getColor(p.getApplicationContext(), R.color.ColorAccent3));
-        colors.add(ContextCompat.getColor(p.getApplicationContext(), R.color.ColorAccent4));
-        colors.add(ContextCompat.getColor(p.getApplicationContext(), R.color.ColorAccent5));
+        colors.add(ContextCompat.getColor(p.m.getApplicationContext(), R.color.ColorAccent));
+        colors.add(ContextCompat.getColor(p.m.getApplicationContext(), R.color.ColorAccent2));
+        colors.add(ContextCompat.getColor(p.m.getApplicationContext(), R.color.ColorAccent3));
+        colors.add(ContextCompat.getColor(p.m.getApplicationContext(), R.color.ColorAccent4));
+        colors.add(ContextCompat.getColor(p.m.getApplicationContext(), R.color.ColorAccent5));
 
         dataSet.setColors(colors);
 

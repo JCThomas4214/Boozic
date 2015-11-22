@@ -204,6 +204,9 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
         removeItems.add(tmp);
         //change favorite from product in existing product list
         m.PLcon.getProductList().get(tmp.position).favorite = 0;
+        //remove from current favorites list
+        m.FLcon.favoritesList.remove(position);
+
         Log.v("Remove Fav", "remove item " + position);
         items.remove(position);
         notifyItemRemoved(position);

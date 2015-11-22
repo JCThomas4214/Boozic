@@ -109,8 +109,8 @@ public class ProductActivity extends AppCompatActivity {
 
         mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new ProductAdapterHandler(model, this);
-        mRecyclerView.setAdapter(mAdapter);
+        //mAdapter = new ProductAdapterHandler(model, this);
+        //mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override

@@ -7,10 +7,12 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Fade;
+import android.transition.Slide;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,6 +29,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import comjason_lewisg.httpsgithub.boozic.Fragments.ProductFragment;
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.Models.TopTensModel;
 import comjason_lewisg.httpsgithub.boozic.ProductActivity;
@@ -39,6 +42,8 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
     private int addedItems = 50;
     private boolean cursorCheck = true;
     MainActivity m;
+
+    public ProductFragment productFragment;
 
     // Provide a reference to the views for each data item
     // Complex data shownItems may need more than one view per item, and
@@ -79,6 +84,7 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
     // Provide a suitable constructor (depends on the kind of data set)
     public AdapterHandler(MainActivity m, List<TopTensModel> productList) {
         this.m = m;
+        productFragment = new ProductFragment();
 
         if (!productList.isEmpty()) {
             allItems.addAll(productList);
@@ -102,7 +108,10 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         // set the view's size, margins, paddings and layout parameters
         return new ListItemViewHolder(itemView, new AdapterHandler.ListItemViewHolder.IMyViewHolderClicks() {
             public void onPotato(View caller, int position) {
-                Intent i = new Intent(m, ProductActivity.class);
+                m.setPreviousListItem(shownItems.get(position));
+                m.startProductFragment(productFragment, true, "Product");
+
+                /*Intent i = new Intent(m, ProductActivity.class);
                 //if the product is in the list, it is not a new product
                 i.putExtra("Found", 0);
                 //inject model variables
@@ -146,7 +155,7 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
                 i.putExtra("COLOR_ACCENT", m.getColorAccent());
                 i.putExtra("COLOR_ACCENT_DARK", m.getColorAccentDark());
 
-                m.startActivity(i);
+                m.startActivity(i);*/
             }
         });
     }

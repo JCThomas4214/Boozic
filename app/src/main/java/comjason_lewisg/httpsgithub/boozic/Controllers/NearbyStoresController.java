@@ -61,7 +61,6 @@ public class NearbyStoresController {
                         urlConnection.disconnect();
                     }
                 } catch (Exception e) {
-                    Log.e("ERROR", e.getMessage(), e);
                     return null;
                 }
             }

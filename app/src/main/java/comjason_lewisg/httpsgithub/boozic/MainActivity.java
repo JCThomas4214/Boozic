@@ -10,6 +10,7 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.transition.Fade;
 import android.transition.Slide;
@@ -24,6 +25,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -124,6 +126,10 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public Context applicationContext;
 
+    private TopTensModel previousListItem;
+    DrawerLayout drawer;
+    FrameLayout frame;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -194,6 +200,9 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
         Log.v("STATE", "onCreate color id = " + colorPrimary_id);
         themeHandler = new ThemeHandler();
+
+        drawer = (DrawerLayout) findViewById(R.id.drawer);
+        frame = (FrameLayout) findViewById(R.id.frame);
 
         //connect to search bar and create new search handler
         searchBarHandler = new SearchBarHandler(this);
@@ -344,13 +353,33 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         return hasSoftwareKeys;
     }
 
+    public void setPreviousListItem(TopTensModel item) {
+        previousListItem = item;
+    }
+
+    public TopTensModel getPreviousListItem() {
+        return previousListItem;
+    }
+
 
     public void startFragment(Fragment fragment, boolean backstack, String tag) {
         this.backstack = backstack;
+        frame.setVisibility(View.VISIBLE);
+
         fragment.setEnterTransition(new Fade().setStartDelay(350));
         fragment.setExitTransition(new Slide(Gravity.BOTTOM));
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame3, fragment, tag);
+        fragmentTransaction.commit();
+    }
+
+    public void startProductFragment(Fragment fragment, boolean backstack, String tag) {
+        this.backstack = backstack;
+        frame.setVisibility(View.GONE);
+
+        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.product_frame, fragment, tag);
+        fragmentTransaction.addToBackStack("ProductList");
         fragmentTransaction.commit();
     }
 
@@ -496,6 +525,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     }
     ////////////////////////////////////////////
 
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
