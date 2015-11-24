@@ -51,10 +51,12 @@ public class TopTensModel {
     public double avgRating;
 
     public int position = -1;
+    public int favoritePosition = -1;
 
-    public TopTensModel(JSONObject object, int position) {
+    public TopTensModel(JSONObject object, int position, int favoritePosition) {
 
         this.position = position;
+        this.favoritePosition = favoritePosition;
 
         try {
             JSONObject closestStoreObject = object.getJSONObject("ClosestStore");
@@ -71,9 +73,13 @@ public class TopTensModel {
             closestStoreId = closestStoreObject.getInt("StoreID");
             cheapestStoreId = cheapestStoreObject.getInt("StoreID");
             closestStoreName = closestStoreObject.getString("StoreName");
+            if (closestStoreName.equals("null")) closestStoreName = null;
             cheapestStoreName = cheapestStoreObject.getString("StoreName");
+            if (cheapestStoreName.equals("null")) cheapestStoreName = null;
             closestStoreAddress = closestStoreObject.getString("Address");
+            if (closestStoreAddress.equals("null")) closestStoreAddress = null;
             cheapestStoreAddress = cheapestStoreObject.getString("Address");
+            if (cheapestStoreAddress.equals("null")) cheapestStoreAddress = null;
             closestStoreDist = closestStoreObject.getDouble("DistanceInMiles");
             cheapestStoreDist = cheapestStoreObject.getDouble("DistanceInMiles");
             closestPrice = closestStoreObject.getDouble("Price");
@@ -118,65 +124,6 @@ public class TopTensModel {
         } catch (JSONException e) {
             Log.e("TT ERROR", e.getMessage(), e);
         }
-    }
-
-    public TopTensModel(String label, String lastUpdate, double userRating, String closestStoreName, String cheapestStoreName, double closestStoreDist, double cheapestStoreDist,
-                        double closestPrice, double cheapestPrice, int type, int favorite, String container,
-                        double abv, int proof, int[] rating, double volume) {
-
-        this.label = label;
-        this.lastUpdate = lastUpdate;
-        this.userRating = userRating;
-        typePic = type;
-
-        this.closestStoreName = closestStoreName;
-        this.cheapestStoreName = cheapestStoreName;
-        this.closestStoreDist = closestStoreDist;
-        this.cheapestStoreDist = cheapestStoreDist;
-        this.closestPrice = closestPrice;
-        this.cheapestPrice = cheapestPrice;
-        this.favorite = favorite;
-        this.containerType = container;
-        getVolMeasure();
-        this.abv = abv;
-        this.proof = proof;
-        //System.arraycopy(rating,0,this.rating,0,rating.length);
-        this.rating = rating;
-
-        this.volume = volume;
-        pbv = findPBV();
-        abp = findABP();
-        pdd = findPDD();
-        td = findTD();
-        avgRating = findAverage();
-    }
-
-    public TopTensModel(String label, String lastUpdate, double userRating, String closestStoreName, double closestStoreDist, double closestPrice, int type, int favorite,
-                        String container, double abv, int proof, int[] rating, double volume) {
-
-        this.label = label;
-        this.lastUpdate = lastUpdate;
-        this.userRating = userRating;
-        typePic = type;
-
-        this.closestStoreName = closestStoreName;
-        this.cheapestStoreName = closestStoreName;
-        this.closestStoreDist = closestStoreDist;
-        this.cheapestStoreDist = closestStoreDist;
-        this.closestPrice = closestPrice;
-        this.cheapestPrice = closestPrice;
-        this.favorite = favorite;
-        this.containerType = container;
-        getVolMeasure();
-        this.abv = abv;
-        this.proof = proof;
-        //System.arraycopy(rating,0,this.rating,0,rating.length);
-        this.rating = rating;
-
-        this.volume = volume;
-        pbv = findPBV();
-        abp = findABP();
-        avgRating = findAverage();
     }
 
     private void getVolMeasure() {

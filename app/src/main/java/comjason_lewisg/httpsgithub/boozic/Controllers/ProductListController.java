@@ -124,6 +124,7 @@ public class ProductListController {
         int size = jArr.length();
         boolean firstSet = true;
         int mod;
+        int count = 0;
 
         for (int i = 1; i <= size; i++) {
             mod = i % 25;
@@ -131,7 +132,12 @@ public class ProductListController {
                 JSONObject oneObject = jArr.getJSONObject(i-1);
                 int favorite = oneObject.getInt("IsFavourite");
                 //continue to add models to list
-                productList.add(new TopTensModel(oneObject,i-1));
+                if (favorite == 1) {
+                    productList.add(new TopTensModel(oneObject,i-1, count));
+                    m.FLcon.favoritesList.add(new TopTensModel(oneObject,i-1, count++));
+                } else {
+                    productList.add(new TopTensModel(oneObject,i-1, -1));
+                }
                 //start the list so the user will not have to wait for 500 toptensproducts to be created for the entire list
                 if (mod == 0 && firstSet) {
                     mAdapter.startList(productList, swipeRefreshLayout);
@@ -145,8 +151,6 @@ public class ProductListController {
                     if (i < 25) mAdapter.startList(productList, swipeRefreshLayout);
                     else mAdapter.addList(productList.subList((size/25)*25, size));
                 }
-
-                if (favorite == 1) m.FLcon.favoritesList.add(new TopTensModel(oneObject,i-1));
             } catch (JSONException e) {}
         }
     }

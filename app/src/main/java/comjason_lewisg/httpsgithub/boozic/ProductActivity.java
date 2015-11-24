@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import comjason_lewisg.httpsgithub.boozic.Controllers.FlagProductController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.NearbyStoresController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.ProductTypeListController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.UpdateProductController;
@@ -37,6 +38,7 @@ public class ProductActivity extends AppCompatActivity {
     public ProductSearchBarHandler searchBarHandler;
     private UpdateProductController UPC;
     public ProductTypeListController PTLC;
+    public FlagProductController FPcon;
 
     public List<String> stores = new ArrayList<>();
     public List<Integer> storeIDs = new ArrayList<>();
@@ -86,6 +88,7 @@ public class ProductActivity extends AppCompatActivity {
 
         UPC = new UpdateProductController();
         PTLC = new ProductTypeListController();
+        FPcon = new FlagProductController();
 
         //if not a new product inject serializable objects
         found = (int) getIntent().getSerializableExtra("Found");
@@ -154,6 +157,7 @@ public class ProductActivity extends AppCompatActivity {
             Intent returnIntent = new Intent();
             returnIntent.putExtra("Position", updatedModel.position);
             returnIntent.putExtra("FavoritePosition", updatedModel.favoritePosition);
+            returnIntent.putExtra("ProductId", updatedModel.productId);
 
             if (updatedModel.userRating != -1 && updatedModel.userRating != model.userRating)
                 returnIntent.putExtra("UserRating", updatedModel.userRating);

@@ -186,7 +186,7 @@ public class NavigationDrawerHandler {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            m.DHandle.OpenFeedbackDialog(m);
+                            m.DHandle.OpenFeedbackDialog();
                         }
                     }, delay);
 
@@ -196,7 +196,7 @@ public class NavigationDrawerHandler {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            m.DHandle.OpenLegalDialog(m);
+                            m.DHandle.OpenLegalDialog();
                         }
                     }, delay);
 

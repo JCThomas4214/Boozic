@@ -30,16 +30,16 @@ public class ProductTypeListController {
     public void onCreate() {}
 
     public ProductTypeListController() {
-        DHandler = new DialogHandler();
     }
 
     public void getList(ProductActivity p, int productParentId, boolean cameFromStartProductInfo) {
+        DHandler = new DialogHandler(p);
         getListInBackground(p, productParentId, cameFromStartProductInfo);
     }
 
     private void getListInBackground(final ProductActivity p, final int productParentId, final boolean cameFromStartProductInfo) {
 
-        final MaterialDialog dialog = DHandler.progressDialog(p);
+        final MaterialDialog dialog = DHandler.progressDialog();
         dialog.show();
 
         productIDs.clear();
@@ -91,7 +91,7 @@ public class ProductTypeListController {
                     }
                 } catch (JSONException e) {}
                 dialog.hide();
-                DHandler.UpdateProductType(p,productLabels,productIDs,cameFromStartProductInfo);
+                DHandler.UpdateProductType(productLabels,productIDs,cameFromStartProductInfo);
             }
         }.execute();
     }

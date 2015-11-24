@@ -220,7 +220,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
     @Override
     public ProductAdapterHandler.ProductInfoHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
-        DHandler = new DialogHandler();
+        DHandler = new DialogHandler(p);
 
         // create a new view
         View itemView = LayoutInflater
@@ -243,14 +243,14 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
                 toggleFavoriteValue(favorite);
             }
             public void startUpdateDialog(View caller) {
-                if (p.model.typePic == 4 && p.updatedModel.type == -1) DHandler.UpdateProductParentType(p, false);
-                else if (p.model.containerType.equals("N/A") && (p.model.typePic == 2 || p.updatedModel.type == 2)) DHandler.UpdateContainer(p, false);
-                else if (p.model.abv <= 0) DHandler.UpdateAbv(p, false, false);
-                else DHandler.UpdateStore(p, false, false);
+                if (p.model.typePic == 4 && p.updatedModel.type == -1) DHandler.UpdateProductParentType(false);
+                else if (p.model.containerType.equals("N/A") && (p.model.typePic == 2 || p.updatedModel.type == 2)) DHandler.UpdateContainer(false);
+                else if (p.model.abv <= 0) DHandler.UpdateAbv(false, false);
+                else DHandler.UpdateStore(false, false);
 
             }
             public void startFlagDialog() {
-                DHandler.startFlagDialog(p);
+                DHandler.startFlagDialog();
             }
             public void startClosestNavigation(View caller) {
                 p.startNavigationIntent(p.model.closestStoreName, p.model.closestStoreAddress);
@@ -269,10 +269,10 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
                 }, 50);
             }
             public void startProductInfoDialog(View caller) {
-                DHandler.StartProductInfoDialog(p);
+                DHandler.StartProductInfoDialog();
             }
             public void startProductNameDialog(View caller) {
-                DHandler.UpdateProductLabel(p);
+                DHandler.UpdateProductLabel();
             }
             public int getPrimaryColor() { return p.getPrimaryColor(); }
             public int getPrimaryColorDark() { return p.getPrimaryColorDark(); }

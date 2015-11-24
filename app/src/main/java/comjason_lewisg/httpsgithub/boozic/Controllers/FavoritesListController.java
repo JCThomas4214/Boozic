@@ -118,12 +118,10 @@ public class FavoritesListController {
                 JSONObject oneObject = jsonArray.getJSONObject(i);
                 ID = oneObject.getInt("ProductID");
                 //re inject the previous product list positions from productID
-                try {
-                    position = hmap.get(ID);
-                } catch (Exception e) {
-                    position = -1;
-                }
-                favoritesList.add(new TopTensModel(oneObject, position));
+                position = hmap.get(ID);
+                m.PLcon.getProductList().get(position).favoritePosition = i;
+
+                favoritesList.add(new TopTensModel(oneObject, position, i));
             }
             catch (JSONException e) {}
         }

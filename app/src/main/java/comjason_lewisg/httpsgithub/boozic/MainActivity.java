@@ -43,6 +43,7 @@ import comjason_lewisg.httpsgithub.boozic.Controllers.DeviceIdController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.FavoritesListController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.FeedbackController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.ProductListController;
+import comjason_lewisg.httpsgithub.boozic.Controllers.RemoveAFavoriteController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.RemoveFromFavoritesController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.UPCFindProductController;
 import comjason_lewisg.httpsgithub.boozic.Fragments.FavoritesFragment;
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public ProductListController PLcon;
     public FavoritesListController FLcon;
     public RemoveFromFavoritesController RFFcon;
+    public RemoveAFavoriteController RAFcon;
     public UPCFindProductController upcFPC;
     public FeedbackController FC;
 
@@ -88,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public boolean filterButtonVis = true;
     public static Activity activity;
 
-    static final int SCANNER_CODE_REQUEST = 1;
+    public static final int SCANNER_CODE_REQUEST = 1;
     public static final int PRODUCT_INFO_REQUEST = 2;
 
     static final int COLOR_STATE = 1;
@@ -175,6 +177,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         PLcon = new ProductListController();
         FLcon = new FavoritesListController(this);
         RFFcon = new RemoveFromFavoritesController(this);
+        RAFcon = new RemoveAFavoriteController(this);
         upcFPC = new UPCFindProductController();
         FC = new FeedbackController();
 
@@ -194,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         TBheight = size.y;
 
         //Create a Dialog Handler for Feedback
-        DHandle = new DialogHandler();
+        DHandle = new DialogHandler(this);
 
         Log.v("STATE", "onCreate color id = " + colorPrimary_id);
         themeHandler = new ThemeHandler();
@@ -375,11 +378,11 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public int getColorAccentDark() { return accentColorDark; }
 
     public void callRangeDialog(String title, String units) {
-        DHandle.OpenRangeDialog(this, title, units);
+        DHandle.OpenRangeDialog(title, units);
     }
 
     public void callCustommiDialog() {
-        DHandle.OpenCustomMileDialog(this);
+        DHandle.OpenCustomMileDialog();
     }
 
     public void callProductRefresh(AdapterHandler mAdapter, SwipeRefreshLayout swipeRefreshLayout) {
@@ -538,6 +541,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
                 int favorite = data.getExtras().getInt("Favorite");
                 int position = data.getExtras().getInt("Position");
                 int favoritePosition = data.getExtras().getInt("FavoritePosition");
+                int productId = data.getExtras().getInt("ProductId");
 
                 if (position >= 0 && favoritePosition == -1) {
                     TopTensModel model = PLcon.getProductList().get(position);
@@ -560,6 +564,13 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
                     model.cheapestStoreDist = data.getExtras().getDouble("CheapestStoreDist");
                     model.closestPrice = data.getExtras().getDouble("ClosestPrice");
                     model.cheapestPrice = data.getExtras().getDouble("CheapestPrice");
+
+                    if (favorite == 1) {
+                        int favPosition = FLcon.favoritesList.size();
+                        PLcon.getProductList().get(position).favoritePosition = favPosition;
+                        model.favoritePosition = favPosition;
+                        FLcon.favoritesList.add(model);
+                    }
 
                     try {
                         Nav.topTensFragment.mAdapter.notifyDataSetChanged();
@@ -620,7 +631,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
                     model.closestPrice = data.getExtras().getDouble("ClosestPrice");
                     model.cheapestPrice = data.getExtras().getDouble("CheapestPrice");
 
-                    if (favorite != 0) {
+                    if (favorite == 1) {
                         //Favorites model at favoritePosition
                         model = FLcon.favoritesList.get(favoritePosition);
                         model.userRating = data.getExtras().getDouble("UserRating");
@@ -642,8 +653,17 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
                         model.cheapestStoreDist = data.getExtras().getDouble("CheapestStoreDist");
                         model.closestPrice = data.getExtras().getDouble("ClosestPrice");
                         model.cheapestPrice = data.getExtras().getDouble("CheapestPrice");
-                    } else {
+                    } else if (favorite == 0){
+                        //set this will prevent results from going into wrong condition
+                        PLcon.getProductList().get(position).favoritePosition = -1;
+                        //remove product from favorites list
                         FLcon.favoritesList.remove(favoritePosition);
+                        //remove favorite from backend
+                        RAFcon.removeFavorite(productId);
+
+                        try {
+                            Nav.favoritesFragment.mAdapter.remove(favoritePosition);
+                        } catch (Exception e) {}
                     }
 
                     try {

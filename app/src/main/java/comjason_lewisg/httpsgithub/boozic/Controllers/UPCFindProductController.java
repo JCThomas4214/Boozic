@@ -102,6 +102,8 @@ public class UPCFindProductController {
                                 JSONObject closestStoreObject = object.getJSONObject("ClosestStore");
                                 JSONObject cheapestStoreObject = object.getJSONObject("CheapestStore");
 
+                                i.putExtra("Position", -1);
+                                i.putExtra("FavoritePosition", -1);
                                 //inject model variables
                                 i.putExtra("Label", object.getString("ProductName"));
                                 i.putExtra("ProductID", object.getInt("ProductID"));
@@ -123,7 +125,7 @@ public class UPCFindProductController {
                                 cheapestPrice = cheapestStoreObject.getDouble("Price");
                                 i.putExtra("CheapestPrice", cheapestPrice);
                                 i.putExtra("Type", object.getInt("ProductParentTypeId"));
-                                i.putExtra("Favorites", false);
+                                i.putExtra("Favorites", object.getInt("IsFavourite"));
 
                                 container = object.getString("ContainerType");
                                 if (container.equals("null")) container = "N/A";
@@ -206,7 +208,7 @@ public class UPCFindProductController {
                                 break;
                             case 2: //Found found on our server and UPC DB
                                 //toast no store information available
-                                Crouton.makeText(m, "This Product Currently does not Exist", Style.ALERT, frame).show();
+                                m.DHandle.varifyUPC(UPC);
                                 break;
                         }
                     } catch (JSONException e) {}

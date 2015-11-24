@@ -52,8 +52,8 @@ public class ProductStorageModel {
 
         this.closestStoreId = closestStoreId;
         this.cheapestStoreId = cheapestStoreId;
-        if (!closestStoreName.equals("null")) this.closestStoreName = closestStoreName;
-        if (!cheapestStoreName.equals("null")) this.cheapestStoreName = cheapestStoreName;
+        if (closestStoreName != null) this.closestStoreName = closestStoreName;
+        if (cheapestStoreName != null) this.cheapestStoreName = cheapestStoreName;
         this.closestStoreAddress = closestStoreAddress;
         this.cheapestStoreAddress = cheapestStoreAddress;
         this.closestStoreDist = closestStoreDist;

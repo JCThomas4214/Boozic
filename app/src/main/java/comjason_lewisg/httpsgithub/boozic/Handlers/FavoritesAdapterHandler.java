@@ -189,6 +189,18 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
         viewHolder.picture.setBackground(viewHolder.picBack);
     }
 
+    public void remove(int position) {
+        items.remove(position);
+        notifyDataSetChanged();
+
+        int PLPosition;
+        for (int i = position; i < items.size(); i++) {
+            PLPosition = items.get(i).position;
+            items.get(position).favoritePosition = i;
+            m.PLcon.getProductList().get(PLPosition).favoritePosition = i;
+        }
+    }
+
     public void removeItem(int position) {
         TopTensModel tmp = items.get(position);
         removeItems.add(tmp);

@@ -1,5 +1,6 @@
 package comjason_lewisg.httpsgithub.boozic.Handlers;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -18,16 +20,27 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
 
+import comjason_lewisg.httpsgithub.boozic.CameraActivity;
 import comjason_lewisg.httpsgithub.boozic.MainActivity;
 import comjason_lewisg.httpsgithub.boozic.ProductActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
 
 public class DialogHandler {
 
-    public void onCreate() {
+    MainActivity m;
+    ProductActivity p;
+
+    public void onCreate() {}
+
+    public DialogHandler(MainActivity m) {
+        this.m = m;
     }
 
-    public void OpenFeedbackDialog(final MainActivity m) {
+    public DialogHandler(ProductActivity p) {
+        this.p = p;
+    }
+
+    public void OpenFeedbackDialog() {
 
         //Create the MaterialDialog object to start initiallizing attributes
         MaterialDialog dialog = new MaterialDialog.Builder(m)
@@ -57,7 +70,7 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void OpenLegalDialog(final MainActivity m) {
+    public void OpenLegalDialog() {
 
         //Create the MaterialDialog object to start initiallizing attributes
         MaterialDialog dialog = new MaterialDialog.Builder(m)
@@ -70,7 +83,92 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void OpenRangeDialog(final MainActivity m, String title, final String units) {
+    public void varifyUPC(final String upc) {
+
+        MaterialDialog dialog = new MaterialDialog.Builder(m)
+                .title("Verify Product UPC")
+                .customView(R.layout.verify_upc, true)
+                .positiveText("OK")
+                .negativeText("CANCEL")
+                .neutralText("RESCAN")
+                .positiveColor(m.getColorAccent())
+                .negativeColor(m.getColorAccent())
+                .neutralColor(m.getColorAccent())
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        veriftProductLabel(upc);
+                        //start new product label
+                    }
+                })
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        Intent i = new Intent(m, CameraActivity.class);
+                        m.startActivityForResult(i, m.SCANNER_CODE_REQUEST);
+                    }
+                })
+                .build();
+
+        View view = dialog.getCustomView();
+
+        TextView text = (TextView)view.findViewById(R.id.product_upc);
+        text.setText(upc);
+
+        dialog.show();
+    }
+
+    public void veriftProductLabel(final String upc) {
+        MaterialDialog dialog = new MaterialDialog.Builder(m)
+                .title("Input Product Label")
+                .inputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS | InputType.TYPE_CLASS_TEXT)
+                .input("Help keep our products correct", null, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        verifyProductParentType(input.toString(), upc);
+                    }
+                })
+                .positiveText("SET")
+                .negativeText("CANCEL")
+                .widgetColor(m.getColorAccent())
+                .positiveColor(m.getColorAccent())
+                .negativeColor(m.getColorAccent())
+                .build();
+
+        EditText input = dialog.getInputEditText();
+        input.setSingleLine(true);
+        input.setVerticalScrollBarEnabled(true);
+        input.setBackground(null);
+        input.setLines(1);
+        input.setGravity(Gravity.TOP);
+
+        dialog.show();
+    }
+
+    public void verifyProductParentType(final String label, final String upc) {
+        CharSequence[] items = {"Wine", "Beer/Mix Drinks", "Liquor"};
+        MaterialDialog dialog = new MaterialDialog.Builder(m)
+                .title("Select Product Parent Type")
+                .items(items)
+                .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        if (text == null) verifyProductParentType(label, upc);
+                        else {
+                            //call new product controller
+                        }
+                        return true;
+                    }
+                })
+                .positiveText("OK")
+                .widgetColor(m.getColorAccent())
+                .positiveColor(m.getColorAccent())
+                .build();
+
+        dialog.show();
+    }
+
+    public void OpenRangeDialog(String title, final String units) {
         //Create the MaterialDialog object to start initiallizing attributes
         MaterialDialog dialog = new MaterialDialog.Builder(m)
                 .title(title)
@@ -89,7 +187,7 @@ public class DialogHandler {
                         EditText high_input = (EditText) view.findViewById(R.id.range_high_input);
                         String high = high_input.getText().toString();
 
-                        checkDialog(m, units, low, high);
+                        checkDialog(units, low, high);
                     }
                 })
 
@@ -116,7 +214,7 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void OpenCustomMileDialog(final MainActivity m) {
+    public void OpenCustomMileDialog() {
         //Create the MaterialDialog object to start initiallizing attributes
         MaterialDialog dialog = new MaterialDialog.Builder(m)
                 .title("Custom Mile Radius")
@@ -132,7 +230,7 @@ public class DialogHandler {
                         EditText miles = (EditText) view.findViewById(R.id.custom_mi_input);
                         String radius = miles.getText().toString();
 
-                        checkDialog(m, radius);
+                        checkDialog(radius);
                     }
                 })
                 .build();
@@ -144,23 +242,16 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void startFlagDialog(final ProductActivity p) {
-        CharSequence[] items = new CharSequence[] {"Product Name is Incorrect", "Closest Price is unreasonable", "Cheapest Price is unreasonable"};
+    public void startFlagDialog() {
+        CharSequence[] items = new CharSequence[] {"Not an Alcohol Product", "Product Name is Incorrect",
+                "Closest Price is unreasonable", "Cheapest Price is unreasonable"};
         MaterialDialog dialog = new MaterialDialog.Builder(p)
                 .title("Flag Product Information")
                 .items(items)
                 .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        switch (which) {
-                            case 0:
-                                UpdateProductLabel(p);
-                                break;
-                            case 1:
-                                break;
-                            case 2:
-                                break;
-                        }
+                        p.FPcon.flagProduct(p,which+1);
                     }
                 })
                 .build();
@@ -168,7 +259,7 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void StartProductInfoDialog(final ProductActivity p) {
+    public void StartProductInfoDialog() {
         CharSequence[] items;
         if (p.model.typePic == 2 || p.updatedModel.parentType == 2) items = new CharSequence[] {"Type of Product", "Volume", "Alcohol by Volume", "Product Container"};
         else items = new CharSequence[] {"Type of Product", "Volume", "Alcohol by Volume"};
@@ -181,19 +272,19 @@ public class DialogHandler {
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
                             case 0:
-                                UpdateProductParentType(p, true);
+                                UpdateProductParentType(true);
                                 break;
                             case 1:
-                                UpdateVolume(p);
+                                UpdateVolume();
                                 break;
                             case 2:
                                 boolean isBeer = false;
                                 if (p.model.typePic == 2 || p.updatedModel.parentType == 2)
                                     isBeer = true;
-                                UpdateAbv(p, isBeer, true);
+                                UpdateAbv(isBeer, true);
                                 break;
                             case 3:
-                                UpdateContainer(p, true);
+                                UpdateContainer(true);
                                 break;
                         }
                     }
@@ -203,7 +294,7 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void UpdateProductParentType(final ProductActivity p, final boolean cameFromStartProductInfo) {
+    public void UpdateProductParentType(final boolean cameFromStartProductInfo) {
         CharSequence[] items = {"Wine", "Beer/Mix Drinks", "Liquor"};
         MaterialDialog dialog = new MaterialDialog.Builder(p)
                 .title("Select Product Parent Type")
@@ -212,7 +303,7 @@ public class DialogHandler {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         Log.v("TYPE", "string = " + text);
-                        if (text == null) UpdateProductParentType(p, cameFromStartProductInfo);
+                        if (text == null) UpdateProductParentType(cameFromStartProductInfo);
                         else {
                             p.updatedModel.updateParentType(which+1);
                             p.mAdapter.changeParentType(which+1);
@@ -236,7 +327,7 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void UpdateProductType(final ProductActivity p, List<String> productTypeName, List<Integer> productTypeID, final boolean cameFromStartProductInfo) {
+    public void UpdateProductType(List<String> productTypeName, List<Integer> productTypeID, final boolean cameFromStartProductInfo) {
 
         final Integer[] productID = productTypeID.toArray(new Integer[productTypeID.size()]);
         final CharSequence[] productName = productTypeName.toArray(new CharSequence[productTypeName.size()]);
@@ -250,10 +341,10 @@ public class DialogHandler {
                         p.updatedModel.updateType(productID[which]);
 
                         if (!cameFromStartProductInfo) {
-                            if (p.model.containerType.equals("N/A") && p.updatedModel.type == 2) UpdateContainer(p, false);
-                            else if (p.model.abv <= 0 && p.updatedModel.type == 2) UpdateAbv(p, true, false);
-                            else if (p.model.abv <= 0) UpdateAbv(p, false, false);
-                            else UpdateStore(p, false, false);
+                            if (p.model.containerType.equals("N/A") && p.updatedModel.type == 2) UpdateContainer(false);
+                            else if (p.model.abv <= 0 && p.updatedModel.type == 2) UpdateAbv(true, false);
+                            else if (p.model.abv <= 0) UpdateAbv(false, false);
+                            else UpdateStore(false, false);
                         }
                         return true;
                     }
@@ -272,7 +363,7 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void UpdateVolume(final ProductActivity p) {
+    public void UpdateVolume() {
         MaterialDialog dialog = new MaterialDialog.Builder(p)
                 .title("Input Volume")
                 .customView(R.layout.input_abv, true)
@@ -317,7 +408,7 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void UpdateContainer(final ProductActivity p, final boolean cameFromStartProductInfo) {
+    public void UpdateContainer(final boolean cameFromStartProductInfo) {
         String positive = "NEXT";
         String neutral = "SKIP";
         if (cameFromStartProductInfo) {
@@ -334,18 +425,18 @@ public class DialogHandler {
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         Log.v("CONTAINER", "string = " + text);
                         if (!cameFromStartProductInfo) {
-                            if (text == null) UpdateContainer(p, false);
+                            if (text == null) UpdateContainer(false);
                             else {
                                 if (!p.model.containerType.equals(text)) p.updatedModel.updateContainerType((String) text);
                                 p.mAdapter.changeContainerType((String) text);
                                 p.mAdapter.notifyDataSetChanged();
-                                UpdateContainerQuant(p, false);
+                                UpdateContainerQuant(false);
                             }
                         } else {
                             if (!p.model.containerType.equals(text)) p.updatedModel.updateContainerType((String) text);
                             p.mAdapter.changeContainerType((String) text);
                             p.mAdapter.notifyDataSetChanged();
-                            UpdateContainerQuant(p, true);
+                            UpdateContainerQuant(true);
                         }
                         return true;
                     }
@@ -373,7 +464,7 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void UpdateContainerQuant(final ProductActivity p, final boolean cameFromStartProductInfo) {
+    public void UpdateContainerQuant(final boolean cameFromStartProductInfo) {
         String positive = "NEXT";
         String neutral = "SKIP";
         if (cameFromStartProductInfo) {
@@ -390,7 +481,7 @@ public class DialogHandler {
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         Log.v("CONTAINER", "string = " + text);
                         if (!cameFromStartProductInfo) {
-                            if (text == null) UpdateContainer(p, false);
+                            if (text == null) UpdateContainer(false);
                             else {
                                 int tmp = changeToInt((String) text);
                                 if (p.model.containerQuantity != tmp) {
@@ -399,7 +490,7 @@ public class DialogHandler {
                                     p.mAdapter.notifyDataSetChanged();
                                 }
                             }
-                            UpdateAbv(p, true, false);
+                            UpdateAbv(true, false);
                         } else {
                             int tmp = changeToInt((String) text);
                             if (p.model.containerQuantity != tmp) {
@@ -434,7 +525,7 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void UpdateAbv(final ProductActivity p, final boolean isBeer, final boolean cameFromStartProductInfo) {
+    public void UpdateAbv(final boolean isBeer, final boolean cameFromStartProductInfo) {
         String negative = "CANCEL";
         if (isBeer) negative = "BACK";
 
@@ -466,20 +557,20 @@ public class DialogHandler {
                         p.mAdapter.changeABV(changeToDouble(percent.getText().toString().replace("%", "")));
                         p.mAdapter.notifyDataSetChanged();
 
-                        if (!cameFromStartProductInfo) UpdateStore(p, true, isBeer);
+                        if (!cameFromStartProductInfo) UpdateStore(true, isBeer);
                         //save input
                     }
                 })
                 .onNeutral(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        UpdateStore(p, true, isBeer);
+                        UpdateStore(true, isBeer);
                     }
                 })
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        if (isBeer) UpdateContainer(p, false);
+                        if (isBeer) UpdateContainer(false);
                     }
                 })
                 .build();
@@ -491,7 +582,7 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void UpdateStore(final ProductActivity p, final boolean cameFrom, final boolean isBeer) {
+    public void UpdateStore(final boolean cameFrom, final boolean isBeer) {
         String tmp;
         if (cameFrom) tmp = "BACK";
         else tmp = "CANCEL";
@@ -505,7 +596,7 @@ public class DialogHandler {
                 .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        if (text == null) UpdateStore(p, cameFrom, isBeer);
+                        if (text == null) UpdateStore(cameFrom, isBeer);
                         else {
                             p.updatedModel.updateStore((String) stores[which], storeIDs[which]);
                         }
@@ -522,14 +613,14 @@ public class DialogHandler {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        UpdatePrice(p, cameFrom, isBeer);
+                        UpdatePrice(cameFrom, isBeer);
                         //save selected
                     }
                 })
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        if (cameFrom) UpdateAbv(p, isBeer, false);
+                        if (cameFrom) UpdateAbv(isBeer, false);
                     }
                 })
                 .onNeutral(new MaterialDialog.SingleButtonCallback() {
@@ -542,7 +633,7 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void UpdatePrice(final ProductActivity p, final boolean cameFrom, final boolean isBeer) {
+    public void UpdatePrice(final boolean cameFrom, final boolean isBeer) {
         MaterialDialog dialog = new MaterialDialog.Builder(p)
                 .title("Update Price")
                 .customView(R.layout.input_price, true)
@@ -562,7 +653,7 @@ public class DialogHandler {
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        UpdateStore(p, cameFrom, isBeer);
+                        UpdateStore(cameFrom, isBeer);
                     }
                 })
                 .build();
@@ -574,7 +665,7 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public MaterialDialog progressDialog(final ProductActivity p) {
+    public MaterialDialog progressDialog() {
         MaterialDialog dialog = new MaterialDialog.Builder(p)
                 .title("Waiting For Stores")
                 .content("Searching...")
@@ -586,7 +677,7 @@ public class DialogHandler {
         return dialog;
     }
 
-    public void UpdateProductLabel(final ProductActivity p) {
+    public void UpdateProductLabel() {
         MaterialDialog dialog = new MaterialDialog.Builder(p)
                 .title("Correct Product Label")
                 .inputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS | InputType.TYPE_CLASS_TEXT)
@@ -745,12 +836,12 @@ public class DialogHandler {
         }
     }
 
-    private void checkDialog(MainActivity m, String radius) {
+    private void checkDialog(String radius) {
         //set the filterbutton model's low/high variables
         m.FMHandle.setCustommi(changeToInt(radius));
     }
 
-    private void checkDialog(MainActivity m, String units, String low, String high) {
+    private void checkDialog(String units, String low, String high) {
 
         int lowInt;
         int highInt;
