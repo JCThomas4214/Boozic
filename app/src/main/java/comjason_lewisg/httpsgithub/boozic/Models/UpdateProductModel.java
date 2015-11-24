@@ -3,6 +3,8 @@ package comjason_lewisg.httpsgithub.boozic.Models;
 public class UpdateProductModel {
 
     public boolean updated = false;
+    public int position;
+    public int favoritePosition = -1;
 
     public String label = null;
     public int parentType = -1;
@@ -24,9 +26,17 @@ public class UpdateProductModel {
 
     public double abv = -1;
 
-    public UpdateProductModel(String upc, int productId) {
+    public UpdateProductModel(String upc, int productId, int position) {
         this.upc = upc;
         this.productId = productId;
+        this.position = position;
+    }
+
+    public UpdateProductModel(String upc, int productId, int position, int favoritePosition) {
+        this.upc = upc;
+        this.productId = productId;
+        this.position = position;
+        this.favoritePosition = favoritePosition;
     }
 
     public void updateContainerType(String container) {

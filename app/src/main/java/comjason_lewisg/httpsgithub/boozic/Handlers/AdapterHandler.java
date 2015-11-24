@@ -33,6 +33,7 @@ import comjason_lewisg.httpsgithub.boozic.ProductActivity;
 import comjason_lewisg.httpsgithub.boozic.R;
 
 public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItemViewHolder> {
+
     private List<TopTensModel> shownItems = new ArrayList<>();
     private List<TopTensModel> allItems = new ArrayList<>();
     private int cursor;
@@ -105,6 +106,7 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
                 Intent i = new Intent(m, ProductActivity.class);
                 //if the product is in the list, it is not a new product
                 i.putExtra("Found", 0);
+                i.putExtra("Position", position);
                 //inject model variables
                 i.putExtra("Label", shownItems.get(position).label);
                 i.putExtra("ProductID", shownItems.get(position).productID);
@@ -128,7 +130,6 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
                 i.putExtra("Volume", shownItems.get(position).volume);
                 i.putExtra("VolumeMeasure", shownItems.get(position).volumeMeasure);
                 i.putExtra("ABV", shownItems.get(position).abv);
-                i.putExtra("Proof", shownItems.get(position).proof);
                 i.putExtra("ABP", shownItems.get(position).abp);
                 i.putExtra("PDD", shownItems.get(position).pdd);
                 i.putExtra("Rating", shownItems.get(position).rating);
@@ -146,7 +147,7 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
                 i.putExtra("COLOR_ACCENT", m.getColorAccent());
                 i.putExtra("COLOR_ACCENT_DARK", m.getColorAccentDark());
 
-                m.startActivity(i);
+                m.startActivityForResult(i, m.PRODUCT_INFO_REQUEST);
             }
         });
     }

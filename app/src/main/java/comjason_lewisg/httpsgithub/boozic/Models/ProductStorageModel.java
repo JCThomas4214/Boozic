@@ -40,7 +40,7 @@ public class ProductStorageModel {
 
     public ProductStorageModel(String label, String upc, int productId, String lastUpdate, double userRating, int closestStoreId, int cheapestStoreId, String closestStoreName, String cheapestStoreName,
                                String closestStoreAddress, String cheapestStoreAddress, double closestStoreDist, double cheapestStoreDist, double closestPrice, double cheapestPrice, int type, int favorite, String container,
-                               int containerQuantity, double abv, int proof, int[] rating, double volume, String volumeMeasure, double pbv, double abp, double pdd, double td, double avgRating) {
+                               int containerQuantity, double abv, int[] rating, double volume, String volumeMeasure, double pbv, double abp, double pdd, double td, double avgRating) {
 
         this.label = label;
         if (!lastUpdate.equals("null")) this.lastUpdate = lastUpdate;
@@ -64,7 +64,7 @@ public class ProductStorageModel {
         this.containerType = container;
         this.containerQuantity = containerQuantity;
         this.abv = abv;
-        this.proof = proof;
+        this.proof = 2 * (int)abv;
         System.arraycopy(rating,0,this.rating,0,rating.length);
 
         this.volume = volume;
@@ -85,5 +85,43 @@ public class ProductStorageModel {
 
         int[] ratingTmp = new int[] {0,0,0,0,0};
         System.arraycopy(ratingTmp,0,this.rating,0,rating.length);
+    }
+
+    public void setABP() {
+        float abptmp = (float)closestPrice / (((float)abv/100f) * (float)convertVol());
+
+        abp = (double)abptmp;
+    }
+
+    public void setPBV() {
+        float pbvtmp = (float)closestPrice / (float)convertVol();
+        pbv = (double)pbvtmp;
+    }
+
+    private double convertVol() {
+        double volumetmp = volume;
+
+        if (volumeMeasure.equals("oz"))
+            volumetmp = volume * 29.5735;
+        else if (volumeMeasure.equals("L"))
+            volumetmp = volume * 1000;
+        else {
+            switch (typePic) {
+                case 1:
+                    volumeMeasure = "ml";
+                    break;
+                case 2:
+                    volumeMeasure = "oz";
+                    break;
+                case 3:
+                    volumeMeasure = "ml";
+                    break;
+                default:
+                    volumeMeasure = "ml";
+                    break;
+            }
+        }
+
+        return volumetmp;
     }
 }

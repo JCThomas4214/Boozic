@@ -215,6 +215,8 @@ public class DialogHandler {
                         if (text == null) UpdateProductParentType(p, cameFromStartProductInfo);
                         else {
                             p.updatedModel.updateParentType(which+1);
+                            p.mAdapter.changeParentType(which+1);
+                            p.mAdapter.notifyDataSetChanged();
                             p.PTLC.getList(p, which+1, cameFromStartProductInfo);
                         }
                         return true;
@@ -287,6 +289,8 @@ public class DialogHandler {
 
                         EditText percent = (EditText) view.findViewById(R.id.abv_dia_input);
                         p.updatedModel.updateVolume(changeToDouble(percent.getText().toString().replaceAll("[oz,L,ml]", "")), p.model.containerQuantity, p.model.volumeMeasure);
+                        p.mAdapter.changeVolume(changeToDouble(percent.getText().toString().replaceAll("[oz,L,ml]", "")));
+                        p.mAdapter.notifyDataSetChanged();
                         //save input
                     }
                 })
@@ -333,10 +337,14 @@ public class DialogHandler {
                             if (text == null) UpdateContainer(p, false);
                             else {
                                 if (!p.model.containerType.equals(text)) p.updatedModel.updateContainerType((String) text);
+                                p.mAdapter.changeContainerType((String) text);
+                                p.mAdapter.notifyDataSetChanged();
                                 UpdateContainerQuant(p, false);
                             }
                         } else {
                             if (!p.model.containerType.equals(text)) p.updatedModel.updateContainerType((String) text);
+                            p.mAdapter.changeContainerType((String) text);
+                            p.mAdapter.notifyDataSetChanged();
                             UpdateContainerQuant(p, true);
                         }
                         return true;
@@ -385,12 +393,20 @@ public class DialogHandler {
                             if (text == null) UpdateContainer(p, false);
                             else {
                                 int tmp = changeToInt((String) text);
-                                if (p.model.containerQuantity != tmp) p.updatedModel.updateContainerQuant(tmp, p.model.volume, p.model.containerQuantity);
+                                if (p.model.containerQuantity != tmp) {
+                                    p.updatedModel.updateContainerQuant(tmp, p.model.volume, p.model.containerQuantity);
+                                    p.mAdapter.changeContainerQty(tmp);
+                                    p.mAdapter.notifyDataSetChanged();
+                                }
                             }
                             UpdateAbv(p, true, false);
                         } else {
                             int tmp = changeToInt((String) text);
-                            if (p.model.containerQuantity != tmp) p.updatedModel.updateContainerQuant(tmp, p.model.volume, p.model.containerQuantity);
+                            if (p.model.containerQuantity != tmp) {
+                                p.updatedModel.updateContainerQuant(tmp, p.model.volume, p.model.containerQuantity);
+                                p.mAdapter.changeContainerQty(tmp);
+                                p.mAdapter.notifyDataSetChanged();
+                            }
                         }
                         return true;
                     }
@@ -447,6 +463,8 @@ public class DialogHandler {
 
                         EditText percent = (EditText) view.findViewById(R.id.abv_dia_input);
                         p.updatedModel.updateABV(changeToDouble(percent.getText().toString().replace("%", "")));
+                        p.mAdapter.changeABV(changeToDouble(percent.getText().toString().replace("%", "")));
+                        p.mAdapter.notifyDataSetChanged();
 
                         if (!cameFromStartProductInfo) UpdateStore(p, true, isBeer);
                         //save input

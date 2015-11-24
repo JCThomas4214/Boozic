@@ -332,7 +332,6 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             viewHolder.container.setText(tmp);
         }
 
-
         selectTypePic(model, viewHolder);
 
         if (model.volume <= 0) viewHolder.volume.setText("N/A");
@@ -395,13 +394,47 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
     }
 
     private void toggleFavoriteValue(ImageView favorite) {
-        if (p.updatedModel.favorite != 1) {
-            setFavorite(1, favorite);
-            p.updatedModel.updateFavorite(1);
+        if (p.updatedModel.favorite == -1) {
+            if (p.model.favorite == 0) {
+                setFavorite(1, favorite);
+                p.updatedModel.updateFavorite(1);
+            } else {
+                setFavorite(0, favorite);
+                p.updatedModel.updateFavorite(0);
+            }
         } else {
-            setFavorite(0, favorite);
-            p.updatedModel.updateFavorite(0);
+            if (p.updatedModel.favorite == 0) {
+                setFavorite(1, favorite);
+                p.updatedModel.updateFavorite(1);
+            } else {
+                setFavorite(0, favorite);
+                p.updatedModel.updateFavorite(0);
+            }
         }
+    }
+
+    public void changeParentType(int type) {
+        item.typePic = type;
+    }
+
+    public void changeABV(double abv) {
+        item.abv = abv;
+        item.proof = 2 * (int)abv;
+        item.setABP();
+    }
+
+    public void changeVolume(double volume) {
+        item.volume = volume;
+        item.setABP();
+        item.setPBV();
+    }
+
+    public void changeContainerType(String type) {
+        item.containerType = type;
+    }
+
+    public void changeContainerQty(int quantity) {
+        item.containerQuantity = quantity;
     }
 
     public void setChart(ProductStorageModel model, ProductInfoHolder viewHolder) {

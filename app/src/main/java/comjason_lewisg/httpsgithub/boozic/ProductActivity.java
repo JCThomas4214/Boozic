@@ -1,6 +1,8 @@
 package comjason_lewisg.httpsgithub.boozic;
 
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +20,7 @@ import com.quinny898.library.persistentsearch.SearchBox;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import comjason_lewisg.httpsgithub.boozic.Controllers.NearbyStoresController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.ProductTypeListController;
@@ -26,6 +29,7 @@ import comjason_lewisg.httpsgithub.boozic.Handlers.ProductAdapterHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ProductSearchBarHandler;
 import comjason_lewisg.httpsgithub.boozic.Models.ProductStorageModel;
 import comjason_lewisg.httpsgithub.boozic.Models.UpdateProductModel;
+import me.dm7.barcodescanner.zbar.Result;
 
 public class ProductActivity extends AppCompatActivity {
 
@@ -38,7 +42,7 @@ public class ProductActivity extends AppCompatActivity {
     public List<Integer> storeIDs = new ArrayList<>();
 
     RecyclerView mRecyclerView;
-    RecyclerView.Adapter mAdapter;
+    public ProductAdapterHandler mAdapter;
     RecyclerView.LayoutManager mLayoutManager;
 
     int colorPrimary_id;
@@ -132,8 +136,8 @@ public class ProductActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == android.R.id.home) {
             //return to main activity
-            checkUpdateModel();
             if (updatedModel.updated) UPC.updateProduct(this);
+            setProductActivityResults();
             finish();
             return true;
         }
@@ -143,6 +147,60 @@ public class ProductActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setProductActivityResults() {
+        if (updatedModel.updated) {
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra("Position", updatedModel.position);
+            returnIntent.putExtra("FavoritePosition", updatedModel.favoritePosition);
+
+            if (updatedModel.userRating != -1 && updatedModel.userRating != model.userRating)
+                returnIntent.putExtra("UserRating", updatedModel.userRating);
+            else returnIntent.putExtra("UserRating", model.userRating);
+
+            if ((updatedModel.parentType != -1 && updatedModel.parentType != model.typePic)) {
+                returnIntent.putExtra("ParentType", updatedModel.parentType);
+            } else returnIntent.putExtra("ParentType", model.typePic);
+
+            if (updatedModel.favorite != -1) returnIntent.putExtra("Favorite", updatedModel.favorite);
+            else returnIntent.putExtra("Favorite", model.favorite);
+
+            if (updatedModel.containerType != null && !updatedModel.containerType.equals(model.containerType))
+                returnIntent.putExtra("ContainerType", updatedModel.containerType);
+            else returnIntent.putExtra("ContainerType", model.containerType);
+
+            if (updatedModel.containerQuantity != -1 && updatedModel.containerQuantity != model.containerQuantity)
+                returnIntent.putExtra("ContainerQty", updatedModel.containerQuantity);
+            else returnIntent.putExtra("ContainerQty", model.containerQuantity);
+
+            if (updatedModel.volume != -1 && updatedModel.volume != model.volume)
+                returnIntent.putExtra("Volume", updatedModel.volume);
+            else returnIntent.putExtra("Volume", model.volume);
+
+            if (updatedModel.volumeMeasure != null && !updatedModel.volumeMeasure.equals(model.volumeMeasure))
+                returnIntent.putExtra("VolumeMeasure", updatedModel.volumeMeasure);
+            else returnIntent.putExtra("VolumeMeasure", model.volumeMeasure);
+
+            if (updatedModel.abv != -1 && updatedModel.abv != model.abv)
+                returnIntent.putExtra("ABV", updatedModel.abv);
+            else returnIntent.putExtra("ABV", model.abv);
+
+
+            returnIntent.putExtra("ClosestStoreId", model.closestStoreId);
+            returnIntent.putExtra("CheapestStoreId", model.cheapestStoreId);
+            returnIntent.putExtra("ClosestStoreName", model.closestStoreName);
+            returnIntent.putExtra("CheapestStoreName", model.cheapestStoreName);
+            returnIntent.putExtra("ClosestStoreAddress", model.closestStoreAddress);
+            returnIntent.putExtra("CheapestStoreAddress", model.cheapestStoreAddress);
+            returnIntent.putExtra("ClosestStoreDist", model.closestStoreDist);
+            returnIntent.putExtra("CheapestStoreDist", model.cheapestStoreDist);
+            returnIntent.putExtra("ClosestPrice", model.closestPrice);
+            returnIntent.putExtra("CheapestPrice", model.cheapestPrice);
+            setResult(RESULT_OK, returnIntent);
+        } else {
+            setResult(RESULT_CANCELED);
+        }
     }
 
     public void setNearByStores(List<String> stores, List<Integer> storeIDs) {
@@ -194,7 +252,6 @@ public class ProductActivity extends AppCompatActivity {
                 (String) getIntent().getSerializableExtra("Container"),
                 (int) getIntent().getSerializableExtra("ContainerQty"),
                 (double) getIntent().getSerializableExtra("ABV"),
-                (int) getIntent().getSerializableExtra("Proof"),
                 (int[]) getIntent().getSerializableExtra("Rating"),
                 (double) getIntent().getSerializableExtra("Volume"),
                 (String) getIntent().getSerializableExtra("VolumeMeasure"),
@@ -204,8 +261,17 @@ public class ProductActivity extends AppCompatActivity {
                 (double) getIntent().getSerializableExtra("TD"),
                 (double) getIntent().getSerializableExtra("AvgRating"));
 
-        updatedModel = new UpdateProductModel((String) getIntent().getSerializableExtra("UPC"),
-                (int) getIntent().getSerializableExtra("ProductID"));
+        try {
+            int favoritePosition = (int) getIntent().getSerializableExtra("FavoritePosition");
+            updatedModel = new UpdateProductModel((String) getIntent().getSerializableExtra("UPC"),
+                    (int) getIntent().getSerializableExtra("ProductID"),
+                    (int) getIntent().getSerializableExtra("Position"),
+                    favoritePosition);
+        } catch (Exception e) {
+            updatedModel = new UpdateProductModel((String) getIntent().getSerializableExtra("UPC"),
+                    (int) getIntent().getSerializableExtra("ProductID"),
+                    (int) getIntent().getSerializableExtra("Position"));
+        }
     }
 
     public void newProduct() {
@@ -216,8 +282,17 @@ public class ProductActivity extends AppCompatActivity {
                 (double) getIntent().getSerializableExtra("Volume"),
                 (String) getIntent().getSerializableExtra("VolumeMeasure"));
 
-        updatedModel = new UpdateProductModel((String) getIntent().getSerializableExtra("UPC"),
-                (int) getIntent().getSerializableExtra("ProductID"));
+        try {
+            int favoritePosition = (int) getIntent().getSerializableExtra("FavoritePosition");
+            updatedModel = new UpdateProductModel((String) getIntent().getSerializableExtra("UPC"),
+                    (int) getIntent().getSerializableExtra("ProductID"),
+                    (int) getIntent().getSerializableExtra("Position"),
+                    favoritePosition);
+        } catch (Exception e) {
+            updatedModel = new UpdateProductModel((String) getIntent().getSerializableExtra("UPC"),
+                    (int) getIntent().getSerializableExtra("ProductID"),
+                    (int) getIntent().getSerializableExtra("Position"));
+        }
     }
 
     // A method to find height of the status bar
@@ -229,6 +304,8 @@ public class ProductActivity extends AppCompatActivity {
         }
         return result;
     }
+
+
 
     @Override
     public void onResume() {
@@ -248,13 +325,6 @@ public class ProductActivity extends AppCompatActivity {
     public int getPrimaryColorDark() { return primaryColorDark; }
     public int getAccentColor() { return accentColor; }
     public int getAccentColorDark() { return accentColorDark; }
-
-    public void checkUpdateModel() {
-        Log.v("UPDATEMODEL", "The value of container is " + updatedModel.containerType);
-        Log.v("UPDATEMODEL", "The value of abv is " + updatedModel.abv);
-        Log.v("UPDATEMODEL", "The value of StoreName and ID is " + updatedModel.StoreName + " and " + updatedModel.StoreID);
-        Log.v("UPDATEMODEL", "The value of Price is " + updatedModel.Price);
-    }
 
     public int changeToInt(String str) {
         return Integer.parseInt(str);

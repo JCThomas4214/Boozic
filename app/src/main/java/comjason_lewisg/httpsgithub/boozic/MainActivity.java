@@ -88,7 +88,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public boolean filterButtonVis = true;
     public static Activity activity;
 
-    static final int SCANNER_CODE_REQUEST = 0;
+    static final int SCANNER_CODE_REQUEST = 1;
+    public static final int PRODUCT_INFO_REQUEST = 2;
 
     static final int COLOR_STATE = 1;
     static final int COLOR_ACCENT_STATE = 1;
@@ -521,16 +522,137 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         return super.onOptionsItemSelected(item);
     }
 
-    //Recieves the result from Camera Activity
+    //Recieves the result from Activity
     @Override
-    protected void onActivityResult(int requestCode, int resultCode,
-                                    Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == SCANNER_CODE_REQUEST) {
             if (resultCode == RESULT_OK) {
                 // A contact was picked.  Here we will just display it
                 // to the user.
                 Log.v("CAM RESULT", data.getExtras().getString("RESULT"));
                 upcFPC.callProduct(this, data.getExtras().getString("RESULT"), latitude, longitude);
+            }
+        }
+        if (requestCode == PRODUCT_INFO_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                int favorite = data.getExtras().getInt("Favorite");
+                int position = data.getExtras().getInt("Position");
+                int favoritePosition = data.getExtras().getInt("FavoritePosition");
+
+                if (position >= 0 && favoritePosition == -1) {
+                    TopTensModel model = PLcon.getProductList().get(position);
+                    model.userRating = data.getExtras().getDouble("UserRating");
+                    model.favorite = favorite;
+                    model.typePic = data.getExtras().getInt("ParentType");
+                    model.containerType = data.getExtras().getString("ContainerType");
+                    model.containerQuantity = data.getExtras().getInt("ContainerQty");
+                    model.volume = data.getExtras().getDouble("Volume");
+                    model.volumeMeasure = data.getExtras().getString("VolumeMeasure");
+                    model.abv = data.getExtras().getDouble("ABV");
+
+                    model.closestStoreId = data.getExtras().getInt("ClosestStoreId");
+                    model.cheapestStoreId = data.getExtras().getInt("CheapestStoreId");
+                    model.closestStoreName = data.getExtras().getString("ClosestStoreName");
+                    model.cheapestStoreName = data.getExtras().getString("CheapestStoreName");
+                    model.closestStoreAddress = data.getExtras().getString("ClosestStoreAddress");
+                    model.cheapestStoreName = data.getExtras().getString("CheapestStoreAddress");
+                    model.closestStoreDist = data.getExtras().getDouble("ClosestStoreDist");
+                    model.cheapestStoreDist = data.getExtras().getDouble("CheapestStoreDist");
+                    model.closestPrice = data.getExtras().getDouble("ClosestPrice");
+                    model.cheapestPrice = data.getExtras().getDouble("CheapestPrice");
+
+                    try {
+                        Nav.topTensFragment.mAdapter.notifyDataSetChanged();
+                    } catch (Exception e) {}
+                } else if (position == -1 && favoritePosition >= 0) {
+                    if (favorite != 0) {
+                        TopTensModel model = FLcon.favoritesList.get(favoritePosition);
+                        model.userRating = data.getExtras().getDouble("UserRating");
+                        model.favorite = favorite;
+                        model.typePic = data.getExtras().getInt("ParentType");
+                        model.containerType = data.getExtras().getString("ContainerType");
+                        model.containerQuantity = data.getExtras().getInt("ContainerQty");
+                        model.volume = data.getExtras().getDouble("Volume");
+                        model.volumeMeasure = data.getExtras().getString("VolumeMeasure");
+                        model.abv = data.getExtras().getDouble("ABV");
+
+                        model.closestStoreId = data.getExtras().getInt("ClosestStoreId");
+                        model.cheapestStoreId = data.getExtras().getInt("CheapestStoreId");
+                        model.closestStoreName = data.getExtras().getString("ClosestStoreName");
+                        model.cheapestStoreName = data.getExtras().getString("CheapestStoreName");
+                        model.closestStoreAddress = data.getExtras().getString("ClosestStoreAddress");
+                        model.cheapestStoreName = data.getExtras().getString("CheapestStoreAddress");
+                        model.closestStoreDist = data.getExtras().getDouble("ClosestStoreDist");
+                        model.cheapestStoreDist = data.getExtras().getDouble("CheapestStoreDist");
+                        model.closestPrice = data.getExtras().getDouble("ClosestPrice");
+                        model.cheapestPrice = data.getExtras().getDouble("CheapestPrice");
+
+                        try {
+                            Nav.favoritesFragment.mAdapter.notifyDataSetChanged();
+                        } catch (Exception e) {}
+                    } else {
+                        FLcon.favoritesList.remove(favoritePosition);
+                        try {
+                            Nav.favoritesFragment.mAdapter.removeItem(favoritePosition);
+                        } catch (Exception e) {}
+                    }
+                }
+                else if (position >= 0 && favoritePosition >= 0) {
+                    //productList model at position
+                    TopTensModel model = PLcon.getProductList().get(position);
+                    model.userRating = data.getExtras().getDouble("UserRating");
+                    model.favorite = favorite;
+                    model.typePic = data.getExtras().getInt("ParentType");
+                    model.containerType = data.getExtras().getString("ContainerType");
+                    model.containerQuantity = data.getExtras().getInt("ContainerQty");
+                    model.volume = data.getExtras().getDouble("Volume");
+                    model.volumeMeasure = data.getExtras().getString("VolumeMeasure");
+                    model.abv = data.getExtras().getDouble("ABV");
+
+                    model.closestStoreId = data.getExtras().getInt("ClosestStoreId");
+                    model.cheapestStoreId = data.getExtras().getInt("CheapestStoreId");
+                    model.closestStoreName = data.getExtras().getString("ClosestStoreName");
+                    model.cheapestStoreName = data.getExtras().getString("CheapestStoreName");
+                    model.closestStoreAddress = data.getExtras().getString("ClosestStoreAddress");
+                    model.cheapestStoreName = data.getExtras().getString("CheapestStoreAddress");
+                    model.closestStoreDist = data.getExtras().getDouble("ClosestStoreDist");
+                    model.cheapestStoreDist = data.getExtras().getDouble("CheapestStoreDist");
+                    model.closestPrice = data.getExtras().getDouble("ClosestPrice");
+                    model.cheapestPrice = data.getExtras().getDouble("CheapestPrice");
+
+                    if (favorite != 0) {
+                        //Favorites model at favoritePosition
+                        model = FLcon.favoritesList.get(favoritePosition);
+                        model.userRating = data.getExtras().getDouble("UserRating");
+                        model.favorite = favorite;
+                        model.typePic = data.getExtras().getInt("ParentType");
+                        model.containerType = data.getExtras().getString("ContainerType");
+                        model.containerQuantity = data.getExtras().getInt("ContainerQty");
+                        model.volume = data.getExtras().getDouble("Volume");
+                        model.volumeMeasure = data.getExtras().getString("VolumeMeasure");
+                        model.abv = data.getExtras().getDouble("ABV");
+
+                        model.closestStoreId = data.getExtras().getInt("ClosestStoreId");
+                        model.cheapestStoreId = data.getExtras().getInt("CheapestStoreId");
+                        model.closestStoreName = data.getExtras().getString("ClosestStoreName");
+                        model.cheapestStoreName = data.getExtras().getString("CheapestStoreName");
+                        model.closestStoreAddress = data.getExtras().getString("ClosestStoreAddress");
+                        model.cheapestStoreName = data.getExtras().getString("CheapestStoreAddress");
+                        model.closestStoreDist = data.getExtras().getDouble("ClosestStoreDist");
+                        model.cheapestStoreDist = data.getExtras().getDouble("CheapestStoreDist");
+                        model.closestPrice = data.getExtras().getDouble("ClosestPrice");
+                        model.cheapestPrice = data.getExtras().getDouble("CheapestPrice");
+                    } else {
+                        FLcon.favoritesList.remove(favoritePosition);
+                    }
+
+                    try {
+                        Nav.favoritesFragment.mAdapter.notifyDataSetChanged();
+                    } catch (Exception e) {}
+                    try {
+                        Nav.topTensFragment.mAdapter.notifyDataSetChanged();
+                    } catch (Exception e) {}
+                }
             }
         }
     }

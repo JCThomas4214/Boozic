@@ -107,6 +107,8 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
                 Intent i = new Intent(m, ProductActivity.class);
                 //if the product is in the list, it is not a new product
                 i.putExtra("Found", 0);
+                i.putExtra("Position", items.get(position).position);
+                i.putExtra("FavoritePosition", position);
                 //inject model variables
                 i.putExtra("Label", items.get(position).label);
                 i.putExtra("ProductID", items.get(position).productID);
@@ -130,7 +132,6 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
                 i.putExtra("Volume", items.get(position).volume);
                 i.putExtra("VolumeMeasure", items.get(position).volumeMeasure);
                 i.putExtra("ABV", items.get(position).abv);
-                i.putExtra("Proof", items.get(position).proof);
                 i.putExtra("ABP", items.get(position).abp);
                 i.putExtra("PDD", items.get(position).pdd);
                 i.putExtra("Rating", items.get(position).rating);
@@ -148,7 +149,7 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
                 i.putExtra("COLOR_ACCENT", m.getColorAccent());
                 i.putExtra("COLOR_ACCENT_DARK", m.getColorAccentDark());
 
-                m.startActivity(i);
+                m.startActivityForResult(i, m.PRODUCT_INFO_REQUEST);
             }
         });
     }
@@ -186,6 +187,13 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
         }
         viewHolder.picBack.setColorFilter(m.getColorPrimary(), PorterDuff.Mode.MULTIPLY);
         viewHolder.picture.setBackground(viewHolder.picBack);
+    }
+
+    public void removeItem(int position) {
+        TopTensModel tmp = items.get(position);
+        removeItems.add(tmp);
+        items.remove(position);
+        notifyDataSetChanged();
     }
 
     public void setList(List<TopTensModel> list) {

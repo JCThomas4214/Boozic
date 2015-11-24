@@ -31,7 +31,7 @@ public class TopTensFragment extends Fragment {
     private FragmentManager manager;
 
     private RecyclerView mRecyclerView;
-    private AdapterHandler mAdapter;
+    public AdapterHandler mAdapter;
     private LinearLayoutManager mLayoutManager;
     private SwipeRefreshLayout swipeRefreshLayout;
 
