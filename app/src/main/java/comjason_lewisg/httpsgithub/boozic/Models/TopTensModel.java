@@ -193,4 +193,14 @@ public class TopTensModel {
 
         return ((wTotal / total) * 100) / 20;
     }
+
+    public boolean isABV() {
+        if (abv > 0) return true;
+        return false;
+    }
+
+    public boolean isContainer() {
+        if (containerType == null) return false;
+        return true;
+    }
 }

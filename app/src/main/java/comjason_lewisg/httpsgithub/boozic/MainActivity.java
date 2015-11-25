@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         createLocationRequest();
 
         DIDcon = new DeviceIdController(this);
-        PLcon = new ProductListController();
+        PLcon = new ProductListController(this);
         FLcon = new FavoritesListController(this);
         RFFcon = new RemoveFromFavoritesController(this);
         RAFcon = new RemoveAFavoriteController(this);
@@ -389,7 +389,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     }
 
     public void callProductRefresh(AdapterHandler mAdapter, SwipeRefreshLayout swipeRefreshLayout) {
-        PLcon.callList(this, FMHandle, mAdapter, swipeRefreshLayout, latitude, longitude);
+        PLcon.callList(FMHandle, mAdapter, swipeRefreshLayout, latitude, longitude);
     }
 
     public void showFilterMenu() {

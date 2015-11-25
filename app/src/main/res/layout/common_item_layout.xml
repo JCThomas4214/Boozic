@@ -60,11 +60,10 @@
                 <TextView
                     android:id="@+id/list_ABV"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="40%"/>
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
             <LinearLayout
-                android:visibility="invisible"
+                android:visibility="gone"
                 android:id="@+id/product_list_container"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -78,8 +77,7 @@
                 <TextView
                     android:id="@+id/list_container"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="(24) bottle"/>
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

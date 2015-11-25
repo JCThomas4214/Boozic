@@ -1,27 +1,15 @@
 package comjason_lewisg.httpsgithub.boozic.Handlers;
 
-import android.app.ActionBar;
 import android.content.Intent;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.github.clans.fab.FloatingActionButton;
-import com.mikhaellopez.circularimageview.CircularImageView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -41,6 +29,7 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
     private int addedItems = 50;
     private boolean cursorCheck = true;
     MainActivity m;
+    TopTensModel model;
 
     // Provide a reference to the views for each data item
     // Complex data shownItems may need more than one view per item, and
@@ -171,7 +160,7 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
     public void onBindViewHolder(ListItemViewHolder viewHolder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        TopTensModel model = shownItems.get(position);
+        model = shownItems.get(position);
         DecimalFormat df = new DecimalFormat("####0.##");
 
         if (model.avgRating == 0) {
@@ -182,11 +171,13 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
             viewHolder.rating.setText(avgRating);
         }
 
-        String abv = df.format(model.abv) + "%";
-        viewHolder.abv.setText(abv);
-
-        String container = "(" + model.containerQuantity + ") " + model.containerType;
-        viewHolder.container.setText(container);
+        if (model.isABV()) {
+            String abv = df.format(model.abv) + "%";
+            viewHolder.abv.setText(abv);
+        }
+        else {
+            viewHolder.abv.setText("N/A");
+        }
 
         viewHolder.label.setText(model.label);
         if (model.closestStoreName != null) {
@@ -199,29 +190,31 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
             viewHolder.price.setText("N/A");
         }
 
-        if (model.volume != -1) {
-            String volume = "(" + df.format(model.volume) + model.volumeMeasure + ")";
-            viewHolder.volume.setText(volume);
+        switch ((int)model.volume) {
+            case -1:
+                viewHolder.volume.setText("N/A");
+                break;
+            default:
+                String volume = "(" + df.format(model.volume) + model.volumeMeasure + ")";
+                viewHolder.volume.setText(volume);
+                break;
         }
-        else viewHolder.volume.setText("N/A");
 
         switch (model.typePic) {
             case 1:
                 viewHolder.picture.setImageResource(R.mipmap.wine);
-                if (model.abv == -1) viewHolder.productInfo.setVisibility(View.GONE);
                 break;
             case 2:
                 viewHolder.picture.setImageResource(R.mipmap.beer);
                 viewHolder.containerLayout.setVisibility(View.VISIBLE);
-                if (model.abv == -1) viewHolder.abvLayout.setVisibility(View.GONE);
+                String container = "(" + model.containerQuantity + ") " + model.containerType;
+                viewHolder.container.setText(container);
                 break;
             case 3:
                 viewHolder.picture.setImageResource(R.mipmap.liquor);
-                if (model.abv == -1) viewHolder.productInfo.setVisibility(View.GONE);
                 break;
             case 4:
                 viewHolder.picture.setImageResource(R.mipmap.boozic_notype);
-                if (model.abv == -1) viewHolder.productInfo.setVisibility(View.GONE);
                 break;
         }
     }

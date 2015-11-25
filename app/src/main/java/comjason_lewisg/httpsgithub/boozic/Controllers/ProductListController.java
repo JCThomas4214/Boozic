@@ -32,14 +32,16 @@ public class ProductListController {
 
     private List<TopTensModel> productList = new ArrayList<>();
     MainActivity m;
+    FrameLayout frame;
 
     public void onCreate() {}
 
-    public ProductListController() {}
-
-    public void callList(MainActivity m, FilterMenuHandler fm, AdapterHandler mAdapter, SwipeRefreshLayout swipeRefreshLayout, double latitude, double longitude) {
+    public ProductListController(MainActivity m) {
         this.m = m;
+        frame = (FrameLayout) m.findViewById(R.id.frame3);
+    }
 
+    public void callList(FilterMenuHandler fm, AdapterHandler mAdapter, SwipeRefreshLayout swipeRefreshLayout, double latitude, double longitude) {
         if (m.checkPlayServices()) {
             getListInBackground(m, fm, mAdapter, swipeRefreshLayout, latitude, longitude);
         }
@@ -110,7 +112,6 @@ public class ProductListController {
                 else {
                     swipeRefreshLayout.setRefreshing(false);
                     //toast no store information available
-                    FrameLayout frame = (FrameLayout) m.findViewById(R.id.frame3);
                     Crouton.makeText(m, "There are Currently no Products", Style.ALERT, frame).show();
                 }
             }
@@ -152,6 +153,11 @@ public class ProductListController {
                     else mAdapter.addList(productList.subList((size/25)*25, size));
                 }
             } catch (JSONException e) {}
+        }
+
+        if (size == 0) {
+            swipeRefreshLayout.setRefreshing(false);
+            Crouton.makeText(m, "No Products with these Constraints", Style.ALERT, frame).show();
         }
     }
 
