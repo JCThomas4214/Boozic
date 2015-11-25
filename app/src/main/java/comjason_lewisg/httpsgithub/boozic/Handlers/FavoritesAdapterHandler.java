@@ -49,7 +49,6 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
         TextView price;
         TextView volume;
         ImageView picture;
-        Drawable picBack;
         public IMyViewHolderClicks mListener;
 
         // each data item is just a string in this case
@@ -60,7 +59,6 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
             storeName = (TextView) itemView.findViewById(R.id.txt_desc_item);
             price = (TextView) itemView.findViewById(R.id.price_item);
             picture = (ImageView) itemView.findViewById(R.id.type_image);
-            picBack = itemView.getResources().getDrawable(R.drawable.image_background, null);
             volume = (TextView) itemView.findViewById(R.id.volume_item);
             itemView.setOnClickListener(this);
         }
@@ -191,8 +189,6 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
                 viewHolder.picture.setImageResource(R.mipmap.boozic_notype);
                 break;
         }
-        viewHolder.picBack.setColorFilter(m.getColorPrimary(), PorterDuff.Mode.MULTIPLY);
-        viewHolder.picture.setBackground(viewHolder.picBack);
     }
 
     public void remove(int position) {

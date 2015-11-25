@@ -16,6 +16,7 @@
        android:layout_marginRight="15dp">
        <ImageView
            android:id="@+id/type_image"
+           android:background="@drawable/image_background"
            android:layout_width="60dp"
            android:layout_height="60dp"
            android:layout_centerVertical="true"

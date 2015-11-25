@@ -50,7 +50,6 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         TextView price;
         TextView volume;
         ImageView picture;
-        Drawable picBack;
         public IMyViewHolderClicks mListener;
 
         // each data item is just a string in this case
@@ -61,7 +60,6 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
             storeName = (TextView) itemView.findViewById(R.id.txt_desc_item);
             price = (TextView) itemView.findViewById(R.id.price_item);
             picture = (ImageView) itemView.findViewById(R.id.type_image);
-            picBack = itemView.getResources().getDrawable(R.drawable.image_background, null);
 
             volume = (TextView) itemView.findViewById(R.id.volume_item);
             itemView.setOnClickListener(this);
@@ -191,8 +189,6 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
                 viewHolder.picture.setImageResource(R.mipmap.boozic_notype);
                 break;
         }
-        viewHolder.picBack.setColorFilter(m.getColorPrimary(), PorterDuff.Mode.MULTIPLY);
-        viewHolder.picture.setBackground(viewHolder.picBack);
     }
 
     // Return the size of your dataset (invoked by the layout manager)

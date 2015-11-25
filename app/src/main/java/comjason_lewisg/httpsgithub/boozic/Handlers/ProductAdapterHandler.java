@@ -63,7 +63,6 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         TextView cheapestPrice;
 
         ImageView typePic;
-        Drawable picBack;
 
         TextView container;
         TextView volume;
@@ -94,7 +93,6 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
 
             label = (TextView) itemView.findViewById(R.id.product_label);
             typePic = (ImageView) itemView.findViewById(R.id.product_type);
-            picBack = itemView.getResources().getDrawable(R.drawable.image_background, null);
 
             boozicScore = (TextView) itemView.findViewById(R.id.product_metascore);
             lastUpdate = (TextView) itemView.findViewById(R.id.product_last_updated);
@@ -371,8 +369,6 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
                 viewHolder.containerLayout.setVisibility(View.GONE);
                 break;
         }
-        viewHolder.picBack.setColorFilter(p.getPrimaryColor(), PorterDuff.Mode.MULTIPLY);
-        viewHolder.typePic.setBackground(viewHolder.picBack);
     }
 
     private int checkFavorites() {
