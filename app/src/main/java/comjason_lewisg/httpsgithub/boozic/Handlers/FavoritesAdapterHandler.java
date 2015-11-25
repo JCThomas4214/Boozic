@@ -195,7 +195,8 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
             viewHolder.price.setText(NumberFormat.getCurrencyInstance().format(model.closestPrice));
         }
         else {
-            viewHolder.storeName.setVisibility(View.GONE);
+            String noStore = "No Store Price Inputted within radius";
+            viewHolder.storeName.setText(noStore);
             viewHolder.price.setText("N/A");
         }
 
