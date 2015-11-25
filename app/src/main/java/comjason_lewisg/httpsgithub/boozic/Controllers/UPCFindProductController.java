@@ -208,7 +208,7 @@ public class UPCFindProductController {
                                 break;
                             case 2: //Found found on our server and UPC DB
                                 //toast no store information available
-                                m.DHandle.varifyUPC(UPC);
+                                m.DHandle.verifyUPC(UPC);
                                 break;
                         }
                     } catch (JSONException e) {}

@@ -163,8 +163,14 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
         DecimalFormat df = new DecimalFormat("####0.##");
 
         viewHolder.label.setText(model.label);
-        viewHolder.storeName.setText(model.closestStoreName);
-        viewHolder.price.setText(NumberFormat.getCurrencyInstance().format(model.closestPrice));
+        if (model.closestStoreName != null) {
+            viewHolder.storeName.setText(model.closestStoreName);
+            viewHolder.price.setText(NumberFormat.getCurrencyInstance().format(model.closestPrice));
+        }
+        else {
+            viewHolder.storeName.setVisibility(View.GONE);
+            viewHolder.price.setText("N/A");
+        }
 
         if (model.volume != -1) {
             String volume = "(" + df.format(model.volume) + model.volumeMeasure + ")";
@@ -182,7 +188,7 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
                 viewHolder.picture.setImageResource(R.mipmap.liquor);
                 break;
             case 4:
-                viewHolder.picture.setImageResource(R.mipmap.ic_launcher);
+                viewHolder.picture.setImageResource(R.mipmap.boozic_notype);
                 break;
         }
         viewHolder.picBack.setColorFilter(m.getColorPrimary(), PorterDuff.Mode.MULTIPLY);
@@ -225,7 +231,7 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
         //change favorite from product in existing product list
         m.PLcon.getProductList().get(tmp.position).favorite = 0;
         Log.v("Remove Fav", "remove item " + position);
-        items.remove(position);
+        remove(position);
         notifyItemRemoved(position);
     }
 

@@ -43,7 +43,7 @@ public class GCMService extends GcmListenerService {
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setSmallIcon(R.mipmap.boozic_icon)
                         .setContentTitle("Boozic")
                         .setContentText(msg);
         // Creates an explicit intent for an Activity in your app

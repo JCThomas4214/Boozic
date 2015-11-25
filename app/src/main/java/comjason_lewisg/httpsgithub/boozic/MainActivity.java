@@ -6,11 +6,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.Layout;
 import android.transition.Fade;
 import android.transition.Slide;
 import android.util.DisplayMetrics;
@@ -24,6 +28,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -93,6 +98,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public static final int SCANNER_CODE_REQUEST = 1;
     public static final int PRODUCT_INFO_REQUEST = 2;
 
+    static final int LIABILITY_STATE = 0;
+
     static final int COLOR_STATE = 1;
     static final int COLOR_ACCENT_STATE = 1;
     static final int PRIMARY_STATE = -10239574;
@@ -104,6 +111,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public int TBheight;
     private double expandConst;
     private double shrinkConst;
+
+    private int legal_liability;
 
     private int colorPrimary_id;
     private int colorAccent_id;
@@ -135,6 +144,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         activity = this;
         //pull the shared preference
         mPrefs = getSharedPreferences("COLOR_STATE", MODE_PRIVATE);
+
+        legal_liability = mPrefs.getInt("LIABILITY_STATE", LIABILITY_STATE);
         //when resume, pull saves states for each button
         colorPrimary_id = mPrefs.getInt("COLOR_STATE", COLOR_STATE);
         colorAccent_id = mPrefs.getInt("COLOR_ACCENT_STATE", COLOR_ACCENT_STATE);
@@ -152,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
         switch (colorPrimary_id) {
             case 1:
-                setTheme(R.style.AppTheme);
+                setTheme(R.style.AppTheme1);
                 break;
             case 2:
                 setTheme(R.style.AppTheme2);
@@ -167,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
                 setTheme(R.style.AppTheme5);
                 break;
         }
+        setContentView(R.layout.activity_main);
         applicationContext = getApplicationContext();
 
         buildGoogleApiClient();
@@ -180,8 +192,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         RAFcon = new RemoveAFavoriteController(this);
         upcFPC = new UPCFindProductController();
         FC = new FeedbackController();
-
-        setContentView(R.layout.activity_main);
 
         // Initializing Toolbar and setting it as the actionbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -198,12 +208,14 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
         //Create a Dialog Handler for Feedback
         DHandle = new DialogHandler(this);
+        if (legal_liability == 0) DHandle.OpenLegalDialogOnStart();
 
-        Log.v("STATE", "onCreate color id = " + colorPrimary_id);
+            Log.v("STATE", "onCreate color id = " + colorPrimary_id);
         themeHandler = new ThemeHandler();
 
         //connect to search bar and create new search handler
         searchBarHandler = new SearchBarHandler(this);
+
         Nav = new NavigationDrawerHandler(this,toolbar);
 
         //change the FAB icons depending on state color
@@ -236,6 +248,10 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
                 Log.v("SCREEN", "Screen size is Xlarge");
                 setXLarge();
         }
+    }
+
+    public void setLegal() {
+        legal_liability = 1;
     }
 
     public void setLarge() {
@@ -704,6 +720,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         //connect universal sharedpreference edit to ed
         SharedPreferences.Editor ed = mPrefs.edit();
         //store all color states into universal sharedpreference
+        ed.putInt("LIABILITY_STATE", legal_liability);
         ed.putInt("COLOR_STATE", colorPrimary_id);
         ed.putInt("COLOR_ACCENT_STATE", colorAccent_id);
         ed.putInt("PRIMARY_STATE", primaryColor);

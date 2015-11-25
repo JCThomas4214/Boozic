@@ -70,20 +70,49 @@ public class DialogHandler {
         dialog.show();
     }
 
+    public void OpenLegalDialogOnStart() {
+
+        //Create the MaterialDialog object to start initiallizing attributes
+        MaterialDialog dialog = new MaterialDialog.Builder(m)
+                .title("Exclusion of Liability")
+                .content(R.string.legal_liability)
+                .positiveText("AGREE")
+                .negativeText("DISAGREE")
+                .positiveColor(m.getColorAccent())
+                .negativeColor(m.getColorAccent())
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        m.setLegal();
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        m.finish();
+                    }
+                })
+                .build();
+
+        dialog.setCancelable(false);
+        dialog.show();
+    }
+
     public void OpenLegalDialog() {
 
         //Create the MaterialDialog object to start initiallizing attributes
         MaterialDialog dialog = new MaterialDialog.Builder(m)
                 .title("Legal and Liability")
-                .content("This is where the legal documentation will go.")
+                .content(R.string.legal_liability)
                 .positiveText("OK")
                 .positiveColor(m.getColorAccent())
                 .build();
 
+        dialog.setCancelable(false);
         dialog.show();
     }
 
-    public void varifyUPC(final String upc) {
+    public void verifyUPC(final String upc) {
 
         MaterialDialog dialog = new MaterialDialog.Builder(m)
                 .title("Verify Product UPC")
@@ -97,7 +126,7 @@ public class DialogHandler {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        veriftProductLabel(upc);
+                        verifyProductLabel(upc);
                         //start new product label
                     }
                 })
@@ -118,7 +147,7 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void veriftProductLabel(final String upc) {
+    public void verifyProductLabel(final String upc) {
         MaterialDialog dialog = new MaterialDialog.Builder(m)
                 .title("Input Product Label")
                 .inputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS | InputType.TYPE_CLASS_TEXT)
@@ -630,6 +659,8 @@ public class DialogHandler {
                     }
                 })
                 .build();
+
+        dialog.setCancelable(false);
         dialog.show();
     }
 
@@ -647,7 +678,8 @@ public class DialogHandler {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         View view = dialog.getCustomView();
                         EditText price = (EditText) view.findViewById(R.id.price_dia_input);
-                        p.updatedModel.updateStorePrice(changeToDouble(price.getText().toString().replace("$", "")));
+                        if (!price.getText().toString().isEmpty()) p.updatedModel.updateStorePrice(changeToDouble(price.getText().toString().replace("$", "")));
+                        else UpdatePrice(cameFrom, isBeer);
                     }
                 })
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -662,6 +694,7 @@ public class DialogHandler {
         final EditText price = (EditText) view.findViewById(R.id.price_dia_input);
         price.addTextChangedListener(makeTextWatcher(price, "$"));
 
+        dialog.setCancelable(false);
         dialog.show();
     }
 

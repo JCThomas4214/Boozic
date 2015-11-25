@@ -374,7 +374,8 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
                 viewHolder.containerLayout.setVisibility(View.GONE);
                 break;
             case 4:
-                viewHolder.typePic.setImageResource(R.mipmap.ic_launcher);
+                viewHolder.typePic.setImageResource(R.mipmap.boozic_notype);
+                viewHolder.containerLayout.setVisibility(View.GONE);
                 break;
         }
         viewHolder.picBack.setColorFilter(p.getPrimaryColor(), PorterDuff.Mode.MULTIPLY);

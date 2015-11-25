@@ -69,7 +69,7 @@ public class ProductActivity extends AppCompatActivity {
         //when resume, pull saves states for each button
         switch (colorPrimary_id) {
             case 1:
-                setTheme(R.style.AppTheme);
+                setTheme(R.style.AppTheme1);
                 break;
             case 2:
                 setTheme(R.style.AppTheme2);

@@ -162,8 +162,14 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         DecimalFormat df = new DecimalFormat("####0.##");
 
         viewHolder.label.setText(model.label);
-        viewHolder.storeName.setText(model.closestStoreName);
-        viewHolder.price.setText(NumberFormat.getCurrencyInstance().format(model.closestPrice));
+        if (model.closestStoreName != null) {
+            viewHolder.storeName.setText(model.closestStoreName);
+            viewHolder.price.setText(NumberFormat.getCurrencyInstance().format(model.closestPrice));
+        }
+        else {
+            viewHolder.storeName.setVisibility(View.GONE);
+            viewHolder.price.setText("N/A");
+        }
 
         if (model.volume != -1) {
             String volume = "(" + df.format(model.volume) + model.volumeMeasure + ")";
@@ -182,7 +188,7 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
                 viewHolder.picture.setImageResource(R.mipmap.liquor);
                 break;
             case 4:
-                viewHolder.picture.setImageResource(R.mipmap.ic_launcher);
+                viewHolder.picture.setImageResource(R.mipmap.boozic_notype);
                 break;
         }
         viewHolder.picBack.setColorFilter(m.getColorPrimary(), PorterDuff.Mode.MULTIPLY);

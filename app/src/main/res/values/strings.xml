@@ -29,4 +29,13 @@
     <string name="title_activity_reveal_avtivity">RevealAvtivity</string>
     <string name="title_activity_reveal">RevealActivity</string>
 
+    <string name="legal_liability">We are not responsible for any user generated content. Even though
+        strict provisions are included in the content generation process, we do not control and are not
+        responsible for what users post on our application and are not responsible for any offensive,
+        inappropriate, obscene, unlawful, infringing, or otherwise objectionable or illegal user generated
+        content you may encounter on our application. Our application is for recreational use only and
+        any damages caused by the use or misuse of this program is not our responsibility. Our application
+        is in no way encouraging substance abuse and/or underage drinking.
+    </string>
+
 </resources>

@@ -32,7 +32,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPrefs = getSharedPreferences("COLOR_STATE", MODE_MULTI_PROCESS);
+        mPrefs = getSharedPreferences("COLOR_STATE", MODE_PRIVATE);
         //when resume, pull saves states for each button
         setContentView(R.layout.activity_settings);
 
