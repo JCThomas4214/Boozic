@@ -1,9 +1,7 @@
 package comjason_lewisg.httpsgithub.boozic;
 
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.app.AppCompatActivity;
@@ -16,16 +14,15 @@ public class SettingsActivity extends AppCompatActivity {
 
     public Toolbar toolbar;
 
-    static final int COLOR_STATE = 0;
     static final int PRIMARY_STATE = 0;
     static final int PRIMARY_DARK_STATE = 0;
     static final int ACCENT_STATE = 0;
     static final int ACCENT_DARK_STATE = 0;
 
-    private int primaryColor;
-    private int primaryColorDark;
-    private int accentColor;
-    private int accentColorDark;
+    int primaryColor;
+    int primaryColorDark;
+    int accentColor;
+    int accentColorDark;
 
     private SharedPreferences mPrefs;
 
@@ -79,7 +76,7 @@ public class SettingsActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         //pull the shared preference
-        mPrefs = getSharedPreferences("COLOR_STATE", MODE_MULTI_PROCESS);
+        mPrefs = getSharedPreferences("COLOR_STATE", MODE_PRIVATE);
         //when resume, pull saves states for each button
 
         primaryColor = mPrefs.getInt("PRIMARY_STATE", PRIMARY_STATE);

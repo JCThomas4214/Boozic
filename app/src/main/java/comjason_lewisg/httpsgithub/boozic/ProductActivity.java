@@ -325,6 +325,14 @@ public class ProductActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        //return to main activity
+        if (updatedModel.updated) UPC.updateProduct(this);
+        setProductActivityResults();
+        finish();
+    }
+
     public int getPrimaryColor() { return primaryColor; }
     public int getPrimaryColorDark() { return primaryColorDark; }
     public int getAccentColor() { return accentColor; }

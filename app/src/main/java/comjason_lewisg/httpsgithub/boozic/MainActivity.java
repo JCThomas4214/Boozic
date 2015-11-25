@@ -6,15 +6,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Point;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.Layout;
 import android.transition.Fade;
 import android.transition.Slide;
 import android.util.DisplayMetrics;
@@ -28,7 +24,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -39,7 +34,6 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -51,7 +45,6 @@ import comjason_lewisg.httpsgithub.boozic.Controllers.ProductListController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.RemoveAFavoriteController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.RemoveFromFavoritesController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.UPCFindProductController;
-import comjason_lewisg.httpsgithub.boozic.Fragments.FavoritesFragment;
 import comjason_lewisg.httpsgithub.boozic.Fragments.ThemeFragment;
 import comjason_lewisg.httpsgithub.boozic.Fragments.TopTensFragment;
 import comjason_lewisg.httpsgithub.boozic.Handlers.AdapterHandler;
@@ -67,7 +60,6 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 
 import com.quinny898.library.persistentsearch.SearchBox;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -341,7 +333,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         relativeLayout.setLayoutParams(layoutParams);
     }
     public static boolean hasSoftKeys(MainActivity m){
-        boolean hasSoftwareKeys = true;
+        boolean hasSoftwareKeys;
 
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.JELLY_BEAN_MR1){
             Display d = m.getWindowManager().getDefaultDisplay();
@@ -590,7 +582,9 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
                     try {
                         Nav.topTensFragment.mAdapter.notifyDataSetChanged();
-                    } catch (Exception e) {}
+                    } catch (Exception e) {
+                        Log.v("CATCH", "There is a catch");
+                    }
                 } else if (position == -1 && favoritePosition >= 0) {
                     if (favorite != 0) {
                         TopTensModel model = FLcon.favoritesList.get(favoritePosition);
@@ -616,12 +610,16 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
                         try {
                             Nav.favoritesFragment.mAdapter.notifyDataSetChanged();
-                        } catch (Exception e) {}
+                        } catch (Exception e) {
+                            Log.v("CATCH", "There is a catch");
+                        }
                     } else {
                         FLcon.favoritesList.remove(favoritePosition);
                         try {
                             Nav.favoritesFragment.mAdapter.removeItem(favoritePosition);
-                        } catch (Exception e) {}
+                        } catch (Exception e) {
+                            Log.v("CATCH", "There is a catch");
+                        }
                     }
                 }
                 else if (position >= 0 && favoritePosition >= 0) {
@@ -679,15 +677,21 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
                         try {
                             Nav.favoritesFragment.mAdapter.remove(favoritePosition);
-                        } catch (Exception e) {}
+                        } catch (Exception e) {
+                            Log.v("CATCH", "There is a catch");
+                        }
                     }
 
                     try {
                         Nav.favoritesFragment.mAdapter.notifyDataSetChanged();
-                    } catch (Exception e) {}
+                    } catch (Exception e) {
+                        Log.v("CATCH", "There is a catch");
+                    }
                     try {
                         Nav.topTensFragment.mAdapter.notifyDataSetChanged();
-                    } catch (Exception e) {}
+                    } catch (Exception e) {
+                        Log.v("CATCH", "There is a catch");
+                    }
                 }
             }
         }
