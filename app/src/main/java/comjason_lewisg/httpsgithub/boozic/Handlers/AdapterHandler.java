@@ -21,6 +21,7 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -49,7 +50,14 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         TextView storeName;
         TextView price;
         TextView volume;
+        TextView rating;
+        TextView abv;
+        TextView container;
         ImageView picture;
+        LinearLayout containerLayout;
+        LinearLayout abvLayout;
+        LinearLayout ratingLayout;
+        LinearLayout productInfo;
         public IMyViewHolderClicks mListener;
 
         // each data item is just a string in this case
@@ -59,7 +67,14 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
             label = (TextView) itemView.findViewById(R.id.txt_label_item);
             storeName = (TextView) itemView.findViewById(R.id.txt_desc_item);
             price = (TextView) itemView.findViewById(R.id.price_item);
+            rating = (TextView) itemView.findViewById(R.id.list_RATING);
+            abv = (TextView) itemView.findViewById(R.id.list_ABV);
+            container = (TextView) itemView.findViewById(R.id.list_container);
             picture = (ImageView) itemView.findViewById(R.id.type_image);
+            containerLayout = (LinearLayout) itemView.findViewById(R.id.product_list_container);
+            abvLayout = (LinearLayout) itemView.findViewById(R.id.product_list_abv);
+            ratingLayout = (LinearLayout) itemView.findViewById(R.id.product_list_rating);
+            productInfo = (LinearLayout) itemView.findViewById(R.id.product_list_info);
 
             volume = (TextView) itemView.findViewById(R.id.volume_item);
             itemView.setOnClickListener(this);
@@ -159,13 +174,28 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         TopTensModel model = shownItems.get(position);
         DecimalFormat df = new DecimalFormat("####0.##");
 
+        if (model.avgRating == 0) {
+            viewHolder.rating.setText("N/A");
+        }
+        else {
+            String avgRating = model.avgRating + "";
+            viewHolder.rating.setText(avgRating);
+        }
+
+        String abv = df.format(model.abv) + "%";
+        viewHolder.abv.setText(abv);
+
+        String container = "(" + model.containerQuantity + ") " + model.containerType;
+        viewHolder.container.setText(container);
+
         viewHolder.label.setText(model.label);
         if (model.closestStoreName != null) {
             viewHolder.storeName.setText(model.closestStoreName);
             viewHolder.price.setText(NumberFormat.getCurrencyInstance().format(model.closestPrice));
         }
         else {
-            viewHolder.storeName.setVisibility(View.GONE);
+            String noStore = "No Store Price Inputted within radius";
+            viewHolder.storeName.setText(noStore);
             viewHolder.price.setText("N/A");
         }
 
@@ -178,15 +208,20 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         switch (model.typePic) {
             case 1:
                 viewHolder.picture.setImageResource(R.mipmap.wine);
+                if (model.abv == -1) viewHolder.productInfo.setVisibility(View.GONE);
                 break;
             case 2:
                 viewHolder.picture.setImageResource(R.mipmap.beer);
+                viewHolder.containerLayout.setVisibility(View.VISIBLE);
+                if (model.abv == -1) viewHolder.abvLayout.setVisibility(View.GONE);
                 break;
             case 3:
                 viewHolder.picture.setImageResource(R.mipmap.liquor);
+                if (model.abv == -1) viewHolder.productInfo.setVisibility(View.GONE);
                 break;
             case 4:
                 viewHolder.picture.setImageResource(R.mipmap.boozic_notype);
+                if (model.abv == -1) viewHolder.productInfo.setVisibility(View.GONE);
                 break;
         }
     }

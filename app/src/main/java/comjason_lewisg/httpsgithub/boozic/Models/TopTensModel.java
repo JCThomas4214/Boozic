@@ -106,7 +106,7 @@ public class TopTensModel {
 
             rating = new int[]{object.getInt("Rating1"), object.getInt("Rating2"),
                             object.getInt("Rating3"), object.getInt("Rating4"), object.getInt("Rating5")};
-            avgRating = object.getDouble("CombinedRating");//findAverage();
+            avgRating = object.getDouble("CombinedRating");
 
             volumeMeasure = object.getString("VolumeUnit");
             getVolMeasure();
