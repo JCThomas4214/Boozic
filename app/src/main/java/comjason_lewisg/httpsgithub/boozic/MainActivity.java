@@ -201,17 +201,12 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         //Create a Dialog Handler for Feedback
         DHandle = new DialogHandler(this);
         if (legal_liability == 0) DHandle.OpenLegalDialogOnStart();
-
-            Log.v("STATE", "onCreate color id = " + colorPrimary_id);
         themeHandler = new ThemeHandler();
 
         //connect to search bar and create new search handler
         searchBarHandler = new SearchBarHandler(this);
 
         Nav = new NavigationDrawerHandler(this,toolbar);
-
-        //change the FAB icons depending on state color
-        findViewById(R.id.toolbar).setBackgroundColor(primaryColor);
 
         //Creates a FAB for the bottom right corner of the main screen
         FAB = new FloatingActionButtonHandler(this, accentColor, accentColorDark);

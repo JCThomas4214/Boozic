@@ -7,7 +7,7 @@
     android:elevation="8dp"
     android:animateLayoutChanges="true"
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    android:background="@color/ColorPrimary">
+    android:background="?appColor">
 
     <TextView
         android:layout_width="wrap_content"

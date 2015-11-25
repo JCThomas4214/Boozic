@@ -281,6 +281,8 @@ public class DialogHandler {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         p.FPcon.flagProduct(p,which+1);
+
+                        if (which == 1) UpdateProductLabel();
                     }
                 })
                 .build();

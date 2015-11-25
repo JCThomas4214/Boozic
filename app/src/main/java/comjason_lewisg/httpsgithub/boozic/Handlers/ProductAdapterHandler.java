@@ -182,9 +182,6 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
                     case R.id.product_info_table_table_layout:
                         mListener.startProductInfoDialog(v);
                         break;
-                    case R.id.product_label:
-                        mListener.startProductNameDialog(v);
-                        break;
                 }
                 return true;
             }
@@ -201,7 +198,6 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             void startCheapestNavigation(View caller);
             void changeUpdateModelRating(RatingBar caller);
             void startProductInfoDialog(View caller);
-            void startProductNameDialog(View caller);
             int getPrimaryColor();
             int getPrimaryColorDark();
         }
@@ -270,9 +266,6 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             }
             public void startProductInfoDialog(View caller) {
                 DHandler.StartProductInfoDialog();
-            }
-            public void startProductNameDialog(View caller) {
-                DHandler.UpdateProductLabel();
             }
             public int getPrimaryColor() { return p.getPrimaryColor(); }
             public int getPrimaryColorDark() { return p.getPrimaryColorDark(); }

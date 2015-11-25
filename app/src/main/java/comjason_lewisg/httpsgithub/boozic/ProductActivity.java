@@ -309,8 +309,6 @@ public class ProductActivity extends AppCompatActivity {
         return result;
     }
 
-
-
     @Override
     public void onResume() {
         super.onResume();
