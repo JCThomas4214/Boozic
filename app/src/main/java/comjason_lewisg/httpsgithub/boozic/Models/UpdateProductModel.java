@@ -41,6 +41,7 @@ public class UpdateProductModel {
 
     public void updateContainerType(String container) {
         this.containerType = container;
+        this.volumeMeasure = "oz";
         updated = true;
     }
 
@@ -77,6 +78,9 @@ public class UpdateProductModel {
         }
         else if (this.volume < 1000 && oldVolumeMeasure.equals("L")) {
             this.volumeMeasure = "ml";
+        }
+        else {
+            this.volumeMeasure = "oz";
         }
         updated = true;
     }
