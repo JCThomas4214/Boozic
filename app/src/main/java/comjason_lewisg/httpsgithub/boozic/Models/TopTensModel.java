@@ -13,6 +13,8 @@ import java.util.Currency;
 import java.util.Date;
 
 public class TopTensModel {
+    public boolean seen = false;
+
     public String label;
     public String lastUpdate;
     public double userRating = -1;
@@ -89,7 +91,7 @@ public class TopTensModel {
             favorite = object.getInt("IsFavourite");
 
             containerType = object.getString("ContainerType");
-            if (containerType.equals("null")) containerType = "N/A";
+            if (containerType.equals("null")) containerType = null;
 
             containerQuantity = object.getInt("ContainerQty");
 
@@ -192,11 +194,6 @@ public class TopTensModel {
         }
 
         return ((wTotal / total) * 100) / 20;
-    }
-
-    public boolean isABV() {
-        if (abv > 0) return true;
-        return false;
     }
 
     public boolean isContainer() {

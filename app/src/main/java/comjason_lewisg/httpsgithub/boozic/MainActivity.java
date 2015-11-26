@@ -10,7 +10,6 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.transition.Fade;
 import android.transition.Slide;
 import android.util.DisplayMetrics;
@@ -47,7 +46,6 @@ import comjason_lewisg.httpsgithub.boozic.Controllers.RemoveFromFavoritesControl
 import comjason_lewisg.httpsgithub.boozic.Controllers.UPCFindProductController;
 import comjason_lewisg.httpsgithub.boozic.Fragments.ThemeFragment;
 import comjason_lewisg.httpsgithub.boozic.Fragments.TopTensFragment;
-import comjason_lewisg.httpsgithub.boozic.Handlers.AdapterHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.AnimateToolbarHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.DialogHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.FilterMenuHandler;
@@ -388,10 +386,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         DHandle.OpenCustomMileDialog();
     }
 
-    public void callProductRefresh(AdapterHandler mAdapter, SwipeRefreshLayout swipeRefreshLayout) {
-        PLcon.callList(FMHandle, mAdapter, swipeRefreshLayout, latitude, longitude);
-    }
-
     public void showFilterMenu() {
         if (!FMHandle.menuOpen) {
             item.setIcon(R.drawable.filter);
@@ -459,7 +453,7 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
 
         //initial query to populate list
         if (firstStartRefresh) {
-            Nav.topTensFragment.askForProductListrefresh(Nav.topTensFragment.getmAdapter(), Nav.topTensFragment.getSwipeRefreshLayout());
+            PLcon.callList(FMHandle, Nav.topTensFragment.mAdapter, Nav.topTensFragment.getSwipeRefreshLayout(), latitude, longitude);
             firstStartRefresh = false;
         }
     }
@@ -825,11 +819,6 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         if (item != null) item.setVisible(false);
         filterButtonVis = false;
         hideFilterMenu();
-    }
-
-    @Override
-    public void AskForProductListrefresh (AdapterHandler mAdapter, SwipeRefreshLayout swipeRefreshLayout) {
-        callProductRefresh(mAdapter, swipeRefreshLayout);
     }
 
     @Override

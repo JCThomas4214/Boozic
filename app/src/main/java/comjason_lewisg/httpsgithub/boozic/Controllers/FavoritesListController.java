@@ -86,8 +86,8 @@ public class FavoritesListController {
 
             @Override
             protected void onPostExecute(JSONArray jsonData) {
-                parseJson(jsonData);
                 if (jsonData != null) {
+                    parseJson(jsonData);
                     mAdapter.setList(favoritesList);
                 }
                 else {

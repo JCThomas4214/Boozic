@@ -317,10 +317,12 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             viewHolder.cheapestPrice.setText("$" + monFormat.format(model.cheapestPrice));
         }
 
-        if (model.containerType.equals("N/A")) viewHolder.containerLayout.setVisibility(View.GONE);
-        else {
+        if (model.containerType != null && model.typePic == 2) {
             String tmp = "(" + model.containerQuantity + ") " + model.containerType;
             viewHolder.container.setText(tmp);
+        }
+        else {
+            viewHolder.containerLayout.setVisibility(View.GONE);
         }
 
         selectTypePic(model, viewHolder);
@@ -354,7 +356,6 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         switch (model.typePic) {
             case 1:
                 viewHolder.typePic.setImageResource(R.mipmap.wine);
-                viewHolder.containerLayout.setVisibility(View.GONE);
                 break;
             case 2:
                 viewHolder.typePic.setImageResource(R.mipmap.beer);
@@ -362,11 +363,9 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
                 break;
             case 3:
                 viewHolder.typePic.setImageResource(R.mipmap.liquor);
-                viewHolder.containerLayout.setVisibility(View.GONE);
                 break;
             case 4:
                 viewHolder.typePic.setImageResource(R.mipmap.boozic_notype);
-                viewHolder.containerLayout.setVisibility(View.GONE);
                 break;
         }
     }

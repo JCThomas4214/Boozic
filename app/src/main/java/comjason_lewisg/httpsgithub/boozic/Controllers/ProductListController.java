@@ -34,6 +34,8 @@ public class ProductListController {
     MainActivity m;
     FrameLayout frame;
 
+    AdapterHandler mAdapter;
+
     public void onCreate() {}
 
     public ProductListController(MainActivity m) {
@@ -42,12 +44,13 @@ public class ProductListController {
     }
 
     public void callList(FilterMenuHandler fm, AdapterHandler mAdapter, SwipeRefreshLayout swipeRefreshLayout, double latitude, double longitude) {
+        this.mAdapter = mAdapter;
         if (m.checkPlayServices()) {
-            getListInBackground(m, fm, mAdapter, swipeRefreshLayout, latitude, longitude);
+            getListInBackground(m, fm, swipeRefreshLayout, latitude, longitude);
         }
     }
 
-    private void getListInBackground(final MainActivity m, final FilterMenuHandler fm, final AdapterHandler mAdapter, final SwipeRefreshLayout swipeRefreshLayout, final double latitude, final double longitude) {
+    private void getListInBackground(final MainActivity m, final FilterMenuHandler fm, final SwipeRefreshLayout swipeRefreshLayout, final double latitude, final double longitude) {
 
         if (!swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(true);
 
@@ -107,27 +110,27 @@ public class ProductListController {
 
             @Override
             protected void onPostExecute(JSONArray jsonData) {
-                mAdapter.clearData();
-                if (jsonData != null) parseJsonObject(jsonData, mAdapter, swipeRefreshLayout);
+                if (jsonData != null) {
+                    parseJsonObject(jsonData);
+                    mAdapter.startList(productList);
+                }
                 else {
-                    swipeRefreshLayout.setRefreshing(false);
                     //toast no store information available
                     Crouton.makeText(m, "There are Currently no Products", Style.ALERT, frame).show();
                 }
+                swipeRefreshLayout.setRefreshing(false);
             }
         }.execute();
     }
 
-    public void parseJsonObject(JSONArray jArr, AdapterHandler mAdapter, SwipeRefreshLayout swipeRefreshLayout) {
+    public void parseJsonObject(JSONArray jArr) {
 
-        productList.clear();
-        m.FLcon.favoritesList.clear();
         int size = jArr.length();
         boolean firstSet = true;
         int mod;
         int count = 0;
 
-        for (int i = 1; i <= size; i++) {
+        /*for (int i = 1; i <= size; i++) {
             mod = i % 25;
             try {
                 JSONObject oneObject = jArr.getJSONObject(i-1);
@@ -153,10 +156,25 @@ public class ProductListController {
                     else mAdapter.addList(productList.subList((size/25)*25, size));
                 }
             } catch (JSONException e) {}
+        }*/
+
+        productList.clear();
+        m.FLcon.favoritesList.clear();
+        for (int i = 0; i <= size; i++) {
+            try {
+                JSONObject oneObject = jArr.getJSONObject(i);
+                int favorite = oneObject.getInt("IsFavourite");
+                //continue to add models to list
+                if (favorite == 1) {
+                    productList.add(new TopTensModel(oneObject,i, count));
+                    m.FLcon.favoritesList.add(new TopTensModel(oneObject,i, count++));
+                } else {
+                    productList.add(new TopTensModel(oneObject,i, -1));
+                }
+            } catch (JSONException e) {}
         }
 
         if (size == 0) {
-            swipeRefreshLayout.setRefreshing(false);
             Crouton.makeText(m, "No Products with these Constraints", Style.ALERT, frame).show();
         }
     }

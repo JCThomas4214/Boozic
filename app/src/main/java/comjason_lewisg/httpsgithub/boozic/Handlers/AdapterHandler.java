@@ -1,8 +1,6 @@
 package comjason_lewisg.httpsgithub.boozic.Handlers;
 
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,12 +22,10 @@ import comjason_lewisg.httpsgithub.boozic.R;
 public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItemViewHolder> {
 
     private List<TopTensModel> shownItems = new ArrayList<>();
-    private List<TopTensModel> allItems = new ArrayList<>();
     private int cursor;
     private int addedItems = 50;
     private boolean cursorCheck = true;
     MainActivity m;
-    TopTensModel model;
 
     // Provide a reference to the views for each data item
     // Complex data shownItems may need more than one view per item, and
@@ -45,7 +41,6 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         ImageView picture;
         LinearLayout containerLayout;
         LinearLayout abvLayout;
-        LinearLayout ratingLayout;
         LinearLayout productInfo;
         public IMyViewHolderClicks mListener;
 
@@ -62,7 +57,6 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
             picture = (ImageView) itemView.findViewById(R.id.type_image);
             containerLayout = (LinearLayout) itemView.findViewById(R.id.product_list_container);
             abvLayout = (LinearLayout) itemView.findViewById(R.id.product_list_abv);
-            ratingLayout = (LinearLayout) itemView.findViewById(R.id.product_list_rating);
             productInfo = (LinearLayout) itemView.findViewById(R.id.product_list_info);
 
             volume = (TextView) itemView.findViewById(R.id.volume_item);
@@ -82,17 +76,7 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
     // Provide a suitable constructor (depends on the kind of data set)
     public AdapterHandler(MainActivity m, List<TopTensModel> productList) {
         this.m = m;
-
-        if (!productList.isEmpty()) {
-            allItems.addAll(productList);
-
-            cursor = 25;
-            cursorCheck = true;
-
-            if (productList.size() > cursor) {
-                shownItems.addAll(productList.subList(0, cursor));
-            } else shownItems.addAll(productList);
-        }
+        this.shownItems.addAll(productList);
     }
 
     // Create new views (invoked by the layout manager)
@@ -160,45 +144,47 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
     public void onBindViewHolder(ListItemViewHolder viewHolder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        model = shownItems.get(position);
+        TopTensModel model = shownItems.get(position);
         DecimalFormat df = new DecimalFormat("####0.##");
+
+        viewHolder.containerLayout.setVisibility(View.VISIBLE);
+        viewHolder.abvLayout.setVisibility(View.VISIBLE);
+        viewHolder.productInfo.setVisibility(View.VISIBLE);
+
+        viewHolder.label.setText(model.label);
+
+        if (model.containerType != null && model.typePic == 2) {
+            String containerLabel = "(" + model.containerQuantity + ") " + model.containerType;
+            viewHolder.container.setText(containerLabel);
+        } else viewHolder.containerLayout.setVisibility(View.GONE);
+
+        if (model.abv > 0) {
+            String abv = df.format(model.abv) + "%";
+            viewHolder.abv.setText(abv);
+        } else {
+            viewHolder.abvLayout.setVisibility(View.GONE);
+        }
 
         if (model.avgRating == 0) {
             viewHolder.rating.setText("N/A");
-        }
-        else {
+        } else {
             String avgRating = model.avgRating + "";
             viewHolder.rating.setText(avgRating);
         }
 
-        if (model.isABV()) {
-            String abv = df.format(model.abv) + "%";
-            viewHolder.abv.setText(abv);
-        }
-        else {
-            viewHolder.abv.setText("N/A");
-        }
-
-        viewHolder.label.setText(model.label);
         if (model.closestStoreName != null) {
             viewHolder.storeName.setText(model.closestStoreName);
             viewHolder.price.setText(NumberFormat.getCurrencyInstance().format(model.closestPrice));
-        }
-        else {
+        } else {
             String noStore = "No Store Price Inputted within radius";
             viewHolder.storeName.setText(noStore);
             viewHolder.price.setText("N/A");
         }
 
-        switch ((int)model.volume) {
-            case -1:
-                viewHolder.volume.setText("N/A");
-                break;
-            default:
-                String volume = "(" + df.format(model.volume) + model.volumeMeasure + ")";
-                viewHolder.volume.setText(volume);
-                break;
-        }
+        if (model.volume != -1) {
+            String volume = "(" + df.format(model.volume) + model.volumeMeasure + ")";
+            viewHolder.volume.setText(volume);
+        } else viewHolder.volume.setText("N/A");
 
         switch (model.typePic) {
             case 1:
@@ -206,9 +192,8 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
                 break;
             case 2:
                 viewHolder.picture.setImageResource(R.mipmap.beer);
-                viewHolder.containerLayout.setVisibility(View.VISIBLE);
-                String container = "(" + model.containerQuantity + ") " + model.containerType;
-                viewHolder.container.setText(container);
+                if (model.abv <= 0 && model.containerType == null)
+                    viewHolder.productInfo.setVisibility(View.GONE);
                 break;
             case 3:
                 viewHolder.picture.setImageResource(R.mipmap.liquor);
@@ -226,98 +211,8 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
     }
 
     public void startList(final List<TopTensModel> productList) {
-        allItems.clear();
         shownItems.clear();
-        allItems.addAll(productList);
-
-        cursor = 25;
-        cursorCheck = true;
-
-        if (productList.size() > cursor) {
-            shownItems.addAll(productList.subList(0,cursor));
-        } else shownItems.addAll(productList);
-        notifyList();
-    }
-
-    public void startList(final List<TopTensModel> productList, final SwipeRefreshLayout swipeRefreshLayout) {
-        allItems.clear();
-        shownItems.clear();
-        allItems.addAll(productList);
-
-        cursor = 25;
-        cursorCheck = true;
-
-        if (productList.size() > cursor) {
-            shownItems.addAll(productList.subList(0,cursor));
-        } else shownItems.addAll(productList);
-
-        notifyList();
-        swipeRefreshLayout.setRefreshing(false);
-    }
-
-    public void addList(List<TopTensModel> productList) {
-        allItems.addAll(productList);
-    }
-
-    public void addItem(TopTensModel item) {
-        shownItems.add(item);
-        this.notifyDataSetChanged();
-    }
-
-    public void addWithScroll() {
-
-        final int size = allItems.size();
-
-        new AsyncTask<Void, Void, Boolean>() {
-
-            @Override
-            protected void onPreExecute() {
-                if (size <= cursor) cursorCheck = false;
-                else cursorCheck = true;
-            }
-            @Override
-            protected Boolean doInBackground(Void... params) {
-                if (cursorCheck) {
-                    if (cursor+addedItems < size) {
-                        shownItems.addAll(allItems.subList(cursor, cursor+addedItems));
-                        cursor += addedItems;
-                    }
-                    else {
-                        shownItems.addAll(allItems.subList(cursor, size));
-                        cursor = size;
-                    }
-                }
-                return cursorCheck;
-            }
-            @Override
-            protected void onPostExecute(Boolean result) {
-                notifyList();
-            }
-        }.execute();
-    }
-
-    public void notifyList() {
-        this.notifyDataSetChanged();
-    }
-
-    public void clearData() {
-        int size = this.allItems.size();
-        int showSize = this.shownItems.size();
-        if (size > 0) {
-            for (int i = 0; i < size; i++) {
-                if (i < showSize) this.shownItems.remove(0);
-                this.allItems.remove(0);
-            }
-
-            this.notifyItemRangeRemoved(0, showSize);
-        }
-    }
-
-    public List<TopTensModel> getProductList() {
-        return shownItems;
-    }
-
-    public boolean getCursorCheck() {
-        return cursorCheck;
+        shownItems.addAll(productList);
+        notifyDataSetChanged();
     }
 }

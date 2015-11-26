@@ -2,9 +2,7 @@ package comjason_lewisg.httpsgithub.boozic.Fragments;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,13 +10,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import comjason_lewisg.httpsgithub.boozic.Handlers.AdapterHandler;
@@ -28,12 +23,13 @@ import comjason_lewisg.httpsgithub.boozic.R;
 
 public class TopTensFragment extends Fragment {
     private View rootView;
-    private FragmentManager manager;
+    FragmentManager manager;
+    MainActivity m;
 
-    private RecyclerView mRecyclerView;
+    RecyclerView mRecyclerView;
     public AdapterHandler mAdapter;
-    private LinearLayoutManager mLayoutManager;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    RecyclerView.LayoutManager mLayoutManager;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     int colorPrimary;
     int colorPrimaryDark;
@@ -47,21 +43,23 @@ public class TopTensFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         rootView = inflater.inflate(R.layout.fragment_toptens,container,false);
-        viewSet(rootView);
-
         return rootView;
     }
 
-    private void viewSet(View rootView) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        m = (MainActivity)getActivity();
+
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.topTen_rv);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setHasFixedSize(false);
 
-        mAdapter = new AdapterHandler((MainActivity) getActivity(), askForProductList());
+        mAdapter = new AdapterHandler(m, askForProductList());
         mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -80,7 +78,7 @@ public class TopTensFragment extends Fragment {
             }
         });
 
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        /*mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if (mAdapter.getCursorCheck()) {
@@ -94,7 +92,7 @@ public class TopTensFragment extends Fragment {
                     }
                 }
             }
-        });
+        });*/
 
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.ColorAccent),
@@ -105,7 +103,8 @@ public class TopTensFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                askForProductListrefresh(mAdapter, swipeRefreshLayout);
+                m.PLcon.callList(m.FMHandle, mAdapter, swipeRefreshLayout, m.latitude, m.longitude);
+                //mAdapter.removeAll();
             }
         });
     }
@@ -126,7 +125,6 @@ public class TopTensFragment extends Fragment {
         void AskToHideFilterButtons();
         void AskToShowFilterButtons();
         void CloseMenu();
-        void AskForProductListrefresh(AdapterHandler mAdapter, SwipeRefreshLayout swipeRefreshLayout);
         List<TopTensModel> AskForProductList();
     }
 
@@ -143,8 +141,6 @@ public class TopTensFragment extends Fragment {
     public void askHideFilterButtons() { dataPasser.AskToHideFilterButtons(); }
 
     public void askShowFilterButtons() { dataPasser.AskToShowFilterButtons(); }
-
-    public void askForProductListrefresh(AdapterHandler mAdapter, SwipeRefreshLayout swipeRefreshLayout) { dataPasser.AskForProductListrefresh(mAdapter, swipeRefreshLayout); }
 
     public List<TopTensModel> askForProductList() { return dataPasser.AskForProductList(); }
 
