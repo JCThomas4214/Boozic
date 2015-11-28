@@ -8,7 +8,7 @@ import org.json.JSONObject;
 public class ProductStorageModel {
     public String label;
     public String lastUpdate = "N/A";
-    public double userRating = -1;
+    public int userRating = -1;
     public int boozicScore = -1;
 
     public String upc;
@@ -43,7 +43,7 @@ public class ProductStorageModel {
     public int[] rating = new int[5];
     public double avgRating;
 
-    public ProductStorageModel(String label, String upc, int productId, String lastUpdate, double userRating, int closestStoreId, int cheapestStoreId, String closestStoreName, String cheapestStoreName,
+    public ProductStorageModel(String label, String upc, int productId, String lastUpdate, int userRating, int closestStoreId, int cheapestStoreId, String closestStoreName, String cheapestStoreName,
                                String closestStoreAddress, String cheapestStoreAddress, double closestStoreDist, double cheapestStoreDist, double closestPrice, double cheapestPrice, int type, int favorite, String container,
                                int containerQuantity, double abv, int[] rating, double volume, String volumeMeasure, double pbv, double abp, double pdd, double td, double avgRating) {
 

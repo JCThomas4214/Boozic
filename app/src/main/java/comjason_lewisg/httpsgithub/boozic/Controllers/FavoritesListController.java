@@ -147,7 +147,7 @@ public class FavoritesListController {
     public void updateFavorite(Intent data, int productId) {
         //Favorites model at favoritePosition
         TopTensModel model = m.FLcon.favoritesList.get(m.favoritePositionHMap.get(productId));
-        model.userRating = data.getExtras().getDouble("UserRating");
+        model.userRating = data.getExtras().getInt("UserRating");
         model.typePic = data.getExtras().getInt("ParentType");
         model.containerType = data.getExtras().getString("ContainerType");
         model.containerQuantity = data.getExtras().getInt("ContainerQty");

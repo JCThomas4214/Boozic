@@ -17,7 +17,7 @@ public class TopTensModel {
 
     public String label;
     public String lastUpdate;
-    public double userRating = -1;
+    public int userRating = -1;
     public int boozicScore;
 
     public String upc;

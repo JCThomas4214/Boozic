@@ -57,7 +57,7 @@ public class TopTensFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mRecyclerView.setHasFixedSize(false);
+        mRecyclerView.setHasFixedSize(true);
 
         mAdapter = new AdapterHandler(m, askForProductList());
         mRecyclerView.setAdapter(mAdapter);

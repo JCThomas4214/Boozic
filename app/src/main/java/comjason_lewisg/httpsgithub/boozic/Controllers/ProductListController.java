@@ -202,7 +202,7 @@ public class ProductListController {
     public void updateProduct(Intent data, int productId, int favorite) {
         //Product model at Position
         TopTensModel model = m.PLcon.getProductList().get(m.positionHMap.get(productId));
-        model.userRating = data.getExtras().getDouble("UserRating");
+        model.userRating = data.getExtras().getInt("UserRating");
         model.favorite = favorite;
         model.typePic = data.getExtras().getInt("ParentType");
         model.containerType = data.getExtras().getString("ContainerType");

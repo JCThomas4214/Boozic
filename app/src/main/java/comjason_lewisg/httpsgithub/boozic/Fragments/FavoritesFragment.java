@@ -48,7 +48,7 @@ public class FavoritesFragment extends Fragment implements OnStartDragListener {
 
         m = (MainActivity)getActivity();
 
-        mRecyclerView.setHasFixedSize(false);
+        mRecyclerView.setHasFixedSize(true);
         mAdapter = new FavoritesAdapterHandler(m.FLcon.favoritesList, m, this);
         mRecyclerView.setAdapter(mAdapter);
 
