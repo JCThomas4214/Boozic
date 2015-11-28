@@ -181,7 +181,7 @@ public class UPCFindProductController {
                                 i.putExtra("COLOR_ACCENT", m.getColorAccent());
                                 i.putExtra("COLOR_ACCENT_DARK", m.getColorAccentDark());
 
-                                m.startActivity(i);
+                                m.startActivityForResult(i, m.PRODUCT_INFO_REQUEST);
                                 break;
                             case 1: //Found on UPC DB
                                 //inject new product variables
@@ -207,7 +207,7 @@ public class UPCFindProductController {
                                 i.putExtra("COLOR_ACCENT", m.getColorAccent());
                                 i.putExtra("COLOR_ACCENT_DARK", m.getColorAccentDark());
 
-                                m.startActivity(i);
+                                m.startActivityForResult(i, m.PRODUCT_INFO_REQUEST);
                                 break;
                             case 2: //Found found on our server and UPC DB
                                 //toast no store information available

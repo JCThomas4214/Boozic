@@ -48,7 +48,7 @@ public class ProductStorageModel {
                                int containerQuantity, double abv, int[] rating, double volume, String volumeMeasure, double pbv, double abp, double pdd, double td, double avgRating) {
 
         this.label = label;
-        if (!lastUpdate.equals("null")) this.lastUpdate = lastUpdate;
+        if (lastUpdate != null) this.lastUpdate = lastUpdate;
         this.userRating = userRating;
         typePic = type;
 

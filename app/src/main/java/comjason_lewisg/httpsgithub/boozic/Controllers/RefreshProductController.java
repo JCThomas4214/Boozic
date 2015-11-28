@@ -29,7 +29,7 @@ public class RefreshProductController {
 
     public void refreshProduct(ProductActivity p) {
         DHandler = new DialogHandler(p);
-        dialog = DHandler.progressDialog("Fetching New Pricing Information", "Searching...");
+        dialog = DHandler.progressDialog(p,"Fetching New Pricing Information", "Searching...");
         updateProduct(p);
         getProduct(p);
     }

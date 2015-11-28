@@ -3,7 +3,6 @@ package comjason_lewisg.httpsgithub.boozic.Models;
 public class UpdateProductModel {
 
     public boolean updated = false;
-    public int favoritePosition = -1;
 
     public String label = null;
     public int parentType = -1;

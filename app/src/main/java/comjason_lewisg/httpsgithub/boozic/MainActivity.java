@@ -40,7 +40,9 @@ import com.google.android.gms.location.LocationServices;
 import comjason_lewisg.httpsgithub.boozic.Controllers.DeviceIdController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.FavoritesListController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.FeedbackController;
+import comjason_lewisg.httpsgithub.boozic.Controllers.NewProductController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.ProductListController;
+import comjason_lewisg.httpsgithub.boozic.Controllers.ProductTypeListController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.RemoveAFavoriteController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.RemoveFromFavoritesController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.UPCFindProductController;
@@ -79,6 +81,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
     public RemoveAFavoriteController RAFcon;
     public UPCFindProductController upcFPC;
     public FeedbackController FC;
+    public ProductTypeListController PTLC;
+    public NewProductController NPC;
 
     public SearchBarHandler searchBarHandler;
     public NavigationDrawerHandler Nav;
@@ -186,6 +190,8 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         RAFcon = new RemoveAFavoriteController(this);
         upcFPC = new UPCFindProductController();
         FC = new FeedbackController();
+        PTLC = new ProductTypeListController();
+        NPC = new NewProductController();
 
         // Initializing Toolbar and setting it as the actionbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);

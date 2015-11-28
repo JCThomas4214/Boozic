@@ -30,13 +30,13 @@ public class NewProductController {
     public double closestPrice;
     public double cheapestPrice;
 
-    public double volume;
-    public String volumeMeasure = null;
+    public double volumeTmp;
+    public String volumeMeasureTmp = null;
     public String container;
-    public int containerQty;
+    public int containerQtyTmp;
 
     public double pbv = -1;
-    public double abv = -1;
+    public double abvTmp = -1;
     public int proof = -1;
     public double abp = -1;
     public double pdd = -1;
@@ -49,12 +49,14 @@ public class NewProductController {
 
     public NewProductController() {}
 
-    public void newProduct(MainActivity m, final String label, final String UPC, final int parentType) {
+    public void newProduct(final MainActivity m, final String label, final String UPC, final int type, final String containerType,
+                           final int containerQty, final double volume, final String volumeMeasure, final double abv) {
         frame = (FrameLayout) m.findViewById(R.id.frame3);
-        newProductInBackground(m, label, UPC, parentType);
+        newProductInBackground(m, label, UPC, type, containerType, containerQty, volume, volumeMeasure, abv);
     }
 
-    private void newProductInBackground(final MainActivity m, final String label, final String UPC, final int parentType) {
+    private void newProductInBackground(final MainActivity m, final String label, final String UPC, final int type, final String containerType,
+                                        final int containerQty, final double volume, final String volumeMeasure, final double abv) {
 
         new AsyncTask<Void, Void, JSONObject>() {
 
@@ -63,14 +65,24 @@ public class NewProductController {
                 try {
                     StringBuilder urlString = new StringBuilder();
                     //TODO: Store the Server IP in global locaiton
-                    urlString.append("http://54.210.175.98:9080/api/products/getProductInfo?");
+                    urlString.append("http://54.210.175.98:9080/api/products/insertProduct?");
                     //append UPC
-                    urlString.append("UPC=").append(UPC);
+                    urlString.append("&UPC=").append(UPC);
                     //append label
                     String value = URLEncoder.encode(label, "UTF-8");
                     urlString.append("&ProductName=").append(value);
                     //append parentType
-                    urlString.append("&ParentType=").append(parentType);
+                    urlString.append("&ProductTypeId=").append(type);
+                    //append containerType
+                    urlString.append("&ContainerType=").append(containerType);
+                    //append  containerQty
+                    urlString.append("&ContainerQty=").append(containerQty);
+                    //append volume
+                    urlString.append("&Volume=").append(volume);
+                    //append volumeMeasure
+                    urlString.append("&VolumeUnit=").append(volumeMeasure);
+                    //append abv
+                    urlString.append("&ABV=").append(abv);
 
                     Log.v("getProductURL", urlString.toString());
                     URL url = new URL(urlString.toString());
@@ -88,6 +100,7 @@ public class NewProductController {
                         urlConnection.disconnect();
                     }
                 } catch (Exception e) {
+                    Log.e("ERROR", e.getMessage());
                     return null;
                 }
             }
@@ -98,78 +111,60 @@ public class NewProductController {
 
                 if (object != null) {
                     try {
-                        //if the product is in the list, it is not a new product
-                        found = object.getInt("IsFoundInDatabase");
-                        i.putExtra("Found", found);
+                        i.putExtra("Found", 0);
 
-                        JSONObject closestStoreObject = object.getJSONObject("ClosestStore");
-                        JSONObject cheapestStoreObject = object.getJSONObject("CheapestStore");
-
-                        i.putExtra("Position", -1);
-                        i.putExtra("FavoritePosition", -1);
                         //inject model variables
                         i.putExtra("Label", object.getString("ProductName"));
                         i.putExtra("ProductID", object.getInt("ProductID"));
                         i.putExtra("UPC", object.getString("UPC"));
-                        i.putExtra("LastUpdate", closestStoreObject.getString("LastUpdated"));
-                        i.putExtra("UserRating", 0.0);
-                        i.putExtra("ClosestStoreId", closestStoreObject.getInt("StoreID"));
-                        i.putExtra("CheapestStoreId", cheapestStoreObject.getInt("StoreID"));
-                        i.putExtra("ClosestStore", closestStoreObject.getString("StoreName"));
-                        i.putExtra("CheapestStore", cheapestStoreObject.getString("StoreName"));
-                        i.putExtra("ClosestStoreAddress", closestStoreObject.getString("Address"));
-                        i.putExtra("CheapestStoreAddress", cheapestStoreObject.getString("Address"));
-                        closestStoreDist = closestStoreObject.getDouble("DistanceInMiles");
+                        i.putExtra("LastUpdate", (String)null);
+                        i.putExtra("UserRating", 0);
+                        i.putExtra("ClosestStoreId", 0);
+                        i.putExtra("CheapestStoreId", 0);
+                        i.putExtra("ClosestStore", (String)null);
+                        i.putExtra("CheapestStore", (String)null);
+                        i.putExtra("ClosestStoreAddress", (String)null);
+                        i.putExtra("CheapestStoreAddress", (String)null);
+                        closestStoreDist = 0;
                         i.putExtra("ClosestStoreDist", closestStoreDist);
-                        cheapestStoreDist = cheapestStoreObject.getDouble("DistanceInMiles");
+                        cheapestStoreDist = 0;
                         i.putExtra("CheapestStoreDist", cheapestStoreDist);
-                        closestPrice = closestStoreObject.getDouble("Price");
+                        closestPrice = 0;
                         i.putExtra("ClosestPrice", closestPrice);
-                        cheapestPrice = cheapestStoreObject.getDouble("Price");
+                        cheapestPrice = 0;
                         i.putExtra("CheapestPrice", cheapestPrice);
                         i.putExtra("Type", object.getInt("ProductParentTypeId"));
-                        i.putExtra("Favorites", object.getInt("IsFavourite"));
+                        i.putExtra("Favorites", 0);
 
                         container = object.getString("ContainerType");
                         if (container.equals("null")) container = "N/A";
                         i.putExtra("Container", container);
 
-                        containerQty = object.getInt("ContainerQty");
+                        containerQtyTmp = object.getInt("ContainerQty");
                         i.putExtra("ContainerQty", containerQty);
 
-                        volume = object.getDouble("Volume");
-                        if (volume == nullInt) volume = -1;
+                        volumeTmp = object.getDouble("Volume");
+                        if (volume == nullInt) volumeTmp = -1;
                         i.putExtra("Volume", volume);
 
-                        abv = object.getDouble("ABV");
+                        abvTmp = object.getDouble("ABV");
                         if (abv > nullInt) {
                             proof = (int) (abv * 2);
                         }
                         i.putExtra("ABV", abv);
                         i.putExtra("Proof", proof);
 
-                        volumeMeasure = object.getString("VolumeUnit");
+                        volumeMeasureTmp = object.getString("VolumeUnit");
                         getVolMeasure();
                         i.putExtra("VolumeMeasure", volumeMeasure);
 
-                        if (cheapestStoreObject.getDouble("Price") > 0) {
+                        i.putExtra("ABP", 0.0);
+                        i.putExtra("PDD", 0.0);
+                        i.putExtra("PBV", 0.0);
+                        i.putExtra("TD", 0.0);
 
-                            pdd = findPDD();
-                            td = findTD();
-                            if (volumeMeasure != null && volume <= 0) {
-                                pbv = findPBV();
-                                if (abv <= 0) abp = findABP();
-                            }
-                        }
-
-                        i.putExtra("ABP", abp);
-                        i.putExtra("PDD", pdd);
-                        i.putExtra("PBV", pbv);
-                        i.putExtra("TD", td);
-
-                        i.putExtra("Rating", new int[]{object.getInt("Rating1"), object.getInt("Rating2"),
-                                object.getInt("Rating3"), object.getInt("Rating4"), object.getInt("Rating5")});
-                        i.putExtra("AvgRating", object.getDouble("CombinedRating"));
+                        i.putExtra("Rating", new int[]{0, 0, 0, 0, 0});
+                        i.putExtra("AvgRating", 0.0);
 
                         i.putExtra("LAT", m.latitude);
                         i.putExtra("LONG", m.longitude);
@@ -181,9 +176,11 @@ public class NewProductController {
                         i.putExtra("COLOR_ACCENT", m.getColorAccent());
                         i.putExtra("COLOR_ACCENT_DARK", m.getColorAccentDark());
 
-                        m.startActivity(i);
+                        m.startActivityForResult(i, m.PRODUCT_INFO_REQUEST);
 
-                    } catch (JSONException e) {}
+                    } catch (JSONException e) {
+                        Log.e("ERROR", e.getMessage());
+                    }
                 }
                 else {
                     Crouton.makeText(m, "An Error has Occurred", Style.ALERT, frame).show();
@@ -194,7 +191,7 @@ public class NewProductController {
 
     public double findABP() {
         double volumetmp = convertVol();
-        float abptmp = (float)closestPrice / (((float)abv/100f) * (float)volumetmp);
+        float abptmp = (float)closestPrice / (((float)abvTmp/100f) * (float)volumetmp);
 
         return (double)abptmp;
     }
@@ -214,24 +211,24 @@ public class NewProductController {
         return (double)tdtmp;
     }
     private double convertVol() {
-        double volumetmp = volume;
+        double volumetmp = volumeTmp;
 
-        if (volumeMeasure.equals("oz"))
-            volumetmp = volume * 29.5735;
-        else if (volumeMeasure.equals("L"))
-            volumetmp = volume * 1000;
+        if (volumeMeasureTmp.equals("oz"))
+            volumetmp = volumeTmp * 29.5735;
+        else if (volumeMeasureTmp.equals("L"))
+            volumetmp = volumeTmp * 1000;
 
         return volumetmp;
     }
     private void getVolMeasure() {
 
-        switch (volumeMeasure) {
+        switch (volumeMeasureTmp) {
             case "ML":
-                if (volume > 1000) {
-                    volume = volume / 1000;
-                    volumeMeasure = "L";
+                if (volumeTmp > 1000) {
+                    volumeTmp = volumeTmp / 1000;
+                    volumeMeasureTmp = "L";
                 } else {
-                    volumeMeasure = "ml";
+                    volumeMeasureTmp = "ml";
                 }
                 break;
             case "L":
@@ -239,8 +236,8 @@ public class NewProductController {
             case "oz":
                 break;
             default:
-                if (volume < 50) {
-                    volumeMeasure = "oz";
+                if (volumeTmp < 50) {
+                    volumeMeasureTmp = "oz";
                 }
                 break;
         }
