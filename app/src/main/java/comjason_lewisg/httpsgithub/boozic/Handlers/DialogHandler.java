@@ -680,7 +680,10 @@ public class DialogHandler {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         View view = dialog.getCustomView();
                         EditText price = (EditText) view.findViewById(R.id.price_dia_input);
-                        if (!price.getText().toString().isEmpty()) p.updatedModel.updateStorePrice(changeToDouble(price.getText().toString().replace("$", "")));
+                        if (!price.getText().toString().isEmpty()) {
+                            p.updatedModel.updateStorePrice(changeToDouble(price.getText().toString().replace("$", "")));
+                            p.RPC.refreshProduct(p);
+                        }
                         else UpdatePrice(cameFrom, isBeer);
                     }
                 })
@@ -700,10 +703,10 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public MaterialDialog progressDialog() {
+    public MaterialDialog progressDialog(String title, String content) {
         MaterialDialog dialog = new MaterialDialog.Builder(p)
-                .title("Waiting For Stores")
-                .content("Searching...")
+                .title(title)
+                .content(content)
                 .progress(true, 0)
                 .widgetColor(p.getAccentColor())
                 .build();

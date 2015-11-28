@@ -1,5 +1,6 @@
 package comjason_lewisg.httpsgithub.boozic.Controllers;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.provider.Settings;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -128,19 +129,25 @@ public class ProductListController {
         int size = jArr.length();
         boolean firstSet = true;
         int mod;
-        int count = 0;
+
+        int favorite, productId;
+        int FPcount = 0;
 
         /*for (int i = 1; i <= size; i++) {
             mod = i % 25;
             try {
-                JSONObject oneObject = jArr.getJSONObject(i-1);
-                int favorite = oneObject.getInt("IsFavourite");
+                JSONObject oneObject = jArr.getJSONObject(i - 1);
+                favorite = oneObject.getInt("IsFavourite");
+                productId = oneObject.getInt("ProductID");
                 //continue to add models to list
                 if (favorite == 1) {
-                    productList.add(new TopTensModel(oneObject,i-1, count));
-                    m.FLcon.favoritesList.add(new TopTensModel(oneObject,i-1, count++));
+                    productList.add(new TopTensModel(oneObject));
+                    m.FLcon.favoritesList.add(new TopTensModel(oneObject));
+
+                    m.positionHMap.put(productId, i);
+                    m.favoritePositionHMap.put(productId, FPcount++);
                 } else {
-                    productList.add(new TopTensModel(oneObject,i-1, -1));
+                    productList.add(new TopTensModel(oneObject));
                 }
                 //start the list so the user will not have to wait for 500 toptensproducts to be created for the entire list
                 if (mod == 0 && firstSet) {
@@ -160,16 +167,25 @@ public class ProductListController {
 
         productList.clear();
         m.FLcon.favoritesList.clear();
+
+
+
         for (int i = 0; i <= size; i++) {
             try {
                 JSONObject oneObject = jArr.getJSONObject(i);
-                int favorite = oneObject.getInt("IsFavourite");
+                favorite = oneObject.getInt("IsFavourite");
+                productId = oneObject.getInt("ProductID");
                 //continue to add models to list
                 if (favorite == 1) {
-                    productList.add(new TopTensModel(oneObject,i, count));
-                    m.FLcon.favoritesList.add(new TopTensModel(oneObject,i, count++));
+                    productList.add(new TopTensModel(oneObject));
+                    m.FLcon.favoritesList.add(new TopTensModel(oneObject));
+
+                    m.positionHMap.put(productId, i);
+                    m.favoritePositionHMap.put(productId, FPcount++);
                 } else {
-                    productList.add(new TopTensModel(oneObject,i, -1));
+                    productList.add(new TopTensModel(oneObject));
+
+                    m.positionHMap.put(productId, i);
                 }
             } catch (JSONException e) {}
         }
@@ -181,5 +197,40 @@ public class ProductListController {
 
     public List<TopTensModel> getProductList() {
         return productList;
+    }
+
+    public void updateProduct(Intent data, int productId, int favorite) {
+        //Product model at Position
+        TopTensModel model = m.PLcon.getProductList().get(m.positionHMap.get(productId));
+        model.userRating = data.getExtras().getDouble("UserRating");
+        model.favorite = favorite;
+        model.typePic = data.getExtras().getInt("ParentType");
+        model.containerType = data.getExtras().getString("ContainerType");
+        model.containerQuantity = data.getExtras().getInt("ContainerQty");
+        model.volume = data.getExtras().getDouble("Volume");
+        model.volumeMeasure = data.getExtras().getString("VolumeMeasure");
+        model.abv = data.getExtras().getDouble("ABV");
+
+        model.closestStoreId = data.getExtras().getInt("ClosestStoreId");
+        model.cheapestStoreId = data.getExtras().getInt("CheapestStoreId");
+        model.closestStoreName = data.getExtras().getString("ClosestStoreName");
+        model.cheapestStoreName = data.getExtras().getString("CheapestStoreName");
+        model.closestStoreAddress = data.getExtras().getString("ClosestStoreAddress");
+        model.cheapestStoreName = data.getExtras().getString("CheapestStoreAddress");
+        model.closestStoreDist = data.getExtras().getDouble("ClosestStoreDist");
+        model.cheapestStoreDist = data.getExtras().getDouble("CheapestStoreDist");
+        model.closestPrice = data.getExtras().getDouble("ClosestPrice");
+        model.cheapestPrice = data.getExtras().getDouble("CheapestPrice");
+
+        try {
+            m.Nav.favoritesFragment.mAdapter.notifyDataSetChanged();
+        } catch (Exception e) {
+            Log.v("CATCH", "There is a catch");
+        }
+        try {
+            m.Nav.topTensFragment.mAdapter.notifyDataSetChanged();
+        } catch (Exception e) {
+            Log.v("CATCH", "There is a catch");
+        }
     }
 }

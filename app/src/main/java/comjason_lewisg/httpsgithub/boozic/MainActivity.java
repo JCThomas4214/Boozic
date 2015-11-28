@@ -58,11 +58,15 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 
 import com.quinny898.library.persistentsearch.SearchBox;
 
+import java.util.HashMap;
 import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements ThemeFragment.OnDataPass, TopTensFragment.OnPass,
         GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener, LocationListener {
+
+    public HashMap<Integer, Integer> positionHMap = new HashMap<>();
+    public HashMap<Integer, Integer> favoritePositionHMap = new HashMap<>();
 
     public Toolbar toolbar;
     public TextView title;
@@ -536,150 +540,34 @@ public class MainActivity extends AppCompatActivity implements ThemeFragment.OnD
         if (requestCode == PRODUCT_INFO_REQUEST) {
             if (resultCode == RESULT_OK) {
                 int favorite = data.getExtras().getInt("Favorite");
-                int position = data.getExtras().getInt("Position");
-                int favoritePosition = data.getExtras().getInt("FavoritePosition");
                 int productId = data.getExtras().getInt("ProductId");
+                boolean containedInPList = positionHMap.containsKey(productId);
+                boolean containedInFList = favoritePositionHMap.containsKey(productId);
 
-                if (position >= 0 && favoritePosition == -1) {
-                    TopTensModel model = PLcon.getProductList().get(position);
-                    model.userRating = data.getExtras().getDouble("UserRating");
-                    model.favorite = favorite;
-                    model.typePic = data.getExtras().getInt("ParentType");
-                    model.containerType = data.getExtras().getString("ContainerType");
-                    model.containerQuantity = data.getExtras().getInt("ContainerQty");
-                    model.volume = data.getExtras().getDouble("Volume");
-                    model.volumeMeasure = data.getExtras().getString("VolumeMeasure");
-                    model.abv = data.getExtras().getDouble("ABV");
-
-                    model.closestStoreId = data.getExtras().getInt("ClosestStoreId");
-                    model.cheapestStoreId = data.getExtras().getInt("CheapestStoreId");
-                    model.closestStoreName = data.getExtras().getString("ClosestStoreName");
-                    model.cheapestStoreName = data.getExtras().getString("CheapestStoreName");
-                    model.closestStoreAddress = data.getExtras().getString("ClosestStoreAddress");
-                    model.cheapestStoreName = data.getExtras().getString("CheapestStoreAddress");
-                    model.closestStoreDist = data.getExtras().getDouble("ClosestStoreDist");
-                    model.cheapestStoreDist = data.getExtras().getDouble("CheapestStoreDist");
-                    model.closestPrice = data.getExtras().getDouble("ClosestPrice");
-                    model.cheapestPrice = data.getExtras().getDouble("CheapestPrice");
-
+                if (containedInPList && containedInFList) {
+                    PLcon.updateProduct(data, productId, favorite);
                     if (favorite == 1) {
-                        int favPosition = FLcon.favoritesList.size();
-                        PLcon.getProductList().get(position).favoritePosition = favPosition;
-                        model.favoritePosition = favPosition;
-                        FLcon.favoritesList.add(model);
-                    }
-
-                    try {
-                        Nav.topTensFragment.mAdapter.notifyDataSetChanged();
-                    } catch (Exception e) {
-                        Log.v("CATCH", "There is a catch");
-                    }
-                } else if (position == -1 && favoritePosition >= 0) {
-                    if (favorite != 0) {
-                        TopTensModel model = FLcon.favoritesList.get(favoritePosition);
-                        model.userRating = data.getExtras().getDouble("UserRating");
-                        model.favorite = favorite;
-                        model.typePic = data.getExtras().getInt("ParentType");
-                        model.containerType = data.getExtras().getString("ContainerType");
-                        model.containerQuantity = data.getExtras().getInt("ContainerQty");
-                        model.volume = data.getExtras().getDouble("Volume");
-                        model.volumeMeasure = data.getExtras().getString("VolumeMeasure");
-                        model.abv = data.getExtras().getDouble("ABV");
-
-                        model.closestStoreId = data.getExtras().getInt("ClosestStoreId");
-                        model.cheapestStoreId = data.getExtras().getInt("CheapestStoreId");
-                        model.closestStoreName = data.getExtras().getString("ClosestStoreName");
-                        model.cheapestStoreName = data.getExtras().getString("CheapestStoreName");
-                        model.closestStoreAddress = data.getExtras().getString("ClosestStoreAddress");
-                        model.cheapestStoreName = data.getExtras().getString("CheapestStoreAddress");
-                        model.closestStoreDist = data.getExtras().getDouble("ClosestStoreDist");
-                        model.cheapestStoreDist = data.getExtras().getDouble("CheapestStoreDist");
-                        model.closestPrice = data.getExtras().getDouble("ClosestPrice");
-                        model.cheapestPrice = data.getExtras().getDouble("CheapestPrice");
-
-                        try {
-                            Nav.favoritesFragment.mAdapter.notifyDataSetChanged();
-                        } catch (Exception e) {
-                            Log.v("CATCH", "There is a catch");
-                        }
-                    } else {
-                        FLcon.favoritesList.remove(favoritePosition);
-                        try {
-                            Nav.favoritesFragment.mAdapter.removeItem(favoritePosition);
-                        } catch (Exception e) {
-                            Log.v("CATCH", "There is a catch");
-                        }
+                        FLcon.updateFavorite(data, productId);
+                    } else if (favorite == 0){
+                        FLcon.removeFavoriteFromList(productId);
                     }
                 }
-                else if (position >= 0 && favoritePosition >= 0) {
-                    //productList model at position
-                    TopTensModel model = PLcon.getProductList().get(position);
-                    model.userRating = data.getExtras().getDouble("UserRating");
-                    model.favorite = favorite;
-                    model.typePic = data.getExtras().getInt("ParentType");
-                    model.containerType = data.getExtras().getString("ContainerType");
-                    model.containerQuantity = data.getExtras().getInt("ContainerQty");
-                    model.volume = data.getExtras().getDouble("Volume");
-                    model.volumeMeasure = data.getExtras().getString("VolumeMeasure");
-                    model.abv = data.getExtras().getDouble("ABV");
-
-                    model.closestStoreId = data.getExtras().getInt("ClosestStoreId");
-                    model.cheapestStoreId = data.getExtras().getInt("CheapestStoreId");
-                    model.closestStoreName = data.getExtras().getString("ClosestStoreName");
-                    model.cheapestStoreName = data.getExtras().getString("CheapestStoreName");
-                    model.closestStoreAddress = data.getExtras().getString("ClosestStoreAddress");
-                    model.cheapestStoreName = data.getExtras().getString("CheapestStoreAddress");
-                    model.closestStoreDist = data.getExtras().getDouble("ClosestStoreDist");
-                    model.cheapestStoreDist = data.getExtras().getDouble("CheapestStoreDist");
-                    model.closestPrice = data.getExtras().getDouble("ClosestPrice");
-                    model.cheapestPrice = data.getExtras().getDouble("CheapestPrice");
-
+                else if (containedInPList) {
+                    PLcon.updateProduct(data, productId, favorite);
                     if (favorite == 1) {
-                        //Favorites model at favoritePosition
-                        model = FLcon.favoritesList.get(favoritePosition);
-                        model.userRating = data.getExtras().getDouble("UserRating");
-                        model.favorite = favorite;
-                        model.typePic = data.getExtras().getInt("ParentType");
-                        model.containerType = data.getExtras().getString("ContainerType");
-                        model.containerQuantity = data.getExtras().getInt("ContainerQty");
-                        model.volume = data.getExtras().getDouble("Volume");
-                        model.volumeMeasure = data.getExtras().getString("VolumeMeasure");
-                        model.abv = data.getExtras().getDouble("ABV");
-
-                        model.closestStoreId = data.getExtras().getInt("ClosestStoreId");
-                        model.cheapestStoreId = data.getExtras().getInt("CheapestStoreId");
-                        model.closestStoreName = data.getExtras().getString("ClosestStoreName");
-                        model.cheapestStoreName = data.getExtras().getString("CheapestStoreName");
-                        model.closestStoreAddress = data.getExtras().getString("ClosestStoreAddress");
-                        model.cheapestStoreName = data.getExtras().getString("CheapestStoreAddress");
-                        model.closestStoreDist = data.getExtras().getDouble("ClosestStoreDist");
-                        model.cheapestStoreDist = data.getExtras().getDouble("CheapestStoreDist");
-                        model.closestPrice = data.getExtras().getDouble("ClosestPrice");
-                        model.cheapestPrice = data.getExtras().getDouble("CheapestPrice");
-                    } else if (favorite == 0){
-                        //set this will prevent results from going into wrong condition
-                        PLcon.getProductList().get(position).favoritePosition = -1;
-                        //remove product from favorites list
-                        FLcon.favoritesList.remove(favoritePosition);
-                        //remove favorite from backend
-                        RAFcon.removeFavorite(productId);
-
-                        try {
-                            Nav.favoritesFragment.mAdapter.remove(favoritePosition);
-                        } catch (Exception e) {
-                            Log.v("CATCH", "There is a catch");
-                        }
+                        FLcon.addFavoriteToList(productId);
                     }
-
-                    try {
-                        Nav.favoritesFragment.mAdapter.notifyDataSetChanged();
-                    } catch (Exception e) {
-                        Log.v("CATCH", "There is a catch");
+                }
+                else if (containedInFList) {
+                    if (favorite != 0) {
+                        FLcon.updateFavorite(data, productId);
+                    } else {
+                        FLcon.removeFavoriteFromList(productId);
                     }
-                    try {
-                        Nav.topTensFragment.mAdapter.notifyDataSetChanged();
-                    } catch (Exception e) {
-                        Log.v("CATCH", "There is a catch");
+                }
+                else {
+                    if (favorite == 1) {
+                        FLcon.updateFavorite(data, productId);
                     }
                 }
             }

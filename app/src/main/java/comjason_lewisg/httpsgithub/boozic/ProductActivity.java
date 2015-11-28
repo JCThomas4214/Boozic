@@ -25,6 +25,7 @@ import java.util.Random;
 import comjason_lewisg.httpsgithub.boozic.Controllers.FlagProductController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.NearbyStoresController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.ProductTypeListController;
+import comjason_lewisg.httpsgithub.boozic.Controllers.RefreshProductController;
 import comjason_lewisg.httpsgithub.boozic.Controllers.UpdateProductController;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ProductAdapterHandler;
 import comjason_lewisg.httpsgithub.boozic.Handlers.ProductSearchBarHandler;
@@ -39,6 +40,7 @@ public class ProductActivity extends AppCompatActivity {
     private UpdateProductController UPC;
     public ProductTypeListController PTLC;
     public FlagProductController FPcon;
+    public RefreshProductController RPC;
 
     public List<String> stores = new ArrayList<>();
     public List<Integer> storeIDs = new ArrayList<>();
@@ -55,6 +57,8 @@ public class ProductActivity extends AppCompatActivity {
     int accentColorDark;
 
     int found;
+    public double latitude;
+    public double longitude;
 
     public ProductStorageModel model;
     public UpdateProductModel updatedModel;
@@ -89,6 +93,11 @@ public class ProductActivity extends AppCompatActivity {
         UPC = new UpdateProductController();
         PTLC = new ProductTypeListController();
         FPcon = new FlagProductController();
+        RPC = new RefreshProductController();
+
+        //store latitude and longitude
+        latitude = (double) getIntent().getSerializableExtra("LAT");
+        longitude = (double) getIntent().getSerializableExtra("LONG");
 
         //if not a new product inject serializable objects
         found = (int) getIntent().getSerializableExtra("Found");
@@ -155,8 +164,6 @@ public class ProductActivity extends AppCompatActivity {
     private void setProductActivityResults() {
         if (updatedModel.updated) {
             Intent returnIntent = new Intent();
-            returnIntent.putExtra("Position", updatedModel.position);
-            returnIntent.putExtra("FavoritePosition", updatedModel.favoritePosition);
             returnIntent.putExtra("ProductId", updatedModel.productId);
 
             if (updatedModel.userRating != -1 && updatedModel.userRating != model.userRating)
@@ -232,9 +239,7 @@ public class ProductActivity extends AppCompatActivity {
     private void fetchProductInfo() {
         //fetch latitude and longitude
         //TODO: wait for script to use distance formula
-        new NearbyStoresController(this,
-                (double) getIntent().getSerializableExtra("LAT"),
-                (double) getIntent().getSerializableExtra("LONG"));
+        new NearbyStoresController(this, latitude, longitude);
         //fetch extra items
         model = new ProductStorageModel((String) getIntent().getSerializableExtra("Label"),
                 (String) getIntent().getSerializableExtra("UPC"),
@@ -265,17 +270,8 @@ public class ProductActivity extends AppCompatActivity {
                 (double) getIntent().getSerializableExtra("TD"),
                 (double) getIntent().getSerializableExtra("AvgRating"));
 
-        try {
-            int favoritePosition = (int) getIntent().getSerializableExtra("FavoritePosition");
-            updatedModel = new UpdateProductModel((String) getIntent().getSerializableExtra("UPC"),
-                    (int) getIntent().getSerializableExtra("ProductID"),
-                    (int) getIntent().getSerializableExtra("Position"),
-                    favoritePosition);
-        } catch (Exception e) {
-            updatedModel = new UpdateProductModel((String) getIntent().getSerializableExtra("UPC"),
-                    (int) getIntent().getSerializableExtra("ProductID"),
-                    (int) getIntent().getSerializableExtra("Position"));
-        }
+        updatedModel = new UpdateProductModel((String) getIntent().getSerializableExtra("UPC"),
+                (int) getIntent().getSerializableExtra("ProductID"));
     }
 
     public void newProduct() {
@@ -286,17 +282,8 @@ public class ProductActivity extends AppCompatActivity {
                 (double) getIntent().getSerializableExtra("Volume"),
                 (String) getIntent().getSerializableExtra("VolumeMeasure"));
 
-        try {
-            int favoritePosition = (int) getIntent().getSerializableExtra("FavoritePosition");
-            updatedModel = new UpdateProductModel((String) getIntent().getSerializableExtra("UPC"),
-                    (int) getIntent().getSerializableExtra("ProductID"),
-                    (int) getIntent().getSerializableExtra("Position"),
-                    favoritePosition);
-        } catch (Exception e) {
-            updatedModel = new UpdateProductModel((String) getIntent().getSerializableExtra("UPC"),
-                    (int) getIntent().getSerializableExtra("ProductID"),
-                    (int) getIntent().getSerializableExtra("Position"));
-        }
+        updatedModel = new UpdateProductModel((String) getIntent().getSerializableExtra("UPC"),
+                (int) getIntent().getSerializableExtra("ProductID"));
     }
 
     // A method to find height of the status bar

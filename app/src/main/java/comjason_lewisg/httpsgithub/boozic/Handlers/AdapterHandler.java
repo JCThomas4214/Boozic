@@ -92,8 +92,6 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
                 Intent i = new Intent(m, ProductActivity.class);
                 //if the product is in the list, it is not a new product
                 i.putExtra("Found", 0);
-                i.putExtra("Position", position);
-                i.putExtra("FavoritePosition", shownItems.get(position).favoritePosition);
                 //inject model variables
                 i.putExtra("Label", shownItems.get(position).label);
                 i.putExtra("ProductID", shownItems.get(position).productID);

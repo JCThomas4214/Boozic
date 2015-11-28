@@ -120,8 +120,6 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
                 Intent i = new Intent(m, ProductActivity.class);
                 //if the product is in the list, it is not a new product
                 i.putExtra("Found", 0);
-                i.putExtra("Position", items.get(position).position);
-                i.putExtra("FavoritePosition", position);
                 //inject model variables
                 i.putExtra("Label", items.get(position).label);
                 i.putExtra("ProductID", items.get(position).productID);
@@ -175,26 +173,35 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
         TopTensModel model = items.get(position);
         DecimalFormat df = new DecimalFormat("####0.##");
 
+        viewHolder.containerLayout.setVisibility(View.VISIBLE);
+        viewHolder.abvLayout.setVisibility(View.VISIBLE);
+        viewHolder.productInfo.setVisibility(View.VISIBLE);
+
+        viewHolder.label.setText(model.label);
+
+        if (model.containerType != null && model.typePic == 2) {
+            String containerLabel = "(" + model.containerQuantity + ") " + model.containerType;
+            viewHolder.container.setText(containerLabel);
+        } else viewHolder.containerLayout.setVisibility(View.GONE);
+
+        if (model.abv > 0) {
+            String abv = df.format(model.abv) + "%";
+            viewHolder.abv.setText(abv);
+        } else {
+            viewHolder.abvLayout.setVisibility(View.GONE);
+        }
+
         if (model.avgRating == 0) {
             viewHolder.rating.setText("N/A");
-        }
-        else {
+        } else {
             String avgRating = model.avgRating + "";
             viewHolder.rating.setText(avgRating);
         }
 
-        String abv = df.format(model.abv) + "%";
-        viewHolder.abv.setText(abv);
-
-        String container = "(" + model.containerQuantity + ") " + model.containerType;
-        viewHolder.container.setText(container);
-
-        viewHolder.label.setText(model.label);
         if (model.closestStoreName != null) {
             viewHolder.storeName.setText(model.closestStoreName);
             viewHolder.price.setText(NumberFormat.getCurrencyInstance().format(model.closestPrice));
-        }
-        else {
+        } else {
             String noStore = "No Store Price Inputted within radius";
             viewHolder.storeName.setText(noStore);
             viewHolder.price.setText("N/A");
@@ -203,47 +210,48 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
         if (model.volume != -1) {
             String volume = "(" + df.format(model.volume) + model.volumeMeasure + ")";
             viewHolder.volume.setText(volume);
-        }
-        else viewHolder.volume.setText("N/A");
+        } else viewHolder.volume.setText("N/A");
 
         switch (model.typePic) {
             case 1:
                 viewHolder.picture.setImageResource(R.mipmap.wine);
-                if (model.abv == -1) viewHolder.productInfo.setVisibility(View.GONE);
                 break;
             case 2:
                 viewHolder.picture.setImageResource(R.mipmap.beer);
-                viewHolder.containerLayout.setVisibility(View.VISIBLE);
-                if (model.abv == -1) viewHolder.abvLayout.setVisibility(View.GONE);
+                if (model.abv <= 0 && model.containerType == null)
+                    viewHolder.productInfo.setVisibility(View.GONE);
                 break;
             case 3:
                 viewHolder.picture.setImageResource(R.mipmap.liquor);
-                if (model.abv == -1) viewHolder.productInfo.setVisibility(View.GONE);
                 break;
             case 4:
                 viewHolder.picture.setImageResource(R.mipmap.boozic_notype);
-                if (model.abv == -1) viewHolder.productInfo.setVisibility(View.GONE);
                 break;
         }
     }
 
     public void remove(int position) {
+        int productId = items.get(position).productID;
         items.remove(position);
         notifyDataSetChanged();
 
-        int PLPosition;
         for (int i = position; i < items.size(); i++) {
-            PLPosition = items.get(i).position;
-            items.get(position).favoritePosition = i;
-            m.PLcon.getProductList().get(PLPosition).favoritePosition = i;
+            m.favoritePositionHMap.remove(productId);
+            m.favoritePositionHMap.put(productId, i);
         }
     }
 
     public void removeItem(int position) {
+        int productId = items.get(position).productID;
         TopTensModel tmp = items.get(position);
         removeItems.add(tmp);
         items.remove(position);
         notifyDataSetChanged();
+
+        for (int i = position; i < items.size(); i++) {
+            m.favoritePositionHMap.remove(productId);
+            m.favoritePositionHMap.put(productId, i);
+        }
     }
 
     public void setList(List<TopTensModel> list) {
@@ -261,7 +269,6 @@ public class FavoritesAdapterHandler extends RecyclerView.Adapter<FavoritesAdapt
         TopTensModel tmp = items.get(position);
         removeItems.add(tmp);
         //change favorite from product in existing product list
-        m.PLcon.getProductList().get(tmp.position).favorite = 0;
         Log.v("Remove Fav", "remove item " + position);
         remove(position);
         notifyItemRemoved(position);

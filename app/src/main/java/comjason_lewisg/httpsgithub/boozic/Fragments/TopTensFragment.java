@@ -104,7 +104,6 @@ public class TopTensFragment extends Fragment {
             @Override
             public void onRefresh() {
                 m.PLcon.callList(m.FMHandle, mAdapter, swipeRefreshLayout, m.latitude, m.longitude);
-                //mAdapter.removeAll();
             }
         });
     }

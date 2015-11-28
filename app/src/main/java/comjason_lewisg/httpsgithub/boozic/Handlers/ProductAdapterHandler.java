@@ -277,6 +277,10 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         // - replace the contents of the view with that element
         ProductStorageModel model = item;
 
+        viewHolder.closestStoreLayout.setVisibility(View.VISIBLE);
+        viewHolder.cheapestStoreLayout.setVisibility(View.VISIBLE);
+        viewHolder.containerLayout.setVisibility(View.VISIBLE);
+
         DecimalFormat df = new DecimalFormat("####0.##");
         DecimalFormat monFormat = new DecimalFormat("####0.00");
         DecimalFormat pbvFormat = new DecimalFormat("####0.00#");
@@ -297,10 +301,6 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             viewHolder.closestStoreLayout.setVisibility(View.GONE);
             viewHolder.cheapestStoreLayout.setVisibility(View.GONE);
             viewHolder.td.setText("N/A");
-            /*viewHolder.cheapestStore.setText("N/A");
-            viewHolder.cheapestPrice.setText("N/A");
-            viewHolder.closestStoreAddress.setText("N/A");
-            viewHolder.cheapestStoreAddress.setText("N/A");*/
         }
         else {
             if (model.closestStoreId == model.cheapestStoreId) {
@@ -350,6 +350,11 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
     @Override
     public int getItemCount() {
         return 1;
+    }
+
+    public void setModel(ProductStorageModel model) {
+        item = model;
+        notifyDataSetChanged();
     }
 
     public void selectTypePic(ProductStorageModel model, ProductInfoHolder viewHolder) {

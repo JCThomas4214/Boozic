@@ -62,8 +62,11 @@ public class UPCFindProductController {
                     StringBuilder urlString = new StringBuilder();
                     //TODO: Store the Server IP in global locaiton
                     urlString.append("http://54.210.175.98:9080/api/products/getProductInfo?");
+                    //append deviceID
+                    String android_id = "" + android.provider.Settings.Secure.getString(m.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+                    urlString.append("DeviceId=").append(android_id);
                     //append UPC
-                    urlString.append("UPC=").append(UPC);
+                    urlString.append("&UPC=").append(UPC);
                     //append location
                     urlString.append("&latitude=").append(latitude).append("&longitude=").append(longitude);
 
@@ -183,7 +186,7 @@ public class UPCFindProductController {
                             case 1: //Found on UPC DB
                                 //inject new product variables
                                 i.putExtra("Label", object.getString("ProductName"));
-                                i.putExtra("ProductId", object.getInt("ProductID"));
+                                i.putExtra("ProductID", object.getInt("ProductID"));
                                 i.putExtra("UPC", object.getString("UPC"));
 
                                 volume = object.getDouble("Volume");
@@ -194,8 +197,8 @@ public class UPCFindProductController {
                                 getVolMeasure();
                                 i.putExtra("VolumeMeasure", volumeMeasure);
 
-                                i.putExtra("LAT", m.getLastLocation().getLatitude());
-                                i.putExtra("LONG", m.getLastLocation().getLongitude());
+                                i.putExtra("LAT", m.latitude);
+                                i.putExtra("LONG", m.longitude);
 
                                 i.putExtra("COLOR_PRIMARY_ID", m.getColorPrimaryId());
                                 i.putExtra("COLOR_ACCENT_ID", m.getColorAccentId());

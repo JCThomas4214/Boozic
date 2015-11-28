@@ -52,13 +52,7 @@ public class TopTensModel {
     public int[] rating;
     public double avgRating;
 
-    public int position = -1;
-    public int favoritePosition = -1;
-
-    public TopTensModel(JSONObject object, int position, int favoritePosition) {
-
-        this.position = position;
-        this.favoritePosition = favoritePosition;
+    public TopTensModel(JSONObject object) {
 
         try {
             JSONObject closestStoreObject = object.getJSONObject("ClosestStore");

@@ -1,6 +1,7 @@
 package comjason_lewisg.httpsgithub.boozic.Controllers;
 
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.provider.Settings;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -104,27 +105,66 @@ public class FavoritesListController {
         //store the previous product list position and productID into a hashmap
         //because product list postion is important for synchronous updates
         int ID;
-        int position;
-        TopTensModel tmp;
-        HashMap<Integer, Integer> hmap = new HashMap<>();
-        for (int j = 0; j < favoritesList.size(); j++) {
-            tmp = favoritesList.get(j);
-            hmap.put(tmp.productID, tmp.position);
-        }
 
         favoritesList.clear();
+        m.favoritePositionHMap.clear();
         for (int i = 0; i < jsonArray.length(); i++) {
             try {
                 JSONObject oneObject = jsonArray.getJSONObject(i);
                 ID = oneObject.getInt("ProductID");
-                //re inject the previous product list positions from productID
-                position = hmap.get(ID);
-                m.PLcon.getProductList().get(position).favoritePosition = i;
 
-                favoritesList.add(new TopTensModel(oneObject, position, i));
+                m.favoritePositionHMap.put(ID, i);
+
+                favoritesList.add(new TopTensModel(oneObject));
             }
             catch (JSONException e) {}
         }
+    }
+
+    public void removeFavoriteFromList(int productId) {
+        int favoritePosition = m.favoritePositionHMap.get(productId);
+        //set this will prevent results from going into wrong condition
+        m.favoritePositionHMap.remove(productId);
+        //remove product from favorites list
+        m.FLcon.favoritesList.remove(favoritePosition);
+        //remove favorite from backend
+        m.RAFcon.removeFavorite(productId);
+
+        try {
+            m.Nav.favoritesFragment.mAdapter.removeItem(favoritePosition);
+        } catch (Exception e) {
+            Log.v("CATCH", "There is a catch");
+        }
+    }
+
+    public void addFavoriteToList(int productId) {
+        TopTensModel model = m.PLcon.getProductList().get(m.positionHMap.get(productId));
+        int favPosition = favoritesList.size();
+        m.favoritePositionHMap.put(productId, favPosition);
+        favoritesList.add(model);
+    }
+
+    public void updateFavorite(Intent data, int productId) {
+        //Favorites model at favoritePosition
+        TopTensModel model = m.FLcon.favoritesList.get(m.favoritePositionHMap.get(productId));
+        model.userRating = data.getExtras().getDouble("UserRating");
+        model.typePic = data.getExtras().getInt("ParentType");
+        model.containerType = data.getExtras().getString("ContainerType");
+        model.containerQuantity = data.getExtras().getInt("ContainerQty");
+        model.volume = data.getExtras().getDouble("Volume");
+        model.volumeMeasure = data.getExtras().getString("VolumeMeasure");
+        model.abv = data.getExtras().getDouble("ABV");
+
+        model.closestStoreId = data.getExtras().getInt("ClosestStoreId");
+        model.cheapestStoreId = data.getExtras().getInt("CheapestStoreId");
+        model.closestStoreName = data.getExtras().getString("ClosestStoreName");
+        model.cheapestStoreName = data.getExtras().getString("CheapestStoreName");
+        model.closestStoreAddress = data.getExtras().getString("ClosestStoreAddress");
+        model.cheapestStoreName = data.getExtras().getString("CheapestStoreAddress");
+        model.closestStoreDist = data.getExtras().getDouble("ClosestStoreDist");
+        model.cheapestStoreDist = data.getExtras().getDouble("CheapestStoreDist");
+        model.closestPrice = data.getExtras().getDouble("ClosestPrice");
+        model.cheapestPrice = data.getExtras().getDouble("CheapestPrice");
     }
 
 }

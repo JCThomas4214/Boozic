@@ -26,6 +26,7 @@ public class ProductTypeListController {
     List<Integer> productIDs = new ArrayList<>();
     List<String> productLabels = new ArrayList<>();
     DialogHandler DHandler;
+    MaterialDialog dialog;
 
     public void onCreate() {}
 
@@ -34,12 +35,12 @@ public class ProductTypeListController {
 
     public void getList(ProductActivity p, int productParentId, boolean cameFromStartProductInfo) {
         DHandler = new DialogHandler(p);
+        dialog = DHandler.progressDialog("Fetching Product Type List", "Searching...");
         getListInBackground(p, productParentId, cameFromStartProductInfo);
     }
 
     private void getListInBackground(final ProductActivity p, final int productParentId, final boolean cameFromStartProductInfo) {
 
-        final MaterialDialog dialog = DHandler.progressDialog();
         dialog.show();
 
         productIDs.clear();
