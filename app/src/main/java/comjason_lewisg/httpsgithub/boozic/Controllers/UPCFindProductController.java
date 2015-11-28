@@ -112,7 +112,7 @@ public class UPCFindProductController {
                                 i.putExtra("ProductID", object.getInt("ProductID"));
                                 i.putExtra("UPC", object.getString("UPC"));
                                 i.putExtra("LastUpdate", closestStoreObject.getString("LastUpdated"));
-                                i.putExtra("UserRating", 0.0);
+                                i.putExtra("UserRating", object.getInt("RatingByCurrentUser"));
                                 i.putExtra("ClosestStoreId", closestStoreObject.getInt("StoreID"));
                                 i.putExtra("CheapestStoreId", cheapestStoreObject.getInt("StoreID"));
                                 i.putExtra("ClosestStore", closestStoreObject.getString("StoreName"));

@@ -245,7 +245,7 @@ public class ProductActivity extends AppCompatActivity {
                 (String) getIntent().getSerializableExtra("UPC"),
                 (int) getIntent().getSerializableExtra("ProductID"),
                 (String) getIntent().getSerializableExtra("LastUpdate"),
-                (double) getIntent().getSerializableExtra("UserRating"),
+                (int) getIntent().getSerializableExtra("UserRating"),
                 (int) getIntent().getSerializableExtra("ClosestStoreId"),
                 (int) getIntent().getSerializableExtra("CheapestStoreId"),
                 (String) getIntent().getSerializableExtra("ClosestStore"),
