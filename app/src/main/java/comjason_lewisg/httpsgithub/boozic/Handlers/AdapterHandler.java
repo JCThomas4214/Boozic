@@ -144,6 +144,7 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         // - replace the contents of the view with that element
         TopTensModel model = shownItems.get(position);
         DecimalFormat df = new DecimalFormat("####0.##");
+        DecimalFormat ratingFormat = new DecimalFormat("0.0");
 
         viewHolder.containerLayout.setVisibility(View.VISIBLE);
         viewHolder.abvLayout.setVisibility(View.VISIBLE);
@@ -166,7 +167,7 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
         if (model.avgRating == 0) {
             viewHolder.rating.setText("N/A");
         } else {
-            String avgRating = model.avgRating + "";
+            String avgRating = ratingFormat.format(model.avgRating) + "";
             viewHolder.rating.setText(avgRating);
         }
 

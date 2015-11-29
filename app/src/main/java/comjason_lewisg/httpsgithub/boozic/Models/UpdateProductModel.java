@@ -60,13 +60,13 @@ public class UpdateProductModel {
         updated = true;
     }
 
-    public void updateVolume(double volume, int currentQty, String oldVolumeMeasure) {
+    public void updateVolume(double volume, int currentQty, int parentType) {
         this.volume = volume * (double)currentQty;
-        if (this.volume > 1000) {
+        if (this.volume > 1000 && (parentType == 1 || parentType == 3)) {
             this.volume = this.volume / 1000.0;
             this.volumeMeasure = "L";
         }
-        else if (this.volume < 1000 && oldVolumeMeasure.equals("L")) {
+        else if (this.volume < 1000 && (parentType == 1 || parentType == 3)) {
             this.volumeMeasure = "ml";
         }
         else {
@@ -87,6 +87,7 @@ public class UpdateProductModel {
 
     public void updateParentType(int type) {
         this.parentType = type;
+        if (type != 2) this.containerQuantity = 1;
     }
     public void updateType(int type) {
         this.type = type;

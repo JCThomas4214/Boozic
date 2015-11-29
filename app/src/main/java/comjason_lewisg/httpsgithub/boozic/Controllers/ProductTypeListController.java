@@ -34,10 +34,10 @@ public class ProductTypeListController {
     public ProductTypeListController() {
     }
 
-    public void getList(ProductActivity p, int productParentId, boolean cameFromStartProductInfo) {
+    public void getList(ProductActivity p, int productParentId) {
         DHandler = new DialogHandler(p);
         dialog = DHandler.progressDialog(p,"Fetching Product Type List", "Searching...");
-        getListInBackground(p, productParentId, cameFromStartProductInfo);
+        getListInBackground(p, productParentId);
     }
 
     public void getList(MainActivity m, int productParentTypeId, String label, String upc) {
@@ -46,7 +46,7 @@ public class ProductTypeListController {
         getListInBackground(m, productParentTypeId, label, upc);
     }
 
-    private void getListInBackground(final ProductActivity p, final int productParentId, final boolean cameFromStartProductInfo) {
+    private void getListInBackground(final ProductActivity p, final int productParentId) {
 
         dialog.show();
 
@@ -99,7 +99,7 @@ public class ProductTypeListController {
                     }
                 } catch (JSONException e) {}
                 dialog.hide();
-                DHandler.UpdateProductType(productLabels,productIDs,cameFromStartProductInfo);
+                DHandler.UpdateProductType(productLabels,productIDs);
             }
         }.execute();
     }

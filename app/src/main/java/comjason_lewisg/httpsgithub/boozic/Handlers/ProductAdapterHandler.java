@@ -237,10 +237,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
                 toggleFavoriteValue(favorite);
             }
             public void startUpdateDialog(View caller) {
-                if (p.model.typePic == 4 && p.updatedModel.type == -1) DHandler.UpdateProductParentType(false);
-                else if (p.model.containerType.equals("N/A") && (p.model.typePic == 2 || p.updatedModel.type == 2)) DHandler.UpdateContainer(false);
-                else if (p.model.abv <= 0) DHandler.UpdateAbv(false, false);
-                else DHandler.UpdateStore(false, false);
+                DHandler.UpdateStore();
 
             }
             public void startFlagDialog() {
@@ -409,6 +406,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
 
     public void changeParentType(int type) {
         item.typePic = type;
+        if (type != 2) item.containerQuantity = 1;
     }
 
     public void changeABV(double abv) {
@@ -417,8 +415,9 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         item.setABP();
     }
 
-    public void changeVolume(double volume) {
+    public void changeVolume(double volume, String volumeMeasure) {
         item.volume = volume;
+        item.volumeMeasure = volumeMeasure;
         item.setABP();
         item.setPBV();
     }
@@ -429,6 +428,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
 
     public void changeContainerQty(int quantity) {
         item.containerQuantity = quantity;
+        item.volume = item.volume * quantity;
     }
 
     public void setChart(ProductStorageModel model, ProductInfoHolder viewHolder) {
