@@ -603,7 +603,7 @@ public class DialogHandler {
 
     public void UpdateVolume() {
         MaterialDialog dialog = new MaterialDialog.Builder(p)
-                .title("Input Volume")
+                .title("Input Bottle Volume")
                 .customView(R.layout.input_abv, true)
                 .positiveText("SET")
                 .negativeText("CANCEL")
