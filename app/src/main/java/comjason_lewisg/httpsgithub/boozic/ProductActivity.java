@@ -257,6 +257,7 @@ public class ProductActivity extends AppCompatActivity {
                 (double) getIntent().getSerializableExtra("ClosestPrice"),
                 (double) getIntent().getSerializableExtra("CheapestPrice"),
                 (int) getIntent().getSerializableExtra("Type"),
+                (String) getIntent().getSerializableExtra("TypeName"),
                 (int) getIntent().getSerializableExtra("Favorites"),
                 (String) getIntent().getSerializableExtra("Container"),
                 (int) getIntent().getSerializableExtra("ContainerQty"),

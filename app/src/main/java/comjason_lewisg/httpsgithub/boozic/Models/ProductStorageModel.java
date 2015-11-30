@@ -9,7 +9,6 @@ public class ProductStorageModel {
     public String label;
     public String lastUpdate = "N/A";
     public int userRating = -1;
-    public int boozicScore = -1;
 
     public String upc;
     public int productId;
@@ -26,6 +25,7 @@ public class ProductStorageModel {
     public double cheapestPrice;
 
     public int typePic = 4;
+    public String typeName = null;
     public int favorite = 0;
 
     public String containerType = "N/A";
@@ -44,13 +44,14 @@ public class ProductStorageModel {
     public double avgRating;
 
     public ProductStorageModel(String label, String upc, int productId, String lastUpdate, int userRating, int closestStoreId, int cheapestStoreId, String closestStoreName, String cheapestStoreName,
-                               String closestStoreAddress, String cheapestStoreAddress, double closestStoreDist, double cheapestStoreDist, double closestPrice, double cheapestPrice, int type, int favorite, String container,
+                               String closestStoreAddress, String cheapestStoreAddress, double closestStoreDist, double cheapestStoreDist, double closestPrice, double cheapestPrice, int type, String typeName, int favorite, String container,
                                int containerQuantity, double abv, int[] rating, double volume, String volumeMeasure, double pbv, double abp, double pdd, double td, double avgRating) {
 
         this.label = label;
         if (lastUpdate != null) this.lastUpdate = lastUpdate;
         this.userRating = userRating;
         typePic = type;
+        this.typeName = typeName;
 
         this.upc = upc;
         this.productId = productId;

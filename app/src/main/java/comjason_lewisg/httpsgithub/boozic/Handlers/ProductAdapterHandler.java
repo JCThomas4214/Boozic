@@ -51,7 +51,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
 
         TextView label;
         TextView lastUpdate;
-        TextView boozicScore;
+        TextView typeName;
         ImageView favorite;
         ImageView flag;
 
@@ -94,7 +94,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             label = (TextView) itemView.findViewById(R.id.product_label);
             typePic = (ImageView) itemView.findViewById(R.id.product_type);
 
-            boozicScore = (TextView) itemView.findViewById(R.id.product_metascore);
+            typeName = (TextView) itemView.findViewById(R.id.product_type_name);
             lastUpdate = (TextView) itemView.findViewById(R.id.product_last_updated);
             userRating = (RatingBar) itemView.findViewById(R.id.product_ratingBar);
             favorite = (ImageView) itemView.findViewById(R.id.favorite_button);
@@ -283,8 +283,8 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
         DecimalFormat pbvFormat = new DecimalFormat("####0.00#");
 
         viewHolder.label.setText(model.label);
-        if (model.boozicScore <= 0) viewHolder.boozicScore.setText("N/A");
-        else viewHolder.boozicScore.setText("" + model.boozicScore);
+        if (model.typeName == null) viewHolder.typeName.setText("N/A");
+        else viewHolder.typeName.setText(model.typeName);
         if (model.lastUpdate == null) viewHolder.lastUpdate.setText("N/A");
         else viewHolder.lastUpdate.setText("" + model.lastUpdate);
         setFavorite(model.favorite, viewHolder.favorite);

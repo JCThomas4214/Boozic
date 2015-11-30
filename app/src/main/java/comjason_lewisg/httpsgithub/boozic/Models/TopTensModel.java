@@ -18,7 +18,6 @@ public class TopTensModel {
     public String label;
     public String lastUpdate;
     public int userRating = -1;
-    public int boozicScore;
 
     public String upc;
     public int productID;
@@ -35,6 +34,7 @@ public class TopTensModel {
     public double cheapestPrice;
 
     public int typePic;
+    public String typeName = null;
     public int favorite;
 
     public String containerType;

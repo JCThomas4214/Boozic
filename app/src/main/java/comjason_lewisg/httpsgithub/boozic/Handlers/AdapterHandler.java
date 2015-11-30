@@ -109,6 +109,7 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
                 i.putExtra("ClosestPrice", shownItems.get(position).closestPrice);
                 i.putExtra("CheapestPrice", shownItems.get(position).cheapestPrice);
                 i.putExtra("Type", shownItems.get(position).typePic);
+                i.putExtra("TypeName", shownItems.get(position).typeName);
                 i.putExtra("Favorites", shownItems.get(position).favorite);
                 i.putExtra("Container", shownItems.get(position).containerType);
                 i.putExtra("ContainerQty", shownItems.get(position).containerQuantity);
