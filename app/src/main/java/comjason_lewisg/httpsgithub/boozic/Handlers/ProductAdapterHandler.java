@@ -433,7 +433,7 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
 
     public void setChart(ProductStorageModel model, ProductInfoHolder viewHolder) {
         DecimalFormat avgFormat = new DecimalFormat("0.0");
-        float yData[] = {model.rating[0], model.rating[1], model.rating[2], model.rating[3], model.rating[4]};
+        float yData[] = {model.rating[4], model.rating[3], model.rating[2], model.rating[1], model.rating[0]};
 
         // config the pie chart
         viewHolder.ratingChart.setUsePercentValues(true);
