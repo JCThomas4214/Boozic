@@ -157,7 +157,12 @@ public class DialogHandler {
                 .input("Help keep our products correct", null, new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
-                        verifyProductParentType(input.toString(), upc);
+                        String text = input.toString();
+                        if (!text.equals("")) {
+                            verifyProductParentType(input.toString(), upc);
+                        } else {
+                            verifyProductLabel(upc);
+                        }
                     }
                 })
                 .positiveText("NEXT")
@@ -203,7 +208,7 @@ public class DialogHandler {
         dialog.show();
     }
 
-    public void verifyProductType(List<String> productTypeName, List<Integer> productTypeID, final int parentType,
+    public void verifyProductType(final List<String> productTypeName, final List<Integer> productTypeID, final int parentType,
                                   final String label, final String upc) {
 
         final Integer[] productID = productTypeID.toArray(new Integer[productTypeID.size()]);
@@ -215,8 +220,10 @@ public class DialogHandler {
                 .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        if (parentType != 2) {
-                            verifyVolume(parentType, label, upc, productID[which], "bottle", 1);
+                        if (text == null)
+                            verifyProductType(productTypeName, productTypeID, parentType, label, upc);
+                        else if (parentType != 2) {
+                            verifyAbv(parentType, label, upc, productID[which], "bottle", 1);
                         } else {
                             verifyContainerType(parentType, label, upc, productID[which]);
                         }
@@ -250,8 +257,10 @@ public class DialogHandler {
                 .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        Log.v("CONTAINER", "string = " + text);
-                        verifyContainerQty(parentType, label, upc, type, text.toString());
+                        if (text == null) verifyContainerType(parentType, label, upc, type);
+                        else {
+                            verifyContainerQty(parentType, label, upc, type, text.toString());
+                        }
                         return true;
                     }
                 })
@@ -286,9 +295,11 @@ public class DialogHandler {
                 .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        Log.v("CONTAINER", "string = " + text);
-                        int tmp = changeToInt((String) text);
-                        verifyVolume(parentType, label, upc, type, containerType, tmp);
+                        if (text == null) verifyContainerQty(parentType, label, upc, type, containerType);
+                        else {
+                            int tmp = changeToInt((String) text);
+                            verifyAbv(parentType, label, upc, type, containerType, tmp);
+                        }
                         return true;
                     }
                 })
@@ -297,29 +308,66 @@ public class DialogHandler {
                 .widgetColor(m.getColorAccent())
                 .positiveColor(m.getColorAccent())
                 .negativeColor(m.getColorAccent())
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        //save selected
-                    }
-                })
-                .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    }
-                })
                 .build();
 
         dialog.show();
     }
 
+
+
+    public void verifyAbv(final int parentType, final String label, final String upc,
+                          final int type, final String containerType, final int containerQty) {
+
+        MaterialDialog dialog = new MaterialDialog.Builder(m)
+                .title("Input ABV")
+                .customView(R.layout.input_abv, true)
+                .positiveText("NEXT")
+                .negativeText("CANCEL")
+                .neutralText("SKIP")
+                .positiveColor(m.getColorAccent())
+                .negativeColor(m.getColorAccent())
+                .neutralColor(m.getColorAccent())
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        View view = dialog.getCustomView();
+
+                        EditText percent = (EditText) view.findViewById(R.id.abv_dia_input);
+                        String text = percent.getText().toString();
+                        if (!text.equals("")) {
+                            double abv = changeToDouble(percent.getText().toString().replace("%", ""));
+                            verifyVolume(parentType, label, upc, type, containerType, containerQty, abv);
+                        } else {
+                            verifyAbv(parentType, label, upc, type, containerType, containerQty);
+                        }
+
+                    }
+                }).onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        verifyVolume(parentType, label, upc, type, containerType, containerQty, -1.0);
+
+                    }
+                })
+                .build();
+
+        View view = dialog.getCustomView();
+        EditText input = (EditText) view.findViewById(R.id.abv_dia_input);
+        input.addTextChangedListener(makeTextWatcher(input, "%"));
+
+        dialog.show();
+    }
+
     public void verifyVolume(final int parentType, final String label, final String upc,
-                            final int type, final String containerType, final int containerQty) {
+                            final int type, final String containerType, final int containerQty,
+                             final double abv) {
 
         MaterialDialog dialog = new MaterialDialog.Builder(m)
                 .title("Input Bottle Volume")
                 .customView(R.layout.input_abv, true)
-                .positiveText("NEXT")
+                .positiveText("FINISH")
                 .negativeText("CANCEL")
                 .widgetColor(m.getColorAccent())
                 .positiveColor(m.getColorAccent())
@@ -331,15 +379,23 @@ public class DialogHandler {
                         View view = dialog.getCustomView();
 
                         EditText percent = (EditText) view.findViewById(R.id.abv_dia_input);
-                        double volume = changeToDouble(percent.getText().toString().replaceAll("[oz,L,ml]", ""));
-                        String volMeas = volumeMeasure;
+                        String text = percent.getText().toString();
+                        if (text.equals("")) text = null;
 
-                        if (volume >= 1000) {
-                            volume = volume / (double)1000;
-                            volMeas = "L";
+                        if (text != null) {
+                            double volume = changeToDouble(percent.getText().toString().replaceAll("[oz,L,ml]", ""));
+                            String volMeas = volumeMeasure;
+
+                            if (volume >= 1000) {
+                                volume = volume / (double) 1000;
+                                volMeas = "L";
+                            }
+                            double totalVolume = containerQty * volume;
+
+                            m.NPC.newProduct(m, label, upc, type, containerType, containerQty, totalVolume, volMeas, abv);
+                        } else {
+                            verifyVolume(parentType, label, upc, type, containerType, containerQty, abv);
                         }
-
-                        verifyAbv(parentType, label, upc, type, containerType, containerQty, volume, volMeas);
                     }
                 })
                 .build();
@@ -364,48 +420,6 @@ public class DialogHandler {
                 break;
 
         }
-
-        dialog.show();
-    }
-
-    public void verifyAbv(final int parentType, final String label, final String upc,
-                          final int type, final String containerType, final int containerQty,
-                          final double volume, final String volumeMeasure) {
-
-        MaterialDialog dialog = new MaterialDialog.Builder(m)
-                .title("Input ABV")
-                .customView(R.layout.input_abv, true)
-                .positiveText("FINISH")
-                .negativeText("CANCEL")
-                .positiveColor(m.getColorAccent())
-                .negativeColor(m.getColorAccent())
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                        View view = dialog.getCustomView();
-
-                        EditText percent = (EditText) view.findViewById(R.id.abv_dia_input);
-                        double abv = changeToDouble(percent.getText().toString().replace("%", ""));
-                        double totalVolume = containerQty * volume;
-
-                        m.NPC.newProduct(m,label,upc,type,containerType,containerQty,totalVolume,volumeMeasure,abv);
-                        Log.v("parentType", "" + parentType);
-                        Log.v("label", label);
-                        Log.v("upc", upc);
-                        Log.v("type", "" + type);
-                        Log.v("containerType", containerType);
-                        Log.v("containerQty", "" + containerQty);
-                        Log.v("volume", "parent type = " + parentType);
-                        Log.v("volumeMeasure", volumeMeasure);
-                        Log.v("abv", "" + abv);
-                    }
-                })
-                .build();
-
-        View view = dialog.getCustomView();
-        EditText input = (EditText) view.findViewById(R.id.abv_dia_input);
-        input.addTextChangedListener(makeTextWatcher(input, "%"));
 
         dialog.show();
     }
