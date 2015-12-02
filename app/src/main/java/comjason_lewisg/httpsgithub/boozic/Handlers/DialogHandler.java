@@ -629,10 +629,16 @@ public class DialogHandler {
                         View view = dialog.getCustomView();
 
                         EditText percent = (EditText) view.findViewById(R.id.abv_dia_input);
-                        p.updatedModel.updateVolume(changeToDouble(percent.getText().toString().replaceAll("[oz,L,ml]", "")), p.model.containerQuantity, p.model.typePic);
-                        p.mAdapter.changeVolume(p.updatedModel.volume, p.updatedModel.volumeMeasure);
-                        p.mAdapter.notifyDataSetChanged();
-                        //save input
+                        String text = percent.getText().toString();
+                        if (text.equals("")) text = null;
+
+                        if (text != null) {
+                            p.updatedModel.updateVolume(changeToDouble(percent.getText().toString().replaceAll("[oz,L,ml]", "")), p.model.containerQuantity, p.model.typePic);
+                            p.mAdapter.changeVolume(p.updatedModel.volume, p.updatedModel.volumeMeasure);
+                            p.mAdapter.notifyDataSetChanged();
+                        } else {
+                            UpdateVolume();
+                        }
                     }
                 })
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -673,7 +679,8 @@ public class DialogHandler {
                         Log.v("CONTAINER", "string = " + text);
                         if (text == null) UpdateContainer();
                         else {
-                            if (!p.model.containerType.equals(text)) p.updatedModel.updateContainerType((String) text);
+                            if (!p.model.containerType.equals(text))
+                                p.updatedModel.updateContainerType((String) text);
                             p.mAdapter.changeContainerType((String) text);
                             p.mAdapter.notifyDataSetChanged();
                             UpdateContainerQuant();
@@ -762,9 +769,16 @@ public class DialogHandler {
                         View view = dialog.getCustomView();
 
                         EditText percent = (EditText) view.findViewById(R.id.abv_dia_input);
-                        p.updatedModel.updateABV(changeToDouble(percent.getText().toString().replace("%", "")));
-                        p.mAdapter.changeABV(changeToDouble(percent.getText().toString().replace("%", "")));
-                        p.mAdapter.notifyDataSetChanged();
+                        String text = percent.getText().toString();
+                        if (text.equals("")) text = null;
+
+                        if (text != null) {
+                            p.updatedModel.updateABV(changeToDouble(percent.getText().toString().replace("%", "")));
+                            p.mAdapter.changeABV(changeToDouble(percent.getText().toString().replace("%", "")));
+                            p.mAdapter.notifyDataSetChanged();
+                        } else {
+                            UpdateAbv();
+                        }
                     }
                 })
                 .build();
@@ -888,7 +902,12 @@ public class DialogHandler {
                 .input("Help keep our products correct", null, new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
-                        p.updatedModel.updateLabel(input.toString());
+                        String text = input.toString();
+                        if (!text.equals("")) {
+                            p.updatedModel.updateLabel(input.toString());
+                        } else {
+                            UpdateProductLabel();
+                        }
                     }
                 })
                 .positiveText("SET")
