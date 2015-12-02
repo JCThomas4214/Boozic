@@ -332,15 +332,14 @@ public class DialogHandler {
 
                         EditText percent = (EditText) view.findViewById(R.id.abv_dia_input);
                         double volume = changeToDouble(percent.getText().toString().replaceAll("[oz,L,ml]", ""));
-                        String ctTmp = containerType;
+                        String volMeas = volumeMeasure;
 
                         if (volume >= 1000) {
                             volume = volume / (double)1000;
-                            ctTmp = "L";
+                            volMeas = "L";
                         }
 
-                        verifyAbv(parentType, label, upc, type, ctTmp, containerQty, volume, volumeMeasure);
-                        //save input
+                        verifyAbv(parentType, label, upc, type, containerType, containerQty, volume, volMeas);
                     }
                 })
                 .build();
