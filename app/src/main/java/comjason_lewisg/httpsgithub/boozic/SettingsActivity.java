@@ -14,11 +14,13 @@ public class SettingsActivity extends AppCompatActivity {
 
     public Toolbar toolbar;
 
+    static final int COLOR_STATE = 1;
     static final int PRIMARY_STATE = 0;
     static final int PRIMARY_DARK_STATE = 0;
     static final int ACCENT_STATE = 0;
     static final int ACCENT_DARK_STATE = 0;
 
+    int colorPrimary_id;
     int primaryColor;
     int primaryColorDark;
     int accentColor;
@@ -30,8 +32,36 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPrefs = getSharedPreferences("COLOR_STATE", MODE_PRIVATE);
-        //when resume, pull saves states for each button
+
+        colorPrimary_id = mPrefs.getInt("COLOR_STATE", COLOR_STATE);
+        primaryColor = mPrefs.getInt("PRIMARY_STATE", PRIMARY_STATE);
+        primaryColorDark = mPrefs.getInt("PRIMARY_DARK_STATE", PRIMARY_DARK_STATE);
+        accentColor = mPrefs.getInt("ACCENT_STATE", ACCENT_STATE);
+        accentColorDark = mPrefs.getInt("ACCENT_DARK_STATE", ACCENT_DARK_STATE);
+
+        switch (colorPrimary_id) {
+            case 1:
+                setTheme(R.style.AppTheme1);
+                break;
+            case 2:
+                setTheme(R.style.AppTheme2);
+                break;
+            case 3:
+                setTheme(R.style.AppTheme3);
+                break;
+            case 4:
+                setTheme(R.style.AppTheme4);
+                break;
+            case 5:
+                setTheme(R.style.AppTheme5);
+                break;
+        }
+
         setContentView(R.layout.activity_settings);
+
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(primaryColorDark);
 
         //Instantiate the toolbar object
         toolbar = (Toolbar) findViewById(R.id.settings_toolbar); // Attaching the layout to the toolbar object
@@ -44,8 +74,6 @@ public class SettingsActivity extends AppCompatActivity {
         //Call these to set up the back arrow on toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-
     }
 
     @Override
@@ -75,18 +103,5 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        //pull the shared preference
-        mPrefs = getSharedPreferences("COLOR_STATE", MODE_PRIVATE);
-        //when resume, pull saves states for each button
-
-        primaryColor = mPrefs.getInt("PRIMARY_STATE", PRIMARY_STATE);
-        primaryColorDark = mPrefs.getInt("PRIMARY_DARK_STATE", PRIMARY_DARK_STATE);
-        accentColor = mPrefs.getInt("ACCENT_STATE", ACCENT_STATE);
-        accentColorDark = mPrefs.getInt("ACCENT_DARK_STATE", ACCENT_DARK_STATE);
-
-        Window window = getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(primaryColorDark);
-        findViewById(R.id.settings_toolbar).setBackgroundColor(primaryColor);
     }
 }
