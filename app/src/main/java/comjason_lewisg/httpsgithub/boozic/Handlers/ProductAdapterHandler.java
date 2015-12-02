@@ -369,6 +369,9 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
             case 4:
                 viewHolder.typePic.setImageResource(R.mipmap.boozic_notype);
                 break;
+            case 5:
+                viewHolder.typePic.setImageResource(R.mipmap.beer);
+                break;
         }
     }
 
@@ -427,8 +430,11 @@ public class ProductAdapterHandler extends RecyclerView.Adapter<ProductAdapterHa
     }
 
     public void changeContainerQty(int quantity) {
+        double singleContainerVol = item.volume / (double)item.containerQuantity;
+
         item.containerQuantity = quantity;
-        item.volume = item.volume * quantity;
+
+        item.volume = singleContainerVol * quantity;
     }
 
     public void setChart(ProductStorageModel model, ProductInfoHolder viewHolder) {

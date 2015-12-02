@@ -43,7 +43,7 @@ public class NearbyStoresController {
                     urlString.append("http://54.210.175.98:9080/api/Location/getStoresInRadius?");
                     //append location
                     urlString.append("latitude=").append(latitude).append("&longitude=").append(longitude);
-                    urlString.append("&Radius=5");
+                    urlString.append("&Radius=15");
 
                     Log.v("NearbyStoresURL", urlString.toString());
                     URL url = new URL(urlString.toString());

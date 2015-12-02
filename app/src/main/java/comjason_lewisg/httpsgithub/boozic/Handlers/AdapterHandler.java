@@ -201,6 +201,9 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
             case 4:
                 viewHolder.picture.setImageResource(R.mipmap.boozic_notype);
                 break;
+            case 5:
+                viewHolder.picture.setImageResource(R.mipmap.beer);
+                break;
         }
     }
 

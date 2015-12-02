@@ -279,7 +279,7 @@ public class DialogHandler {
     public void verifyContainerQty(final int parentType, final String label, final String upc,
                              final int type, final String containerType) {
 
-        CharSequence[] items = {"1", "6", "12", "24"};
+        CharSequence[] items = {"1", "4", "6", "8", "12", "18", "24"};
         MaterialDialog dialog = new MaterialDialog.Builder(m)
                 .title("Container Quantity for purchase")
                 .items(items)
@@ -332,8 +332,14 @@ public class DialogHandler {
 
                         EditText percent = (EditText) view.findViewById(R.id.abv_dia_input);
                         double volume = changeToDouble(percent.getText().toString().replaceAll("[oz,L,ml]", ""));
+                        String ctTmp = containerType;
 
-                        verifyAbv(parentType, label, upc, type, containerType, containerQty, volume, volumeMeasure);
+                        if (volume >= 1000) {
+                            volume = volume / (double)1000;
+                            ctTmp = "L";
+                        }
+
+                        verifyAbv(parentType, label, upc, type, ctTmp, containerQty, volume, volumeMeasure);
                         //save input
                     }
                 })
@@ -382,8 +388,9 @@ public class DialogHandler {
 
                         EditText percent = (EditText) view.findViewById(R.id.abv_dia_input);
                         double abv = changeToDouble(percent.getText().toString().replace("%", ""));
+                        double totalVolume = containerQty * volume;
 
-                        m.NPC.newProduct(m,label,upc,type,containerType,containerQty,volume,volumeMeasure,abv);
+                        m.NPC.newProduct(m,label,upc,type,containerType,containerQty,totalVolume,volumeMeasure,abv);
                         Log.v("parentType", "" + parentType);
                         Log.v("label", label);
                         Log.v("upc", upc);
@@ -530,7 +537,7 @@ public class DialogHandler {
     }
 
     public void UpdateProductParentType() {
-        CharSequence[] items = {"Wine", "Beer/Mix Drinks", "Liquor"};
+        CharSequence[] items = {"Wine", "Beer", "Liquor", "Mix Drinks"};
         MaterialDialog dialog = new MaterialDialog.Builder(p)
                 .title("Select Product Parent Type")
                 .items(items)
@@ -540,10 +547,12 @@ public class DialogHandler {
                         Log.v("TYPE", "string = " + text);
                         if (text == null) UpdateProductParentType();
                         else {
-                            p.updatedModel.updateParentType(which+1);
-                            p.mAdapter.changeParentType(which+1);
-                            p.mAdapter.notifyDataSetChanged();
-                            p.PTLC.getList(p, which+1);
+                            if (which != 3) {
+                                p.updatedModel.updateParentType(which+1);
+                                p.mAdapter.changeParentType(which+1);
+                                p.mAdapter.notifyDataSetChanged();
+                                p.PTLC.getList(p, which + 1);
+                            }
                         }
                         return true;
                     }
@@ -682,7 +691,7 @@ public class DialogHandler {
 
     public void UpdateContainerQuant() {
 
-        CharSequence[] items = {"1", "6", "12", "24"};
+        CharSequence[] items = {"1", "4", "6", "8", "12", "18", "24"};
         MaterialDialog dialog = new MaterialDialog.Builder(p)
                 .title("Container Quantity for purchase")
                 .items(items)

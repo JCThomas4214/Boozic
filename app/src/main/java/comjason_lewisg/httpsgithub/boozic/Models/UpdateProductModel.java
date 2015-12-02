@@ -62,7 +62,7 @@ public class UpdateProductModel {
 
     public void updateVolume(double volume, int currentQty, int parentType) {
         this.volume = volume * (double)currentQty;
-        if (this.volume > 1000 && (parentType == 1 || parentType == 3)) {
+        if (this.volume >= 1000 && (parentType == 1 || parentType == 3)) {
             this.volume = this.volume / 1000.0;
             this.volumeMeasure = "L";
         }
