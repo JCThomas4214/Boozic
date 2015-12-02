@@ -23,6 +23,12 @@ public class UPCFindProductController {
 
     static final int nullInt = 0;
 
+    public String lastUpdate;
+
+    public String closestStoreName;
+    public String cheapestStoreName;
+    public String closestStoreAddress;
+    public String cheapestStoreAddress;
     public double closestStoreDist;
     public double cheapestStoreDist;
     public double closestPrice;
@@ -111,14 +117,24 @@ public class UPCFindProductController {
                                 i.putExtra("Label", object.getString("ProductName"));
                                 i.putExtra("ProductID", object.getInt("ProductID"));
                                 i.putExtra("UPC", object.getString("UPC"));
-                                i.putExtra("LastUpdate", closestStoreObject.getString("LastUpdated"));
+                                lastUpdate = closestStoreObject.getString("LastUpdated");
+                                if (lastUpdate.equals("null")) lastUpdate = null;
+                                i.putExtra("LastUpdate", lastUpdate);
                                 i.putExtra("UserRating", object.getInt("RatingByCurrentUser"));
                                 i.putExtra("ClosestStoreId", closestStoreObject.getInt("StoreID"));
                                 i.putExtra("CheapestStoreId", cheapestStoreObject.getInt("StoreID"));
-                                i.putExtra("ClosestStore", closestStoreObject.getString("StoreName"));
-                                i.putExtra("CheapestStore", cheapestStoreObject.getString("StoreName"));
-                                i.putExtra("ClosestStoreAddress", closestStoreObject.getString("Address"));
-                                i.putExtra("CheapestStoreAddress", cheapestStoreObject.getString("Address"));
+                                closestStoreName = closestStoreObject.getString("StoreName");
+                                if (closestStoreName.equals("null")) closestStoreName = null;
+                                i.putExtra("ClosestStore", closestStoreName);
+                                cheapestStoreName = cheapestStoreObject.getString("StoreName");
+                                if (cheapestStoreName.equals("null")) cheapestStoreName = null;
+                                i.putExtra("CheapestStore", cheapestStoreName);
+                                closestStoreAddress = closestStoreObject.getString("Address");
+                                if (closestStoreAddress.equals("null")) closestStoreAddress = null;
+                                i.putExtra("ClosestStoreAddress", closestStoreAddress);
+                                cheapestStoreAddress = cheapestStoreObject.getString("Address");
+                                if (cheapestStoreAddress.equals("null")) cheapestStoreAddress = null;
+                                i.putExtra("CheapestStoreAddress", cheapestStoreAddress);
                                 closestStoreDist = closestStoreObject.getDouble("DistanceInMiles");
                                 i.putExtra("ClosestStoreDist", closestStoreDist);
                                 cheapestStoreDist = cheapestStoreObject.getDouble("DistanceInMiles");
@@ -131,7 +147,7 @@ public class UPCFindProductController {
                                 i.putExtra("Favorites", object.getInt("IsFavourite"));
 
                                 container = object.getString("ContainerType");
-                                if (container.equals("null")) container = "N/A";
+                                if (container.equals("null")) container = null;
                                 i.putExtra("Container", container);
 
                                 containerQty = object.getInt("ContainerQty");
@@ -156,9 +172,9 @@ public class UPCFindProductController {
 
                                     pdd = findPDD();
                                     td = findTD();
-                                    if (volumeMeasure != null && volume <= 0) {
+                                    if (volumeMeasure != null && volume > 0) {
                                         pbv = findPBV();
-                                        if (abv <= 0) abp = findABP();
+                                        if (abv > 0) abp = findABP();
                                     }
                                 }
 
