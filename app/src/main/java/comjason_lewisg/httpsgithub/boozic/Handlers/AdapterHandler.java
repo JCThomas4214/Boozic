@@ -153,11 +153,13 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
 
         viewHolder.label.setText(model.label);
 
+        //display container type
         if (model.containerType != null && model.typePic == 2) {
             String containerLabel = "(" + model.containerQuantity + ") " + model.containerType;
             viewHolder.container.setText(containerLabel);
         } else viewHolder.containerLayout.setVisibility(View.GONE);
 
+        //display product alcohol by volume
         if (model.abv > 0) {
             String abv = df.format(model.abv) + "%";
             viewHolder.abv.setText(abv);
@@ -165,6 +167,7 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
             viewHolder.abvLayout.setVisibility(View.GONE);
         }
 
+        //display average rating
         if (model.avgRating == 0) {
             viewHolder.rating.setText("N/A");
         } else {
@@ -172,6 +175,7 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
             viewHolder.rating.setText(avgRating);
         }
 
+        //display closest store name
         if (model.closestStoreName != null) {
             viewHolder.storeName.setText(model.closestStoreName);
             viewHolder.price.setText(NumberFormat.getCurrencyInstance().format(model.closestPrice));
@@ -181,11 +185,13 @@ public class AdapterHandler extends RecyclerView.Adapter<AdapterHandler.ListItem
             viewHolder.price.setText("N/A");
         }
 
+        //display container volume
         if (model.volume != -1) {
             String volume = "(" + df.format(model.volume) + model.volumeMeasure + ")";
             viewHolder.volume.setText(volume);
         } else viewHolder.volume.setText("N/A");
 
+        //select picture to display
         switch (model.typePic) {
             case 1:
                 viewHolder.picture.setImageResource(R.mipmap.wine);
