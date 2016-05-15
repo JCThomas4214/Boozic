@@ -7,7 +7,7 @@ This is the repo for an Android Development project for the University of Florid
 
 <h2>Team members</h2>
 <ul style="list-style-type:square">
-	<li>Jason Thomas (<a href="https://github.com/JCThomas4214">Jason-LewisG</a>)</li>
+	<li>Jason Thomas (<a href="https://github.com/JCThomas4214">JCThomas4214</a>)</li>
 	<li>Timmy Chandy (<a href="https://github.com/chandyt">chandyt</a>)</li>
 </ul>
 <h2>Languages</h2>
